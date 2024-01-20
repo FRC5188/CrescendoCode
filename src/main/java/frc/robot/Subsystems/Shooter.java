@@ -1,23 +1,36 @@
 package frc.robot.Subsystems;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
-
     protected enum ShooterPosition {
         Subwoofer, Podium
     }
+    protected final double SUBWOOFER_ANGLE = 0; //subject to change!
+    protected final double PODIUM_ANGLE = 0; //also subject to change
+    protected final int LEFT_FLYWHEEL_MOTOR_ID = 0;
+    protected final int RIGHT_FLYWHEEL_MOTOR_ID = 0;
+    protected final double ANGLE_MOTOR_KP = 0;
+    protected final double ANGLE_MOTOR_KI = 0;
+    protected final double ANGLE_MOTOR_KD = 0;
 
     protected double _targetFlywheelSpeed;
     protected CANSparkFlex _leftFlywheelMotor;
     protected CANSparkFlex _rightFlywheelMotor;
     protected ShooterPosition _targetPosition;
-    protected final double SUBWOOFER_ANGLE = 0; //subject to change!
-    protected final double PODIUM_ANGLE = 0; //also subject to change
     protected PIDController _anglePIDController;
+
+    public Shooter() {
+        _targetFlywheelSpeed = 0;
+        _leftFlywheelMotor = new CANSparkFlex(LEFT_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        _rightFlywheelMotor = new CANSparkFlex(RIGHT_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        _targetPosition = ShooterPosition.Podium; //change start position
+        _anglePIDController = new PIDController(ANGLE_MOTOR_KP, ANGLE_MOTOR_KI, ANGLE_MOTOR_KD);
+    }
 
     public void setFlywheelSpeed(double targetSpeed) {
         _targetFlywheelSpeed = targetSpeed;

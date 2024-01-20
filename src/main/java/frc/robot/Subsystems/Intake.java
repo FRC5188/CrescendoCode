@@ -59,6 +59,8 @@ public class Intake extends SubsystemBase {
     public void stopRollerMotor() {
         _rollerMotor.set(0);
     }
+
+    public boolean pivotAtSetpoint() {
+        return _pivotMotorPID.atSetpoint();
+    }
 }
-
-

@@ -1,6 +1,7 @@
 package frc.robot.Subsystems;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -16,11 +17,23 @@ public class Intake extends SubsystemBase {
     protected final double INTAKE_AMP_SCORE = 0; //also subject to change!
     protected final double INTAKE_ACQUIRE_SPEED = 0; //subject to change
     protected final double INTAKE_SPIT_SPEED = 0; //also subject to change!
+    protected final double PIVOT_MOTOR_KP = 0;
+    protected final double PIVOT_MOTOR_KI = 0;
+    protected final double PIVOT_MOTOR_KD = 0;
+    protected final int PIVOT_ENCODER_CHANNEL = 0;
+    protected final int ROLLER_MOTOR_ID = 0;
+
     protected IntakePosition _intakePosition;
     protected PIDController _pivotMotorPID;
     protected DutyCycleEncoder _pivotAbsEncoder;
-
     protected CANSparkFlex _rollerMotor;
+
+    public Intake() {
+        _intakePosition = IntakePosition.Stowed;
+        _pivotMotorPID = new PIDController(PIVOT_MOTOR_KP, PIVOT_MOTOR_KI, PIVOT_MOTOR_KD);
+        _pivotAbsEncoder = new DutyCycleEncoder(PIVOT_ENCODER_CHANNEL);
+        _rollerMotor = new CANSparkFlex(ROLLER_MOTOR_ID, MotorType.kBrushless);
+    }
 
     public IntakePosition getIntakePosition() {
             return this._intakePosition;

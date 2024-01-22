@@ -1,21 +1,72 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.intake.IntakeHardware;
 
 public class Intake extends SubsystemBase {
-  private IntakeHardware _hardware;
+    public enum IntakePosition {
+        SourcePickup,
+        GroundPickup,
+        Stowed,
+        AmpScore,
+        SpeakerScore
+    }
 
-  public Intake(IntakeHardware hardware) {
-    _hardware = hardware;
-  }
+    protected IntakePosition _intakePosition;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    private IntakeHardware _hardware;
+
+    public Intake(IntakeHardware hardware) {
+        _hardware = hardware;
+    }
+
+    public IntakePosition getIntakePosition() {
+        return this._intakePosition;
+    }
+
+    public void setIntakePosition(IntakePosition position) {
+        _intakePosition = position;
+        switch (_intakePosition) {
+            case GroundPickup:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
+                break;
+            case SourcePickup:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
+                break;
+            case Stowed:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
+                break;
+            case AmpScore:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
+                break;
+            case SpeakerScore:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
+                break;
+        }
+    }
+
+    public void setRollerMotorSpeedAcquire() {
+        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_ACQUIRE_SPEED);
+    }
+
+    public void setRollerSpeedSpit() {
+        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_SPIT_SPEED);
+    }
+
+    public void stopRollerMotor() {
+        _hardware.getRollerMotor().set(0);
+    }
+
+    public void setIntakePositionWithAngle(Double angle) {
+        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
+            // TODO: log an error, but don't throw exception
+            return;
+        } 
+        _hardware.getPivotMotorPID().setSetpoint(angle);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }

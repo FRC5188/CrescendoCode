@@ -3,6 +3,7 @@ package frc.robot.hardware.intake;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public interface IntakeHardware {
@@ -11,4 +12,6 @@ public interface IntakeHardware {
     CANSparkMax getRollerMotor();
 
     DigitalInput getLightSensor();
+
+    PIDController getPivotMotorPID();
 }

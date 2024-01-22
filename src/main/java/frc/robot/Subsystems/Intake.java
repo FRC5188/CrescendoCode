@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
     }
 
     public IntakePosition getIntakePosition() {
-            return this._intakePosition;
+        return this._intakePosition;
     }
 
     public void setIntakePosition(IntakePosition dontKillMeZoe) {
@@ -70,7 +70,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopRollerMotor() {
-        _rollerMotor.set(0);
+        _rollerMotor.stopMotor();
     }
 
     public boolean pivotAtSetpoint() {

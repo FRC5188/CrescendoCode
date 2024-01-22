@@ -3,10 +3,8 @@ package frc.robot.hardware.shooter;
 import org.easymock.EasyMock;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.hardware.HardwareConstants;
 
 public class RealShooterHardware implements ShooterHardware {

@@ -3,11 +3,6 @@ package frc.robot.hardware.shooter;
 import org.easymock.EasyMock;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.hardware.HardwareConstants;
 
 public class SimShooterHardware implements ShooterHardware {
     private CANSparkFlex _angleMotor;

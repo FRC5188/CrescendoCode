@@ -1,17 +1,60 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.hardware.intake.IntakeHardware;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
-  public Intake() {}
+    public enum IntakePosition {
+        SourcePickup,
+        GroundPickup,
+        Stowed,
+        AmpScore,
+        SpeakerScore
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    protected IntakePosition _intakePosition;
+
+    private IntakeHardware _hardware;
+
+    public Intake(IntakeHardware hardware) {
+        _hardware = hardware;
+    }
+
+    public IntakePosition getIntakePosition() {
+        return this._intakePosition;
+    }
+
+    public void setIntakePosition(IntakePosition position) {
+        _intakePosition = position;
+        switch (_intakePosition) {
+            case GroundPickup:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
+                break;
+            case SourcePickup:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
+                break;
+            case Stowed:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
+                break;
+            case AmpScore:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
+                break;
+            case SpeakerScore:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
+                break;
+        }
+    }
+
+    public void setIntakePositionWithAngle(Double angle) {
+        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
+            // TODO: log an error, but don't throw exception
+            return;
+        } 
+        _hardware.getPivotMotorPID().setSetpoint(angle);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }

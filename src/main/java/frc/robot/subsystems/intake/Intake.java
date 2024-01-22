@@ -1,7 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.intake.IntakeHardware;
 
@@ -48,7 +46,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void setIntakePositionWithAngle(Double angle) {
-        // TODO: Implement
+        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
+            // TODO: log an error, but don't throw exception
+            return;
+        } 
+        _hardware.getPivotMotorPID().setSetpoint(angle);
     }
 
     @Override

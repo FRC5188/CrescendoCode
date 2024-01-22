@@ -45,6 +45,18 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    public void setRollerMotorSpeedAcquire() {
+        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_ACQUIRE_SPEED);
+    }
+
+    public void setRollerSpeedSpit() {
+        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_SPIT_SPEED);
+    }
+
+    public void stopRollerMotor() {
+        _hardware.getRollerMotor().set(0);
+    }
+
     public void setIntakePositionWithAngle(Double angle) {
         if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
             // TODO: log an error, but don't throw exception

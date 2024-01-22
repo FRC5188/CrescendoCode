@@ -11,4 +11,8 @@ public class IntakeConstants {
     public static double INTAKE_STOWED_ANGLE = 0; // subject to change. Hi programmer!
     public static double INTAKE_AMP_SCORE_ANGLE = 0; // also subject to change!
     public static double INTAKE_SPEAKER_SCORE_ANGLE = 0; // also subject to change!
+
+    // Intake roller values
+    public static double INTAKE_ACQUIRE_SPEED = 0;
+    public static double INTAKE_SPIT_SPEED = 0;
 }

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkFlex;
@@ -9,64 +5,68 @@ import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.hardware.intake.IntakeHardware;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
-        SourcePickup, GroundPickup, Stowed, AmpScore
+        SourcePickup,
+        GroundPickup,
+        Stowed,
+        AmpScore,
+        SpeakerScore
     }
 
-    protected final double INTAKE_GROUND_PICKUP = 0; // subject to change. Hi programmer!
-    protected final double INTAKE_SOURCE_PICKUP = 0; // also subject to change!
-    protected final double INTAKE_STOWED = 0; // subject to change. Hi programmer!
-    protected final double INTAKE_AMP_SCORE = 0; // also subject to change!
-    protected final double INTAKE_ACQUIRE_SPEED = 0; // subject to change
-    protected final double INTAKE_SPIT_SPEED = 0; // also subject to change!
     protected IntakePosition _intakePosition;
-    protected PIDController _pivotMotorPID;
-    protected DutyCycleEncoder _pivotAbsEncoder;
 
-    protected CANSparkFlex _rollerMotor;
+    private IntakeHardware _hardware;
+
+    public Intake(IntakeHardware hardware) {
+        _hardware = hardware;
+    }
 
     public IntakePosition getIntakePosition() {
         return this._intakePosition;
     }
 
-    public void setIntakePosition(IntakePosition dontKillMeZoe) {
-        _intakePosition = dontKillMeZoe;
+    public void setIntakePosition(IntakePosition position) {
+        _intakePosition = position;
         switch (_intakePosition) {
             case GroundPickup:
-                _pivotMotorPID.setSetpoint(INTAKE_GROUND_PICKUP);
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
                 break;
             case SourcePickup:
-                _pivotMotorPID.setSetpoint(INTAKE_SOURCE_PICKUP);
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
                 break;
             case Stowed:
-                _pivotMotorPID.setSetpoint(INTAKE_STOWED);
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
                 break;
             case AmpScore:
-                _pivotMotorPID.setSetpoint(INTAKE_AMP_SCORE);
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
+                break;
+            case SpeakerScore:
+                setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
                 break;
         }
     }
 
-    public double getPivotMotorAngle() {
-        return this._pivotAbsEncoder.getAbsolutePosition();
-    }
-
     public void setRollerMotorSpeedAcquire() {
-        _rollerMotor.set(INTAKE_ACQUIRE_SPEED);
+        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_ACQUIRE_SPEED);
     }
 
     public void setRollerSpeedSpit() {
-        _rollerMotor.set(INTAKE_SPIT_SPEED);
+        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_SPIT_SPEED);
     }
 
     public void stopRollerMotor() {
-        _rollerMotor.set(0);
+        _hardware.getRollerMotor().set(0);
     }
 
-    public boolean pivotAtSetpoint() {
-        return _pivotMotorPID.atSetpoint();
+    public void setIntakePositionWithAngle(Double angle) {
+        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
+            // TODO: log an error, but don't throw exception
+            return;
+        } 
+        _hardware.getPivotMotorPID().setSetpoint(angle);
     }
 
     @Override

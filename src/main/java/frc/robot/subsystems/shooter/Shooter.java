@@ -14,6 +14,10 @@ public class Shooter extends SubsystemBase {
     _hardware = hardware;
   }
 
+  public void setTargetPositionAsAngle(double angle) {
+    
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

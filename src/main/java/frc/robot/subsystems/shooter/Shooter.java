@@ -39,6 +39,9 @@ public void setTargetPosition(ShooterPosition newPosition) {
     //         break;
     // }
 }
+  public void setTargetPositionAsAngle(double angle) {
+    
+  }
 
   @Override
   public void periodic() {

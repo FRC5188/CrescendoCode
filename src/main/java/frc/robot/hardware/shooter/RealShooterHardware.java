@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.hardware.HardwareConstants;
+import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class RealShooterHardware implements ShooterHardware {
     private CANSparkFlex _angleMotor;
@@ -16,7 +17,7 @@ public class RealShooterHardware implements ShooterHardware {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
         _topFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         _bottomFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-        _anglePidController = new PIDController(0, 0, 0);
+        _anglePidController = new PIDController(ShooterConstants.ANGLE_PID_P, ShooterConstants.ANGLE_PID_I, ShooterConstants.ANGLE_PID_D);
     }
 
     @Override

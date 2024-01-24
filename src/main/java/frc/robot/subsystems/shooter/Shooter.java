@@ -10,12 +10,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterHardware;
 
 public class Shooter extends SubsystemBase {
-  ShooterHardware _hardware;
-
-  private final static float ANGLE_ENCODER_OFFSET_FOR_ROBOT_BASE = 0;
-
-  // Note: The channel that this encoder is on will need to be configured for the robot. 
+  // Note: The channel that this encoder is on will need to be configured for the
+  // robot.
   private final DutyCycleEncoder _angleEncoder = configEncoder(new DutyCycleEncoder(0));
+  ShooterHardware _hardware;
+  private static final float ANGLE_ENCODER_OFFSET_FOR_ROBOT_BASE = 0;
 
   public Shooter(ShooterHardware hardware) {
     _hardware = hardware;
@@ -27,7 +26,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getCurrentPositionInDegrees() {
-    // This assumes that absolute zero is the base of the robot though an offset might need to be set.
+    // This assumes that absolute zero is the base of the robot though an offset
+    // might need to be set.
     return Rotation2d.fromRotations(_angleEncoder.get()).getDegrees();
   }
 

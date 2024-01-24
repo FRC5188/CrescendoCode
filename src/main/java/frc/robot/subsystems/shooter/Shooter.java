@@ -5,10 +5,14 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.hardware.shooter.ShooterHardware;
 
 public class Shooter extends SubsystemBase {
-  /** Creates a new Shooter. */
-  public Shooter() {}
+  ShooterHardware _hardware;
+
+  public Shooter(ShooterHardware hardware) {
+    _hardware = hardware;
+  }
 
   @Override
   public void periodic() {

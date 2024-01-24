@@ -5,10 +5,14 @@
 package frc.robot.subsystems.climber;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.hardware.climber.ClimberHardware;
 
 public class Climber extends SubsystemBase {
-  /** Creates a new Climber. */
-  public Climber() {}
+  private ClimberHardware _hardware;
+
+  public Climber(ClimberHardware hardware) {
+    _hardware = hardware;
+  }
 
   @Override
   public void periodic() {

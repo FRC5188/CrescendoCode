@@ -1,7 +1,5 @@
 package frc.robot.hardware.shooter;
 
-import org.easymock.EasyMock;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -16,14 +14,6 @@ public class RealShooterHardware implements ShooterHardware {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
         _topFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         _bottomFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-    }
-
-    public void replayHardware() {
-        EasyMock.replay(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor);
-    }
-
-    public void verifyHardware() {
-        EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor);
     }
 
     @Override

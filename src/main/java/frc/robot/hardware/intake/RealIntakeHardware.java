@@ -1,7 +1,5 @@
 package frc.robot.hardware.intake;
 
-import org.easymock.EasyMock;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -21,14 +19,6 @@ public class RealIntakeHardware implements IntakeHardware {
         _rollerMotor = new CANSparkMax(HardwareConstants.CanIds.ROLLER_MOTOR_ID, MotorType.kBrushless);
         _lightSensor = new DigitalInput(HardwareConstants.DIOPorts.LIGHT_SENSOR_PORT);
         _pivotMotorPID = new PIDController(0, 0, 0);
-    }
-
-    public void replayHardware() {
-        EasyMock.replay(_pivotMotor, _rollerMotor, _lightSensor);
-    }
-
-    public void verifyHardware() {
-        EasyMock.verify(_pivotMotor, _rollerMotor, _lightSensor);
     }
 
     @Override

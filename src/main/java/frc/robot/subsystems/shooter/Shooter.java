@@ -24,10 +24,11 @@ public class Shooter extends SubsystemBase {
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
     double encoderValueAsRotations = _hardware.getAngleEncoder().get();
-    if (encoderValueAsRotations > ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS || encoderValueAsRotations < ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS) {
-      throw new RuntimeException("It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
-    }
-    else {
+    if (encoderValueAsRotations > ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
+        || encoderValueAsRotations < ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS) {
+      throw new RuntimeException(
+          "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
+    } else {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
   }

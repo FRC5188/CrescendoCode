@@ -3,17 +3,24 @@ package frc.robot.hardware.shooter;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.hardware.HardwareConstants;
 
 public class RealShooterHardware implements ShooterHardware {
-    private CANSparkFlex _angleMotor;
-    private CANSparkFlex _topFlywheelMotor;
-    private CANSparkFlex _bottomFlywheelMotor;
+    private final CANSparkFlex _angleMotor;
+    private final CANSparkFlex _topFlywheelMotor;
+    private final CANSparkFlex _bottomFlywheelMotor;
+
+    private final DutyCycleEncoder _angleEncoder;
 
     public RealShooterHardware() {
-        _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
-        _topFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-        _bottomFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        _angleMotor = configureAngleMotor(HardwareConstants.CanIds.ANGLE_MOTOR_ID);
+        _topFlywheelMotor = configureFlywheel(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID);
+        _bottomFlywheelMotor = configureFlywheel(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID);
+
+        _angleEncoder = configureEncoder();
+
+        // Now that we've created the objects some might require additional configuration which will be carried out by helper-methods in this file. 
     }
 
     @Override
@@ -31,4 +38,20 @@ public class RealShooterHardware implements ShooterHardware {
         return _angleMotor;
     }
 
+    @Override
+    public DutyCycleEncoder getAngleEncoder() {
+        return _angleEncoder;
+    }
+
+    private DutyCycleEncoder configureEncoder() {
+        return new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);
+    }
+
+    private CANSparkFlex configureAngleMotor(int canId) {
+        return new CANSparkFlex(canId, MotorType.kBrushless);
+    }
+
+    private CANSparkFlex configureFlywheel(int canId) {
+        return new CANSparkFlex(canId, MotorType.kBrushless);
+    }
 }

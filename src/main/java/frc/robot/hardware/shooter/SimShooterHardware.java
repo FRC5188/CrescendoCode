@@ -4,23 +4,27 @@ import org.easymock.EasyMock;
 
 import com.revrobotics.CANSparkFlex;
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
 public class SimShooterHardware implements ShooterHardware {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _topFlywheelMotor;
     private CANSparkFlex _bottomFlywheelMotor;
+    private DutyCycleEncoder _angleEncoder;
 
     public SimShooterHardware() {
         _angleMotor = EasyMock.mock(CANSparkFlex.class);
         _topFlywheelMotor = EasyMock.mock(CANSparkFlex.class);
         _bottomFlywheelMotor = EasyMock.mock(CANSparkFlex.class);
+        _angleEncoder = EasyMock.mock(DutyCycleEncoder.class);
     }
 
     public void replayHardware() {
-        EasyMock.replay(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor);
+        EasyMock.replay(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder);
     }
 
     public void verifyHardware() {
-        EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor);
+        EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder);
     }
 
     @Override
@@ -36,5 +40,10 @@ public class SimShooterHardware implements ShooterHardware {
     @Override
     public CANSparkFlex getAngleMotor() {
         return _angleMotor;
+    }
+
+    @Override
+    public DutyCycleEncoder getAngleEncoder() {
+        return _angleEncoder;
     }
 }

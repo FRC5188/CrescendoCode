@@ -9,6 +9,7 @@ import frc.robot.hardware.climber.ClimberHardware;
 
 public class Climber extends SubsystemBase {
   private ClimberHardware _hardware;
+  private double _rightEncoderPos;
 
   public Climber(ClimberHardware hardware) {
     _hardware = hardware;
@@ -25,6 +26,11 @@ public class Climber extends SubsystemBase {
 
   public void setClimberRightSpeed(double speed) {
     _hardware.getRightClimberMotor().set(speed);
+  }
+
+  public double getRightEncoderPos(){
+    _rightEncoderPos = _hardware.getRightClimberMotor().getEncoder().getPosition();
+    return _rightEncoderPos;
   }
 
   @Override

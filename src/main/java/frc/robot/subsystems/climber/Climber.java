@@ -4,16 +4,23 @@
 
 package frc.robot.subsystems.climber;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkFlex;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.climber.ClimberHardware;
 
 public class Climber extends SubsystemBase {
   private ClimberHardware _hardware;
-
+  private double _leftEncoderPos;
+  private CANSparkFlex  _climberLeft;
   public Climber(ClimberHardware hardware) {
     _hardware = hardware;
   }
-
+private double getLeftEncoderPos(){
+  _leftEncoderPos =  _climberLeft.getAbsoluteEncoder(null);
+  return _leftEncoderPos
+}
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

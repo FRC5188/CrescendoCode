@@ -18,5 +18,13 @@ public class HardwareConstants {
 
     public class DIOPorts {
         public static int LIGHT_SENSOR_PORT = 0;
+        public static int ANGLE_ENCODER_PORT = 1;
+    }
+
+    public class PIDConstants {
+        public static double SHOOTER_ANGLE_KP = 1;
+        public static double SHOOTER_ANGLE_KD = 1;
+        public static double SHOOTER_ANGLE_KI = 1;
+
     }
 }

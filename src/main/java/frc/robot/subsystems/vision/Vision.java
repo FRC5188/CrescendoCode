@@ -1,7 +1,6 @@
 package frc.robot.subsystems.vision;
 
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -50,11 +49,11 @@ public class Vision {
 
   private static AprilTagFieldLayout layout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
 
-  static final PhotonCamera camera = new PhotonCamera(CAMERA_NAME);
-  private static final PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(
+  static final PhotonCamera CAMERA = new PhotonCamera(CAMERA_NAME);
+  private static final PhotonPoseEstimator POSE_ESTIMATOR = new PhotonPoseEstimator(
       layout,
       PoseStrategy.LOWEST_AMBIGUITY,
-      camera,
+      CAMERA,
       cameraPos);
 
   /**
@@ -116,7 +115,7 @@ public class Vision {
    * @return SwerveDrivePoseEstimator from WPILIB
    */
   public static SwerveDrivePoseEstimator getVisionEstimatedRobotPose(SwerveDrivePoseEstimator poseEstimator) {
-    PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+    PhotonTrackedTarget target = CAMERA.getLatestResult().getBestTarget();
     if (target != null) {
       hasTarget = true;
       Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(),
@@ -142,7 +141,7 @@ public class Vision {
    */
   public static Pose3d getRobotInitialPose() throws NullPointerException {
     try {
-      PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+      PhotonTrackedTarget target = CAMERA.getLatestResult().getBestTarget();
       Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(),
           layout.getTagPose(target.getFiducialId()).get(), cameraPos);
       return robotPose;
@@ -159,8 +158,8 @@ public class Vision {
    * @return AprilTag Field Layout
    */
   private static Optional<EstimatedRobotPose> getEstimatedRobotGlobalPose(Pose2d previousEstimatedRobotPose) {
-    poseEstimator.setReferencePose(previousEstimatedRobotPose);
-    return poseEstimator.update();
+    POSE_ESTIMATOR.setReferencePose(previousEstimatedRobotPose);
+    return POSE_ESTIMATOR.update();
   }
 
   public static boolean hasTarget() {
@@ -168,6 +167,6 @@ public class Vision {
   }
 
   public static boolean isServerConnected() {
-    return camera != null;
+    return CAMERA != null;
   }
 }

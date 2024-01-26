@@ -47,7 +47,9 @@ public class SimShooterHardware implements ShooterHardware {
     @Override
     public DutyCycleEncoder getAngleEncoder() {
         return _angleEncoder;
+    }
 
+    @Override
     public PIDController getAnglePIDController() {
         return _anglePIDController;
     }

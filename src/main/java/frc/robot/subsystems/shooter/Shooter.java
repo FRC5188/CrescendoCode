@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.revrobotics.CANSparkFlex;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterHardware;
 
@@ -13,7 +15,9 @@ public class Shooter extends SubsystemBase {
   public Shooter(ShooterHardware hardware) {
     _hardware = hardware;
   }
-
+  private CANSparkFlex configFlywheelMotor (CANSparkFlex flywheelMotor){
+      return flywheelMotor;
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

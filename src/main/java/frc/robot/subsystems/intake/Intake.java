@@ -65,6 +65,14 @@ public class Intake extends SubsystemBase {
         _hardware.getPivotMotorPID().setSetpoint(angle);
     }
 
+    public boolean pivotAtSetpoint() {
+        return _hardware.getPivotMotorPID().atSetpoint();
+    }
+
+    public boolean hasNote() {
+        return _hardware.getRollerMotor().getOutputCurrent() > IntakeConstants.INTAKE_CURRENT_CUTOFF;
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run

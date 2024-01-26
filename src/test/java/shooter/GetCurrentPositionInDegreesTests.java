@@ -61,7 +61,7 @@ public class GetCurrentPositionInDegreesTests {
 
     @Test
     void testGetCurrentPositionInDegrees_withImpossibleHighTurnOutput_expectRuntimeException() {
-        final double simulatedPositionTurns = ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS + 0.1;
+        final double simulatedPositionTurns = ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS + Rotation2d.fromDegrees(10).getRotations();
         // Sets the simulated hardware to the value that we need it to be. 
         EasyMock.expect(_simulatedHardware.getAngleEncoder().get()).andReturn(simulatedPositionTurns);
 
@@ -71,9 +71,9 @@ public class GetCurrentPositionInDegreesTests {
         verifyMocks();
     }
 
-        @Test
+    @Test
     void testGetCurrentPositionInDegrees_withImpossibleLowTurnOutput_expectRuntimeException() {
-        final double simulatedPositionTurns = ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS - 0.1;
+        final double simulatedPositionTurns = ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS - Rotation2d.fromDegrees(10).getRotations();
         // Sets the simulated hardware to the value that we need it to be. 
         EasyMock.expect(_simulatedHardware.getAngleEncoder().get()).andReturn(simulatedPositionTurns);
 
@@ -83,4 +83,33 @@ public class GetCurrentPositionInDegreesTests {
         verifyMocks();
     }
 
+    @Test
+    void testGetCurrentPositionInDegrees_withPossibleHighOutputOutsideBounds_expectDegrees() {
+        final double simulatedPositionTurns = ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS + Rotation2d.fromDegrees(5).getRotations();
+
+        EasyMock.expect(_simulatedHardware.getAngleEncoder().get()).andReturn(simulatedPositionTurns);
+
+        replayMocks(); // Run everything for EasyMock.
+
+        // Expected output in degrees.
+        final double expectedDegreesResult = Rotation2d.fromRotations(simulatedPositionTurns).getDegrees();
+
+        assertEquals(expectedDegreesResult, _shooter.getCurrentPositionInDegrees());
+        verifyMocks();
+    }
+
+    @Test
+    void testGetCurrentPositionInDegrees_withPossibleLowOutputOutsideBounds_expectDegrees() {
+        final double simulatedPositionTurns = ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS - Rotation2d.fromDegrees(5).getRotations();
+
+        EasyMock.expect(_simulatedHardware.getAngleEncoder().get()).andReturn(simulatedPositionTurns);
+
+        replayMocks(); // Run everything for EasyMock.
+
+        // Expected output in degrees.
+        final double expectedDegreesResult = Rotation2d.fromRotations(simulatedPositionTurns).getDegrees();
+
+        assertEquals(expectedDegreesResult, _shooter.getCurrentPositionInDegrees());
+        verifyMocks();
+    }
 }

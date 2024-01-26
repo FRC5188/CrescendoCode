@@ -4,12 +4,12 @@
 
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterHardware;
 
 public class Shooter extends SubsystemBase {
   ShooterHardware _hardware;
-
   public Shooter(ShooterHardware hardware) {
     _hardware = hardware;
   }
@@ -17,5 +17,10 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+
+  private PIDController configureAnglePID(PIDController angleMotor) {
+    return angleMotor;
   }
 }

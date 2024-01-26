@@ -46,7 +46,7 @@ public class SetTargetPositionAsAngleTests {
 
         // Here is where we tell EasyMock our expected behavior for our sim hardware
         // This is called recording
-        _hardware.getAnglePidController().setSetpoint(angle);
+        _hardware.getAnglePIDController().setSetpoint(angle);
 
         // Here we call a hardware method called replayHardware()
         // This causes EasyMock to run all of the stuff we just recorded
@@ -68,7 +68,7 @@ public class SetTargetPositionAsAngleTests {
 
         // Here is where we tell EasyMock our expected behavior for our sim hardware
         // This is called recording
-        _hardware.getAnglePidController().setSetpoint(angle);
+        _hardware.getAnglePIDController().setSetpoint(angle);
 
         // Here we call a hardware method called replayHardware()
         // This causes EasyMock to run all of the stuff we just recorded

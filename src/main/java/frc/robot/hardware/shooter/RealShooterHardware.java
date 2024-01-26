@@ -11,13 +11,13 @@ public class RealShooterHardware implements ShooterHardware {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _topFlywheelMotor;
     private CANSparkFlex _bottomFlywheelMotor;
-    private PIDController _anglePidController;
+    private PIDController _anglePIDController;
 
     public RealShooterHardware() {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
         _topFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         _bottomFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-        _anglePidController = new PIDController(ShooterConstants.ANGLE_PID_P, ShooterConstants.ANGLE_PID_I, ShooterConstants.ANGLE_PID_D);
+        _anglePIDController = new PIDController(ShooterConstants.ANGLE_PID_P, ShooterConstants.ANGLE_PID_I, ShooterConstants.ANGLE_PID_D);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class RealShooterHardware implements ShooterHardware {
     }
 
     @Override
-    public PIDController getAnglePidController() {
-        return _anglePidController;
+    public PIDController getAnglePIDController() {
+        return _anglePIDController;
     }
 
 }

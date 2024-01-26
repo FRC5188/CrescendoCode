@@ -10,21 +10,21 @@ public class SimShooterHardware implements ShooterHardware {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _topFlywheelMotor;
     private CANSparkFlex _bottomFlywheelMotor;
-    private PIDController _anglePidController;
+    private PIDController _anglePIDController;
 
     public SimShooterHardware() {
         _angleMotor = EasyMock.mock(CANSparkFlex.class);
         _topFlywheelMotor = EasyMock.mock(CANSparkFlex.class);
         _bottomFlywheelMotor = EasyMock.mock(CANSparkFlex.class);
-        _anglePidController = EasyMock.mock(PIDController.class);
+        _anglePIDController = EasyMock.mock(PIDController.class);
     }
 
     public void replayHardware() {
-        EasyMock.replay(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _anglePidController);
+        EasyMock.replay(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _anglePIDController);
     }
 
     public void verifyHardware() {
-        EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _anglePidController);
+        EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _anglePIDController);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SimShooterHardware implements ShooterHardware {
     }
 
     @Override
-    public PIDController getAnglePidController() {
-        return _anglePidController;
+    public PIDController getAnglePIDController() {
+        return _anglePIDController;
     }
 }

@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
       return;
 
     } else {
-      _hardware.getAnglePidController().setSetpoint(angle);
+      _hardware.getAnglePIDController().setSetpoint(angle);
       }
   }
 

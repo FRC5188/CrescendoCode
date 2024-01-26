@@ -11,5 +11,5 @@ public interface ShooterHardware {
 
     CANSparkFlex getBottomFlywheelMotor();
 
-    PIDController getAnglePidController();
+    PIDController getAnglePIDController();
 }

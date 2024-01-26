@@ -17,6 +17,22 @@ public class Shooter extends SubsystemBase {
     _hardware = hardware;
   }
 
+  public void setTargetPositionAsAngle(double angle) {
+    if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
+      // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
+      // 2024/01/23
+      return;
+
+    } else if (angle > ShooterConstants.MAX_SHOOTER_ANGLE) {
+      // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
+      // 2024/01/23
+      return;
+
+    } else {
+      _hardware.getAnglePIDController().setSetpoint(angle);
+      }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

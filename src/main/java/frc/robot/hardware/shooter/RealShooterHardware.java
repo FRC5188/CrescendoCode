@@ -2,26 +2,24 @@ package frc.robot.hardware.shooter;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.hardware.HardwareConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class RealShooterHardware implements ShooterHardware {
-    private final CANSparkFlex _angleMotor;
-    private final CANSparkFlex _topFlywheelMotor;
-    private final CANSparkFlex _bottomFlywheelMotor;
-
-    private final DutyCycleEncoder _angleEncoder;
+    private CANSparkFlex _angleMotor;
+    private CANSparkFlex _topFlywheelMotor;
+    private CANSparkFlex _bottomFlywheelMotor;
+    private PIDController _anglePIDController;
+    private DutyCycleEncoder _angleEncoder;
 
     public RealShooterHardware() {
-        _angleMotor = configureAngleMotor(HardwareConstants.CanIds.ANGLE_MOTOR_ID);
-        _topFlywheelMotor = configureFlywheel(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID);
-        _bottomFlywheelMotor = configureFlywheel(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID);
-
+        _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
+        _topFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        _bottomFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         _angleEncoder = configureEncoder();
-
-        // Now that we've created the objects some might require additional configuration which will be carried out by helper-methods in this file. 
+        _anglePIDController = new PIDController(ShooterConstants.ANGLE_PID_P, ShooterConstants.ANGLE_PID_I, ShooterConstants.ANGLE_PID_D);
     }
 
     @Override
@@ -43,6 +41,11 @@ public class RealShooterHardware implements ShooterHardware {
     public DutyCycleEncoder getAngleEncoder() {
         return _angleEncoder;
     }
+  
+      
+    public PIDController getAnglePIDController() {
+        return _anglePIDController;
+    }
 
     private DutyCycleEncoder configureEncoder() {
         DutyCycleEncoder angleEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);
@@ -57,4 +60,6 @@ public class RealShooterHardware implements ShooterHardware {
     private CANSparkFlex configureFlywheel(int canId) {
         return new CANSparkFlex(canId, MotorType.kBrushless);
     }
+  
+
 }

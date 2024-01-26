@@ -41,140 +41,140 @@ public class ModuleIOSparkFlex implements ModuleIO {
   private static final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
   private static final double TURN_GEAR_RATIO = 150.0 / 7.0;
 
-  private final CANSparkFlex driveSparkFlex;
-  private final CANSparkFlex turnSparkFlex;
-  private final CANcoder cancoder;
+  private final CANSparkFlex _driveSparkFlex;
+  private final CANSparkFlex _turnSparkFlex;
+  private final CANcoder _cancoder;
 
-  private final RelativeEncoder driveEncoder;
-  private final RelativeEncoder turnRelativeEncoder;
-  private final StatusSignal<Double> turnAbsolutePosition;
+  private final RelativeEncoder _driveEncoder;
+  private final RelativeEncoder _turnRelativeEncoder;
+  private final StatusSignal<Double> _turnAbsolutePosition;
 
-  private final boolean isTurnMotorInverted = true;
-  private final Rotation2d absoluteEncoderOffset;
+  private final boolean _isTurnMotorInverted = true;
+  private final Rotation2d _absoluteEncoderOffset;
 
   public ModuleIOSparkFlex(int index) {
     switch (index) {
       case 0:
-        driveSparkFlex = new CANSparkFlex(1, MotorType.kBrushless);
-        turnSparkFlex = new CANSparkFlex(2, MotorType.kBrushless);
-        cancoder = new CANcoder(3);
-        absoluteEncoderOffset = Rotation2d.fromRotations(0.058630167643229); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(1, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(2, MotorType.kBrushless);
+        _cancoder = new CANcoder(3);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(0.058630167643229); // MUST BE CALIBRATED
         break;
       case 1:
-        driveSparkFlex = new CANSparkFlex(4, MotorType.kBrushless);
-        turnSparkFlex = new CANSparkFlex(5, MotorType.kBrushless);
-        cancoder = new CANcoder(6);
-        absoluteEncoderOffset = Rotation2d.fromRotations(0.23297861735026); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(4, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(5, MotorType.kBrushless);
+        _cancoder = new CANcoder(6);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(0.23297861735026); // MUST BE CALIBRATED
         break;
       case 2:
-        driveSparkFlex = new CANSparkFlex(7, MotorType.kBrushless);
-        turnSparkFlex = new CANSparkFlex(8, MotorType.kBrushless);
-        cancoder = new CANcoder(9);
-        absoluteEncoderOffset = Rotation2d.fromRotations(0.370921122233073); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(7, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(8, MotorType.kBrushless);
+        _cancoder = new CANcoder(9);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(0.370921122233073); // MUST BE CALIBRATED
         break;
       case 3:
-        driveSparkFlex = new CANSparkFlex(10, MotorType.kBrushless);
-        turnSparkFlex = new CANSparkFlex(11, MotorType.kBrushless);
-        cancoder = new CANcoder(12);
-        absoluteEncoderOffset = Rotation2d.fromRotations(-0.360928141276042); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(10, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(11, MotorType.kBrushless);
+        _cancoder = new CANcoder(12);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.360928141276042); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
     }
 
-    cancoder.getConfigurator().apply(new CANcoderConfiguration());
-    turnAbsolutePosition = cancoder.getAbsolutePosition();
+    _cancoder.getConfigurator().apply(new CANcoderConfiguration());
+    _turnAbsolutePosition = _cancoder.getAbsolutePosition();
 
-    driveSparkFlex.restoreFactoryDefaults();
-    turnSparkFlex.restoreFactoryDefaults();
+    _driveSparkFlex.restoreFactoryDefaults();
+    _turnSparkFlex.restoreFactoryDefaults();
 
-    driveSparkFlex.setCANTimeout(250);
-    turnSparkFlex.setCANTimeout(250);
+    _driveSparkFlex.setCANTimeout(250);
+    _turnSparkFlex.setCANTimeout(250);
 
-    driveEncoder = driveSparkFlex.getEncoder();
-    turnRelativeEncoder = turnSparkFlex.getEncoder();
+    _driveEncoder = _driveSparkFlex.getEncoder();
+    _turnRelativeEncoder = _turnSparkFlex.getEncoder();
 
-    turnSparkFlex.setInverted(isTurnMotorInverted);
-    driveSparkFlex.setSmartCurrentLimit(40);
-    turnSparkFlex.setSmartCurrentLimit(30);
-    driveSparkFlex.enableVoltageCompensation(12.0);
-    turnSparkFlex.enableVoltageCompensation(12.0);
+    _turnSparkFlex.setInverted(_isTurnMotorInverted);
+    _driveSparkFlex.setSmartCurrentLimit(40);
+    _turnSparkFlex.setSmartCurrentLimit(30);
+    _driveSparkFlex.enableVoltageCompensation(12.0);
+    _turnSparkFlex.enableVoltageCompensation(12.0);
 
-    driveEncoder.setPosition(0.0);
-    driveEncoder.setMeasurementPeriod(10);
-    driveEncoder.setAverageDepth(2);
+    _driveEncoder.setPosition(0.0);
+    _driveEncoder.setMeasurementPeriod(10);
+    _driveEncoder.setAverageDepth(2);
 
-    turnRelativeEncoder.setPosition(0.0);
-    turnRelativeEncoder.setMeasurementPeriod(10);
-    turnRelativeEncoder.setAverageDepth(2);
+    _turnRelativeEncoder.setPosition(0.0);
+    _turnRelativeEncoder.setMeasurementPeriod(10);
+    _turnRelativeEncoder.setAverageDepth(2);
 
-    driveSparkFlex.setCANTimeout(0);
-    turnSparkFlex.setCANTimeout(0);
+    _driveSparkFlex.setCANTimeout(0);
+    _turnSparkFlex.setCANTimeout(0);
 
-    driveSparkFlex.setPeriodicFramePeriod(
+    _driveSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus3, 65520); // Analog Sensor Info
-    driveSparkFlex.setPeriodicFramePeriod(
+    _driveSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus4, 65522); // Alternate Encoder Info
-    driveSparkFlex.setPeriodicFramePeriod(
+    _driveSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus5, 65524); // Duty Cycle Encoder Position
-    driveSparkFlex.setPeriodicFramePeriod(
+    _driveSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus6, 65526); // Duty Cycle Encoder Velocity
-    driveSparkFlex.setPeriodicFramePeriod(
+    _driveSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus7, 65528); // Iaccum for PID
 
-    turnSparkFlex.setPeriodicFramePeriod(
+    _turnSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus3, 65520); // Analog Sensor Info
-    turnSparkFlex.setPeriodicFramePeriod(
+    _turnSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus4, 65522); // Alternate Encoder Info
-    turnSparkFlex.setPeriodicFramePeriod(
+    _turnSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus5, 65524); // Duty Cycle Encoder Position
-    turnSparkFlex.setPeriodicFramePeriod(
+    _turnSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus6, 65526); // Duty Cycle Encoder Velocity
-    turnSparkFlex.setPeriodicFramePeriod(
+    _turnSparkFlex.setPeriodicFramePeriod(
         CANSparkLowLevel.PeriodicFrame.kStatus7, 65528); // Iaccum for PID
 
-    driveSparkFlex.burnFlash();
-    turnSparkFlex.burnFlash();
+    _driveSparkFlex.burnFlash();
+    _turnSparkFlex.burnFlash();
   }
 
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
-    inputs.drivePositionRad =
-        Units.rotationsToRadians(driveEncoder.getPosition()) / DRIVE_GEAR_RATIO;
-    inputs.driveVelocityRadPerSec =
-        Units.rotationsPerMinuteToRadiansPerSecond(driveEncoder.getVelocity()) / DRIVE_GEAR_RATIO;
-    inputs.driveAppliedVolts = driveSparkFlex.getAppliedOutput() * driveSparkFlex.getBusVoltage();
-    inputs.driveCurrentAmps = new double[] {driveSparkFlex.getOutputCurrent()};
+    inputs._drivePositionRad =
+        Units.rotationsToRadians(_driveEncoder.getPosition()) / DRIVE_GEAR_RATIO;
+    inputs._driveVelocityRadPerSec =
+        Units.rotationsPerMinuteToRadiansPerSecond(_driveEncoder.getVelocity()) / DRIVE_GEAR_RATIO;
+    inputs._driveAppliedVolts = _driveSparkFlex.getAppliedOutput() * _driveSparkFlex.getBusVoltage();
+    inputs._driveCurrentAmps = new double[] {_driveSparkFlex.getOutputCurrent()};
 
-    inputs.turnAbsolutePosition =
-        Rotation2d.fromRotations(turnAbsolutePosition.getValueAsDouble())
-            .minus(absoluteEncoderOffset);
-    inputs.turnPosition =
-        Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
-    inputs.turnVelocityRadPerSec =
-        Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity())
+    inputs._turnAbsolutePosition =
+        Rotation2d.fromRotations(_turnAbsolutePosition.getValueAsDouble())
+            .minus(_absoluteEncoderOffset);
+    inputs._turnPosition =
+        Rotation2d.fromRotations(_turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
+    inputs._turnVelocityRadPerSec =
+        Units.rotationsPerMinuteToRadiansPerSecond(_turnRelativeEncoder.getVelocity())
             / TURN_GEAR_RATIO;
-    inputs.turnAppliedVolts = turnSparkFlex.getAppliedOutput() * turnSparkFlex.getBusVoltage();
-    inputs.turnCurrentAmps = new double[] {turnSparkFlex.getOutputCurrent()};
+    inputs._turnAppliedVolts = _turnSparkFlex.getAppliedOutput() * _turnSparkFlex.getBusVoltage();
+    inputs._turnCurrentAmps = new double[] {_turnSparkFlex.getOutputCurrent()};
   }
 
   @Override
   public void setDriveVoltage(double volts) {
-    driveSparkFlex.setVoltage(volts);
+    _driveSparkFlex.setVoltage(volts);
   }
 
   @Override
   public void setTurnVoltage(double volts) {
-    turnSparkFlex.setVoltage(volts);
+    _turnSparkFlex.setVoltage(volts);
   }
 
   @Override
   public void setDriveBrakeMode(boolean enable) {
-    driveSparkFlex.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
+    _driveSparkFlex.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
   }
 
   @Override
   public void setTurnBrakeMode(boolean enable) {
-    turnSparkFlex.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
+    _turnSparkFlex.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
   }
 }

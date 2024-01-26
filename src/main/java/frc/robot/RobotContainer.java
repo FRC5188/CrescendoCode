@@ -16,19 +16,17 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
+import frc.robot.subsystems.drive.commands.DriveCommands;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -40,23 +38,23 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  private final Drive _drive;
   // private final Flywheel flywheel;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController _controller = new CommandXboxController(0);
 
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private final LoggedDashboardChooser<Command> _autoChooser;
   /*private final LoggedDashboardNumber flywheelSpeedInput =
   new LoggedDashboardNumber("Flywheel Speed", 1500.0);*/
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    switch (Constants.currentMode) {
+    switch (Constants.CURRENT_MODE) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive =
+        _drive =
             new Drive(
                 new GyroIONavX2(),
                 new ModuleIOSparkFlex(0),
@@ -68,7 +66,7 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
+        _drive =
             new Drive(
                 new GyroIO() {},
                 new ModuleIOSim(),
@@ -80,7 +78,7 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
+        _drive =
             new Drive(
                 new GyroIO() {},
                 new ModuleIO() {},
@@ -97,19 +95,19 @@ public class RobotContainer {
     Commands.startEnd(
             () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel)
         .withTimeout(5.0));*/
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
-    autoChooser.addOption(
+    _autoChooser.addOption(
         "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
+        _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    _autoChooser.addOption(
         "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    _autoChooser.addOption(
+        "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    _autoChooser.addOption(
+        "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     /*autoChooser.addOption(
         "Flywheel SysId (Quasistatic Forward)",
         flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
@@ -132,21 +130,21 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    drive.setDefaultCommand(
+    _drive.setDefaultCommand(
         DriveCommands.joystickDrive(
-            drive,
-            () -> controller.getLeftY(),
-            () -> controller.getLeftX(),
-            () -> -controller.getRightX()));
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    controller
+            _drive,
+            () -> _controller.getLeftY(),
+            () -> _controller.getLeftX(),
+            () -> -_controller.getRightX()));
+    _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+    _controller
         .b()
         .onTrue(
             Commands.runOnce(
                     () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                    drive)
+                        _drive.setPose(
+                            new Pose2d(_drive.getPose().getTranslation(), new Rotation2d())),
+                    _drive)
                 .ignoringDisable(true));
     /*controller
     .a()
@@ -161,6 +159,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    return _autoChooser.get();
   }
 }

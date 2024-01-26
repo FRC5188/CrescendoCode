@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.hardware.HardwareConstants;
+import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class RealShooterHardware implements ShooterHardware {
     private final CANSparkFlex _angleMotor;
@@ -44,7 +45,9 @@ public class RealShooterHardware implements ShooterHardware {
     }
 
     private DutyCycleEncoder configureEncoder() {
-        return new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);
+        DutyCycleEncoder angleEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);
+        angleEncoder.setPositionOffset(ShooterConstants.ANGLE_ENCODER_OFFSET);
+        return angleEncoder;
     }
 
     private CANSparkFlex configureAngleMotor(int canId) {

@@ -1,10 +1,12 @@
 package frc.robot.hardware.vision;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-// import org.photonvision.PhotonTargetSortMode;
+import org.photonvision.PhotonTargetSortMode;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -50,10 +52,24 @@ public class VisionIOPhotonVision {
 
     public void updateInputs(VisionIOInputs inputs) {
         PhotonPipelineResult cameraOneResult = CAMERA_ONE.getLatestResult();
-        //PhotonPipelineResult cameraTwoResult = 
+        PhotonPipelineResult cameraTwoResult = CAMERA_TWO.getLatestResult();
+
+        _cameraOneTargets = cameraOneResult.getTargets();
+        _cameraTwoTargets = cameraTwoResult.getTargets();
+
+        //_doesCameraOneHaveTarget = checkValidResult(_cameraOneTargets) && _cameraOneTargets
     }
 
     public void setOdometryReferenceEstimator(SwerveDrivePoseEstimator inputEstimationFromOdometry) {
 
     } 
+
+    private boolean checkValidResult(List<PhotonTrackedTarget> result) {
+        for (PhotonTrackedTarget target : result) {
+            if (target.getFiducialId() > 8) { // TODO: This will need to be updated with new ID for tags. 
+                return false;
+            }
+        }
+        return true;
+    }
 }   

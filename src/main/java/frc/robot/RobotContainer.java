@@ -151,14 +151,14 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> _controller.getLeftY(),
+                        () -> -_controller.getLeftY(),
                         () -> _controller.getLeftX(),
                         () -> -_controller.getRightX()));
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         _controller
                 .b()
                 .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                        () -> _controller.getLeftY(),
+                        () -> -_controller.getLeftY(),
                         () -> _controller.getLeftX()));
         /*
          * controller

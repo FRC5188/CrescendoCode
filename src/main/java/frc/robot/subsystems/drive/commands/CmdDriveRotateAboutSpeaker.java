@@ -15,9 +15,9 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     private final DoubleSupplier _translationYSupplier;
     private PIDController _angleController;
 
-    final double _autoRotateP = 0.2;
-    final double _autoRotateI = 0.001;
-    final double _autoRotateD = 0.001;
+    final double _autoRotateP = 0.1;
+    final double _autoRotateI = 0.003;
+    final double _autoRotateD = 0.00075;
     final double _autoRotateTolerance = 3.0;
 
     /**

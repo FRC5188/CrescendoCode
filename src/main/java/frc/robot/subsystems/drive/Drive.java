@@ -258,6 +258,10 @@ public class Drive extends SubsystemBase {
     _poseEstimator.resetPosition(_rawGyroRotation, getModulePositions(), pose);
   }
 
+  public Rotation2d getGyroscopeRotation() {
+    return _rawGyroRotation;
+  }
+
   /**
    * Adds a vision measurement to the pose estimator.
    *
@@ -308,6 +312,30 @@ public class Drive extends SubsystemBase {
     } else {
       setCenterOfRotation(calcSpeakerCoRForRed(_poseEstimator.getEstimatedPosition(), getSpeakerPos()));
     }
+  }
+
+  public double calcAngleToSpeaker() {
+    if (getAlliance() == Alliance.Blue) {
+      return calcAngleToSpeakerForBlue();
+    } else {
+      return calcAngleToSpeakerForRed();
+    }
+  }
+
+  private double calcAngleToSpeakerForBlue() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d speakerPos = getSpeakerPos();
+    double xDiff = robotPose.getX() - speakerPos.getX();
+    double yDiff = speakerPos.getY() - robotPose.getY();
+    return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
+  private double calcAngleToSpeakerForRed() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d speakerPos = getSpeakerPos();
+    double xDiff = speakerPos.getX() - robotPose.getX();
+    double yDiff = speakerPos.getY() - robotPose.getY();
+    return Math.toDegrees(Math.atan(yDiff / xDiff));
   }
 
   public static Translation2d calcSpeakerCoRForBlue(Pose2d robotPose, Pose2d speakerPos) {

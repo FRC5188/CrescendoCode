@@ -7,6 +7,14 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
+  // Note: The channel that this encoder is on will need to be configured for the
+  // robot.
+  //ShooterHardware _hardware;
+
+  // public Shooter(ShooterHardware hardware) {
+  //   _hardware = hardware;
+  // }
+}
 
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {

@@ -1,6 +1,1 @@
-[submodule "src/main/java/frc/robot/VortexSwerveCode"]
-	path = src/main/java/frc/robot/VortexSwerveCode
-	url = git@github.com:FRC5188/VortexSwerveCode.git
-[submodule "AdvKitTest"]
-	path = AdvKitTest
-	url = https://github.com/FRC5188/AdvKitTest
+

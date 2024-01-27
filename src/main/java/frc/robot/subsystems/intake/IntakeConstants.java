@@ -12,9 +12,10 @@ public class IntakeConstants {
     public static double INTAKE_AMP_SCORE_ANGLE = 0; // also subject to change!
     public static double INTAKE_SPEAKER_SCORE_ANGLE = 0; // also subject to change!
 
-    // Intake roller values
+    // Intake Roller Values
     public static double INTAKE_ACQUIRE_SPEED = 0;
     public static double INTAKE_SPIT_SPEED = 0;
 
     public static double INTAKE_CURRENT_CUTOFF = 0;
+
 }

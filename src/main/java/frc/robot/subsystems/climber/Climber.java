@@ -1,12 +1,12 @@
 package frc.robot.subsystems.climber;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.hardware.climber.ClimberHardware;
+import frc.robot.hardware.climber.ClimberIO;
 
 public class Climber extends SubsystemBase {
-  private ClimberHardware _hardware;
+  private ClimberIO _hardware;
   private boolean _canMove;
-  public Climber(ClimberHardware hardware) {
+  public Climber(ClimberIO hardware) {
     _hardware = hardware;
     _canMove = false;
   }
@@ -16,17 +16,17 @@ public class Climber extends SubsystemBase {
   }
 
   public void setClimberSpeed(double speed) {
-    setClimberLeftSpeed(speed);
-    setClimberRightSpeed(speed);
+    //setClimberLeftSpeed(speed);
+    //setClimberRightSpeed(speed);
   }
 
-  public void setClimberLeftSpeed(double speed) {
-    _hardware.getLeftClimberMotor().set(speed);
-  }
+  //public void setClimberLeftSpeed(double speed) {
+  //  _hardware.getLeftClimberMotor().set(speed);
+  //}
 
-  public void setClimberRightSpeed(double speed) {
-    _hardware.getRightClimberMotor().set(speed);
-  }
+  //public void setClimberRightSpeed(double speed) {
+  //  _hardware.getRightClimberMotor().set(speed);
+  //}
 
   @Override
   public void periodic() {

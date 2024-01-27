@@ -52,10 +52,11 @@ public class CmdIntakeWaitForNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (_commandTimesOut) {
-      return _countdownInCycles <= 0;
-    }
+    // if (_commandTimesOut) {
+    //   return _countdownInCycles <= 0;
+    // }
     
-    return (_commandTimesOut && _countdownInCycles <= 0) || _intakeSubsystem.hasNote();
+    // return (_commandTimesOut && _countdownInCycles <= 0) || _intakeSubsystem.hasNote();
+    return true;
   }
 }

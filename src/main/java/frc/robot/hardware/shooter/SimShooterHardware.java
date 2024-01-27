@@ -26,11 +26,11 @@ public class SimShooterHardware implements ShooterHardware {
     }
 
     public void replayHardware() {
-        EasyMock.replay(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder);
+        EasyMock.replay(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder, _anglePIDController);
     }
 
     public void verifyHardware() {
-        EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder);
+        EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder, _anglePIDController);
     }
 
     @Override

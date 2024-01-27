@@ -15,6 +15,7 @@ public class Shooter extends SubsystemBase {
   // public Shooter(ShooterHardware hardware) {
   //   _hardware = hardware;
   // }
+  private static boolean _autoShootEnabled = true;
 
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
@@ -47,4 +48,7 @@ public class Shooter extends SubsystemBase {
   //     return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
   //   }
   // }
+    public boolean isAutoShootEnabled() {
+      return _autoShootEnabled;
+    }
 }

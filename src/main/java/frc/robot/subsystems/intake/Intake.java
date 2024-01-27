@@ -1,7 +1,12 @@
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.hardware.intake.IntakeHardware;
+
+import frc.robot.hardware.intake.IntakeIO;
+import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
@@ -14,37 +19,38 @@ public class Intake extends SubsystemBase {
 
     protected IntakePosition _intakePosition;
 
-    //private IntakeHardware _hardware;
+    private final IntakeIO _intakeIO;
+    private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged(); 
 
-    //public Intake(IntakeHardware hardware) {
-    //    _hardware = hardware;
-    //}
-
-    public IntakePosition getIntakePosition() {
-        //return this._intakePosition;
-        return null;
+    public Intake(IntakeIO intakeIO) {
+        _intakeIO = intakeIO;
     }
 
-    // public void setIntakePosition(IntakePosition position) {
-    //     _intakePosition = position;
-    //     switch (_intakePosition) {
-    //         case GroundPickup:
-    //             setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
-    //             break;
-    //         case SourcePickup:
-    //             setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
-    //             break;
-    //         case Stowed:
-    //             setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
-    //             break;
-    //         case AmpScore:
-    //             setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
-    //             break;
-    //         case SpeakerScore:
-    //             setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
-    //             break;
-    //     }
-    // }
+    public IntakePosition getIntakePosition() {
+        return this._intakePosition;
+        //return null;
+    }
+
+    public void setIntakePosition(IntakePosition position) {
+        _intakePosition = position;
+        switch (_intakePosition) {
+            case GroundPickup:
+                _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
+                break;
+            case SourcePickup:
+                _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
+                break;
+            case Stowed:
+                _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_STOWED_ANGLE);
+                break;
+            case AmpScore:
+                _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
+                break;
+            case SpeakerScore:
+                _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
+                break;
+        }
+    }
 
     //public void setRollerMotorSpeedAcquire() {
     //    _hardware.getRollerMotor().set(IntakeConstants.INTAKE_ACQUIRE_SPEED);
@@ -70,12 +76,14 @@ public class Intake extends SubsystemBase {
     //    return _hardware.getPivotMotorPID().atSetpoint();
     //}
 
-    //public boolean hasNote() {
-    //    return _hardware.getRollerMotor().getOutputCurrent() > IntakeConstants.INTAKE_CURRENT_CUTOFF;
-    //}
+    public boolean hasNote() {
+        return _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
+    }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        _intakeIO.updateInputs(_intakeInputs);
+    Logger.processInputs("Drive/Gyro", _intakeInputs);
     }
 }

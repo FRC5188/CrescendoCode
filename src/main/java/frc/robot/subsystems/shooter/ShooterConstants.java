@@ -12,4 +12,8 @@ public abstract class ShooterConstants {
     public static final double ANGLE_PID_P = 0;
     public static final double ANGLE_PID_I = 0;
     public static final double ANGLE_PID_D = 0;
+
+    public static final double AMP_SCORE_ANGLE = 0;
+    public static final double SPEAKER_SCORE_ANGLE = 0;
+    public static final double PODIUM_ANGLE = 0;
 }

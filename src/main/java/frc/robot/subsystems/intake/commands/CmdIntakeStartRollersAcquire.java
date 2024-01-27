@@ -12,10 +12,10 @@ public class CmdIntakeStartRollersAcquire extends Command {
         addRequirements(intakeSubsystem);
     }
 
-    @Override
-    public void initialize() {
-        _intakeSubsystem.setRollerMotorSpeedAcquire();
-    }
+    // @Override
+    // public void initialize() {
+    //     _intakeSubsystem.setRollerMotorSpeedAcquire();
+    // }
 
     @Override
     public void execute() {

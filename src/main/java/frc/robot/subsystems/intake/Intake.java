@@ -21,7 +21,8 @@ public class Intake extends SubsystemBase {
     //}
 
     public IntakePosition getIntakePosition() {
-        return this._intakePosition;
+        //return this._intakePosition;
+        return null;
     }
 
     // public void setIntakePosition(IntakePosition position) {

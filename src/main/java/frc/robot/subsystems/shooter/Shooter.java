@@ -13,8 +13,8 @@ public class Shooter extends SubsystemBase {
   // Note: The channel that this encoder is on will need to be configured for the
   // robot.
 
-    private final ShooterIO _shooterIO;
-    private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+  private final ShooterIO _shooterIO;
+  private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
 
   public Shooter(ShooterIO shooterIO) {
     this._shooterIO = shooterIO;
@@ -33,7 +33,11 @@ public class Shooter extends SubsystemBase {
 
     } else {
       _shooterIO.setTargetPositionAsDegrees(angle);
-      }
+    }
+  }
+
+  private void runPivotPID() {
+    _shooterIO.setTargetPositionAsDegrees(getCurrentPositionInDegrees());
   }
 
   @Override
@@ -44,8 +48,10 @@ public class Shooter extends SubsystemBase {
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
     double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
-    if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS + Rotation2d.fromDegrees(10).getRotations()
-        || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS - Rotation2d.fromDegrees(10).getRotations()) {
+    if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
+        + Rotation2d.fromDegrees(10).getRotations()
+        || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS
+            - Rotation2d.fromDegrees(10).getRotations()) {
       throw new RuntimeException(
           "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
     } else {

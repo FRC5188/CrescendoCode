@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  private void runPivotPID() {
+  public void runPivotPID() {
     _shooterIO.setTargetPositionAsDegrees(getCurrentPositionInDegrees());
   }
 

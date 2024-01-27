@@ -57,6 +57,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
         } else {
             _rollerMotor.set(0.0);
         }
+    }
       
     public void setRollerMotorSpeed(double speed) {
         _rollerMotor.set(speed);

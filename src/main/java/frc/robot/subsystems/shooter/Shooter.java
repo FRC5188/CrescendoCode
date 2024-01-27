@@ -14,7 +14,6 @@ public class Shooter extends SubsystemBase {
   // public Shooter(ShooterHardware hardware) {
   //   _hardware = hardware;
   // }
-}
 
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {

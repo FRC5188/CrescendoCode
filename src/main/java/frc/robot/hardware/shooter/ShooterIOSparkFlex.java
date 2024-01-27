@@ -38,7 +38,7 @@ public class ShooterIOSparkFlex implements ShooterIO {
         inputs._angleMotorCurrent = _angleMotor.getOutputCurrent();
         inputs._angleMotorPositionDegrees = Units.rotationsToDegrees(_angleMotor.getEncoder().getPosition());
 
-        inputs._angleEncoderPosition = _angleEncoder.getPosition(); // TODO: This might be in encoder tics. Decide later what units would be best. 
+        inputs._angleEncoderPositionRotations = _angleEncoder.getPosition(); // TODO: This might be in encoder tics. Decide later what units would be best. 
     }
 
     public void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {

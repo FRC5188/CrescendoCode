@@ -29,7 +29,7 @@ public interface ShooterIO {
         // |================= END ANGLE MOTOR LOGGING =================|
 
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
-        public double _angleEncoderPosition;
+        public double _angleEncoderPositionRotations;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
     }
 

@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.math.controller.PIDController;
 
-public class SimShooterHardware implements ShooterHardware {
+public class SimShooterHardware implements ShooterIO {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _topFlywheelMotor;
     private CANSparkFlex _bottomFlywheelMotor;

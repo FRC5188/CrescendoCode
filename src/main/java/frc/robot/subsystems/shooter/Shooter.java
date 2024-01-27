@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems.shooter;
 
-import com.revrobotics.CANSparkFlex;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+// import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.hardware.shooter.ShooterHardware;
 
@@ -23,11 +21,11 @@ public class Shooter extends SubsystemBase {
    Subwoofer,
    Podium
   }
-
-  private double _targetFlywheelSpeed;
-  private PIDController _anglePIDController;
-  private boolean _autoShootEnabled;
-  private double FLYWHEEL_SPEED_DEADBAND;
+// Commented these out because they are not used yet
+  // private double _targetFlywheelSpeed;
+  // private PIDController _anglePIDController;
+  // private boolean _autoShootEnabled;
+  // private double FLYWHEEL_SPEED_DEADBAND;
 
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {

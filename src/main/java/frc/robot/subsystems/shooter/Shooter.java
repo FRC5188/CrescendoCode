@@ -22,8 +22,9 @@ public class Shooter extends SubsystemBase {
   public enum ShooterZone {
     AMP_SCORE, ZONE_ONE, SPEAKER_SCORE, ZONE_TWO, PODIUM, ZONE_THREE
   }
-  ShooterZone shooterZone;
-  
+
+  ShooterZone targetZone;
+
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
   }
@@ -61,6 +62,22 @@ public class Shooter extends SubsystemBase {
           "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
     } else {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
+    }
+  }
+
+  public void setShooterPosition(ShooterZone targetZone) {
+    switch (targetZone) {
+      case AMP_SCORE:
+        setTargetPositionAsAngle(ShooterConstants.AMP_SCORE_ANGLE);
+        break;
+      case SPEAKER_SCORE:
+        setTargetPositionAsAngle(ShooterConstants.SPEAKER_SCORE_ANGLE);
+        break;
+      case PODIUM:
+        setTargetPositionAsAngle(ShooterConstants.PODIUM_ANGLE);
+        break;
+      default:
+        // I have no clue if anything is supposed to go here.
     }
   }
 }

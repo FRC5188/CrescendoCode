@@ -51,11 +51,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
         _pivotMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
     }
 
-    public void setIsRollerRolling(boolean isRollerRolling) {
-        if (isRollerRolling) {
-            _rollerMotor.set(0.5); // TODO: The actual magnitude of the roller motor that we want will be left up to testing later. 
-        } else {
-            _rollerMotor.set(0.0);
-        }
+    public void setRollerMotorSpeed(double speed) {
+        _rollerMotor.set(speed);
     }
 }

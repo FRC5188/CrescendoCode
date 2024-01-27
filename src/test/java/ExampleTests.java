@@ -29,12 +29,14 @@
 
 //     void replayMocks() {
 //         // Put anything in here that is mocked
-//         EasyMock.replay(_subsystem, _hardware);
+//         EasyMock.replay(_subsystem);
+//         _hardware.replayHardware();
 //     }
 
 //     void verifyMocks() {
 //         // Put anything in here that is mocked
-//         EasyMock.verify(_subsystem, _hardware);
+//         EasyMock.verify(_subsystem);
+//         _hardware.verifyHardware();
 //     }
 
 //     @SuppressWarnings("PMD.SignatureDeclareThrowsException")

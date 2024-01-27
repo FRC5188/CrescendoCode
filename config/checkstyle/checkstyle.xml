@@ -98,7 +98,7 @@
         <!-- <module name="MethodName"/>-->
         <!-- <module name="PackageName"/> -->
         <module name="ParameterName"/>
-        <module name="StaticVariableName"/>
+        <!-- <module name="StaticVariableName"/> -->
         <module name="TypeName"/>
 
         <!-- Checks for imports                              -->
@@ -131,7 +131,7 @@
         <!-- Modifier Checks                                    -->
         <!-- See https://checkstyle.org/config_modifier.html -->
         <module name="ModifierOrder"/>
-        <module name="RedundantModifier"/>
+        <!-- <module name="RedundantModifier"/> -->
 
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See https://checkstyle.org/config_blocks.html -->

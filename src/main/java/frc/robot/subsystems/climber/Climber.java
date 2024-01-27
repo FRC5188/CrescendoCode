@@ -8,21 +8,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.climber.ClimberHardware;
 
 public class Climber extends SubsystemBase {
+    private ClimberHardware _hardware;
+    private boolean _canMove;
 
-  private ClimberHardware _hardware;
-  private boolean _canMove; 
+    public Climber(ClimberHardware hardware) {
+        _hardware = hardware;
+    }
 
-  public Climber(ClimberHardware hardware) {
-    _hardware = hardware;
-  }
+    public void setCanMove(boolean canMove) {
+        _canMove = canMove;
+    }
 
-public void setCanMove(boolean canMove) {
-  _canMove = canMove; 
-}
+    public boolean getCanMove(){
+        return _canMove;
+    }
 
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }

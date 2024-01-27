@@ -32,19 +32,19 @@ public class Intake extends SubsystemBase {
          _intakePosition = position;
          switch (_intakePosition) {
              case GroundPickup:
-                 _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
+                 setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
                  break;
              case SourcePickup:
-                 _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
+                 setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
                  break;
              case Stowed:
-                 _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_STOWED_ANGLE);
+                 setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
                  break;
              case AmpScore:
-                 _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
+                 setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
                  break;
              case SpeakerScore:
-                 _intakeIO.setTargetPositionAsDegrees(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
+                 setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
                  break;
          }
      }

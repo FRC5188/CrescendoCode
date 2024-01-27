@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.hardware.intake.IntakeHardware;
+import frc.robot.hardware.intake.IntakeIO;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
@@ -13,12 +14,11 @@ public class Intake extends SubsystemBase {
     }
 
     protected IntakePosition _intakePosition;
+    private IntakeIO _io; 
 
-    //private IntakeHardware _hardware;
-
-    //public Intake(IntakeHardware hardware) {
-    //    _hardware = hardware;
-    //}
+    public Intake(IntakeIO io) {
+        _io = io;
+    }
 
     public IntakePosition getIntakePosition() {
         //return this._intakePosition;
@@ -67,7 +67,7 @@ public class Intake extends SubsystemBase {
     //}
 
     public boolean pivotAtSetpoint() {
-        return _hardware.getPivotMotorPID().atSetpoint();
+        return _io.getPivotMotorPID().atSetpoint();
 }
 
     //public boolean hasNote() {

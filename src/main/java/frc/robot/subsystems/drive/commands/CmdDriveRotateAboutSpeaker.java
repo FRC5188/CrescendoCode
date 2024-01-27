@@ -8,7 +8,6 @@ import frc.robot.subsystems.drive.Drive;
 
 import java.util.function.DoubleSupplier;
 
-
 public class CmdDriveRotateAboutSpeaker extends Command {
     private final Drive _drive;
 
@@ -16,11 +15,10 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     private final DoubleSupplier _translationYSupplier;
     private PIDController _angleController;
 
-    // windham gains were 0.02, 0.0, 0.0. It worked well for their week 1
-    static final double AUTO_ROTATE_KP = 0.2;
-    static final double AUTO_ROTATE_KI = 0.001;
-    static final double AUTO_ROTATE_KD = 0.001;
-    static final double AUTO_ROTATE_TOLERANCE = 3.0;
+    final double _autoRotateP = 0.2;
+    final double _autoRotateI = 0.001;
+    final double _autoRotateD = 0.001;
+    final double _autoRotateTolerance = 3.0;
 
     /**
      * Auto Rotate the robot to a specified angle. This command will still allow the
@@ -40,10 +38,10 @@ public class CmdDriveRotateAboutSpeaker extends Command {
         this._translationXSupplier = translationXSupplier;
         this._translationYSupplier = translationYSupplier;
 
-        this._angleController = new PIDController(this.AUTO_ROTATE_KP, this.AUTO_ROTATE_KI,
-                this.AUTO_ROTATE_KD);
-        
-        this._angleController.setTolerance(this.AUTO_ROTATE_TOLERANCE);
+        this._angleController = new PIDController(this._autoRotateP, this._autoRotateI,
+                this._autoRotateD);
+
+        this._angleController.setTolerance(this._autoRotateTolerance);
         this._angleController.enableContinuousInput(-180, 180);
 
         addRequirements(drivetrainSubsystem);
@@ -72,7 +70,8 @@ public class CmdDriveRotateAboutSpeaker extends Command {
                         _translationYSupplier.getAsDouble(),
                         rotationVal,
                         _drive.getGyroscopeRotation()));
-       System.out.println("desired: " + _drive.calcAngleToSpeaker() + " actual: " + _drive.getGyroscopeRotation().getDegrees());
+        System.out.println(
+                "desired: " + _drive.calcAngleToSpeaker() + " actual: " + _drive.getGyroscopeRotation().getDegrees());
     }
 
     // Called once the command ends or is interrupted.

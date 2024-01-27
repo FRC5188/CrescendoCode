@@ -69,6 +69,11 @@ public class Intake extends SubsystemBase {
         return _hardware.getPivotMotorPID().atSetpoint();
     }
 
+    // Sets the pivot motor speed to the speed calculated by the PID when given the encoder position.
+    public void runPivotPID(){
+        _hardware.getPivotMotor().set(_hardware.getPivotMotorPID().calculate(_hardware.getPivotMotor().getEncoder().getPosition()));
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.shooter;
 
-import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterHardware;
@@ -36,7 +35,7 @@ public class Shooter extends SubsystemBase {
     }
 
     // TODO: Make this multiply by gear ratio
-    public void setFlywheelSpeedRPM(double targetSpeedInRPM){
+    public void setFlywheelSpeedRPM(double targetSpeedInRPM) {
         _flywheelSpeedRPM = targetSpeedInRPM;
         _hardware.getTopFlywheelMotor().set(targetSpeedInRPM * 1.00);
         _hardware.getBottomFlywheelMotor().set(targetSpeedInRPM * 1.00);

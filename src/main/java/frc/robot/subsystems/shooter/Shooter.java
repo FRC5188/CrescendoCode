@@ -5,16 +5,22 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.hardware.shooter.ShooterIO;
+import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 //import frc.robot.hardware.shooter.ShooterHardware;
+import frc.robot.hardware.shooter.ShooterIOSparkFlex;
 
 public class Shooter extends SubsystemBase {
   // Note: The channel that this encoder is on will need to be configured for the
   // robot.
   //ShooterHardware _hardware;
 
-  // public Shooter(ShooterHardware hardware) {
-  //   _hardware = hardware;
-  // }
+    private final ShooterIO _shooterIO;
+    private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+
+  public Shooter(ShooterIO shooterIO) {
+    this._shooterIO = shooterIO;
+  }
 
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
@@ -35,6 +41,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    _shooterIO.updateInputs(_shooterInputs);
   }
 
   // public double getCurrentPositionInDegrees() throws RuntimeException {

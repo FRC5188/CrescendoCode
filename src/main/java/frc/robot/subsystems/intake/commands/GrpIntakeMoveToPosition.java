@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 
-public class GrpIntakeMoveToPosition extends SequentialCommandGroup{
+public class GrpIntakeMoveToPosition extends SequentialCommandGroup {
     private Intake _intakeSubsystem;
     private IntakePosition _intakePosition;
 
@@ -15,8 +15,7 @@ public class GrpIntakeMoveToPosition extends SequentialCommandGroup{
         addRequirements(_intakeSubsystem);
 
         addCommands(
-            new CmdIntakeSetPosition(_intakeSubsystem, _intakePosition),
-            new CmdIntakeWaitForIntake(_intakeSubsystem)
-        );
+                new CmdIntakeSetPosition(_intakeSubsystem, _intakePosition),
+                new CmdIntakeWaitForIntake(_intakeSubsystem));
     }
 }

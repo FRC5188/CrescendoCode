@@ -14,11 +14,12 @@ public class CmdIntakeWaitForNote extends Command {
   private Intake _intakeSubsystem;
 
   /**
-     * Waits for the intake to acquire a note or for the timeout to be reached. 
-     * If a timeout of <= 0 is given, this command will not time out.
-     * 
-     * @param timeoutInMs Time waited in milliseconds for the intake to acquire a note.
-     */
+   * Waits for the intake to acquire a note or for the timeout to be reached.
+   * If a timeout of <= 0 is given, this command will not time out.
+   * 
+   * @param timeoutInMs Time waited in milliseconds for the intake to acquire a
+   *                    note.
+   */
 
   public CmdIntakeWaitForNote(int timeoutInMs, Intake intakeSubsystem) {
 
@@ -26,7 +27,7 @@ public class CmdIntakeWaitForNote extends Command {
 
     // Current state of the countdown in cycles. 20 ms per robot cycle.
     _countdownInCycles = (int) Math.ceil(timeoutInMs / 20.0);
-    
+
     // If a timeout of <=0 is given, this command will never time out.
     if (timeoutInMs <= 0) {
       _commandTimesOut = false;
@@ -55,7 +56,7 @@ public class CmdIntakeWaitForNote extends Command {
     if (_commandTimesOut) {
       return _countdownInCycles <= 0;
     }
-    
+
     return (_commandTimesOut && _countdownInCycles <= 0) || _intakeSubsystem.hasNote();
   }
 }

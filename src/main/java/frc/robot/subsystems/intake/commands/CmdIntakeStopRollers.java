@@ -3,7 +3,6 @@ package frc.robot.subsystems.intake.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
-
 public class CmdIntakeStopRollers extends Command {
 
     private Intake _intakeSubsystem;
@@ -16,7 +15,7 @@ public class CmdIntakeStopRollers extends Command {
 
     @Override
     public void initialize() {
-       _intakeSubsystem.stopRollerMotor();
+        _intakeSubsystem.stopRollerMotor();
     }
 
     @Override

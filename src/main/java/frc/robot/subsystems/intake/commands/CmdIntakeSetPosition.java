@@ -21,9 +21,9 @@ public class CmdIntakeSetPosition extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-     public void initialize() {
-         _intakeSubsystem.setIntakePosition(_intakePosition);
-     }
+    public void initialize() {
+        _intakeSubsystem.setIntakePosition(_intakePosition);
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

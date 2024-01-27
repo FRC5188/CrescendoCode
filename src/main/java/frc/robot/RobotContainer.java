@@ -139,13 +139,12 @@ public class RobotContainer {
     _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
     _controller
         .b()
-        .onTrue(
-            Commands.runOnce(
+        .onTrue(Commands.runOnce(
                     () ->
-                        _drive.setPose(
-                            new Pose2d(_drive.getPose().getTranslation(), new Rotation2d())),
-                    _drive)
-                .ignoringDisable(true));
+                        _drive.setCenterOfRotationToSpeaker()))
+        .onFalse(Commands.runOnce(
+                    () ->
+                        _drive.setCenterOfRotationToRobot()));
     /*controller
     .a()
     .whileTrue(

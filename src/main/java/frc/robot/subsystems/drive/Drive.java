@@ -30,22 +30,20 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import org.opencv.core.Mat;
 
 public class Drive extends SubsystemBase {
-  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(17.6);
-  private static final double TRACK_WIDTH_X = Units.inchesToMeters(20.75);
-  private static final double TRACK_WIDTH_Y = Units.inchesToMeters(20.75);
-  private static final double DRIVE_BASE_RADIUS =
-      Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
-  private static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
   private final GyroIO _gyroIO;
   private final GyroIOInputsAutoLogged _gyroInputs = new GyroIOInputsAutoLogged();
@@ -63,6 +61,11 @@ public class Drive extends SubsystemBase {
       };
   private SwerveDrivePoseEstimator _poseEstimator =
       new SwerveDrivePoseEstimator(_kinematics, _rawGyroRotation, _lastModulePositions, new Pose2d());
+
+  private Alliance _alliance;
+  private Pose2d _speakerPosition;
+  private Translation2d _centerOfRotation;
+  public Field2d _field;
 
   public Drive(
       GyroIO gyroIO,
@@ -83,7 +86,7 @@ public class Drive extends SubsystemBase {
         () -> _kinematics.toChassisSpeeds(getModuleStates()),
         this::runVelocity,
         new HolonomicPathFollowerConfig(
-            MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
+            DriveConstants.MAX_LINEAR_SPEED, DriveConstants.DRIVE_BASE_RADIUS, new ReplanningConfig()),
         () ->
             DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red,
@@ -115,6 +118,8 @@ public class Drive extends SubsystemBase {
                 },
                 null,
                 this));
+    _centerOfRotation = new Translation2d();
+    _field = new Field2d();
   }
 
   public void periodic() {
@@ -159,6 +164,11 @@ public class Drive extends SubsystemBase {
     }
     // Apply odometry update
     _poseEstimator.update(_rawGyroRotation, modulePositions);
+
+    _field.setRobotPose(_poseEstimator.getEstimatedPosition());
+    SmartDashboard.putData("Field", _field);
+    double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
+    SmartDashboard.putNumberArray("CoR", cor);
   }
 
   /**
@@ -169,8 +179,8 @@ public class Drive extends SubsystemBase {
   public void runVelocity(ChassisSpeeds speeds) {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
-    SwerveModuleState[] setpointStates = _kinematics.toSwerveModuleStates(discreteSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, MAX_LINEAR_SPEED);
+    SwerveModuleState[] setpointStates = _kinematics.toSwerveModuleStates(discreteSpeeds, _centerOfRotation);
+    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, DriveConstants.MAX_LINEAR_SPEED);
 
     // Send setpoints to modules
     SwerveModuleState[] optimizedSetpointStates = new SwerveModuleState[4];
@@ -258,23 +268,85 @@ public class Drive extends SubsystemBase {
     _poseEstimator.addVisionMeasurement(visionPose, timestamp);
   }
 
+  private Alliance getAlliance() {
+    if (_alliance == null) {
+      if (DriverStation.getAlliance().isPresent()) {
+        _alliance = DriverStation.getAlliance().get();
+      }
+    }
+
+    return _alliance;
+  }
+
+  private Pose2d getSpeakerPos() {
+    if (_speakerPosition == null) {
+      if (getAlliance() != null) _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
+    }
+
+    return _speakerPosition;
+  }
+
+  /** Returns the distance from the center of the robot to the alliance's speaker */
+  public double getRadiusToSpeakerInInches() {
+    
+    return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
+  }
+
+  // this setup lets us test the math, but when we actually run the code we don't have to give a pose estimator
+  public static double getRadiusToSpeakerInMeters(Pose2d robotPose, Pose2d speakerPos) {
+    double xDiff = robotPose.getX() - speakerPos.getX();
+    double yDiff = robotPose.getY() - speakerPos.getY();
+    double xPow = Math.pow(xDiff, 2);
+    double yPow = Math.pow(yDiff, 2);
+    // Use pythagorean thm to find hypotenuse, which is our radius
+    return Math.sqrt(xPow + yPow);
+  }
+
+  public void setCenterOfRotationToSpeaker() {
+    if (getAlliance() == Alliance.Blue) {
+      setCenterOfRotation(calcSpeakerCoRForBlue(_poseEstimator.getEstimatedPosition(), getSpeakerPos()));
+    } else {
+      setCenterOfRotation(calcSpeakerCoRForRed(_poseEstimator.getEstimatedPosition(), getSpeakerPos()));
+    }
+  }
+
+  public static Translation2d calcSpeakerCoRForBlue(Pose2d robotPose, Pose2d speakerPos) {
+    double xDiff = robotPose.getX() - speakerPos.getX();
+    double yDiff = speakerPos.getY() - robotPose.getY();
+    return new Translation2d(xDiff, yDiff);
+  }
+
+  public static Translation2d calcSpeakerCoRForRed(Pose2d robotPose, Pose2d speakerPos) {
+    double xDiff = speakerPos.getX() - robotPose.getX();
+    double yDiff = speakerPos.getY() - robotPose.getY();
+    return new Translation2d(xDiff, yDiff);
+  }
+
+  public void setCenterOfRotationToRobot() {
+    setCenterOfRotation(new Translation2d());
+  }
+
+  private void setCenterOfRotation(Translation2d pos) {
+    _centerOfRotation = pos;
+  }
+
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {
-    return MAX_LINEAR_SPEED;
+    return DriveConstants.MAX_LINEAR_SPEED;
   }
 
   /** Returns the maximum angular speed in radians per sec. */
   public double getMaxAngularSpeedRadPerSec() {
-    return MAX_ANGULAR_SPEED;
+    return DriveConstants.MAX_ANGULAR_SPEED;
   }
 
   /** Returns an array of module translations. */
   public static Translation2d[] getModuleTranslations() {
     return new Translation2d[] {
-      new Translation2d(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
-      new Translation2d(TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0),
-      new Translation2d(-TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
-      new Translation2d(-TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0)
+      new Translation2d(DriveConstants.TRACK_WIDTH_X / 2.0, DriveConstants.TRACK_WIDTH_Y / 2.0),
+      new Translation2d(DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0),
+      new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, DriveConstants.TRACK_WIDTH_Y / 2.0),
+      new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0)
     };
   }
 }

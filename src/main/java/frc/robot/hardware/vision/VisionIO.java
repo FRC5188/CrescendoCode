@@ -13,11 +13,15 @@ public interface VisionIO {
         public double _cameraOneY;
         public double _cameraOneTimestamp; 
         public double _cameraOneAmbiguity;
+        public double _cameraOneTranslationTargetX;
+        public double _cameraOneTranslationTargetY;
 
         public double _cameraTwoX;
         public double _cameraTwoY;
         public double _cameraTwoTimestamp;
         public double _cameraTwoAmbiguity;
+        public double _cameraTwoTranslationTargetX;
+        public double _cameraTwoTranslationTargetY;
 
         // While the variables above are for the cameras themselves the ones below are after they have been combined into one estimate.
         public double _combinedX;
@@ -29,5 +33,5 @@ public interface VisionIO {
 
     public default void updateInputs(VisionIOInputs inputs) {}
 
-    public default void setOdometryReferenceEstimation(SwerveDrivePoseEstimator inputEstimationFromOdometry) {} // This is passed in and then we use vision to account for error then the current estimated pose is put into the table.
+    public default void setOdometryReferenceEstimator(SwerveDrivePoseEstimator inputEstimationFromOdometry) {} // This is passed in and then we use vision to account for error then the current estimated pose is put into the table.
 }

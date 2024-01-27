@@ -4,7 +4,7 @@ import org.easymock.EasyMock;
 
 import com.revrobotics.CANSparkFlex;
 
-public class SimClimberHardware implements ClimberHardware {
+public class SimClimberHardware implements ClimberIO {
     private CANSparkFlex _leftClimberMotor;
     private CANSparkFlex _rightClimberMotor;
 

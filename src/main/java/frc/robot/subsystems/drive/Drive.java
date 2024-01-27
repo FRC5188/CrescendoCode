@@ -29,8 +29,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -41,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-import org.opencv.core.Mat;
 
 public class Drive extends SubsystemBase {
 
@@ -284,7 +281,9 @@ public class Drive extends SubsystemBase {
 
   private Pose2d getSpeakerPos() {
     if (_speakerPosition == null) {
-      if (getAlliance() != null) _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
+      if (getAlliance() != null) {
+        _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
+      }
     }
 
     return _speakerPosition;

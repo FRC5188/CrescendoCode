@@ -2,28 +2,25 @@ package frc.robot.subsystems.drive.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 
 import java.util.function.DoubleSupplier;
 
-import org.littletonrobotics.junction.Logger;
 
 public class CmdDriveRotateAboutSpeaker extends Command {
-    private final Drive m_drivetrainSubsystem;
+    private final Drive _drive;
 
-    private final DoubleSupplier m_translationXSupplier;
-    private final DoubleSupplier m_translationYSupplier;
-    private PIDController m_angleController;
+    private final DoubleSupplier _translationXSupplier;
+    private final DoubleSupplier _translationYSupplier;
+    private PIDController _angleController;
 
     // windham gains were 0.02, 0.0, 0.0. It worked well for their week 1
-    private final double AUTO_ROTATE_KP = 0.2;
-    private final double AUTO_ROTATE_KI = 0.001;
-    private final double AUTO_ROTATE_KD = 0.001;
-    private final double AUTO_ROTATE_TOLERANCE = 3.0;
+    static final double AUTO_ROTATE_KP = 0.2;
+    static final double AUTO_ROTATE_KI = 0.001;
+    static final double AUTO_ROTATE_KD = 0.001;
+    static final double AUTO_ROTATE_TOLERANCE = 3.0;
 
     /**
      * Auto Rotate the robot to a specified angle. This command will still allow the
@@ -39,15 +36,15 @@ public class CmdDriveRotateAboutSpeaker extends Command {
             DoubleSupplier translationXSupplier,
             DoubleSupplier translationYSupplier) {
 
-        this.m_drivetrainSubsystem = drivetrainSubsystem;
-        this.m_translationXSupplier = translationXSupplier;
-        this.m_translationYSupplier = translationYSupplier;
+        this._drive = drivetrainSubsystem;
+        this._translationXSupplier = translationXSupplier;
+        this._translationYSupplier = translationYSupplier;
 
-        this.m_angleController = new PIDController(this.AUTO_ROTATE_KP, this.AUTO_ROTATE_KI,
+        this._angleController = new PIDController(this.AUTO_ROTATE_KP, this.AUTO_ROTATE_KI,
                 this.AUTO_ROTATE_KD);
         
-        this.m_angleController.setTolerance(this.AUTO_ROTATE_TOLERANCE);
-        this.m_angleController.enableContinuousInput(-180, 180);
+        this._angleController.setTolerance(this.AUTO_ROTATE_TOLERANCE);
+        this._angleController.enableContinuousInput(-180, 180);
 
         addRequirements(drivetrainSubsystem);
     }
@@ -61,33 +58,33 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     @Override
     public void execute() {
         // Calc the current angle to the speaker
-        this.m_angleController.setSetpoint(m_drivetrainSubsystem.calcAngleToSpeaker());
+        this._angleController.setSetpoint(_drive.calcAngleToSpeaker());
         // inputModulus will wrap the value to between -180 and 180. This combine with
         // using enableContinuousInput on the PID Controller
         // means that our robot will always take the shortest path to the angle.
         // copied this from windham
-        double rotationVal = this.m_angleController.calculate(
-                (MathUtil.inputModulus(this.m_drivetrainSubsystem.getGyroscopeRotation().getDegrees(), -180, 180)));
+        double rotationVal = this._angleController.calculate(
+                (MathUtil.inputModulus(this._drive.getGyroscopeRotation().getDegrees(), -180, 180)));
 
-        this.m_drivetrainSubsystem.runVelocity(
+        this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        m_translationXSupplier.getAsDouble(),
-                        m_translationYSupplier.getAsDouble(),
+                        _translationXSupplier.getAsDouble(),
+                        _translationYSupplier.getAsDouble(),
                         rotationVal,
-                        m_drivetrainSubsystem.getGyroscopeRotation()));
-       System.out.println("desired: " + m_drivetrainSubsystem.calcAngleToSpeaker() + " actual: " + m_drivetrainSubsystem.getGyroscopeRotation().getDegrees());
+                        _drive.getGyroscopeRotation()));
+       System.out.println("desired: " + _drive.calcAngleToSpeaker() + " actual: " + _drive.getGyroscopeRotation().getDegrees());
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         // when we finish set the rotation to 0 but keep driving
-        this.m_drivetrainSubsystem.runVelocity(
+        this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        m_translationXSupplier.getAsDouble(),
-                        m_translationYSupplier.getAsDouble(),
+                        _translationXSupplier.getAsDouble(),
+                        _translationYSupplier.getAsDouble(),
                         0,
-                        m_drivetrainSubsystem.getGyroscopeRotation()));
+                        _drive.getGyroscopeRotation()));
 
     }
 

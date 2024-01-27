@@ -12,23 +12,20 @@ public interface VisionIO {
         public double _cameraOneX;
         public double _cameraOneY;
         public double _cameraOneTimestamp; 
-        public double _cameraOneAmbiguity;
-        public double _cameraOneTranslationTargetX;
-        public double _cameraOneTranslationTargetY;
+        public double _cameraOneMaxAmbiguity;
+        public double _camerOneMaxDistance;
+        public boolean _cameraOneHasTarget;
 
         public double _cameraTwoX;
         public double _cameraTwoY;
         public double _cameraTwoTimestamp;
-        public double _cameraTwoAmbiguity;
-        public double _cameraTwoTranslationTargetX;
-        public double _cameraTwoTranslationTargetY;
+        public double _cameraTwoMaxDistance;
+        public double _cameraTwoMaxAmbiguity;
+        public boolean _cameraTwoHasTarget;
 
         // While the variables above are for the cameras themselves the ones below are after they have been combined into one estimate.
         public double _combinedX;
         public double _combinedY;
-
-        public double _translationToTargetX;
-        public double _translationToTargetY;
     }
 
     public default void updateInputs(VisionIOInputs inputs) {}

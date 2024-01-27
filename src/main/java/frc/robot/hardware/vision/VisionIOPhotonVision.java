@@ -1,8 +1,14 @@
 package frc.robot.hardware.vision;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+// import org.photonvision.PhotonTargetSortMode;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -27,11 +33,24 @@ public class VisionIOPhotonVision {
         CAMERA_TWO,
         HardwareConstants.ComponentTransformations._cameraTwoPosition);
 
+    static {
+        // If we can't use multiple tags then just use the target with the lowest ambiguity.
+        CAMERA_ONE_ESTIMATION.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+        CAMERA_TWO_ESTIMATION.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+    }
+
     private double _cameraOneTimestamp;
     private double _cameraTwoTimestamp;
 
+    private List<PhotonTrackedTarget> _cameraOneTargets;
+    private List<PhotonTrackedTarget> _cameraTwoTargets;
+
+    private boolean _doesCameraOneHaveTarget = false;
+    private boolean _doesCameraTwoHaveTarget = false;
+
     public void updateInputs(VisionIOInputs inputs) {
-        
+        PhotonPipelineResult cameraOneResult = CAMERA_ONE.getLatestResult();
+        //PhotonPipelineResult cameraTwoResult = 
     }
 
     public void setOdometryReferenceEstimator(SwerveDrivePoseEstimator inputEstimationFromOdometry) {

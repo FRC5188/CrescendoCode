@@ -1,10 +1,10 @@
 package frc.robot.hardware.intake;
 
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkFlex;
+// import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.wpilibj.DigitalInput;
 
 public interface IntakeIO {
     public static class IntakeIOInputs {

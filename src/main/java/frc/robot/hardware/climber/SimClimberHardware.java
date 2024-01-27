@@ -20,14 +20,4 @@ public class SimClimberHardware implements ClimberIO {
     public void verifyHardware() {
         EasyMock.verify(_leftClimberMotor, _rightClimberMotor);
     }
-
-    @Override
-    public CANSparkFlex getLeftClimberMotor() {
-        return _leftClimberMotor;
-    }
-
-    @Override
-    public CANSparkFlex getRightClimberMotor() {
-        return _rightClimberMotor;
-    }
 }

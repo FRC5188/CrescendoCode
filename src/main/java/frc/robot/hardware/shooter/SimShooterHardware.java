@@ -29,28 +29,4 @@ public class SimShooterHardware implements ShooterIO {
         EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder, _anglePIDController);
     }
 
-    @Override
-    public CANSparkFlex getTopFlywheelMotor() {
-        return _topFlywheelMotor;
-    }
-
-    @Override
-    public CANSparkFlex getBottomFlywheelMotor() {
-        return _bottomFlywheelMotor;
-    }
-
-    @Override
-    public CANSparkFlex getAngleMotor() {
-        return _angleMotor;
-    }
-
-    @Override
-    public DutyCycleEncoder getAngleEncoder() {
-        return _angleEncoder;
-    }
-
-    @Override
-    public PIDController getAnglePIDController() {
-        return _anglePIDController;
-    }
 }

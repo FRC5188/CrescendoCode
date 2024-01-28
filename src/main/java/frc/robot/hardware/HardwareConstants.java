@@ -7,26 +7,28 @@ import edu.wpi.first.math.geometry.Translation3d;
 public class HardwareConstants {
     public class CanIds {
         
-        // |====================== INTAKE SUBSYSTEM CONSTANTS ======================|
+        // |====================== INTAKE SUBSYSTEM CAN IDs ======================|
         public static int PIVOT_MOTOR_ID = 0;
         public static int ROLLER_MOTOR_ID = 0;
 
-        // |====================== SHOOTER SUBSYSTEM CONSTANTS ======================|
+        // |====================== SHOOTER SUBSYSTEM CAN IDs ======================|
         public static int ANGLE_MOTOR_ID = 0;
         public static int TOP_FLYWHEEL_MOTOR_ID = 0;
         public static int BOTTOM_FLYWHEEL_MOTOR_ID = 0;
 
-        //|====================== CLIMBER SUBSYSTEM CONSTANTS ======================|
+        //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
         public static int LEFT_CLIMBER_MOTOR = 0;
         public static int RIGHT_CLIMBER_MOTOR = 0;
     }
 
     public class DIOPorts {
-        public static int LIGHT_SENSOR_PORT = 0;
-        public static int SHOOTER_ANGLE_ENCODER_PORT = 1; // These must be configured when robot is wired. 
+        public static int SHOOTER_ANGLE_ENCODER_PORT = 0; // These must be configured when robot is wired. 
+        public static int INTAKE_ANGLE_ENCODER_PORT = 1;
     }
-
     public class ComponentTransformations {
+
+    // |====================== START VISION SUBSYSTEM TRANSFORMATIONS ======================|
+
         public static final String CAMERA_ONE_NAME = "photoncamera";
         /*
         * Assume that you're looking at the robot from above it. In our code we treat
@@ -62,5 +64,8 @@ public class HardwareConstants {
         public static Transform3d _cameraTwoPosition = new Transform3d(
         new Translation3d(CAMERA_TWO_X_FROM_ROBOT_CENTER, CAMERA_TWO_Y_FROM_ROBOT_CENTER, CAMERA_TWO_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_TWO_ROLL, CAMERA_TWO_PITCH, CAMERA_TWO_YAW));
+    
+    // |====================== END VISION SUBSYSTEM TRANSFORMATIONS ======================|
+    
     }
 }

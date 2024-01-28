@@ -15,7 +15,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.hardware.HardwareConstants;
-
 import frc.robot.hardware.vision.VisionIO.VisionIOInputs;
 
 public class VisionIOPhotonVision {

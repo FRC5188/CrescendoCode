@@ -23,10 +23,6 @@ public interface IntakeIO {
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
         public double _pivotEncoderPositionRotations;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
-
-        // |================= START LIGHT SENSOR LOGGING =================|
-        public boolean _isLightSensorBlocked;
-        // |================= END LIGHT SENSOR LOGGING =================|
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}

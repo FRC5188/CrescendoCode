@@ -15,6 +15,7 @@ public class CmdIntakeStopRollers extends Command {
 
     @Override
     public void initialize() {
+        _intakeSubsystem.stopRollerMotor();
     }
 
     @Override

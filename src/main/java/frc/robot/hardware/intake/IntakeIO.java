@@ -36,8 +36,6 @@ public interface IntakeIO {
 
     public default void setTargetPositionAsDegrees(double degrees) {}
 
-    // |============================== ROLLER MOTOR METHODS ============================== |
-    public default void setIsRollerRolling(boolean isRollerRolling) {}
-  
+    // |============================== ROLLER MOTOR METHODS ============================== |  
     public default void setRollerMotorSpeed(double speed) {}
 }

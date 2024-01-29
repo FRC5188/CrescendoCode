@@ -60,6 +60,6 @@ public class SetIntakePositionTests {
 
         _intake.setIntakePosition(IntakePosition.Stowed);
 
-        replayMocks();
+        verifyMocks();
     }
 }

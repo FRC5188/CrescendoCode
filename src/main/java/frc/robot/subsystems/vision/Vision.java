@@ -1,6 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import org.easymock.internal.matchers.Null;
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,6 +17,7 @@ public class Vision extends SubsystemBase {
   }
 
   public SwerveDrivePoseEstimator getVisionAccountedPoseEstimator(SwerveDrivePoseEstimator poseEstimatorFromOdometry) throws NullPointerException {
+    try {
     _visionIO.setOdometryReferenceEstimator(poseEstimatorFromOdometry);
     poseEstimatorFromOdometry.addVisionMeasurement(
         new Pose2d(_visionInputs._cameraOneX, _visionInputs._cameraOneY, new Rotation2d(_visionInputs._cameraOneRotationRadians)),
@@ -29,6 +29,9 @@ public class Vision extends SubsystemBase {
     );
 
     return poseEstimatorFromOdometry;
+    } catch (Exception exception) {
+      throw new NullPointerException("The likley issue is that we're not looking at an Apriltag.");
+    }
   }
 
   // Note: These timestamp functions should be run after pose estimator has been set.

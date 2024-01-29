@@ -120,7 +120,7 @@ public class VisionIOPhotonVision {
                         b.getBestCameraToTarget().getTranslation().getNorm()))
                 .get().getPoseAmbiguity();
         inputs._cameraTwoHasTarget = this._doesCameraTwoHaveTarget;
-        inputs._cameraOneRotationRadians = (_doesCameraOneHaveTarget) ? (_cameraOneEstimatedPose.getRotation().toRotation2d().getRadians()) : (-1.0);
+        inputs._cameraTwoRotationRadians = (_doesCameraTwoHaveTarget) ? (_cameraTwoEstimatedPose.getRotation().toRotation2d().getRadians()) : (-1.0);
 
         inputs._combinedX = _poseEstimatorFromOdometry.getEstimatedPosition().getX();
         inputs._combinedY = _poseEstimatorFromOdometry.getEstimatedPosition().getY();

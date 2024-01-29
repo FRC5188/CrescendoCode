@@ -9,16 +9,16 @@ public class HardwareConstants {
         
         // |====================== INTAKE SUBSYSTEM CAN IDs ======================|
         public static int PIVOT_MOTOR_ID = 0;
-        public static int ROLLER_MOTOR_ID = 0;
+        public static int ROLLER_MOTOR_ID = 1;
 
         // |====================== SHOOTER SUBSYSTEM CAN IDs ======================|
-        public static int ANGLE_MOTOR_ID = 0;
-        public static int TOP_FLYWHEEL_MOTOR_ID = 0;
-        public static int BOTTOM_FLYWHEEL_MOTOR_ID = 0;
+        public static int ANGLE_MOTOR_ID = 2;
+        public static int TOP_FLYWHEEL_MOTOR_ID = 3;
+        public static int BOTTOM_FLYWHEEL_MOTOR_ID = 4;
 
         //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
-        public static int LEFT_CLIMBER_MOTOR = 0;
-        public static int RIGHT_CLIMBER_MOTOR = 0;
+        public static int LEFT_CLIMBER_MOTOR = 5;
+        public static int RIGHT_CLIMBER_MOTOR = 6;
     }
 
     public class DIOPorts {

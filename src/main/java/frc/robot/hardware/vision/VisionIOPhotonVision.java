@@ -23,7 +23,7 @@ public class VisionIOPhotonVision {
     private static final PhotonCamera CAMERA_TWO = new PhotonCamera(
             HardwareConstants.ComponentTransformations.CAMERA_TWO_NAME);
 
-    private static AprilTagFieldLayout _fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+    private static AprilTagFieldLayout _fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
     private static final PhotonPoseEstimator CAMERA_ONE_ESTIMATION = new PhotonPoseEstimator(
             _fieldLayout,

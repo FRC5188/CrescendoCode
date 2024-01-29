@@ -15,6 +15,7 @@ public interface VisionIO {
         public double _cameraOneMaxAmbiguity;
         public double _camerOneMaxDistance;
         public boolean _cameraOneHasTarget;
+        public double _cameraOneRotationRadians;
 
         public double _cameraTwoX;
         public double _cameraTwoY;
@@ -22,10 +23,12 @@ public interface VisionIO {
         public double _cameraTwoMaxDistance;
         public double _cameraTwoMaxAmbiguity;
         public boolean _cameraTwoHasTarget;
+        public double _cameraTwoRotationRadians;
 
         // While the variables above are for the cameras themselves the ones below are after they have been combined into one estimate.
         public double _combinedX;
         public double _combinedY;
+        public double _combinedRotationRadians;
     }
 
     public default void updateInputs(VisionIOInputs inputs) {}

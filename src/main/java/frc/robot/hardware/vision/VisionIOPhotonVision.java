@@ -107,6 +107,7 @@ public class VisionIOPhotonVision {
                         b.getBestCameraToTarget().getTranslation().getNorm()))
                 .get().getPoseAmbiguity();
         inputs._cameraOneHasTarget = this._doesCameraOneHaveTarget;
+        inputs._cameraOneRotationRadians = (_doesCameraOneHaveTarget) ? (_cameraOneEstimatedPose.getRotation().toRotation2d().getRadians()) : (-1.0);
 
         inputs._cameraTwoX = (_doesCameraTwoHaveTarget) ? (_cameraTwoEstimatedPose.getX()) : (-1.0);
         inputs._cameraTwoY = (_doesCameraTwoHaveTarget) ? (_cameraTwoEstimatedPose.getY()) : (-1.0);
@@ -119,9 +120,11 @@ public class VisionIOPhotonVision {
                         b.getBestCameraToTarget().getTranslation().getNorm()))
                 .get().getPoseAmbiguity();
         inputs._cameraTwoHasTarget = this._doesCameraTwoHaveTarget;
+        inputs._cameraOneRotationRadians = (_doesCameraOneHaveTarget) ? (_cameraOneEstimatedPose.getRotation().toRotation2d().getRadians()) : (-1.0);
 
         inputs._combinedX = _poseEstimatorFromOdometry.getEstimatedPosition().getX();
         inputs._combinedY = _poseEstimatorFromOdometry.getEstimatedPosition().getY();
+        inputs._combinedRotationRadians = _poseEstimatorFromOdometry.getEstimatedPosition().getRotation().getRadians();
     }
 
     // Note: This has to be run in the periodic() for Odometry.

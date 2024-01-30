@@ -96,10 +96,7 @@ public class Intake extends SubsystemBase {
         return _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
     }
 
-    // Sets the pivot motor speed to the speed calculated by the PID when given the encoder position.
-    public void runPivotPID(){
-        _hardware.getPivotMotor().set(_hardware.getPivotMotorPID().calculate(_hardware.getPivotMotor().getEncoder().getPosition()));
-    }
+   
 
     @Override
     public void periodic() {
@@ -107,4 +104,6 @@ public class Intake extends SubsystemBase {
         _intakeIO.updateInputs(_intakeInputs);
         Logger.processInputs("Intake", _intakeInputs);
     }
+
+    
 }

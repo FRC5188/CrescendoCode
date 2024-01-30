@@ -16,7 +16,7 @@ public class CmdIntakeRollersSpit extends Command {
 
     @Override
     public void initialize() {
-        _intakeSubsytem.setRollerSpeedSpit();
+        _intakeSubsytem.setRollerMotorSpeedSpit();
     }
 
     @Override

@@ -1,24 +1,24 @@
-package intake;
+package shooter;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import edu.wpi.first.hal.HAL;
-import frc.robot.hardware.intake.SimIntakeHardware;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.hardware.shooter.SimShooterHardware;
+import frc.robot.subsystems.shooter.Shooter;
 
-public class SetIntakePositionWithAngleTests {
+public class SetTargetPositionAsAngleTests {
     // Define the subsystem and hardware you're testing with
-    Intake _intake;
-    SimIntakeHardware _hardware;
+    Shooter _shooter;
+    SimShooterHardware _hardware;
 
     @BeforeEach
     void setup() {
         assert HAL.initialize(500, 0); // initialize the HAL, crash if failed
 
         // Create our sim hardware and subsystem
-        _hardware = new SimIntakeHardware();
-        //_intake = new Intake(_hardware);
+        _hardware = new SimShooterHardware();
+        //_shooter = new Shooter(_hardware);
     }
 
     void replayMocks() {
@@ -37,19 +37,21 @@ public class SetIntakePositionWithAngleTests {
 
     }
 
+    // A test case with hardware mocking
     // @Test
-    // void testSetIntakePositionWithAngle_withMinAngle_expectPIDSetpointSet() {
-    //     double inputAngle = IntakeConstants.MIN_INTAKE_ANGLE;
+    // void testSetShooterPositionAsAngle_withMinShooterAngle_expectPIDSetToMinShooterAngle() {
+    //     double angle = ShooterConstants.MIN_SHOOTER_ANGLE;
 
-    //     // We expect this method to set the PID's setpoint to this value
-    //     _hardware.getPivotMotorPID().setSetpoint(IntakeConstants.MIN_INTAKE_ANGLE);
+    //     // Here is where we tell EasyMock our expected behavior for our sim hardware
+    //     // This is called recording
+    //     _hardware.getAnglePIDController().setSetpoint(angle);
 
     //     // Here we call a hardware method called replayHardware()
     //     // This causes EasyMock to run all of the stuff we just recorded
     //     replayMocks();
 
     //     // Here is where we call the method under test
-    //     _intake.setIntakePositionWithAngle(inputAngle);
+    //     _shooter.setTargetPositionAsAngle(angle);
 
     //     // Here is where we make assertions about behavior and call verifyHardware()
     //     // In this test, our assertions are handled by EasyMock, since
@@ -59,18 +61,19 @@ public class SetIntakePositionWithAngleTests {
     // }
 
     // @Test
-    // void testSetIntakePositionWithAngle_withMaxAngle_expectPIDSetpointSet() {
-    //     double inputAngle = IntakeConstants.MAX_INTAKE_ANGLE;
+    // void testSetShooterPositionAsAngle_withMaxShooterAngle_expectPIDSetToMaxShooterAngle() {
+    //     double angle = ShooterConstants.MAX_SHOOTER_ANGLE;
 
-    //     // We expect this method to set the PID's setpoint to this value
-    //     _hardware.getPivotMotorPID().setSetpoint(IntakeConstants.MAX_INTAKE_ANGLE);
+    //     // Here is where we tell EasyMock our expected behavior for our sim hardware
+    //     // This is called recording
+    //     _hardware.getAnglePIDController().setSetpoint(angle);
 
     //     // Here we call a hardware method called replayHardware()
     //     // This causes EasyMock to run all of the stuff we just recorded
     //     replayMocks();
 
     //     // Here is where we call the method under test
-    //     _intake.setIntakePositionWithAngle(inputAngle);
+    //     _shooter.setTargetPositionAsAngle(angle);
 
     //     // Here is where we make assertions about behavior and call verifyHardware()
     //     // In this test, our assertions are handled by EasyMock, since
@@ -80,17 +83,15 @@ public class SetIntakePositionWithAngleTests {
     // }
 
     // @Test
-    // void testSetIntakePositionWithAngle_withInvalidMaxAngle_expectPIDSetpointToNotChange() {
-    //     double inputAngle = IntakeConstants.MAX_INTAKE_ANGLE + 0.01;
-
-    //     // We expect this method to not set the PID's setpoint
+    // void testSetShooterPositionAsAngle_withInvalidMinShooterAngle_expectPIDNoSet() {
+    //     double angle = ShooterConstants.MIN_SHOOTER_ANGLE - 0.1;
 
     //     // Here we call a hardware method called replayHardware()
     //     // This causes EasyMock to run all of the stuff we just recorded
     //     replayMocks();
 
     //     // Here is where we call the method under test
-    //     _intake.setIntakePositionWithAngle(inputAngle);
+    //     _shooter.setTargetPositionAsAngle(angle);
 
     //     // Here is where we make assertions about behavior and call verifyHardware()
     //     // In this test, our assertions are handled by EasyMock, since
@@ -100,17 +101,15 @@ public class SetIntakePositionWithAngleTests {
     // }
 
     // @Test
-    // void testSetIntakePositionWithAngle_withInvalidMinAngle_expectPIDSetpointToNotChange() {
-    //     double inputAngle = IntakeConstants.MIN_INTAKE_ANGLE - 0.01;
-
-    //     // We expect this method to not set the PID's setpoint
+    // void testSetShooterPositionAsAngle_withInvalidMaxShooterAngle_expectPIDNoSet() {
+    //     double angle = ShooterConstants.MAX_SHOOTER_ANGLE + 0.1;
 
     //     // Here we call a hardware method called replayHardware()
     //     // This causes EasyMock to run all of the stuff we just recorded
     //     replayMocks();
 
     //     // Here is where we call the method under test
-    //     _intake.setIntakePositionWithAngle(inputAngle);
+    //     _shooter.setTargetPositionAsAngle(angle);
 
     //     // Here is where we make assertions about behavior and call verifyHardware()
     //     // In this test, our assertions are handled by EasyMock, since

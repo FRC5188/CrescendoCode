@@ -10,8 +10,36 @@ import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
-  // Note: The channel that this encoder is on will need to be configured for the
-  // robot.
+  public enum ShooterZone {
+    // Here we define all of the zones for the shooter
+    Subwoofer (0, 2.5, 45, 3000),
+    Unknown (-1, -1, 0, 3000);
+
+    private final double lowBound;
+    private final double highBound;
+    private final double shooterAngle;
+    private final double shooterSpeed;
+
+    ShooterZone(double lowBound, double highBound, double shooterAngle, double shooterSpeed) {
+        this.lowBound = lowBound;
+        this.highBound = highBound;
+        this.shooterAngle = shooterAngle;
+        this.shooterSpeed = shooterSpeed;
+    }
+
+    // These functions can be called on an enum value to get various bits of data
+    boolean radiusInZone(double radius) {
+      return (radius >= lowBound) || (radius < highBound);
+    }
+
+    double getShooterAngle() {
+      return this.shooterAngle;
+    }
+
+    double getShooterSpeed() {
+      return this.shooterSpeed;
+    }
+  }
 
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
@@ -57,5 +85,15 @@ public class Shooter extends SubsystemBase {
     } else {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
+  }
+
+  public ShooterZone getZoneFromRadius(double radius) {
+    for (ShooterZone zone : ShooterZone.values()) {
+      if (zone.radiusInZone(radius)) {
+        return zone;
+      }
+    }
+
+    return ShooterZone.Unknown;
   }
 }

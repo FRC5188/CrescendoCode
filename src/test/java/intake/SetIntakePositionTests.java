@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.hal.HAL;
-import frc.robot.hardware.intake.SimIntakeHardware;
+import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
@@ -14,31 +14,25 @@ import frc.robot.subsystems.intake.Intake.IntakePosition;
 public class SetIntakePositionTests {
     // Define the subsystem and hardware you're testing with
     Intake _intake;
-    SimIntakeHardware _hardware;
+    IntakeIO _io;
 
     @BeforeEach
     void setup() {
         assert HAL.initialize(500, 0); // initialize the HAL, crash if failed
 
         // Create our sim hardware and subsystem
-        _hardware = new SimIntakeHardware();
-        _intake = EasyMock.partialMockBuilder(Intake.class)
-                 .addMockedMethod("setIntakePositionWithAngle", Double.class)
-                 .mock();
+        _io = EasyMock.mock(IntakeIO.class);
+        _intake = new Intake(_io);
     }
 
     void replayMocks() {
         // Put anything in here that is mocked
-        EasyMock.replay(_intake);
-        _hardware.replayHardware();
+        EasyMock.replay(_io);
     }
 
     void verifyMocks() {
         // Put anything in here that is mocked
-        // Should probably always have _hardware.verifyHardware()
-        // Only add EasyMock.verify(_subsystem) if you are mocking class methods
-        EasyMock.verify(_intake);
-        _hardware.verifyHardware();
+        EasyMock.verify(_io);
     }
 
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
@@ -47,103 +41,25 @@ public class SetIntakePositionTests {
 
     }
 
-     @Test
-     void testSetIntakePosition_withGroundPickup_expectPIDSetpointGroundPickup() {
-         IntakePosition inputPosition = IntakePosition.GroundPickup;
+    @Test 
+    void testSetIntakePosition_withGroundPickup_expectGroundPickup() {
+        _io.setTargetPositionAsDegrees(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
 
-         // We expect this method to be called
-         _intake.setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
+        replayMocks();
 
-         // Here we call a hardware method called replayMocks()
-         // This causes EasyMock to run all of the stuff we just recorded
-         replayMocks();
+        _intake.setIntakePosition(IntakePosition.GroundPickup);
 
-         // Here is where we call the method under test
-         _intake.setIntakePosition(inputPosition);
+        verifyMocks();
+    }
 
-         // Here is where we make assertions about behavior and call verifyMocks()
-         // In this test, our assertions are handled by EasyMock, since
-         // we tell it what we expect our code to call
-         verifyMocks();
-     }
+    @Test
+    void testSetIntakePosition_withStowed_expectStowed() {
+        _io.setTargetPositionAsDegrees(IntakeConstants.INTAKE_STOWED_ANGLE);
 
-     @Test
-     void testSetIntakePosition_withSourcePickup_expectPIDSetpointSourcePickup() {
-         IntakePosition inputPosition = IntakePosition.SourcePickup;
+        replayMocks();
 
-         // We expect this method to be called
-         _intake.setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
+        _intake.setIntakePosition(IntakePosition.Stowed);
 
-         // Here we call a hardware method called replayMocks()
-         // This causes EasyMock to run all of the stuff we just recorded
-         replayMocks();
-
-         // Here is where we call the method under test
-         _intake.setIntakePosition(inputPosition);
-
-         // Here is where we make assertions about behavior and call verifyMocks()
-         // In this test, our assertions are handled by EasyMock, since
-         // we tell it what we expect our code to call
-         verifyMocks();
-     }
-
-     @Test
-     void testSetIntakePosition_withAmpScore_expectPIDSetpointAmpScore() {
-         IntakePosition inputPosition = IntakePosition.AmpScore;
-
-         // We expect this method to be called
-         _intake.setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
-
-         // Here we call a hardware method called replayMocks()
-         // This causes EasyMock to run all of the stuff we just recorded
-         replayMocks();
-
-         // Here is where we call the method under test
-         _intake.setIntakePosition(inputPosition);
-
-         // Here is where we make assertions about behavior and call verifyMocks()
-         // In this test, our assertions are handled by EasyMock, since
-         // we tell it what we expect our code to call
-         verifyMocks();
-     }
-
-     @Test
-     void testSetIntakePosition_withSpeakerScore_expectPIDSetpointSpeakerScore() {
-         IntakePosition inputPosition = IntakePosition.SpeakerScore;
-
-         // We expect this method to be called
-         _intake.setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
-
-         // Here we call a hardware method called replayMocks()
-         // This causes EasyMock to run all of the stuff we just recorded
-         replayMocks();
-
-         // Here is where we call the method under test
-         _intake.setIntakePosition(inputPosition);
-
-         // Here is where we make assertions about behavior and call verifyMocks()
-         // In this test, our assertions are handled by EasyMock, since
-         // we tell it what we expect our code to call
-         verifyMocks();
-     }
-
-     @Test
-     void testSetIntakePosition_withStowed_expectPIDSetpointStowed() {
-         IntakePosition inputPosition = IntakePosition.Stowed;
-
-         // We expect this method to be called
-         _intake.setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
-
-         // Here we call a hardware method called replayMocks()
-         // This causes EasyMock to run all of the stuff we just recorded
-         replayMocks();
-
-         // Here is where we call the method under test
-         _intake.setIntakePosition(inputPosition);
-
-         // Here is where we make assertions about behavior and call verifyMocks()
-         // In this test, our assertions are handled by EasyMock, since
-         // we tell it what we expect our code to call
-         verifyMocks();
-     }
+        verifyMocks();
+    }
 }

@@ -16,21 +16,19 @@ public class Climber extends SubsystemBase {
   }
 
   public void setClimberSpeed(double speed) {
-    //setClimberLeftSpeed(speed);
-    //setClimberRightSpeed(speed);
+    setClimberLeftSpeed(speed);
+    setClimberRightSpeed(speed);
   }
 
-  //public void setClimberLeftSpeed(double speed) {
-  //  _hardware.getLeftClimberMotor().set(speed);
-  //}
+  public void setClimberLeftSpeed(double speed) {
+    _hardware.setLeftClimberVelocity(speed);
+  }
 
-  //public void setClimberRightSpeed(double speed) {
-  //  _hardware.getRightClimberMotor().set(speed);
-  //}
+  public void setClimberRightSpeed(double speed) {
+    _hardware.setRightClimberPosition(speed);
+  }
 
   @Override
   public void periodic() {
   }
 }
-
-

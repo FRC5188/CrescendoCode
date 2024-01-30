@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.math.controller.PIDController;
 
-public class SimShooterHardware implements ShooterHardware {
+public class SimShooterHardware implements ShooterIO {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _topFlywheelMotor;
     private CANSparkFlex _bottomFlywheelMotor;
@@ -29,28 +29,4 @@ public class SimShooterHardware implements ShooterHardware {
         EasyMock.verify(_angleMotor, _topFlywheelMotor, _bottomFlywheelMotor, _angleEncoder, _anglePIDController);
     }
 
-    @Override
-    public CANSparkFlex getTopFlywheelMotor() {
-        return _topFlywheelMotor;
-    }
-
-    @Override
-    public CANSparkFlex getBottomFlywheelMotor() {
-        return _bottomFlywheelMotor;
-    }
-
-    @Override
-    public CANSparkFlex getAngleMotor() {
-        return _angleMotor;
-    }
-
-    @Override
-    public DutyCycleEncoder getAngleEncoder() {
-        return _angleEncoder;
-    }
-
-    @Override
-    public PIDController getAnglePIDController() {
-        return _anglePIDController;
-    }
 }

@@ -8,14 +8,10 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
-  // Note: The channel that this encoder is on will need to be configured for the
-  // robot.
-
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
 
@@ -43,6 +39,10 @@ public class Shooter extends SubsystemBase {
     } else {
       _shooterIO.setTargetPositionAsDegrees(angle);
     }
+  }
+
+  private void runPivotPID() {
+    _shooterIO.setTargetPositionAsDegrees(getCurrentPositionInDegrees());
   }
 
   @Override

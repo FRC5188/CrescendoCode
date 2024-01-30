@@ -8,6 +8,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
+import frc.robot.hardware.shooter.ShooterIO.ShooterIOInputs;
+
+import java.lang.Math;
 
 public class Shooter extends SubsystemBase {
   // Note: The channel that this encoder is on will need to be configured for the
@@ -58,4 +61,10 @@ public class Shooter extends SubsystemBase {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
   }
+
+  
+  }
+  
+  protected boolean areFlywheelsAtTargetSpeed() {
+    boolean Math.abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin - _targetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
 }

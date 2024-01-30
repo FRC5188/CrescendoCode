@@ -7,9 +7,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 
-import frc.robot.hardware.intake.IntakeIO;
-import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
-
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
         SourcePickup,

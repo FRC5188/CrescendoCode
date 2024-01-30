@@ -50,7 +50,6 @@ public class VisionIOPhotonVision implements VisionIO{
         );
 
         inputs._combinedPose = _poseEstimatorFromOdometry.getEstimatedPosition();
-        inputs._combinedRotationRadians = _poseEstimatorFromOdometry.getEstimatedPosition().getRotation().getRadians();
     }
 
     // Note: This has to be run in the periodic() for Odometry.

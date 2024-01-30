@@ -12,6 +12,7 @@ import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
+  private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
 
@@ -35,7 +36,6 @@ public class Shooter extends SubsystemBase {
       // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
       // 2024/01/23
       return;
-
     } else {
       _shooterIO.setTargetPositionAsDegrees(angle);
     }
@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase {
     _shooterIO.updateInputs(_shooterInputs);
     Logger.processInputs("Drive/Gyro", _shooterInputs);
   }
-
+  
   public double getCurrentPositionInDegrees() throws RuntimeException {
     double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
     if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
@@ -63,6 +63,14 @@ public class Shooter extends SubsystemBase {
     } else {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
+  }
+  
+  public boolean isAutoShootEnabled() {
+    return _autoShootEnabled;
+  }
+
+  public void setAutoShootEnabled(boolean enabled) {
+    _autoShootEnabled = enabled;
   }
 
   public void setShooterPosition(ShooterZone targetZone) {

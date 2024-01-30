@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import frc.robot.hardware.HardwareConstants;
 
-public class ShooterIOSparkFlex implements ShooterIO {
+public class RealShooterIO implements ShooterIO {
     private static final double GEAR_RATIO = 1.0;
 
     private CANSparkFlex _angleMotor;
@@ -15,7 +15,7 @@ public class ShooterIOSparkFlex implements ShooterIO {
     private CANSparkFlex _rightFlywheelMotor;
     private SparkAbsoluteEncoder _angleEncoder;
 
-    public ShooterIOSparkFlex() {
+    public RealShooterIO() {
         configAngleMotor();
         configFlywheelMotor();
         _angleEncoder = _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);

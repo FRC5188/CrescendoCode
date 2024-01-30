@@ -96,6 +96,10 @@ public class Intake extends SubsystemBase {
         return _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
     }
 
+    public double getPivotMotorAngle() {
+        return _intakeInputs._pivotMotorPositionDegrees;
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run

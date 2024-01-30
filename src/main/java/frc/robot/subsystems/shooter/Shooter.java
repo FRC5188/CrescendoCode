@@ -48,6 +48,10 @@ public class Shooter extends SubsystemBase {
     this._shooterIO = shooterIO;
   }
 
+  public void setTargetPosition(ShooterZone zone) {
+    setTargetPositionAsAngle(zone.getShooterAngle());
+  }
+
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
       // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH

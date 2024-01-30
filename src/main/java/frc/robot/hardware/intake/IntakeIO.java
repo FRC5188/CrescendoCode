@@ -1,12 +1,9 @@
 package frc.robot.hardware.intake;
 
-// import com.revrobotics.CANSparkFlex;
-// import com.revrobotics.CANSparkMax;
-
-// import edu.wpi.first.math.controller.PIDController;
-// import edu.wpi.first.wpilibj.DigitalInput;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
+    @AutoLog
     public static class IntakeIOInputs {
         // |================= START PIVOT MOTOR LOGGING =================|
         public double _pivotMotorTemperature; 
@@ -26,10 +23,6 @@ public interface IntakeIO {
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
         public double _pivotEncoderPositionRotations;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
-
-        // |================= START LIGHT SENSOR LOGGING =================|
-        public boolean _isLightSensorBlocked;
-        // |================= END LIGHT SENSOR LOGGING =================|
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}
@@ -39,6 +32,6 @@ public interface IntakeIO {
 
     public default void setTargetPositionAsDegrees(double degrees) {}
 
-    // |============================== ROLLER MOTOR METHODS ============================== |
-    public default void setIsRollerRolling(boolean isRollerRolling) {}
+    // |============================== ROLLER MOTOR METHODS ============================== |  
+    public default void setRollerMotorSpeed(double speed) {}
 }

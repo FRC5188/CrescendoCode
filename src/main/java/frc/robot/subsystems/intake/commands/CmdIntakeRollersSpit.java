@@ -14,25 +14,18 @@ public class CmdIntakeRollersSpit extends Command {
         addRequirements(intakeSubsystem);
     }
 
-    // @Override
-    // public void initialize() {
-    //     _intakeSubsytem.setRollerSpeedSpit();
-    //     _counter = 0;
-    // }
+    @Override
+    public void initialize() {
+        _intakeSubsytem.setRollerMotorSpeedSpit();
+    }
 
     @Override
     public void execute() {
         _counter++;
     }
 
-    // @Override
-    // public void end(boolean interrupted) {
-    //     _intakeSubsytem.stopRollerMotor();
-    // }
-
     @Override
     public boolean isFinished() {
         return _counter >= 50;
-
     }
 }

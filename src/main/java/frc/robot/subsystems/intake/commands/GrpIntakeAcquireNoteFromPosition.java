@@ -10,17 +10,13 @@ public class GrpIntakeAcquireNoteFromPosition extends SequentialCommandGroup {
     private int _timeoutInMs;
 
     public GrpIntakeAcquireNoteFromPosition(Intake intakeSubsystem, IntakePosition intakePosition, int timeoutInMs) {
-        _intakeSubsystem = intakeSubsystem;
-        _intakePosition = intakePosition;
-        _timeoutInMs = timeoutInMs;
-
-        addRequirements(_intakeSubsystem);
+        addRequirements(intakeSubsystem);
 
         addCommands(
                 new GrpIntakeMoveToPosition(intakeSubsystem, intakePosition),
                 new CmdIntakeStartRollersAcquire(intakeSubsystem),
-                new CmdIntakeWaitForNote(_timeoutInMs, intakeSubsystem),
+                new CmdIntakeWaitForNote(timeoutInMs, intakeSubsystem),
                 new CmdIntakeStopRollers(intakeSubsystem),
-                new GrpIntakeMoveToPosition(intakeSubsystem, _intakePosition.Stowed));
+                new GrpIntakeMoveToPosition(intakeSubsystem, intakePosition.Stowed));
     }
 }

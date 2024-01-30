@@ -19,8 +19,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.hardware.HardwareConstants;
 
-import frc.robot.hardware.vision.VisionIO.VisionIOInputs;
-
 public class RealVisionIO implements VisionIO {
         private static final int NUMBER_OF_CAMERAS = 2;
         private static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();

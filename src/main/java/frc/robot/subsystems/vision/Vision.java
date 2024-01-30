@@ -1,5 +1,6 @@
 package frc.robot.subsystems.vision;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +16,7 @@ public class Vision extends SubsystemBase {
     this._visionIO = visionIO;
   }
 
+  @AutoLogOutput 
   public Pose2d getEstimatedPoseFrom(SwerveDrivePoseEstimator poseEstimatorFromOdometry) throws RuntimeException {
     this._visionIO.setOdometryReferenceEstimator(poseEstimatorFromOdometry);
     return _visionInputs._combinedPose;

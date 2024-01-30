@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.shooter;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
@@ -46,6 +48,7 @@ public class Shooter extends SubsystemBase {
     _shooterIO.updateInputs(_shooterInputs);
   }
 
+  @AutoLogOutput
   public double getCurrentPositionInDegrees() throws RuntimeException {
     double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
     if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS

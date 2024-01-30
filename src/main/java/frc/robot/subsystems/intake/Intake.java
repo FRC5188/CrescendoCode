@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.util.Units;
@@ -24,6 +25,7 @@ public class Intake extends SubsystemBase {
         this._intakeIO = intakeIO;
     }
 
+    @AutoLogOutput
     public IntakePosition getIntakePosition() {
         return this._intakePosition;
     }
@@ -69,6 +71,7 @@ public class Intake extends SubsystemBase {
         _intakeIO.setTargetPositionAsDegrees(angle);
     }
 
+    @AutoLogOutput
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionRotations);
         double targetPositionDegrees = 0;
@@ -92,6 +95,7 @@ public class Intake extends SubsystemBase {
         return pivotEncoderPositionDegrees == targetPositionDegrees;
     }
 
+    @AutoLogOutput
     public boolean hasNote() {
         return _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
     }

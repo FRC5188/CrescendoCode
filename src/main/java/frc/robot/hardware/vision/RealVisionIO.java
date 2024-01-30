@@ -18,7 +18,7 @@ import frc.robot.hardware.HardwareConstants;
 
 import frc.robot.hardware.vision.VisionIO.VisionIOInputs;
 
-public class VisionIOPhotonVision {
+public class RealVisionIO {
     private static final PhotonCamera CAMERA_ONE = new PhotonCamera(
             HardwareConstants.ComponentTransformations.CAMERA_ONE_NAME);
     private static final PhotonCamera CAMERA_TWO = new PhotonCamera(

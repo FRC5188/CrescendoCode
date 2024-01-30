@@ -6,11 +6,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.hardware.HardwareConstants;
 
-public class ClimberIOSparkFlex implements ClimberIO {
+public class RealClimberIO implements ClimberIO {
     private CANSparkFlex _leftClimberMotor;
     private CANSparkFlex _rightClimberMotor;
 
-    public ClimberIOSparkFlex() {
+    public RealClimberIO() {
         _leftClimberMotor = new CANSparkFlex(HardwareConstants.CanIds.LEFT_CLIMBER_MOTOR, MotorType.kBrushless);
         _rightClimberMotor = new CANSparkFlex(HardwareConstants.CanIds.RIGHT_CLIMBER_MOTOR, MotorType.kBrushless);
     }

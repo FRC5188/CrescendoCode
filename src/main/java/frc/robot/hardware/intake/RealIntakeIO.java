@@ -10,13 +10,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.hardware.HardwareConstants;
 
-public class IntakeIOSparkFlex implements IntakeIO {
+public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;
     private CANSparkMax _rollerMotor;
     private DigitalInput _lightSensor;
     private SparkAbsoluteEncoder _pivotMotorEncoder;
 
-    public IntakeIOSparkFlex() {
+    public RealIntakeIO() {
         _pivotMotor = new CANSparkFlex(HardwareConstants.CanIds.PIVOT_MOTOR_ID, MotorType.kBrushless);
         _rollerMotor = new CANSparkMax(HardwareConstants.CanIds.ROLLER_MOTOR_ID, MotorType.kBrushless);
         _lightSensor = new DigitalInput(HardwareConstants.DIOPorts.LIGHT_SENSOR_PORT);

@@ -71,6 +71,7 @@ public class Shooter extends SubsystemBase {
 
   public void setAutoShootEnabled(boolean enabled) {
     _autoShootEnabled = enabled;
+  }
 
   public void setShooterPosition(ShooterZone targetZone) {
     switch (targetZone) {

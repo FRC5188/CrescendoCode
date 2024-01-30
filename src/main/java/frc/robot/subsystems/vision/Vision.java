@@ -16,31 +16,9 @@ public class Vision extends SubsystemBase {
     this._visionIO = visionIO;
   }
 
-  public SwerveDrivePoseEstimator getVisionAccountedPoseEstimator(SwerveDrivePoseEstimator poseEstimatorFromOdometry) throws NullPointerException {
-    try {
-    _visionIO.setOdometryReferenceEstimator(poseEstimatorFromOdometry);
-    poseEstimatorFromOdometry.addVisionMeasurement(
-        new Pose2d(_visionInputs._cameraOneX, _visionInputs._cameraOneY, new Rotation2d(_visionInputs._cameraOneRotationRadians)),
-        _visionInputs._cameraOneTimestamp
-    );
-    poseEstimatorFromOdometry.addVisionMeasurement(
-        new Pose2d(_visionInputs._cameraTwoX, _visionInputs._cameraTwoY, new Rotation2d(_visionInputs._cameraTwoRotationRadians)),
-        _visionInputs._cameraTwoTimestamp
-    );
-
-    return poseEstimatorFromOdometry;
-    } catch (Exception exception) {
-      throw new NullPointerException("The likley issue is that we're not looking at an Apriltag.");
-    }
-  }
-
-  // Note: These timestamp functions should be run after pose estimator has been set.
-  public double getCameraOneTimestamp() {
-    return _visionInputs._cameraOneTimestamp;
-  }
-
-  public double getCameraTwoTimestamp() {
-    return _visionInputs._cameraTwoTimestamp;
+  public Pose2d getEstimatedPoseFrom(SwerveDrivePoseEstimator poseEstimatorFromOdometry) throws RuntimeException {
+    this._visionIO.setOdometryReferenceEstimator(poseEstimatorFromOdometry);
+    return _visionInputs._combinedPose;
   }
 
   public void periodic() {

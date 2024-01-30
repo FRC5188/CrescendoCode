@@ -19,8 +19,7 @@ public class CmdShooterDefault extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // this._shooterSubsystem.configAnglePID(); TODO: Uncomment when this is
-    // implemented.
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

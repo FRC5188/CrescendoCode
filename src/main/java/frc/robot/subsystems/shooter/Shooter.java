@@ -58,3 +58,4 @@ public class Shooter extends SubsystemBase {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
 }
+}

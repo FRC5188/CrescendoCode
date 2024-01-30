@@ -1,25 +1,21 @@
 package frc.robot.hardware.intake;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.hardware.HardwareConstants;
 
 public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;
-    private CANSparkMax _rollerMotor;
-    private DigitalInput _lightSensor;
+    private CANSparkFlex _rollerMotor;
     private SparkAbsoluteEncoder _pivotMotorEncoder;
 
     public RealIntakeIO() {
-        _pivotMotor = new CANSparkFlex(HardwareConstants.CanIds.PIVOT_MOTOR_ID, MotorType.kBrushless);
-        _rollerMotor = new CANSparkMax(HardwareConstants.CanIds.ROLLER_MOTOR_ID, MotorType.kBrushless);
-        _lightSensor = new DigitalInput(HardwareConstants.DIOPorts.LIGHT_SENSOR_PORT);
+        _pivotMotor = getConfiguredPivotMotor();
+        _rollerMotor = getConfiguredRollerMotor();
         _pivotMotorEncoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     }
 
@@ -35,8 +31,6 @@ public class RealIntakeIO implements IntakeIO {
         inputs._rollerMotorVoltage = _rollerMotor.getAppliedOutput() * _rollerMotor.getBusVoltage();
         inputs._rollerMotorCurrent = _rollerMotor.getOutputCurrent();
 
-        inputs._isLightSensorBlocked = _lightSensor.get();
-
         inputs._pivotEncoderPositionRotations = _pivotMotorEncoder.getPosition();
     }
 
@@ -50,16 +44,36 @@ public class RealIntakeIO implements IntakeIO {
     public void setTargetPositionAsDegrees(double degrees) {
         _pivotMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
     }
-
-    public void setIsRollerRolling(boolean isRollerRolling) {
-        if (isRollerRolling) {
-            _rollerMotor.set(0.5); // TODO: The actual magnitude of the roller motor that we want will be left up to testing later. 
-        } else {
-            _rollerMotor.set(0.0);
-        }
-    }
       
     public void setRollerMotorSpeed(double speed) {
         _rollerMotor.set(speed);
+    }
+
+    private CANSparkFlex getConfiguredPivotMotor() {
+        _pivotMotor = new CANSparkFlex(HardwareConstants.CanIds.PIVOT_MOTOR_ID, MotorType.kBrushless);
+        
+        _pivotMotor.setCANTimeout(100);
+        _pivotMotor.setInverted(false);
+
+        _pivotMotor.setSmartCurrentLimit(40);
+        _pivotMotor.setSecondaryCurrentLimit(55);
+
+        _pivotMotor.enableVoltageCompensation(12.0);
+
+        return _pivotMotor;
+    }
+
+    public CANSparkFlex getConfiguredRollerMotor() {
+        _rollerMotor = new CANSparkFlex(HardwareConstants.CanIds.ROLLER_MOTOR_ID, MotorType.kBrushless);
+
+        _rollerMotor.setCANTimeout(100);
+        _rollerMotor.setInverted(false);
+
+        _rollerMotor.setSmartCurrentLimit(40);
+        _rollerMotor.setSecondaryCurrentLimit(55);
+
+        _rollerMotor.enableVoltageCompensation(12.0);
+
+        return _rollerMotor;
     }
 }

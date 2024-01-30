@@ -23,10 +23,6 @@ public interface IntakeIO {
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
         public double _pivotEncoderPositionRotations;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
-
-        // |================= START LIGHT SENSOR LOGGING =================|
-        public boolean _isLightSensorBlocked;
-        // |================= END LIGHT SENSOR LOGGING =================|
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}
@@ -36,8 +32,6 @@ public interface IntakeIO {
 
     public default void setTargetPositionAsDegrees(double degrees) {}
 
-    // |============================== ROLLER MOTOR METHODS ============================== |
-    public default void setIsRollerRolling(boolean isRollerRolling) {}
-  
+    // |============================== ROLLER MOTOR METHODS ============================== |  
     public default void setRollerMotorSpeed(double speed) {}
 }

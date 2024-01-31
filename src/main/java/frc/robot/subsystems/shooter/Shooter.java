@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.shooter;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
@@ -47,11 +49,15 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  private static boolean _autoShootEnabled = true;
+
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
 
+  private ShooterZone targetZone;
+
   public Shooter(ShooterIO shooterIO) {
-    this._shooterIO = shooterIO;
+    _shooterIO = shooterIO;
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -68,7 +74,6 @@ public class Shooter extends SubsystemBase {
       // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
       // 2024/01/23
       return;
-
     } else {
       _shooterIO.setTargetPositionAsDegrees(angle);
     }
@@ -78,8 +83,9 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
+    Logger.processInputs("Drive/Gyro", _shooterInputs);
   }
-
+  
   public double getCurrentPositionInDegrees() throws RuntimeException {
     double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
     if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
@@ -101,5 +107,13 @@ public class Shooter extends SubsystemBase {
     }
 
     return ShooterZone.Unknown;
+  }
+  
+  public boolean isAutoShootEnabled() {
+    return _autoShootEnabled;
+  }
+
+  public void setAutoShootEnabled(boolean enabled) {
+    _autoShootEnabled = enabled;
   }
 }

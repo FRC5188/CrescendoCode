@@ -88,4 +88,7 @@ public class Shooter extends SubsystemBase {
         // I have no clue if anything is supposed to go here.
     }
   }
+    public void stopFlywheels() {
+      _shooterIO.stopFlywheels();
+    }
 }

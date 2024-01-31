@@ -14,12 +14,15 @@ public class CmdShooterStopFlywheel extends Command {
     public CmdShooterStopFlywheel(Shooter shooterSubsystem, double speed) {
         _shooterSubsystem = shooterSubsystem;
         _speed = speed;
+
+        addRequirements(_shooterSubsystem);
+
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        //stop motor method
+        _shooterSubsystem.stopFlywheels();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -38,3 +41,4 @@ public class CmdShooterStopFlywheel extends Command {
         return true;
     }
 }
+public default void stopFlywheels(){}

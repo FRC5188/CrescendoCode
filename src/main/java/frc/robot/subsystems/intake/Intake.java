@@ -6,6 +6,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
+import frc.robot.subsystems.intake.commands.CmdIntakeDefault;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
@@ -22,6 +23,8 @@ public class Intake extends SubsystemBase {
 
     public Intake(IntakeIO intakeIO) {
         this._intakeIO = intakeIO;
+        this.setIntakePosition(IntakePosition.Stowed);
+        this.setDefaultCommand(new CmdIntakeDefault(this)); // The default command is just running the intake and we'll set the default position to stowed.
     }
 
     public IntakePosition getIntakePosition() {

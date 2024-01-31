@@ -15,14 +15,14 @@ public class Intake extends SubsystemBase {
         AmpScore (80),
         SpeakerScore (115);
 
-        private final double angle;
+        private final double _angle;
 
         private IntakePosition(double angle) {
-            this.angle = angle;
+            this._angle = angle;
         }
 
-        public double getAngle() {
-            return this.angle;
+        public double get_angle() {
+            return this._angle;
         }
     }
 
@@ -40,7 +40,7 @@ public class Intake extends SubsystemBase {
 
     public void setIntakePosition(IntakePosition position) {
         _intakePosition = position;
-        setIntakePositionWithAngle(position.getAngle());
+        setIntakePositionWithAngle(position.get_angle());
      }
 
     public void setRollerMotorSpeedAcquire() {
@@ -65,7 +65,7 @@ public class Intake extends SubsystemBase {
 
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionRotations);
-        double targetPositionDegrees = _intakePosition.getAngle();
+        double targetPositionDegrees = _intakePosition.get_angle();
         return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
 

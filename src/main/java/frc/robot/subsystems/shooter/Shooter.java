@@ -17,35 +17,35 @@ public class Shooter extends SubsystemBase {
     Subwoofer (0, 2.5, 45, 3000, 3000),
     Unknown (-1, -1, 0, 3000, 3000);
 
-    private final double lowBound;
-    private final double highBound;
-    private final double shooterAngle;
-    private final double leftFlywheelSpeed;
-    private final double rightFlywheelSpeed;
+    private final double _lowBound;
+    private final double _highBound;
+    private final double _shooterAngle;
+    private final double _leftFlywheelSpeed;
+    private final double _rightFlywheelSpeed;
 
     ShooterZone(double lowBound, double highBound, double shooterAngle, double leftFlywheelSpeed, double rightFlywheelSpeed) {
-        this.lowBound = lowBound;
-        this.highBound = highBound;
-        this.shooterAngle = shooterAngle;
-        this.leftFlywheelSpeed = leftFlywheelSpeed;
-        this.rightFlywheelSpeed = rightFlywheelSpeed;
+        this._lowBound = lowBound;
+        this._highBound = highBound;
+        this._shooterAngle = shooterAngle;
+        this._leftFlywheelSpeed = leftFlywheelSpeed;
+        this._rightFlywheelSpeed = rightFlywheelSpeed;
     }
 
     // These functions can be called on an enum value to get various bits of data
     boolean radiusInZone(double radius) {
-      return (radius >= lowBound) || (radius < highBound);
+      return (radius >= _lowBound) || (radius < _highBound);
     }
 
-    double getShooterAngle() {
-      return this.shooterAngle;
+    double get_shooterAngle() {
+      return this._shooterAngle;
     }
 
-    double getLeftFlywheelSpeed() {
-      return this.leftFlywheelSpeed;
+    double get_leftFlywheelSpeed() {
+      return this._leftFlywheelSpeed;
     }
 
-    double getRightFlywheelSpeed() {
-      return this.rightFlywheelSpeed;
+    double get_rightFlywheelSpeed() {
+      return this._rightFlywheelSpeed;
     }
   }
 
@@ -60,7 +60,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setTargetPosition(ShooterZone zone) {
-    setTargetPositionAsAngle(zone.getShooterAngle());
+    setTargetPositionAsAngle(zone.get_shooterAngle());
   }
 
   public void setTargetPositionAsAngle(double angle) {
@@ -118,6 +118,6 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPosition(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-    setTargetPositionAsAngle(targetZone.getShooterAngle());
+    setTargetPositionAsAngle(targetZone.get_shooterAngle());
   }
 }

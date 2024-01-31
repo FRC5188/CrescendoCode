@@ -12,19 +12,21 @@ import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
     // Here we define all of the zones for the shooter
-    Subwoofer (0, 2.5, 45, 3000),
-    Unknown (-1, -1, 0, 3000);
+    Subwoofer (0, 2.5, 45, 3000, 3000),
+    Unknown (-1, -1, 0, 3000, 3000);
 
     private final double lowBound;
     private final double highBound;
     private final double shooterAngle;
-    private final double shooterSpeed;
+    private final double leftFlywheelSpeed;
+    private final double rightFlywheelSpeed;
 
-    ShooterZone(double lowBound, double highBound, double shooterAngle, double shooterSpeed) {
+    ShooterZone(double lowBound, double highBound, double shooterAngle, double leftFlywheelSpeed, double rightFlywheelSpeed) {
         this.lowBound = lowBound;
         this.highBound = highBound;
         this.shooterAngle = shooterAngle;
-        this.shooterSpeed = shooterSpeed;
+        this.leftFlywheelSpeed = leftFlywheelSpeed;
+        this.rightFlywheelSpeed = rightFlywheelSpeed;
     }
 
     // These functions can be called on an enum value to get various bits of data
@@ -36,8 +38,12 @@ public class Shooter extends SubsystemBase {
       return this.shooterAngle;
     }
 
-    double getShooterSpeed() {
-      return this.shooterSpeed;
+    double getLeftFlywheelSpeed() {
+      return this.leftFlywheelSpeed;
+    }
+
+    double getRightFlywheelSpeed() {
+      return this.rightFlywheelSpeed;
     }
   }
 
@@ -66,10 +72,6 @@ public class Shooter extends SubsystemBase {
     } else {
       _shooterIO.setTargetPositionAsDegrees(angle);
     }
-  }
-
-  private void runPivotPID() {
-    _shooterIO.setTargetPositionAsDegrees(getCurrentPositionInDegrees());
   }
 
   @Override

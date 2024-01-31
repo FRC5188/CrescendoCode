@@ -53,7 +53,7 @@ public class Intake extends SubsystemBase {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
     }
 
-    public void setRollerSpeedSpit() {
+    public void setRollerMotorSpeedSpit() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED);
     }
 

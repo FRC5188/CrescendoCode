@@ -12,20 +12,57 @@ import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
+  public enum ShooterZone {
+    // Here we define all of the zones for the shooter
+    Subwoofer (0, 2.5, 45, 3000, 3000),
+    Unknown (-1, -1, 0, 3000, 3000);
+
+    private final double _lowBound;
+    private final double _highBound;
+    private final double _shooterAngle;
+    private final double _leftFlywheelSpeed;
+    private final double _rightFlywheelSpeed;
+
+    ShooterZone(double lowBound, double highBound, double shooterAngle, double leftFlywheelSpeed, double rightFlywheelSpeed) {
+        this._lowBound = lowBound;
+        this._highBound = highBound;
+        this._shooterAngle = shooterAngle;
+        this._leftFlywheelSpeed = leftFlywheelSpeed;
+        this._rightFlywheelSpeed = rightFlywheelSpeed;
+    }
+
+    // These functions can be called on an enum value to get various bits of data
+    boolean radiusInZone(double radius) {
+      return (radius >= _lowBound) || (radius < _highBound);
+    }
+
+    double get_shooterAngle() {
+      return this._shooterAngle;
+    }
+
+    double get_leftFlywheelSpeed() {
+      return this._leftFlywheelSpeed;
+    }
+
+    double get_rightFlywheelSpeed() {
+      return this._rightFlywheelSpeed;
+    }
+  }
+
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
   private double _targetShooterPosition;
 
-  public enum ShooterZone {
-    AMP_SCORE, ZONE_ONE, SPEAKER_SCORE, ZONE_TWO, PODIUM, ZONE_THREE
-  }
-
-  ShooterZone targetZone;
+  private ShooterZone _currentShooterZone;
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = ShooterConstants.SPEAKER_SCORE_ANGLE;
+  }
+
+  public void setTargetPosition(ShooterZone zone) {
+    setTargetPositionAsAngle(zone.get_shooterAngle());
   }
 
   public void setTargetPositionAsAngle(double angle) {
@@ -41,10 +78,6 @@ public class Shooter extends SubsystemBase {
     } else {
       _shooterIO.setTargetPositionAsDegrees(angle);
     }
-  }
-
-  public void runPivotPID() {
-    _shooterIO.setTargetPositionAsDegrees(getCurrentPositionInDegrees());
   }
 
   @Override
@@ -66,6 +99,16 @@ public class Shooter extends SubsystemBase {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
   }
+
+  public ShooterZone getZoneFromRadius(double radius) {
+    for (ShooterZone zone : ShooterZone.values()) {
+      if (zone.radiusInZone(radius)) {
+        return zone;
+      }
+    }
+
+    return ShooterZone.Unknown;
+  }
   
   public boolean isAutoShootEnabled() {
     return _autoShootEnabled;
@@ -76,19 +119,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterPosition(ShooterZone targetZone) {
-    switch (targetZone) {
-      case AMP_SCORE:
-        setTargetPositionAsAngle(ShooterConstants.AMP_SCORE_ANGLE);
-        break;
-      case SPEAKER_SCORE:
-        setTargetPositionAsAngle(ShooterConstants.SPEAKER_SCORE_ANGLE);
-        break;
-      case PODIUM:
-        setTargetPositionAsAngle(ShooterConstants.PODIUM_ANGLE);
-        break;
-      default:
-        // I have no clue if anything is supposed to go here.
-    }
+    _currentShooterZone = targetZone;
+    setTargetPositionAsAngle(targetZone.get_shooterAngle());
   }
   private boolean shooterInPosition() {
       return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;

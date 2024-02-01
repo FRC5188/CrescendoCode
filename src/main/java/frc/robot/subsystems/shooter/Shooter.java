@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
+
+
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
     // Here we define all of the zones for the shooter
@@ -124,19 +126,18 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isReady(){
-    boolean isFlywheelReady;
-    // Here we'll check both the flywheel speed and the shooter angle. 
-    // If both are within a certain range, we'll return true.
-
-    // First, we'll check the flywheel speed with a deadband.
-    isFlywheelReady = Math.abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin - _currentShooterZone.get_leftFlywheelSpeed()) < ShooterConstants.FLYWHEEL_DEADBAND
-        && Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin - _currentShooterZone.get_rightFlywheelSpeed()) < ShooterConstants.FLYWHEEL_DEADBAND;
-  
-    return isFlywheelReady && shooterInPosition();
+    return areFlywheelsAtTargetSpeed() && shooterInPosition();
     // It should be noted that there is another method being worked on right now shooterInPosition() that eventually will be put into this. 
   }
 
   private boolean shooterInPosition() {
       return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
+  
+  private boolean areFlywheelsAtTargetSpeed() {
+      // Whenever this is implemented I'm going to pull and make it work
+      return false;
+  }
 }
+  
+  

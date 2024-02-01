@@ -16,4 +16,6 @@ public abstract class ShooterConstants {
     public static final double AMP_SCORE_ANGLE = 0;
     public static final double SPEAKER_SCORE_ANGLE = 0;
     public static final double PODIUM_ANGLE = 0;
+
+    public static final double FLYWHEEL_DEADBAND = 0.01; // TODO: Tune this value.
 }

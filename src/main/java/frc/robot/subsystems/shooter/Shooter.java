@@ -120,4 +120,20 @@ public class Shooter extends SubsystemBase {
     _currentShooterZone = targetZone;
     setTargetPositionAsAngle(targetZone.get_shooterAngle());
   }
+
+  public boolean isReady(){
+    boolean isFlywheelReady;
+    boolean isAngleReady;
+    // Here we'll check both the flywheel speed and the shooter angle. 
+    // If both are within a certain range, we'll return true.
+
+    // First, we'll check the flywheel speed with a deadband.
+    isFlywheelReady = Math.abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin - _currentShooterZone.get_leftFlywheelSpeed()) < ShooterConstants.FLYWHEEL_DEADBAND
+        && Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin - _currentShooterZone.get_rightFlywheelSpeed()) < ShooterConstants.FLYWHEEL_DEADBAND;
+
+    // Next, we'll check the shooter angle.
+    isAngleReady = Math.abs(_shooterInputs._angleEncoderPositionRotations - _currentShooterZone.get_shooterAngle()) < ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+  
+    return isFlywheelReady && isAngleReady;
+  }
 }

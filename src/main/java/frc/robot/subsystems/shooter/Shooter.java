@@ -17,7 +17,8 @@ public class Shooter extends SubsystemBase {
 
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
-  private double _targetFlywheelSpeed = -1;
+  private double _leftTargetFlywheelSpeed = 0;
+  private double _rightTargetFlywheelSpeed = 0;
 
   public Shooter(ShooterIO shooterIO) {
     this._shooterIO = shooterIO;
@@ -63,7 +64,10 @@ public class Shooter extends SubsystemBase {
   }
 
   private boolean areFlywheelsAtTargetSpeed() {
-    return Math.abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin -  _targetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+    return
+      Math.abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin -  _leftTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND &&
+      Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+
   }
 }
   

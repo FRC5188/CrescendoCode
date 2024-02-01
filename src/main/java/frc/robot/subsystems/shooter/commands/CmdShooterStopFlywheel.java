@@ -9,14 +9,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class CmdShooterStopFlywheel extends Command {
     private Shooter _shooterSubsystem;
-    private double _speed;
 
-    public CmdShooterStopFlywheel(Shooter shooterSubsystem, double speed) {
+    public CmdShooterStopFlywheel(Shooter shooterSubsystem) {
         _shooterSubsystem = shooterSubsystem;
-        _speed = speed;
-
+        
         addRequirements(_shooterSubsystem);
-
     }
 
     // Called when the command is initially scheduled.
@@ -41,4 +38,3 @@ public class CmdShooterStopFlywheel extends Command {
         return true;
     }
 }
-public default void stopFlywheels(){}

@@ -135,5 +135,6 @@ public class Shooter extends SubsystemBase {
     isAngleReady = Math.abs(_shooterInputs._angleEncoderPositionRotations - _currentShooterZone.get_shooterAngle()) < ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   
     return isFlywheelReady && isAngleReady;
+    // It should be noted that there is another method being worked on right now shooterInPosition() that eventually will be put into this. 
   }
 }

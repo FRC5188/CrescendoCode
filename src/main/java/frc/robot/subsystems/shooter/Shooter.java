@@ -36,15 +36,15 @@ public class Shooter extends SubsystemBase {
       return (radius >= _lowBound) || (radius < _highBound);
     }
 
-    double get_shooterAngle() {
+    double getShooterAngle() {
       return this._shooterAngle;
     }
 
-    double get_leftFlywheelSpeed() {
+    double getLeftFlywheelSpeed() {
       return this._leftFlywheelSpeed;
     }
 
-    double get_rightFlywheelSpeed() {
+    double getRightFlywheelSpeed() {
       return this._rightFlywheelSpeed;
     }
   }
@@ -52,15 +52,17 @@ public class Shooter extends SubsystemBase {
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+  private double _targetShooterPosition;
 
   private ShooterZone _currentShooterZone;
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
+    _targetShooterPosition = getCurrentPositionInDegrees();
   }
 
   public void setTargetPosition(ShooterZone zone) {
-    setTargetPositionAsAngle(zone.get_shooterAngle());
+    setTargetPositionAsAngle(zone.getShooterAngle());
   }
 
   public void setTargetPositionAsAngle(double angle) {
@@ -118,6 +120,9 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPosition(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-    setTargetPositionAsAngle(targetZone.get_shooterAngle());
+    setTargetPositionAsAngle(targetZone.getShooterAngle());
+  }
+  private boolean shooterInPosition() {
+      return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
 }

@@ -15,6 +15,7 @@ public class Shooter extends SubsystemBase {
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+  private double _targetShooterPosition;
 
   public enum ShooterZone {
     AMP_SCORE, ZONE_ONE, SPEAKER_SCORE, ZONE_TWO, PODIUM, ZONE_THREE
@@ -24,6 +25,7 @@ public class Shooter extends SubsystemBase {
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
+    _targetShooterPosition = ShooterConstants.SPEAKER_SCORE_ANGLE;
   }
 
   public void setTargetPositionAsAngle(double angle) {
@@ -87,5 +89,8 @@ public class Shooter extends SubsystemBase {
       default:
         // I have no clue if anything is supposed to go here.
     }
+  }
+  private boolean shooterInPosition() {
+      return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
 }

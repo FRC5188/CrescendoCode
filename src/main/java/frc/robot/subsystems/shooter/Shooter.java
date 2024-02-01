@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
+
+
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
     // Here we define all of the zones for the shooter
@@ -52,6 +54,8 @@ public class Shooter extends SubsystemBase {
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+  private double _leftTargetFlywheelSpeed = 0;
+  private double _rightTargetFlywheelSpeed = 0;
   private double _targetShooterPosition;
 
   private ShooterZone _currentShooterZone;
@@ -100,6 +104,12 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  private boolean areFlywheelsAtTargetSpeed() {
+    return
+      Math.abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin -  _leftTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND &&
+      Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+  }
+  
   public ShooterZone getZoneFromRadius(double radius) {
     for (ShooterZone zone : ShooterZone.values()) {
       if (zone.radiusInZone(radius)) {
@@ -122,7 +132,10 @@ public class Shooter extends SubsystemBase {
     _currentShooterZone = targetZone;
     setTargetPositionAsAngle(targetZone.getShooterAngle());
   }
+  
   private boolean shooterInPosition() {
       return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
 }
+  
+  

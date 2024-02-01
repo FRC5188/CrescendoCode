@@ -52,11 +52,13 @@ public class Shooter extends SubsystemBase {
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+  private double _targetShooterPosition;
 
   private ShooterZone _currentShooterZone;
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
+    _targetShooterPosition = ShooterConstants.SPEAKER_SCORE_ANGLE;
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -136,5 +138,8 @@ public class Shooter extends SubsystemBase {
   
     return isFlywheelReady && isAngleReady;
     // It should be noted that there is another method being worked on right now shooterInPosition() that eventually will be put into this. 
+  }
+  private boolean shooterInPosition() {
+      return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
 }

@@ -91,4 +91,9 @@ public class Shooter extends SubsystemBase {
     public void stopFlywheels() {
       _shooterIO.stopFlywheels();
     }
+
+    public void setFlywheels(double speed) {
+      _shooterIO.setLeftFlywheelMotorVelocity(speed);
+      _shooterIO.setRightFlywheelMotorVelocity(speed);
+    }
 }

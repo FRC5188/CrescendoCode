@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.hardware.shooter.RealShooterIO;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
@@ -140,10 +141,13 @@ public class Shooter extends SubsystemBase {
       _shooterIO.stopFlywheels();
     }
 
-    public void setFlywheels(double speed) {
-      _shooterIO.setLeftFlywheelMotorVelocity(speed);
-      _shooterIO.setRightFlywheelMotorVelocity(speed);
+    public void setLeftFlywheel(double speedInRPM) {
+      _shooterIO.setLeftFlywheelSpeedRPM(speedInRPM);
+    }
+
+    public void setRightFlywheel(double speedInRPM) {
+      _shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
     }
 }
-  
+
   

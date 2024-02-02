@@ -134,7 +134,11 @@ public class Shooter extends SubsystemBase {
   }
   
   private boolean shooterInPosition() {
-      return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+    return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+  }
+
+  public boolean isReady() {
+    return shooterInPosition() && areFlywheelsAtTargetSpeed();
   }
 }
   

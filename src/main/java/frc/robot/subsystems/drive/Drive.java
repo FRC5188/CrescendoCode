@@ -36,6 +36,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.hardware.vision.VisionIO;
+import frc.robot.hardware.vision.VisionIOInputsAutoLogged;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -61,16 +63,21 @@ public class Drive extends SubsystemBase {
 
   private Alliance _alliance;
   private Pose2d _speakerPosition;
+  private final VisionIO _visionIO;
+  private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
   private Translation2d _centerOfRotation;
   public Field2d _field;
 
+
   public Drive(
       GyroIO gyroIO,
+      VisionIO visionIO,
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
       ModuleIO brModuleIO) {
     this._gyroIO = gyroIO;
+    this._visionIO = visionIO;
     _modules[0] = new Module(flModuleIO, 0);
     _modules[1] = new Module(frModuleIO, 1);
     _modules[2] = new Module(blModuleIO, 2);
@@ -121,7 +128,9 @@ public class Drive extends SubsystemBase {
 
   public void periodic() {
     _gyroIO.updateInputs(_gyroInputs);
+    _visionIO.updateInputs(_visionInputs);
     Logger.processInputs("Drive/Gyro", _gyroInputs);
+    Logger.processInputs("Drive/Vision", _visionInputs);
     for (var module : _modules) {
       module.periodic();
     }
@@ -162,7 +171,8 @@ public class Drive extends SubsystemBase {
     // Apply odometry update
     _poseEstimator.update(_rawGyroRotation, modulePositions);
 
-    _field.setRobotPose(_poseEstimator.getEstimatedPosition());
+    // TODO: Change this to use the in-class method
+    _field.setRobotPose(getPose());
     SmartDashboard.putData("Field", _field);
     double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
     SmartDashboard.putNumberArray("CoR", cor);
@@ -242,7 +252,8 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
-    return _poseEstimator.getEstimatedPosition();
+    _visionIO.setOdometryReferenceEstimator(_poseEstimator);
+    return _visionIO.getUpdatedEstimation().getEstimatedPosition();
   }
 
   /** Returns the current odometry rotation. */

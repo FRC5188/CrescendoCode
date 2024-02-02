@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 
 public interface VisionIO {
     
@@ -11,6 +12,7 @@ public interface VisionIO {
     public static class VisionIOInputs {
         // While the variables above are for the cameras themselves the ones below are after they have been combined into one estimate.
         public Pose2d _combinedPose;
+        public Pose3d[] _allPoses;
     }
 
     public default void updateInputs(VisionIOInputs inputs) {}

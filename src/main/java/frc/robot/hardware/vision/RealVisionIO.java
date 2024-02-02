@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.hardware.HardwareConstants;
 
 public class RealVisionIO implements VisionIO {
-        private static final int NUMBER_OF_CAMERAS = 2;
         private static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         private static final List<PhotonPoseEstimator> ESTIMATORS = createPhotonPoseEstimators();
 
@@ -40,6 +39,11 @@ public class RealVisionIO implements VisionIO {
                 }
         );
 
+        Object[] poses = cameraPoseTimestampMap.keySet().toArray();
+        for (int n = 0; n <VisionConstants.NUMBER_OF_CAMERAS; n++) {
+                inputs._allPoses[n] = (Pose3d) poses[n];      
+        }
+
         inputs._combinedPose = _poseEstimatorFromOdometry.getEstimatedPosition();
     }
 
@@ -56,13 +60,13 @@ public class RealVisionIO implements VisionIO {
     private static List<PhotonPoseEstimator> createPhotonPoseEstimators() {
         // Creates the cameras.
         List<PhotonCamera> cameras = new ArrayList<>();
-        for (int i = 0; i < NUMBER_OF_CAMERAS; i++) {
-            cameras.add(new PhotonCamera("photoncamera_" + (i + 1)));
+        for (int i = 0; i < VisionConstants.NUMBER_OF_CAMERAS; i++) {
+            cameras.add(new PhotonCamera("photoncamera-" + (i + 1)));
         }
 
         // Creates the estimators for each camera.
         List<PhotonPoseEstimator> estimators = new ArrayList<>();
-        for (int i = 0; i < NUMBER_OF_CAMERAS; i++) {
+        for (int i = 0; i < VisionConstants.NUMBER_OF_CAMERAS; i++) {
             estimators.add(new PhotonPoseEstimator(
                     FIELD_LAYOUT,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,

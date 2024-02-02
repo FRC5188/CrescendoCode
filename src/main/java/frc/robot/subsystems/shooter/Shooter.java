@@ -38,15 +38,15 @@ public class Shooter extends SubsystemBase {
       return (radius >= _lowBound) || (radius < _highBound);
     }
 
-    double get_shooterAngle() {
+    double getShooterAngle() {
       return this._shooterAngle;
     }
 
-    double get_leftFlywheelSpeed() {
+    double getLeftFlywheelSpeed() {
       return this._leftFlywheelSpeed;
     }
 
-    double get_rightFlywheelSpeed() {
+    double getRightFlywheelSpeed() {
       return this._rightFlywheelSpeed;
     }
   }
@@ -54,17 +54,19 @@ public class Shooter extends SubsystemBase {
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+  private double _leftTargetFlywheelSpeed = 0;
+  private double _rightTargetFlywheelSpeed = 0;
   private double _targetShooterPosition;
 
   private ShooterZone _currentShooterZone;
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
-    _targetShooterPosition = ShooterConstants.SPEAKER_SCORE_ANGLE;
+    _targetShooterPosition = getCurrentPositionInDegrees();
   }
 
   public void setTargetPosition(ShooterZone zone) {
-    setTargetPositionAsAngle(zone.get_shooterAngle());
+    setTargetPositionAsAngle(zone.getShooterAngle());
   }
 
   public void setTargetPositionAsAngle(double angle) {
@@ -102,6 +104,12 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  private boolean areFlywheelsAtTargetSpeed() {
+    return
+      Math.abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin -  _leftTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND &&
+      Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+  }
+  
   public ShooterZone getZoneFromRadius(double radius) {
     for (ShooterZone zone : ShooterZone.values()) {
       if (zone.radiusInZone(radius)) {
@@ -122,21 +130,15 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPosition(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-    setTargetPositionAsAngle(targetZone.get_shooterAngle());
-  }
-
-  public boolean isReady(){
-    return areFlywheelsAtTargetSpeed() && shooterInPosition();
-    // It should be noted that there is another method being worked on right now shooterInPosition() that eventually will be put into this. 
-  }
-
-  private boolean shooterInPosition() {
-      return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+    setTargetPositionAsAngle(targetZone.getShooterAngle());
   }
   
-  private boolean areFlywheelsAtTargetSpeed() {
-      // Whenever this is implemented I'm going to pull and make it work
-      return false;
+  private boolean shooterInPosition() {
+    return Math.abs(_targetShooterPosition - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+  }
+
+  public boolean isReady() {
+    return shooterInPosition() && areFlywheelsAtTargetSpeed();
   }
 }
   

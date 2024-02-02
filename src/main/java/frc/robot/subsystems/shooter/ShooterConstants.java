@@ -13,9 +13,14 @@ public abstract class ShooterConstants {
     public static final double ANGLE_PID_I = 0;
     public static final double ANGLE_PID_D = 0;
 
+<<<<<<< HEAD
     public static final double AMP_SCORE_ANGLE = 0;
     public static final double SPEAKER_SCORE_ANGLE = 0;
     public static final double PODIUM_ANGLE = 0;
 
     public static final double FLYWHEEL_DEADBAND = 0.01; // TODO: Tune this value.
+=======
+    public static final double FLYWHEEL_GEAR_RATIO = 0;
+    public static final double FLYWHEEL_SPEED_DEADBAND = 0;
+>>>>>>> main
 }

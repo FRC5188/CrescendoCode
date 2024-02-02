@@ -1,36 +1,37 @@
 package intake;
 
-import org.junit.jupiter.api.Test;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.hal.HAL;
-import frc.robot.hardware.intake.SimIntakeHardware;
+import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 
 public class SetIntakePositionWithAngleTests {
     // Define the subsystem and hardware you're testing with
     Intake _intake;
-    SimIntakeHardware _hardware;
+    IntakeIO _io;
 
     @BeforeEach
     void setup() {
         assert HAL.initialize(500, 0); // initialize the HAL, crash if failed
 
         // Create our sim hardware and subsystem
-        _hardware = new SimIntakeHardware();
-        _intake = new Intake(_hardware);
+        _io = EasyMock.mock(IntakeIO.class);
+        _intake = new Intake(_io);
     }
 
     void replayMocks() {
         // Put anything in here that is mocked
-        _hardware.replayHardware();
+        EasyMock.replay(_io);
     }
 
     void verifyMocks() {
         // Put anything in here that is mocked
-        _hardware.verifyHardware();
+        EasyMock.verify(_io);
     }
 
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
@@ -44,7 +45,7 @@ public class SetIntakePositionWithAngleTests {
         double inputAngle = IntakeConstants.MIN_INTAKE_ANGLE;
 
         // We expect this method to set the PID's setpoint to this value
-        _hardware.getPivotMotorPID().setSetpoint(IntakeConstants.MIN_INTAKE_ANGLE);
+        _io.setTargetPositionAsDegrees(IntakeConstants.MIN_INTAKE_ANGLE);
 
         // Here we call a hardware method called replayHardware()
         // This causes EasyMock to run all of the stuff we just recorded
@@ -65,7 +66,7 @@ public class SetIntakePositionWithAngleTests {
         double inputAngle = IntakeConstants.MAX_INTAKE_ANGLE;
 
         // We expect this method to set the PID's setpoint to this value
-        _hardware.getPivotMotorPID().setSetpoint(IntakeConstants.MAX_INTAKE_ANGLE);
+        _io.setTargetPositionAsDegrees(IntakeConstants.MAX_INTAKE_ANGLE);
 
         // Here we call a hardware method called replayHardware()
         // This causes EasyMock to run all of the stuff we just recorded

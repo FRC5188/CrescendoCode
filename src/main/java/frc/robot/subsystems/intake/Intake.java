@@ -1,23 +1,37 @@
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.hardware.intake.IntakeHardware;
+import frc.robot.hardware.intake.IntakeIO;
+import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
-        SourcePickup,
-        GroundPickup,
-        Stowed,
-        AmpScore,
-        SpeakerScore
+        SourcePickup (75),
+        GroundPickup (10),
+        Stowed (100),
+        AmpScore (80),
+        SpeakerScore (115);
+
+        private final double _angle;
+
+        private IntakePosition(double angle) {
+            this._angle = angle;
+        }
+
+        public double get_angle() {
+            return this._angle;
+        }
     }
 
     protected IntakePosition _intakePosition;
+    private final IntakeIO _intakeIO;
+    private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged();
 
-    private IntakeHardware _hardware;
-
-    public Intake(IntakeHardware hardware) {
-        _hardware = hardware;
+    public Intake(IntakeIO intakeIO) {
+        this._intakeIO = intakeIO;
     }
 
     public IntakePosition getIntakePosition() {
@@ -26,35 +40,19 @@ public class Intake extends SubsystemBase {
 
     public void setIntakePosition(IntakePosition position) {
         _intakePosition = position;
-        switch (_intakePosition) {
-            case GroundPickup:
-                setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
-                break;
-            case SourcePickup:
-                setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
-                break;
-            case Stowed:
-                setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
-                break;
-            case AmpScore:
-                setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
-                break;
-            case SpeakerScore:
-                setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
-                break;
-        }
-    }
+        setIntakePositionWithAngle(position.get_angle());
+     }
 
     public void setRollerMotorSpeedAcquire() {
-        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_ACQUIRE_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
     }
 
-    public void setRollerSpeedSpit() {
-        _hardware.getRollerMotor().set(IntakeConstants.INTAKE_SPIT_SPEED);
+    public void setRollerMotorSpeedSpit() {
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED);
     }
 
     public void stopRollerMotor() {
-        _hardware.getRollerMotor().set(0);
+        _intakeIO.setRollerMotorSpeed(0);
     }
 
     public void setIntakePositionWithAngle(Double angle) {
@@ -62,15 +60,27 @@ public class Intake extends SubsystemBase {
             // TODO: log an error, but don't throw exception
             return;
         } 
-        _hardware.getPivotMotorPID().setSetpoint(angle);
+        _intakeIO.setTargetPositionAsDegrees(angle);
     }
 
     public boolean pivotAtSetpoint() {
-        return _hardware.getPivotMotorPID().atSetpoint();
+        double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionRotations);
+        double targetPositionDegrees = _intakePosition.get_angle();
+        return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
+    }
+
+    public boolean hasNote() {
+        return _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
+    }
+
+    public double getPivotMotorAngle() {
+        return _intakeInputs._pivotMotorPositionDegrees;
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        _intakeIO.updateInputs(_intakeInputs);
+        Logger.processInputs("Intake", _intakeInputs);
     }
 }

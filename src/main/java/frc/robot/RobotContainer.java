@@ -14,10 +14,17 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.hardware.intake.IntakeIO;
+import frc.robot.hardware.intake.RealIntakeIO;
+import frc.robot.hardware.shooter.RealShooterIO;
+import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
@@ -26,6 +33,10 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.commands.CmdShooterSetAutoshootEnabled;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -41,7 +52,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
     // Subsystems
     private final Drive _drive;
-    // private final Flywheel flywheel;
+    private final Intake _intake;
+    private final Shooter _shooter;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
@@ -66,7 +78,8 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
-                // flywheel = new Flywheel(new FlywheelIOSparkMax());
+                _intake = new Intake(new RealIntakeIO());
+                _shooter = new Shooter(new RealShooterIO());
                 break;
 
             case SIM:
@@ -78,7 +91,8 @@ public class RobotContainer {
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim());
-                // flywheel = new Flywheel(new FlywheelIOSim());
+                _intake = new Intake(new IntakeIO(){});
+                _shooter = new Shooter(new ShooterIO(){});
                 break;
 
             default:
@@ -94,19 +108,11 @@ public class RobotContainer {
                         },
                         new ModuleIO() {
                         });
-                // flywheel = new Flywheel(new FlywheelIO() {});
+                _intake = new Intake(new IntakeIO(){});
+                _shooter = new Shooter(new ShooterIO(){});
                 break;
         }
 
-        // Set up auto routines
-        /*
-         * NamedCommands.registerCommand(
-         * "Run Flywheel",
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel)
-         * .withTimeout(5.0));
-         */
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
         // Set up SysId routines
@@ -120,20 +126,6 @@ public class RobotContainer {
                 "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         _autoChooser.addOption(
                 "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        /*
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Forward)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Reverse)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Forward)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Reverse)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-         */
 
         // Configure the button bindings
         configureButtonBindings();
@@ -156,18 +148,14 @@ public class RobotContainer {
                         () -> -_controller.getRightX()));
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         _controller
-                .b()
+                .leftBumper()
                 .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                         () -> -_controller.getLeftY(),
                         () -> _controller.getLeftX()));
-        /*
-         * controller
-         * .a()
-         * .whileTrue(
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel));
-         */
+        _controller
+                .a()
+                .whileTrue(new CmdShooterSetAutoshootEnabled(_shooter, true))
+                .whileFalse(new CmdShooterSetAutoshootEnabled(_shooter, false));
     }
 
     /**
@@ -177,5 +165,9 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return _autoChooser.get();
+    }
+
+    public Command getAutoShootCommand() {
+        return new CmdRunShooterAutomatically(_drive, _shooter, _intake);
     }
 }

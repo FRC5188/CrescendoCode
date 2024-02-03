@@ -23,10 +23,10 @@ public class HardwareConstants {
 
     public class DIOPorts {
         public static int SHOOTER_ANGLE_ENCODER_PORT = 0; // These must be configured when robot is wired. 
-        public static int INTAKE_ANGLE_ENCODER_PORT = 1;
+        public static int INTAKE_PIVOT_ENCODER_PORT = 1;
     }
-    public class ComponentTransformations {
 
+    public class ComponentTransformations {
     // |====================== START VISION SUBSYSTEM TRANSFORMATIONS ======================|
 
         public static final String CAMERA_ONE_NAME = "photoncamera";
@@ -67,5 +67,10 @@ public class HardwareConstants {
     
     // |====================== END VISION SUBSYSTEM TRANSFORMATIONS ======================|
     
+    }
+
+    public class AbsEncoderOffsets {
+        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 0;
+        public static final double SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES = 0;
     }
 }

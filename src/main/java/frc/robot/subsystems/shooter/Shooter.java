@@ -135,10 +135,7 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPositionWithZone(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-    if (targetZone != ShooterZone.Unknown) {
       setTargetPositionAsAngle(targetZone.getShooterAngle());
-    }
-    // If we don't know what zone we are in, don't move the shooter
   }
 
   private boolean shooterInPosition() {

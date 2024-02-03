@@ -9,11 +9,11 @@ import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
-        SourcePickup (75),
-        GroundPickup (10),
-        Stowed (100),
-        AmpScore (80),
-        SpeakerScore (115);
+        SourcePickup(75),
+        GroundPickup(10),
+        Stowed(100),
+        AmpScore(80),
+        SpeakerScore(115);
 
         private final double _angle;
 
@@ -29,9 +29,11 @@ public class Intake extends SubsystemBase {
     protected IntakePosition _intakePosition;
     private final IntakeIO _intakeIO;
     private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged();
+    private boolean _hasNote;
 
     public Intake(IntakeIO intakeIO) {
         this._intakeIO = intakeIO;
+        _hasNote = false;
     }
 
     public IntakePosition getIntakePosition() {
@@ -59,18 +61,26 @@ public class Intake extends SubsystemBase {
         if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
             // TODO: log an error, but don't throw exception
             return;
-        } 
+        }
         _intakeIO.setTargetPositionAsDegrees(angle);
     }
 
     public boolean pivotAtSetpoint() {
-        double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionRotations);
+        double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionDegrees);
         double targetPositionDegrees = _intakePosition.getAngle();
         return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
 
     public boolean hasNote() {
-        return _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
+        if (!_hasNote) {
+            _hasNote = _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
+        }
+
+        return _hasNote;
+    }
+
+    public void resetHasNote() {
+        _hasNote = false;
     }
 
     public double getPivotMotorAngle() {

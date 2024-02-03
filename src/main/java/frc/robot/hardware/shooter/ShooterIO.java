@@ -43,15 +43,11 @@ public interface ShooterIO {
 
     public default void stopFlywheels(){}
 
-    public default void configFlywheelPID(double p, double i, double d){}
-
     public default void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {}
 
     public default void setRightFlywheelSpeedRPM(double velocityRotationsPerMinute) {}
 
     // |============================== ANGLE MOTOR METHODS ============================== |
-
-    public default void configAnglePID(double p, double i, double d){}
 
     public default void setTargetPositionAsDegrees(double degrees){}
 }

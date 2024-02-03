@@ -17,8 +17,10 @@ public class RealShooterIO implements ShooterIO {
 
     public RealShooterIO() {
         configAngleMotor();
-        configFlywheelMotor();
-        _angleEncoder = _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        configFlywheelMotors();
+        configEncoder();
+        configAnglePID(0, 0, 0);
+        configFlywheelPIDs(0, 0, 0);
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
@@ -59,25 +61,6 @@ public class RealShooterIO implements ShooterIO {
         _rightFlywheelMotor.stopMotor();
     }
 
-    public void configFlywheelPID(double p, double i, double d) {
-        _leftFlywheelMotor.getPIDController().setP(p);
-        _leftFlywheelMotor.getPIDController().setI(i);
-        _leftFlywheelMotor.getPIDController().setD(d);
-        _leftFlywheelMotor.getPIDController().setFF(0, 0);
-
-        _rightFlywheelMotor.getPIDController().setP(p);
-        _rightFlywheelMotor.getPIDController().setI(i);
-        _rightFlywheelMotor.getPIDController().setD(d);
-        _rightFlywheelMotor.getPIDController().setFF(0, 0);
-    }
-
-    public void configAnglePID(double p, double i, double d) {
-        _angleMotor.getPIDController().setFeedbackDevice(_angleEncoder);
-        _angleMotor.getPIDController().setP(p);
-        _angleMotor.getPIDController().setI(i);
-        _angleMotor.getPIDController().setD(d);
-    }
-
     public void setTargetPositionAsDegrees(double degrees) {
         // TODO: may need an offset to get sensor and input angle to line up
         _angleMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
@@ -94,7 +77,7 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor.setSecondaryCurrentLimit(40);
     }
 
-    private void configFlywheelMotor() {
+    private void configFlywheelMotors() {
         _leftFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         _rightFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
 
@@ -111,5 +94,30 @@ public class RealShooterIO implements ShooterIO {
 
         _rightFlywheelMotor.setSmartCurrentLimit(40);
         _rightFlywheelMotor.setSecondaryCurrentLimit(40);
+    }
+
+    private void configEncoder() {
+        _angleEncoder = _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        _angleEncoder.setPositionConversionFactor(360);
+        _angleEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
+    }
+
+    private void configFlywheelPIDs(double p, double i, double d) {
+        _leftFlywheelMotor.getPIDController().setP(p);
+        _leftFlywheelMotor.getPIDController().setI(i);
+        _leftFlywheelMotor.getPIDController().setD(d);
+        _leftFlywheelMotor.getPIDController().setFF(0, 0);
+
+        _rightFlywheelMotor.getPIDController().setP(p);
+        _rightFlywheelMotor.getPIDController().setI(i);
+        _rightFlywheelMotor.getPIDController().setD(d);
+        _rightFlywheelMotor.getPIDController().setFF(0, 0);
+    }
+
+    private void configAnglePID(double p, double i, double d) {
+        _angleMotor.getPIDController().setFeedbackDevice(_angleEncoder);
+        _angleMotor.getPIDController().setP(p);
+        _angleMotor.getPIDController().setI(i);
+        _angleMotor.getPIDController().setD(d);
     }
 }

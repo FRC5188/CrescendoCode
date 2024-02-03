@@ -27,6 +27,7 @@ public class CmdIntakeRollersSpit extends Command {
     @Override
     public void end(boolean interrupted) {
         _intakeSubsytem.stopRollerMotor();
+        _intakeSubsytem.resetHasNote();
     }
 
     @Override

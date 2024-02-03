@@ -151,4 +151,16 @@ public class Shooter extends SubsystemBase {
     public void setRightFlywheel(double speedInRPM) {
         _shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
     }
+  
+  public boolean isAutoShootEnabled() {
+    return _autoShootEnabled;
+  }
+
+  public void setAutoShootEnabled(boolean enabled) {
+    _autoShootEnabled = enabled;
+  }
+
+  public boolean isReady() {
+    return shooterInPosition() && areFlywheelsAtTargetSpeed();
+  }
 }

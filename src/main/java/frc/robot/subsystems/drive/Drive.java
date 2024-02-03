@@ -295,6 +295,14 @@ public class Drive extends SubsystemBase {
     return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
   }
 
+  public SwerveDrivePoseEstimator getPoseEstimator() {
+    return _poseEstimator;
+  }
+
+  public Drive getObject() {
+    return this;
+  }
+
   // this setup lets us test the math, but when we actually run the code we don't have to give a pose estimator
   public static double getRadiusToSpeakerInMeters(Pose2d robotPose, Pose2d speakerPos) {
     double xDiff = robotPose.getX() - speakerPos.getX();

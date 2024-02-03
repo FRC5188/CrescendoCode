@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.hardware.vision.RealVisionIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
@@ -26,6 +27,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
+import frc.robot.subsystems.vision.Vision;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -41,6 +43,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
     // Subsystems
     private final Drive _drive;
+    private Vision _vision;
     // private final Flywheel flywheel;
 
     // Controller
@@ -67,6 +70,7 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
                 // flywheel = new Flywheel(new FlywheelIOSparkMax());
+                _vision = new Vision(new RealVisionIO(), _drive);
                 break;
 
             case SIM:

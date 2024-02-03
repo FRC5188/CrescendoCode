@@ -23,6 +23,7 @@ public class CmdShooterMoveManually extends Command {
         _shooterSubsystem.setTargetPositionAsAngle(setpoint);
 
     }
+    
     @Override
     public boolean isFinished() {
         return true;

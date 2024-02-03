@@ -4,51 +4,95 @@
 
 package frc.robot.subsystems.shooter;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
-  // Note: The channel that this encoder is on will need to be configured for the
-  // robot.
+    public enum ShooterZone {
+        // Here we define all of the zones for the shooter
+        Subwoofer(0, 2.5, 45, 3000, 3000),
+        Unknown(-1, -1, 0, 3000, 3000);
 
-  private final ShooterIO _shooterIO;
-  private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+        private final double _lowBound;
+        private final double _highBound;
+        private final double _shooterAngle;
+        private final double _leftFlywheelSpeed;
+        private final double _rightFlywheelSpeed;
 
-  public Shooter(ShooterIO shooterIO) {
-    this._shooterIO = shooterIO;
-  }
+        ShooterZone(double lowBound, double highBound, double shooterAngle, double leftFlywheelSpeed,
+                double rightFlywheelSpeed) {
+            this._lowBound = lowBound;
+            this._highBound = highBound;
+            this._shooterAngle = shooterAngle;
+            this._leftFlywheelSpeed = leftFlywheelSpeed;
+            this._rightFlywheelSpeed = rightFlywheelSpeed;
+        }
 
-  public void setTargetPositionAsAngle(double angle) {
-    if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
-      // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
-      // 2024/01/23
-      return;
-
-    } else if (angle > ShooterConstants.MAX_SHOOTER_ANGLE) {
-      // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
-      // 2024/01/23
-      return;
-
-    } else {
-      _shooterIO.setTargetPositionAsDegrees(angle);
+    // These functions can be called on an enum value to get various bits of data
+    public boolean radiusInZone(double radius) {
+      return (radius >= _lowBound) && (radius < _highBound);
     }
-  }
 
-  private void runPivotPID() {
-    _shooterIO.setTargetPositionAsDegrees(getCurrentPositionInDegrees());
+    public double getShooterAngle() {
+      return this._shooterAngle;
+    }
+
+    public double getLeftFlywheelSpeed() {
+      return this._leftFlywheelSpeed;
+    }
+
+    public double getRightFlywheelSpeed() {
+      return this._rightFlywheelSpeed;
+    }
   }
   public void runShooterForZone() {
     // waiting for setShooterPosition to be implemented
   }
 
+    private static boolean _autoShootEnabled = true;
+    private final ShooterIO _shooterIO;
+    private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
+    private double _leftTargetFlywheelSpeed = 0;
+    private double _rightTargetFlywheelSpeed = 0;
+    private double _targetShooterPosition;
+
+    private ShooterZone _currentShooterZone;
+
+    public Shooter(ShooterIO shooterIO) {
+        _shooterIO = shooterIO;
+        _targetShooterPosition = getCurrentPositionInDegrees();
+    }
+
+    public void setTargetPosition(ShooterZone zone) {
+        setTargetPositionAsAngle(zone.getShooterAngle());
+    }
+
+    public void setTargetPositionAsAngle(double angle) {
+        if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
+            // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
+            // 2024/01/23
+            return;
+
+        } else if (angle > ShooterConstants.MAX_SHOOTER_ANGLE) {
+            // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
+            // 2024/01/23
+            return;
+        } else {
+            _shooterIO.setTargetPositionAsDegrees(angle);
+        }
+    }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
+    Logger.processInputs("Shooter", _shooterInputs);
   }
-
+  
   public double getCurrentPositionInDegrees() throws RuntimeException {
     double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
     if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
@@ -61,4 +105,64 @@ public class Shooter extends SubsystemBase {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
   }
+
+  public ShooterZone getCurrentZone() {
+    return _currentShooterZone;
+  }
+
+    private boolean areFlywheelsAtTargetSpeed() {
+        return Math
+                .abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin
+                        - _leftTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
+                &&
+                Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin
+                        - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+    }
+
+    public ShooterZone getZoneFromRadius(double radius) {
+        for (ShooterZone zone : ShooterZone.values()) {
+            if (zone.radiusInZone(radius)) {
+                return zone;
+            }
+        }
+
+        return ShooterZone.Unknown;
+    }
+
+    public boolean isAutoShootEnabled() {
+        return _autoShootEnabled;
+    }
+
+    public void setAutoShootEnabled(boolean enabled) {
+        _autoShootEnabled = enabled;
+    }
+
+    public void setShooterPositionWithZone(ShooterZone targetZone) {
+        _currentShooterZone = targetZone;
+    if (targetZone != ShooterZone.Unknown) {
+          setTargetPositionAsAngle(targetZone.getShooterAngle());
+    }
+    // If we don't know what zone we are in, don't move the shooter
+    }
+
+    private boolean shooterInPosition() {
+        return Math.abs(_targetShooterPosition
+                - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+    }
+
+    public void stopFlywheels() {
+        _shooterIO.stopFlywheels();
+    }
+
+    public void setLeftFlywheelSpeed(double speedInRPM) {
+        _shooterIO.setLeftFlywheelSpeedRPM(speedInRPM);
+    }
+
+    public void setRightFlywheelSpeed(double speedInRPM) {
+        _shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
+    }
+
+    public boolean isReady() {
+        return shooterInPosition() && areFlywheelsAtTargetSpeed();
+    }
 }

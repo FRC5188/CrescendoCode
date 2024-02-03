@@ -34,19 +34,19 @@ public class Shooter extends SubsystemBase {
     }
 
     // These functions can be called on an enum value to get various bits of data
-    boolean radiusInZone(double radius) {
-      return (radius >= _lowBound) || (radius < _highBound);
+    public boolean radiusInZone(double radius) {
+      return (radius >= _lowBound) && (radius < _highBound);
     }
 
-    double getShooterAngle() {
+    public double getShooterAngle() {
       return this._shooterAngle;
     }
 
-    double getLeftFlywheelSpeed() {
+    public double getLeftFlywheelSpeed() {
       return this._leftFlywheelSpeed;
     }
 
-    double getRightFlywheelSpeed() {
+    public double getRightFlywheelSpeed() {
       return this._rightFlywheelSpeed;
     }
   }
@@ -63,10 +63,6 @@ public class Shooter extends SubsystemBase {
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
-  }
-
-  public void setTargetPosition(ShooterZone zone) {
-    setTargetPositionAsAngle(zone.getShooterAngle());
   }
 
   public void setTargetPositionAsAngle(double angle) {
@@ -88,7 +84,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
-    Logger.processInputs("Drive/Gyro", _shooterInputs);
+    Logger.processInputs("Shooter", _shooterInputs);
   }
   
   public double getCurrentPositionInDegrees() throws RuntimeException {
@@ -102,6 +98,10 @@ public class Shooter extends SubsystemBase {
     } else {
       return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
+  }
+
+  public ShooterZone getCurrentZone() {
+    return _currentShooterZone;
   }
 
   private boolean areFlywheelsAtTargetSpeed() {
@@ -128,9 +128,12 @@ public class Shooter extends SubsystemBase {
     _autoShootEnabled = enabled;
   }
 
-  public void setShooterPosition(ShooterZone targetZone) {
+  public void setShooterPositionWithZone(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-    setTargetPositionAsAngle(targetZone.getShooterAngle());
+    if (targetZone != ShooterZone.Unknown) {
+      setTargetPositionAsAngle(targetZone.getShooterAngle());
+    }
+    // If we don't know what zone we are in, don't move the shooter
   }
   
   private boolean shooterInPosition() {

@@ -3,10 +3,10 @@ package frc.robot.subsystems.intake.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
-public class CmdIntakeStartRollersAcquire extends Command {
+public class CmdIntakeRollersAcquire extends Command {
     private Intake _intakeSubsystem;
 
-    public CmdIntakeStartRollersAcquire(Intake intakeSubsystem) {
+    public CmdIntakeRollersAcquire(Intake intakeSubsystem) {
         _intakeSubsystem = intakeSubsystem;
 
         addRequirements(intakeSubsystem);

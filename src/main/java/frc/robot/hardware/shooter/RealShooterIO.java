@@ -74,6 +74,7 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
+        // TODO: may need an offset to get sensor and input angle to line up
         _angleMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
     }
 

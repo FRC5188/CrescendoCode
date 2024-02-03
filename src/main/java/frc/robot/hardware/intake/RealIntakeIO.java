@@ -24,14 +24,13 @@ public class RealIntakeIO implements IntakeIO {
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
         inputs._pivotMotorCurrent = _pivotMotor.getOutputCurrent();
-        inputs._pivotMotorPositionDegrees = _pivotMotorEncoder.getPosition();
+        // TODO: Might need the same offset as mentioned for set position
+        inputs._pivotEncoderPositionRotations = _pivotMotorEncoder.getPosition();
 
         inputs._rollerMotorTemperature = _rollerMotor.getMotorTemperature();
         inputs._rollerMotorVelocityRotationsPerMin = _rollerMotor.getEncoder().getVelocity();
         inputs._rollerMotorVoltage = _rollerMotor.getAppliedOutput() * _rollerMotor.getBusVoltage();
         inputs._rollerMotorCurrent = _rollerMotor.getOutputCurrent();
-
-        inputs._pivotEncoderPositionRotations = _pivotMotorEncoder.getPosition();
     }
 
     public void configPivotPID(double p, double i, double d) {
@@ -42,6 +41,7 @@ public class RealIntakeIO implements IntakeIO {
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
+        // TODO: Maybe add an offset to make angle between intake and our code line up
         _pivotMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
     }
       

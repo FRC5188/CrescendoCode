@@ -5,11 +5,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 
 public class GrpIntakeAcquireNoteFromSource extends SequentialCommandGroup {
-    private Intake _intakeSubsystem;
-    private IntakePosition _intakePosition;
-    private int _timeoutInMs;
 
-    public GrpIntakeAcquireNoteFromSource(Intake intakeSubsystem, IntakePosition intakePosition, int timeoutInMs) {
+    public GrpIntakeAcquireNoteFromSource(Intake intakeSubsystem, int timeoutInMs) {
         addRequirements(intakeSubsystem);
 
         addCommands(

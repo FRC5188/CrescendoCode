@@ -41,7 +41,7 @@ public interface ShooterIO {
 
     public default void setRightFlywheelMotorVelocity(double velocityRadiansPerSecond){}
 
-    public default void stopLeftFlywheels(){}
+    public default void stopFlywheels(){}
 
     public default void configFlywheelPID(double p, double i, double d){}
 

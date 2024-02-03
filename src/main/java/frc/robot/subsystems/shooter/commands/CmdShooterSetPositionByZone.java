@@ -4,21 +4,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 
-public class CmdShooterSetPosition extends Command {
+public class CmdShooterSetPositionByZone extends Command {
 
     private Shooter _shooterSubsystem;
+    private ShooterZone _zone;
 
-    public CmdShooterSetPosition(Shooter shooterSubsystem) {
+    public CmdShooterSetPositionByZone(Shooter shooterSubsystem, ShooterZone zone) {
         _shooterSubsystem = shooterSubsystem;
+        _zone = zone;
 
         addRequirements(shooterSubsystem);
     }
 
-    ShooterZone position;
-
     @Override
     public void initialize() {
-        _shooterSubsystem.setShooterPosition(position);
+        _shooterSubsystem.setShooterPositionWithZone(_zone);
     }
 
     @Override

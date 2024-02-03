@@ -29,9 +29,7 @@ public class CmdIntakeWaitForNote extends Command {
     _countdownInCycles = (int) Math.ceil(timeoutInMs / 20.0);
 
     // If a timeout of <=0 is given, this command will never time out.
-    if (timeoutInMs <= 0) {
-      _commandTimesOut = false;
-    }
+    _commandTimesOut = !(timeoutInMs <= 0);
   }
 
   // Called when the command is initially scheduled.
@@ -42,7 +40,7 @@ public class CmdIntakeWaitForNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _countdownInCycles = -1;
+    _countdownInCycles--;
   }
 
   // Called once the command ends or is interrupted.
@@ -53,10 +51,6 @@ public class CmdIntakeWaitForNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (_commandTimesOut) {
-      return _countdownInCycles <= 0;
-    }
-
     return (_commandTimesOut && _countdownInCycles <= 0) || _intakeSubsystem.hasNote();
   }
 }

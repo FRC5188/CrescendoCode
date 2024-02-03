@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
             this._angle = angle;
         }
 
-        public double get_angle() {
+        public double getAngle() {
             return this._angle;
         }
     }
@@ -40,8 +40,8 @@ public class Intake extends SubsystemBase {
 
     public void setIntakePosition(IntakePosition position) {
         _intakePosition = position;
-        setIntakePositionWithAngle(position.get_angle());
-     }
+        setIntakePositionWithAngle(position.getAngle());
+    }
 
     public void setRollerMotorSpeedAcquire() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
@@ -65,7 +65,7 @@ public class Intake extends SubsystemBase {
 
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionRotations);
-        double targetPositionDegrees = _intakePosition.get_angle();
+        double targetPositionDegrees = _intakePosition.getAngle();
         return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
 

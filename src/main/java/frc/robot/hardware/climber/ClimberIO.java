@@ -26,16 +26,8 @@ public interface ClimberIO {
     public default void updateInputs(ClimberIOInputs inputs){}
 
     // |============================== LEFT CLIMBER MOTOR METHODS ============================== |
-    public default void setLeftClimberPosition(double positionRotations){}
-
-    public default void setLeftClimberVoltage(double voltage){}
-
-    public default void setLeftClimberVelocity(double velocityRotationsPerMin){}
+    public default void setLeftClimberSpeed(double speed){}
 
     // |============================== RIGHT CLIMBER MOTOR METHODS ============================== |
-    public default void setRightClimberPosition(double positionRotations){}
-
-    public default void setRightClimberVoltage(double voltage){}
-
-    public default void setRightClimberVelocity(double velocityRotationsPerMin){}
+    public default void setRightClimberSpeed(double speed){}
 }

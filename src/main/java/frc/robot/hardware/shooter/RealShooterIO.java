@@ -28,8 +28,10 @@ public class RealShooterIO implements ShooterIO {
         inputs._leftFlywheelMotorCurrent = _leftFlywheelMotor.getOutputCurrent();
 
         inputs._rightFlywheelMotorTemperature = _rightFlywheelMotor.getMotorTemperature();
-        inputs._rightFlywheelMotorVelocityRotationsPerMin = (_rightFlywheelMotor.getEncoder().getVelocity()) / GEAR_RATIO;
-        inputs._rightFlywheelMotorVoltage = _rightFlywheelMotor.getAppliedOutput() * _rightFlywheelMotor.getBusVoltage();
+        inputs._rightFlywheelMotorVelocityRotationsPerMin = (_rightFlywheelMotor.getEncoder().getVelocity())
+                / GEAR_RATIO;
+        inputs._rightFlywheelMotorVoltage = _rightFlywheelMotor.getAppliedOutput()
+                * _rightFlywheelMotor.getBusVoltage();
         inputs._rightFlywheelMotorCurrent = _rightFlywheelMotor.getOutputCurrent();
 
         inputs._angleMotorTemperature = _angleMotor.getMotorTemperature();
@@ -38,15 +40,18 @@ public class RealShooterIO implements ShooterIO {
         inputs._angleMotorCurrent = _angleMotor.getOutputCurrent();
         inputs._angleMotorPositionDegrees = Units.rotationsToDegrees(_angleMotor.getEncoder().getPosition());
 
-        inputs._angleEncoderPositionRotations = _angleEncoder.getPosition(); // TODO: This might be in encoder tics. Decide later what units would be best. 
+        inputs._angleEncoderPositionRotations = _angleEncoder.getPosition(); // TODO: This might be in encoder tics.
+                                                                             // Decide later what units would be best.
     }
 
     public void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {
-        _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute / 60.0) * GEAR_RATIO), ControlType.kVelocity);
+        _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute / 60.0) * GEAR_RATIO),
+                ControlType.kVelocity);
     }
 
     public void setRightFlywheelSpeedRPM(double velocityRotationsPerMinute) {
-        _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute / 60.0) * GEAR_RATIO), ControlType.kVelocity);
+        _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute / 60.0) * GEAR_RATIO),
+                ControlType.kVelocity);
     }
 
     public void stopFlywheels() {
@@ -74,6 +79,7 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
+        // TODO: may need an offset to get sensor and input angle to line up
         _angleMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
     }
 

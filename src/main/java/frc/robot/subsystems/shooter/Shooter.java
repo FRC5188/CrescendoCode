@@ -151,11 +151,11 @@ public class Shooter extends SubsystemBase {
         _shooterIO.stopFlywheels();
     }
 
-    public void setLeftFlywheel(double speedInRPM) {
+    public void setLeftFlywheelSpeed(double speedInRPM) {
         _shooterIO.setLeftFlywheelSpeedRPM(speedInRPM);
     }
 
-    public void setRightFlywheel(double speedInRPM) {
+    public void setRightFlywheelSpeed(double speedInRPM) {
         _shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
     }
 

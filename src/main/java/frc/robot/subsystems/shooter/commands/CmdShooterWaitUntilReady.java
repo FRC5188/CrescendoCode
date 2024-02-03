@@ -20,6 +20,6 @@ public class CmdShooterWaitUntilReady extends Command {
     public boolean isFinished() {
         return _shooterSubsystem.isReady() && 
         _intakeSubsystem.pivotAtSetpoint() && 
-        (_intakeSubsystem.getIntakePosition() == IntakePosition.AmpScore || _intakeSubsystem.getIntakePosition() == IntakePosition.SpeakerScore);
+        _intakeSubsystem.getIntakePosition() == IntakePosition.SpeakerScore;
     }
 }

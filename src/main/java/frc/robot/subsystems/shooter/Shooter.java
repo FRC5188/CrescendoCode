@@ -32,23 +32,23 @@ public class Shooter extends SubsystemBase {
             this._rightFlywheelSpeed = rightFlywheelSpeed;
         }
 
-        // These functions can be called on an enum value to get various bits of data
-        boolean radiusInZone(double radius) {
-            return (radius >= _lowBound) || (radius < _highBound);
-        }
-
-        double getShooterAngle() {
-            return this._shooterAngle;
-        }
-
-        double getLeftFlywheelSpeed() {
-            return this._leftFlywheelSpeed;
-        }
-
-        double getRightFlywheelSpeed() {
-            return this._rightFlywheelSpeed;
-        }
+    // These functions can be called on an enum value to get various bits of data
+    public boolean radiusInZone(double radius) {
+      return (radius >= _lowBound) && (radius < _highBound);
     }
+
+    public double getShooterAngle() {
+      return this._shooterAngle;
+    }
+
+    public double getLeftFlywheelSpeed() {
+      return this._leftFlywheelSpeed;
+    }
+
+    public double getRightFlywheelSpeed() {
+      return this._rightFlywheelSpeed;
+    }
+  }
 
     private static boolean _autoShootEnabled = true;
     private final ShooterIO _shooterIO;
@@ -83,25 +83,29 @@ public class Shooter extends SubsystemBase {
         }
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        _shooterIO.updateInputs(_shooterInputs);
-        Logger.processInputs("Drive/Gyro", _shooterInputs);
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    _shooterIO.updateInputs(_shooterInputs);
+    Logger.processInputs("Shooter", _shooterInputs);
+  }
+  
+  public double getCurrentPositionInDegrees() throws RuntimeException {
+    double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
+    if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
+        + Rotation2d.fromDegrees(10).getRotations()
+        || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS
+            - Rotation2d.fromDegrees(10).getRotations()) {
+      throw new RuntimeException(
+          "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
+    } else {
+      return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
     }
+  }
 
-    public double getCurrentPositionInDegrees() throws RuntimeException {
-        double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
-        if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
-                + Rotation2d.fromDegrees(10).getRotations()
-                || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS
-                        - Rotation2d.fromDegrees(10).getRotations()) {
-            throw new RuntimeException(
-                    "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
-        } else {
-            return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
-        }
-    }
+  public ShooterZone getCurrentZone() {
+    return _currentShooterZone;
+  }
 
     private boolean areFlywheelsAtTargetSpeed() {
         return Math
@@ -130,9 +134,12 @@ public class Shooter extends SubsystemBase {
         _autoShootEnabled = enabled;
     }
 
-    public void setShooterPosition(ShooterZone targetZone) {
+    public void setShooterPositionWithZone(ShooterZone targetZone) {
         _currentShooterZone = targetZone;
-        setTargetPositionAsAngle(targetZone.getShooterAngle());
+    if (targetZone != ShooterZone.Unknown) {
+          setTargetPositionAsAngle(targetZone.getShooterAngle());
+    }
+    // If we don't know what zone we are in, don't move the shooter
     }
 
     private boolean shooterInPosition() {

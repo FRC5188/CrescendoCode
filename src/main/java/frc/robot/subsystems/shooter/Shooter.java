@@ -50,12 +50,6 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public void runShooterForZone(ShooterZone zone) {
-    setShooterPositionWithZone(zone);
-    setLeftFlywheelSpeed(zone._leftFlywheelSpeed);
-    setRightFlywheelSpeed(zone._rightFlywheelSpeed);
-  }
-
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
@@ -89,13 +83,6 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    _shooterIO.updateInputs(_shooterInputs);
-    Logger.processInputs("Shooter", _shooterInputs);
-  }
-
   public double getCurrentPositionInDegrees() throws RuntimeException {
     double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
     if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
@@ -120,6 +107,12 @@ public class Shooter extends SubsystemBase {
         &&
         Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin
             - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+  }
+
+  public void runShooterForZone(ShooterZone zone) {
+    setShooterPositionWithZone(zone);
+    setLeftFlywheelSpeed(zone._leftFlywheelSpeed);
+    setRightFlywheelSpeed(zone._rightFlywheelSpeed);
   }
 
   public ShooterZone getZoneFromRadius(double radius) {
@@ -167,5 +160,12 @@ public class Shooter extends SubsystemBase {
 
   public boolean isReady() {
     return shooterInPosition() && areFlywheelsAtTargetSpeed();
+  }
+
+    @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    _shooterIO.updateInputs(_shooterInputs);
+    Logger.processInputs("Shooter", _shooterInputs);
   }
 }

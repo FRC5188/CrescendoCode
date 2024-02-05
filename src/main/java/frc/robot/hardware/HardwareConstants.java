@@ -49,7 +49,7 @@ public class HardwareConstants {
         private static final double CAMERA_ONE_PITCH = 0;
         private static final double CAMERA_ONE_YAW = Math.toRadians(-10.5);
 
-        public static Transform3d _cameraOnePosition = new Transform3d(
+        private static Transform3d _cameraOnePosition = new Transform3d(
         new Translation3d(CAMERA_ONE_X_FROM_ROBOT_CENTER, CAMERA_ONE_Y_FROM_ROBOT_CENTER, CAMERA_ONE_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_ONE_ROLL, CAMERA_ONE_PITCH, CAMERA_ONE_YAW));
 
@@ -62,9 +62,11 @@ public class HardwareConstants {
         private static final double CAMERA_TWO_PITCH = 0;
         private static final double CAMERA_TWO_YAW = Math.toRadians(0);
 
-        public static Transform3d _cameraTwoPosition = new Transform3d(
+        private static Transform3d _cameraTwoPosition = new Transform3d(
         new Translation3d(CAMERA_TWO_X_FROM_ROBOT_CENTER, CAMERA_TWO_Y_FROM_ROBOT_CENTER, CAMERA_TWO_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_TWO_ROLL, CAMERA_TWO_PITCH, CAMERA_TWO_YAW));
+
+        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraOnePosition, _cameraTwoPosition};
     
     // |====================== END VISION SUBSYSTEM TRANSFORMATIONS ======================|
     

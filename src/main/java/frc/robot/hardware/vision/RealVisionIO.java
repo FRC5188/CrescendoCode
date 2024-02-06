@@ -7,6 +7,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.hardware.HardwareConstants;
 
 public class RealVisionIO implements VisionIO {
@@ -24,6 +25,7 @@ public class RealVisionIO implements VisionIO {
                                 inputs._hasPose[n] = true;
                         } else {
                                 inputs._hasPose[n] = false;
+                                inputs._poses[n] = new Pose2d();
                         }
                 }
         }

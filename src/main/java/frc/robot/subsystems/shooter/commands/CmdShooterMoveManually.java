@@ -1,5 +1,4 @@
 package frc.robot.subsystems.shooter.commands;
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
@@ -7,9 +6,9 @@ import frc.robot.subsystems.shooter.Shooter;
 public class CmdShooterMoveManually extends Command {
 
     private Shooter _shooterSubsystem;
-    private DoubleSupplier _changeAmount;
+    private double _changeAmount;
 
-    public CmdShooterMoveManually(Shooter shooterSubsystem, DoubleSupplier changeAmount) {
+    public CmdShooterMoveManually(Shooter shooterSubsystem, double changeAmount) {
         _shooterSubsystem = shooterSubsystem;
         _changeAmount = changeAmount;
 
@@ -18,8 +17,8 @@ public class CmdShooterMoveManually extends Command {
 
     @Override
     public void initialize() {
-        double setpoint = _shooterSubsystem.getCurrentPositionInDegrees() + _changeAmount.getAsDouble();
-        System.out.println ("Changing Shooter Position from" + _shooterSubsystem.getCurrentPositionInDegrees() + "to" + setpoint);
+        double setpoint = _shooterSubsystem.getCurrentZone().getShooterAngle() + _changeAmount;
+        System.out.println ("Changing Shooter Position from " + _shooterSubsystem.getCurrentZone().getShooterAngle() + " to " + setpoint);
         _shooterSubsystem.setTargetPositionAsAngle(setpoint);
 
     }

@@ -1,30 +1,50 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.leds.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.LEDs.LEDAnimation;
+import frc.robot.subsystems.shooter.Shooter;
 
 public class CmdLEDsRunLEDs extends Command {
-  /** Creates a new CmdLEDsRunLEDs. */
-  public CmdLEDsRunLEDs() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private LEDs _leds;
+  private Shooter _shooter;
+  private Intake _intake;
+  private int _timer;
+  
+  public CmdLEDsRunLEDs(LEDs leds, Shooter shooter, Intake intake) {
+    _leds = leds;
+    _shooter = shooter;
+    _intake = intake;
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    _timer = 0;
+  }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    // Stop running the current animation if it's run for long enough
+    _leds.stopAnimationIfTimedOut(_timer);
 
-  // Called once the command ends or is interrupted.
+    // Start a new animation if we meet conditions
+    if (_shooter.isReady()) {
+      // Run this animation when the shooter is ready
+      _leds.runAnimation(LEDAnimation.ReadyToShoot);
+    } else if (_leds.shouldRunHasNoteAnimation(_intake.hasNote())) {
+      // Only run this animation one time, right when the intake first picks up a note
+      _leds.runAnimation(LEDAnimation.PickedUpNote);
+    }
+
+    // Increment the timer for another loop
+    _timer++;
+  }
+
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

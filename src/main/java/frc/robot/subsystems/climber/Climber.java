@@ -35,13 +35,9 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean isClimbing() {
-    double _leftSpeed = _climberInputs._leftClimberSpeed;
-    double _rightSpeed = _climberInputs._rightClimberSpeed;
-    if (_leftSpeed != 0 || _rightSpeed != 0) {
-      return true;
-    } else {
-      return false;
-    }
+    double leftSpeed = _climberInputs._leftClimberSpeed;
+    double rightSpeed = _climberInputs._rightClimberSpeed;
+    return (leftSpeed != 0 || rightSpeed != 0);
   }
 
   @Override

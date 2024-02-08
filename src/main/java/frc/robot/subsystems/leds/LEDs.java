@@ -2,7 +2,9 @@ package frc.robot.subsystems.leds;
 
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
+import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 
 import frc.robot.hardware.HardwareConstants;
 
@@ -14,8 +16,9 @@ public class LEDs {
 
     public enum LEDAnimation {
         None(null, null, 0),
-        ReadyToShoot(new LEDColor(0, 255, 0), null, 0),
-        PickedUpNote(null, new StrobeAnimation(255, 165, 0, 0, 0.5, _numLEDs), 3);
+        ReadyToShoot(new LEDColor(0, 255, 0), null, 3),
+        PickedUpNote(null, new StrobeAnimation(255, 128, 0, 0, 0.5, _numLEDs), 3),
+        ClimberAscending(new LEDColor(255, 215, 0), new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3);
 
         LEDColor _color;
         Animation _animation;
@@ -55,10 +58,16 @@ public class LEDs {
             if (animation.getColor() == null) {
                 _candle.clearAnimation(0);
                 _candle.animate(animation.getAnimation());
+            } else if (animation.getAnimation() == null){
+                LEDColor color = animation.getColor();
+                _candle.setLEDs(color.getR(), color.getB(), color.getG());
             } else {
+                _candle.clearAnimation(0);
+                _candle.animate(animation.getAnimation());
                 LEDColor color = animation.getColor();
                 _candle.setLEDs(color.getR(), color.getB(), color.getG());
             }
+            
         }
     }
 

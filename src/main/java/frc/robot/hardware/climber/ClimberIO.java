@@ -12,6 +12,7 @@ public interface ClimberIO {
         public double _leftClimberMotorPositionRotations;
         public double _leftClimberMotorVoltage;
         public double _leftClimberMotorCurrent;
+        public double _leftClimberSpeed;
         // |===================== END LEFT CLIMBER MOTOR LOGGING =====================|
 
         // |===================== RIGHT CLIMBER MOTOR LOGGING =====================|
@@ -20,6 +21,7 @@ public interface ClimberIO {
         public double _rightClimberMotorPositionRotations;
         public double _rightClimberMotorVoltage;
         public double _rightClimberMotorCurrent;
+        public double _rightClimberSpeed;
         // |===================== END RIGHT CLIMBER MOTOR LOGGING =====================|
     }
 
@@ -30,4 +32,6 @@ public interface ClimberIO {
 
     // |============================== RIGHT CLIMBER MOTOR METHODS ============================== |
     public default void setRightClimberSpeed(double speed){}
+
+    
 }

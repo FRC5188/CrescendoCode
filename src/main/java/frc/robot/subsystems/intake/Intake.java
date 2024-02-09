@@ -9,11 +9,21 @@ import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
-        SourcePickup,
-        GroundPickup,
-        Stowed,
-        AmpScore,
-        SpeakerScore
+        SourcePickup (75),
+        GroundPickup (10),
+        Stowed (100),
+        AmpScore (80),
+        SpeakerScore (115);
+
+        private final double _angle;
+
+        private IntakePosition(double angle) {
+            this._angle = angle;
+        }
+
+        public double getAngle() {
+            return this._angle;
+        }
     }
 
     protected IntakePosition _intakePosition;
@@ -29,25 +39,9 @@ public class Intake extends SubsystemBase {
     }
 
     public void setIntakePosition(IntakePosition position) {
-         _intakePosition = position;
-         switch (_intakePosition) {
-             case GroundPickup:
-                 setIntakePositionWithAngle(IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE);
-                 break;
-             case SourcePickup:
-                 setIntakePositionWithAngle(IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE);
-                 break;
-             case Stowed:
-                 setIntakePositionWithAngle(IntakeConstants.INTAKE_STOWED_ANGLE);
-                 break;
-             case AmpScore:
-                 setIntakePositionWithAngle(IntakeConstants.INTAKE_AMP_SCORE_ANGLE);
-                 break;
-             case SpeakerScore:
-                 setIntakePositionWithAngle(IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE);
-                 break;
-         }
-     }
+        _intakePosition = position;
+        setIntakePositionWithAngle(position.getAngle());
+    }
 
     public void setRollerMotorSpeedAcquire() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
@@ -71,29 +65,16 @@ public class Intake extends SubsystemBase {
 
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionRotations);
-        double targetPositionDegrees = 0;
-        switch (_intakePosition) {
-             case GroundPickup:
-                 targetPositionDegrees = IntakeConstants.INTAKE_GROUND_PICKUP_ANGLE;
-                 break;
-             case SourcePickup:
-                 targetPositionDegrees = IntakeConstants.INTAKE_SOURCE_PICKUP_ANGLE;
-                 break;
-             case Stowed:
-                 targetPositionDegrees = IntakeConstants.INTAKE_STOWED_ANGLE;
-                 break;
-             case AmpScore:
-                 targetPositionDegrees = IntakeConstants.INTAKE_AMP_SCORE_ANGLE;
-                 break;
-             case SpeakerScore:
-                 targetPositionDegrees = IntakeConstants.INTAKE_SPEAKER_SCORE_ANGLE;
-                 break;
-         }
-        return pivotEncoderPositionDegrees == targetPositionDegrees;
+        double targetPositionDegrees = _intakePosition.getAngle();
+        return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
 
     public boolean hasNote() {
         return _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
+    }
+
+    public double getPivotMotorAngle() {
+        return _intakeInputs._pivotMotorPositionDegrees;
     }
 
     @Override

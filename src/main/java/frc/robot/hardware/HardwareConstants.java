@@ -20,6 +20,10 @@ public class HardwareConstants {
         //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
         public static int LEFT_CLIMBER_MOTOR = 5;
         public static int RIGHT_CLIMBER_MOTOR = 6;
+
+        //|====================== LED SUBSYSTEM CAN IDS ==========================|
+        public static int CANDLE_ID = 7;
+        
     }
 
     public class DIOPorts {

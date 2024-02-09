@@ -15,4 +15,11 @@ public abstract class ShooterConstants {
 
     public static final double FLYWHEEL_GEAR_RATIO = 0;
     public static final double FLYWHEEL_SPEED_DEADBAND = 0;
+
+    public static final double SHOOTER_WIDTH = 0;
+    public static final double SHOOTER_HEIGHT = 0;
+    public static final double SHOOTER_ROOT_WIDTH = 0;
+    public static final double SHOOTER_ROOT_HEIGHT = 0;
+    public static final double SHOOTER_LENGTH = 0;
+    public static final double SHOOTER_ANGLE = 0;
 }

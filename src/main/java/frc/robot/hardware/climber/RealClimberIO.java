@@ -20,12 +20,14 @@ public class RealClimberIO implements ClimberIO {
         inputs._leftClimberMotorPositionRotations = _leftClimberMotor.getEncoder().getPosition();
         inputs._leftClimberMotorVoltage = _leftClimberMotor.getAppliedOutput() * _leftClimberMotor.getBusVoltage();
         inputs._leftClimberMotorCurrent = _leftClimberMotor.getOutputCurrent();
+        inputs._leftClimberSpeed = _leftClimberMotor.get();
 
         inputs._rightClimberMotorTemperature = _rightClimberMotor.getMotorTemperature();
         inputs._rightClimberMotorVelocityRotationsPerMin = _rightClimberMotor.getEncoder().getVelocity();
         inputs._rightClimberMotorPositionRotations = _rightClimberMotor.getEncoder().getPosition();
         inputs._rightClimberMotorVoltage = _rightClimberMotor.getAppliedOutput() * _rightClimberMotor.getBusVoltage();
         inputs._rightClimberMotorCurrent = _rightClimberMotor.getOutputCurrent();
+        inputs._rightClimberSpeed = _rightClimberMotor.get();
     }
 
     public void setLeftClimberSpeed(double speed) {

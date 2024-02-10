@@ -54,29 +54,29 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
   public ModuleIOSparkFlex(int index) {
     switch (index) {
-      case 0:
+      case 0: //Front Left
         _driveSparkFlex = new CANSparkFlex(1, MotorType.kBrushless);
         _turnSparkFlex = new CANSparkFlex(2, MotorType.kBrushless);
         _cancoder = new CANcoder(3);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.058630167643229); // MUST BE CALIBRATED
+        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.442138671875); // MUST BE CALIBRATED
         break;
-      case 1:
+      case 1: //Front Right
         _driveSparkFlex = new CANSparkFlex(4, MotorType.kBrushless);
         _turnSparkFlex = new CANSparkFlex(5, MotorType.kBrushless);
         _cancoder = new CANcoder(6);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.23297861735026); // MUST BE CALIBRATED
+        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.10791015625); // MUST BE CALIBRATED
         break;
-      case 2:
+      case 2: //Back Left
         _driveSparkFlex = new CANSparkFlex(7, MotorType.kBrushless);
         _turnSparkFlex = new CANSparkFlex(8, MotorType.kBrushless);
         _cancoder = new CANcoder(9);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.370921122233073); // MUST BE CALIBRATED
+        _absoluteEncoderOffset = Rotation2d.fromRotations(0.234619140625); // MUST BE CALIBRATED
         break;
-      case 3:
+      case 3: //Back Right
         _driveSparkFlex = new CANSparkFlex(10, MotorType.kBrushless);
         _turnSparkFlex = new CANSparkFlex(11, MotorType.kBrushless);
         _cancoder = new CANcoder(12);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.360928141276042); // MUST BE CALIBRATED
+        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.382080078125); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");

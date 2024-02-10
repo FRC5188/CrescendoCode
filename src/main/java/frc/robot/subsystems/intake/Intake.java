@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
@@ -40,7 +41,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void runPivotPID() {
-        _intakeIO.setPivotMotorSpeed(_pivotPid.calculate(getPivotMotorAngle()));
+        //_intakeIO.setPivotMotorSpeed(_pivotPid.calculate(getPivotMotorAngle()));
     }
 
     public IntakePosition getIntakePosition() {
@@ -100,5 +101,9 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run
         _intakeIO.updateInputs(_intakeInputs);
         Logger.processInputs("Intake", _intakeInputs);
+        SmartDashboard.putNumber("Intake PID Speed", _pivotPid.calculate(getPivotMotorAngle()));
+        SmartDashboard.putNumber("Intake Current Pivot Angle", getPivotMotorAngle());
+        SmartDashboard.putNumber("Intake Desired Pivot Angle", _pivotPid.getSetpoint());
+
     }
 }

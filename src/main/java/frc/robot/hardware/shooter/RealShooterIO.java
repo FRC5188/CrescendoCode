@@ -17,11 +17,11 @@ public class RealShooterIO implements ShooterIO {
     private DutyCycleEncoder _angleEncoder;
 
     public RealShooterIO() {
-        configAngleMotor();
-        configFlywheelMotors();
-        configEncoder();
-        configAnglePID(0, 0, 0);
-        configFlywheelPIDs(0, 0, 0);
+        // configAngleMotor();
+        // configFlywheelMotors();
+        // configEncoder();
+        // configAnglePID(0, 0, 0);
+        // configFlywheelPIDs(0, 0, 0);
     }
 
     public void updateInputs(ShooterIOInputs inputs) {

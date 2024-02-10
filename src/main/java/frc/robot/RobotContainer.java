@@ -34,7 +34,9 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
+import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
@@ -148,16 +150,21 @@ public class RobotContainer {
                         () -> -_controller.getLeftY(),
                         () -> _controller.getLeftX(),
                         () -> -_controller.getRightX()));
-        _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+        // _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         _controller
                 .leftBumper()
                 .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                         () -> -_controller.getLeftY(),
                         () -> _controller.getLeftX()));
-        _controller
-                .a()
-                .whileTrue(new CmdShooterSetAutoshootEnabled(_shooter, true))
-                .whileFalse(new CmdShooterSetAutoshootEnabled(_shooter, false));
+
+        _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
+        _controller.b().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
+        _controller.x().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.SourcePickup));
+        _controller.y().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
+        // _controller
+        //         .a()
+        //         .whileTrue(new CmdShooterSetAutoshootEnabled(_shooter, true))
+        //         .whileFalse(new CmdShooterSetAutoshootEnabled(_shooter, false));
     }
 
     /**

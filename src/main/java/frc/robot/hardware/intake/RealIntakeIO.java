@@ -6,6 +6,7 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.hardware.HardwareConstants;
@@ -60,6 +61,7 @@ public class RealIntakeIO implements IntakeIO {
         
         _pivotMotor.setCANTimeout(100);
         _pivotMotor.setInverted(false);
+        _pivotMotor.setIdleMode(IdleMode.kBrake);
 
         _pivotMotor.setSmartCurrentLimit(40);
         _pivotMotor.setSecondaryCurrentLimit(55);
@@ -72,6 +74,7 @@ public class RealIntakeIO implements IntakeIO {
 
         _rollerMotor.setCANTimeout(100);
         _rollerMotor.setInverted(false);
+        _rollerMotor.setIdleMode(IdleMode.kBrake);
 
         _rollerMotor.setSmartCurrentLimit(40);
         _rollerMotor.setSecondaryCurrentLimit(55);

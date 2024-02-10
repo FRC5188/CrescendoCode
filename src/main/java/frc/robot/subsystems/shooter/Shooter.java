@@ -6,6 +6,7 @@ package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
@@ -56,12 +57,18 @@ public class Shooter extends SubsystemBase {
   private double _leftTargetFlywheelSpeed = 0;
   private double _rightTargetFlywheelSpeed = 0;
   private double _targetShooterPosition;
+  private PIDController _anglePid;
 
   private ShooterZone _currentShooterZone;
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
+    _anglePid = new PIDController(0, 0, 0);
+  }
+
+  public void runAnglePid() {
+    _shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -79,12 +86,13 @@ public class Shooter extends SubsystemBase {
       // 2024/01/23
       return;
     } else {
-      _shooterIO.setTargetPositionAsDegrees(angle);
+      //_shooterIO.setTargetPositionAsDegrees(angle);
+      _anglePid.setSetpoint(angle);
     }
   }
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
-    double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
+    double encoderValueAsRotations = _shooterInputs._angleEncoderPositionDegrees;
     if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
         + Rotation2d.fromDegrees(10).getRotations()
         || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS

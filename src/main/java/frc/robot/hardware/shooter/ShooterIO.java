@@ -29,7 +29,7 @@ public interface ShooterIO {
         // |================= END ANGLE MOTOR LOGGING =================|
 
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
-        public double _angleEncoderPositionRotations;
+        public double _angleEncoderPositionDegrees;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
     }
 
@@ -50,4 +50,6 @@ public interface ShooterIO {
     // |============================== ANGLE MOTOR METHODS ============================== |
 
     public default void setTargetPositionAsDegrees(double degrees){}
+
+    public default void setAngleMotorSpeed(double speed){}
 }

@@ -119,6 +119,8 @@ public class Robot extends LoggedRobot {
     }
 
     _robotContainer.getAutoShootCommand().schedule();
+    _robotContainer.getIntakeRunPIDCommand().schedule();
+    _robotContainer.getShooterRunPIDCommand().schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -137,6 +139,8 @@ public class Robot extends LoggedRobot {
     }
 
     _robotContainer.getAutoShootCommand().schedule();
+    _robotContainer.getIntakeRunPIDCommand().schedule();
+    _robotContainer.getShooterRunPIDCommand().schedule();
   }
 
   /** This function is called periodically during operator control. */

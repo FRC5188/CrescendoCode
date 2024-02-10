@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.intake.IntakeIO;
@@ -30,10 +31,16 @@ public class Intake extends SubsystemBase {
     private final IntakeIO _intakeIO;
     private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged();
     private boolean _hasNote;
+    private PIDController _pivotPid;
 
     public Intake(IntakeIO intakeIO) {
         this._intakeIO = intakeIO;
         _hasNote = false;
+        _pivotPid = new PIDController(0, 0, 0);
+    }
+
+    public void runPivotPID() {
+        _intakeIO.setPivotMotorSpeed(_pivotPid.calculate(getPivotMotorAngle()));
     }
 
     public IntakePosition getIntakePosition() {
@@ -62,7 +69,8 @@ public class Intake extends SubsystemBase {
             // TODO: log an error, but don't throw exception
             return;
         }
-        _intakeIO.setTargetPositionAsDegrees(angle);
+        //_intakeIO.setTargetPositionAsDegrees(angle);
+        _pivotPid.setSetpoint(angle);
     }
 
     public boolean pivotAtSetpoint() {

@@ -2,6 +2,9 @@ package frc.robot.hardware.intake;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -10,7 +13,7 @@ import frc.robot.hardware.HardwareConstants;
 public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;
     private CANSparkFlex _rollerMotor;
-    private SparkAbsoluteEncoder _pivotMotorEncoder;
+    private DutyCycleEncoder _pivotMotorEncoder;
 
     public RealIntakeIO() {
         configPivotMotor();
@@ -24,7 +27,8 @@ public class RealIntakeIO implements IntakeIO {
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
         inputs._pivotMotorCurrent = _pivotMotor.getOutputCurrent();
-        inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getPosition();
+        //inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getPosition();
+        inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getDistance();
 
         inputs._rollerMotorTemperature = _rollerMotor.getMotorTemperature();
         inputs._rollerMotorVelocityRotationsPerMin = _rollerMotor.getEncoder().getVelocity();
@@ -40,11 +44,15 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor.set(speed);
     }
 
+    public void setPivotMotorSpeed(double speed) {
+        _pivotMotor.set(speed);
+    }
+
     private void configPivotPID(double p, double i, double d) {
-        _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
-        _pivotMotor.getPIDController().setP(p);
-        _pivotMotor.getPIDController().setI(i);
-        _pivotMotor.getPIDController().setD(d);
+        // _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
+        // _pivotMotor.getPIDController().setP(p);
+        // _pivotMotor.getPIDController().setI(i);
+        // _pivotMotor.getPIDController().setD(d);
     }
 
     private void configPivotMotor() {
@@ -72,8 +80,11 @@ public class RealIntakeIO implements IntakeIO {
     }
 
     private void configEncoder() {
-        SparkAbsoluteEncoder encoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        encoder.setPositionConversionFactor(360);
-        encoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
+        // _pivotMotorEncoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        // _pivotMotorEncoder.setPositionConversionFactor(360);
+        // _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
+        _pivotMotorEncoder = new DutyCycleEncoder(0);
+        _pivotMotorEncoder.setDistancePerRotation(360);
+        _pivotMotorEncoder.setPositionOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
     }
 }

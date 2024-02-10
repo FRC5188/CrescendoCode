@@ -5,6 +5,7 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.hardware.HardwareConstants;
 
 public class RealShooterIO implements ShooterIO {
@@ -13,7 +14,7 @@ public class RealShooterIO implements ShooterIO {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _leftFlywheelMotor;
     private CANSparkFlex _rightFlywheelMotor;
-    private SparkAbsoluteEncoder _angleEncoder;
+    private DutyCycleEncoder _angleEncoder;
 
     public RealShooterIO() {
         configAngleMotor();
@@ -40,10 +41,8 @@ public class RealShooterIO implements ShooterIO {
         inputs._angleMotorVelocityRotationsPerMin = _angleMotor.getEncoder().getVelocity();
         inputs._angleMotorVoltage = _angleMotor.getAppliedOutput() * _angleMotor.getBusVoltage();
         inputs._angleMotorCurrent = _angleMotor.getOutputCurrent();
-        inputs._angleMotorPositionDegrees = Units.rotationsToDegrees(_angleMotor.getEncoder().getPosition());
-
-        inputs._angleEncoderPositionRotations = _angleEncoder.getPosition(); // TODO: This might be in encoder tics.
-                                                                             // Decide later what units would be best.
+        //inputs._angleEncoderPositionDegrees = _angleEncoder.getPosition();
+        inputs._angleEncoderPositionDegrees = _angleEncoder.getDistance();
     }
 
     public void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {
@@ -64,6 +63,10 @@ public class RealShooterIO implements ShooterIO {
     public void setTargetPositionAsDegrees(double degrees) {
         // TODO: may need an offset to get sensor and input angle to line up
         _angleMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
+    }
+
+    public void setAngleMotorSpeed(double speed) {
+        _angleMotor.set(speed);
     }
 
     private void configAngleMotor() {
@@ -97,9 +100,12 @@ public class RealShooterIO implements ShooterIO {
     }
 
     private void configEncoder() {
-        _angleEncoder = _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        _angleEncoder.setPositionConversionFactor(360);
-        _angleEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
+        //_angleEncoder = _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        // _angleEncoder.setPositionConversionFactor(360);
+        // _angleEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
+        _angleEncoder = new DutyCycleEncoder(0);
+        _angleEncoder.setDistancePerRotation(360);
+        _angleEncoder.setPositionOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
     }
 
     private void configFlywheelPIDs(double p, double i, double d) {
@@ -115,9 +121,9 @@ public class RealShooterIO implements ShooterIO {
     }
 
     private void configAnglePID(double p, double i, double d) {
-        _angleMotor.getPIDController().setFeedbackDevice(_angleEncoder);
-        _angleMotor.getPIDController().setP(p);
-        _angleMotor.getPIDController().setI(i);
-        _angleMotor.getPIDController().setD(d);
+        // _angleMotor.getPIDController().setFeedbackDevice(_angleEncoder);
+        // _angleMotor.getPIDController().setP(p);
+        // _angleMotor.getPIDController().setI(i);
+        // _angleMotor.getPIDController().setD(d);
     }
 }

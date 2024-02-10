@@ -33,4 +33,6 @@ public interface IntakeIO {
 
     // |============================== ROLLER MOTOR METHODS ============================== |  
     public default void setRollerMotorSpeed(double speed) {}
+
+    public default void setPivotMotorSpeed(double speed) {}
 }

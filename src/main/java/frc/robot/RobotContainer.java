@@ -34,8 +34,10 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetAutoshootEnabled;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -169,5 +171,13 @@ public class RobotContainer {
 
     public Command getAutoShootCommand() {
         return new CmdRunShooterAutomatically(_drive, _shooter, _intake);
+    }
+
+    public Command getIntakeRunPIDCommand() {
+        return new CmdIntakeRunPID(_intake);
+    }
+
+    public Command getShooterRunPIDCommand() {
+        return new CmdShooterRunPids(_shooter);
     }
 }

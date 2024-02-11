@@ -58,13 +58,13 @@ public class ModuleIOSparkFlex implements ModuleIO {
         _driveSparkFlex = new CANSparkFlex(1, MotorType.kBrushless);
         _turnSparkFlex = new CANSparkFlex(2, MotorType.kBrushless);
         _cancoder = new CANcoder(3);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.442138671875); // MUST BE CALIBRATED
+        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.453711); // MUST BE CALIBRATED
         break;
       case 1: //Front Right
         _driveSparkFlex = new CANSparkFlex(4, MotorType.kBrushless);
         _turnSparkFlex = new CANSparkFlex(5, MotorType.kBrushless);
         _cancoder = new CANcoder(6);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.10791015625); // MUST BE CALIBRATED
+        _absoluteEncoderOffset = Rotation2d.fromRotations(0.716553); // MUST BE CALIBRATED
         break;
       case 2: //Back Left
         _driveSparkFlex = new CANSparkFlex(7, MotorType.kBrushless);

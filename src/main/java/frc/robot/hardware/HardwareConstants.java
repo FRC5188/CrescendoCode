@@ -8,11 +8,11 @@ public class HardwareConstants {
     public class CanIds {
         
         // |====================== INTAKE SUBSYSTEM CAN IDs ======================|
-        public static int PIVOT_MOTOR_ID = 0;
-        public static int ROLLER_MOTOR_ID = 1;
+        public static int PIVOT_MOTOR_ID = 21;
+        public static int ROLLER_MOTOR_ID = 20;
 
         // |====================== SHOOTER SUBSYSTEM CAN IDs ======================|
-        public static int ANGLE_MOTOR_ID = 2;
+        public static int ANGLE_MOTOR_ID = 30;
         public static int TOP_FLYWHEEL_MOTOR_ID = 3;
         public static int BOTTOM_FLYWHEEL_MOTOR_ID = 4;
 
@@ -26,8 +26,8 @@ public class HardwareConstants {
     }
 
     public class DIOPorts {
-        public static int SHOOTER_ANGLE_ENCODER_PORT = 0; // These must be configured when robot is wired. 
-        public static int INTAKE_PIVOT_ENCODER_PORT = 1;
+        public static int SHOOTER_ANGLE_ENCODER_PORT = 9; // These must be configured when robot is wired. 
+        public static int INTAKE_PIVOT_ENCODER_PORT = 8;
     }
 
     public class ComponentTransformations {
@@ -74,7 +74,7 @@ public class HardwareConstants {
     }
 
     public class AbsEncoderOffsets {
-        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 0;
+        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 51.98;
         public static final double SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES = 0;
     }
 }

@@ -29,7 +29,7 @@ public class RealIntakeIO implements IntakeIO {
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
         inputs._pivotMotorCurrent = _pivotMotor.getOutputCurrent();
         //inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getPosition();
-        inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getDistance();
+        inputs._pivotEncoderPositionDegrees = (_pivotMotorEncoder.getAbsolutePosition() * 360) - HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES;
 
         inputs._rollerMotorTemperature = _rollerMotor.getMotorTemperature();
         inputs._rollerMotorVelocityRotationsPerMin = _rollerMotor.getEncoder().getVelocity();
@@ -60,7 +60,7 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor = new CANSparkFlex(HardwareConstants.CanIds.PIVOT_MOTOR_ID, MotorType.kBrushless);
         
         _pivotMotor.setCANTimeout(100);
-        _pivotMotor.setInverted(false);
+        _pivotMotor.setInverted(true);
         _pivotMotor.setIdleMode(IdleMode.kBrake);
 
         _pivotMotor.setSmartCurrentLimit(40);
@@ -86,8 +86,6 @@ public class RealIntakeIO implements IntakeIO {
         // _pivotMotorEncoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         // _pivotMotorEncoder.setPositionConversionFactor(360);
         // _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
-        _pivotMotorEncoder = new DutyCycleEncoder(0);
-        _pivotMotorEncoder.setDistancePerRotation(360);
-        _pivotMotorEncoder.setPositionOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
+        _pivotMotorEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.INTAKE_PIVOT_ENCODER_PORT);
     }
 }

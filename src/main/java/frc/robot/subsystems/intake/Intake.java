@@ -3,6 +3,9 @@ package frc.robot.subsystems.intake;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,10 +14,10 @@ import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
-        SourcePickup(75),
-        GroundPickup(10),
-        Stowed(100),
-        AmpScore(80),
+        SourcePickup(50),
+        GroundPickup(175),
+        Stowed(5),
+        AmpScore(60),
         SpeakerScore(115);
 
         private final double _angle;
@@ -32,16 +35,18 @@ public class Intake extends SubsystemBase {
     private final IntakeIO _intakeIO;
     private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged();
     private boolean _hasNote;
-    private PIDController _pivotPid;
+    private boolean _intakeHasBeenRunning;
+    private ProfiledPIDController _pivotPid;
 
     public Intake(IntakeIO intakeIO) {
         this._intakeIO = intakeIO;
         _hasNote = false;
-        _pivotPid = new PIDController(0, 0, 0);
+        _intakeHasBeenRunning = false;
+        _pivotPid = new ProfiledPIDController(0.004, 0.0002, 0.001, new Constraints(50, 80));
     }
 
     public void runPivotPID() {
-        //_intakeIO.setPivotMotorSpeed(_pivotPid.calculate(getPivotMotorAngle()));
+        _intakeIO.setPivotMotorSpeed(_pivotPid.calculate(getPivotAngle()));
     }
 
     public IntakePosition getIntakePosition() {
@@ -62,7 +67,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopRollerMotor() {
-        _intakeIO.setRollerMotorSpeed(0);
+        _intakeIO.setRollerMotorSpeed(0.05);
     }
 
     public void setIntakePositionWithAngle(Double angle) {
@@ -71,7 +76,8 @@ public class Intake extends SubsystemBase {
             return;
         }
         //_intakeIO.setTargetPositionAsDegrees(angle);
-        _pivotPid.setSetpoint(angle);
+        _pivotPid.reset(getPivotAngle());
+        _pivotPid.setGoal(angle);
     }
 
     public boolean pivotAtSetpoint() {
@@ -82,7 +88,7 @@ public class Intake extends SubsystemBase {
 
     public boolean hasNote() {
         if (!_hasNote) {
-            _hasNote = _intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF;
+            _hasNote = (_intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF) && _intakeHasBeenRunning;
         }
 
         return _hasNote;
@@ -92,8 +98,12 @@ public class Intake extends SubsystemBase {
         _hasNote = false;
     }
 
-    public double getPivotMotorAngle() {
-        return _intakeInputs._pivotMotorPositionDegrees;
+    public void setIntakeHasBeenRunning(boolean running) {
+        _intakeHasBeenRunning = running;
+    }
+
+    public double getPivotAngle() {
+        return _intakeInputs._pivotEncoderPositionDegrees;
     }
 
     @Override
@@ -101,9 +111,11 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run
         _intakeIO.updateInputs(_intakeInputs);
         Logger.processInputs("Intake", _intakeInputs);
-        SmartDashboard.putNumber("Intake PID Speed", _pivotPid.calculate(getPivotMotorAngle()));
-        SmartDashboard.putNumber("Intake Current Pivot Angle", getPivotMotorAngle());
-        SmartDashboard.putNumber("Intake Desired Pivot Angle", _pivotPid.getSetpoint());
+        SmartDashboard.putNumber("Intake PID Speed", _pivotPid.calculate(_intakeInputs._pivotEncoderPositionDegrees));
+        SmartDashboard.putNumber("Intake Current Pivot Angle", _intakeInputs._pivotEncoderPositionDegrees);
+        SmartDashboard.putNumber("Intake Desired Pivot Angle", _pivotPid.getSetpoint().position);
+        SmartDashboard.putNumber("Intake PID Error", _pivotPid.getPositionError());
+        SmartDashboard.putBoolean("Intake Has Note", _hasNote);
 
     }
 }

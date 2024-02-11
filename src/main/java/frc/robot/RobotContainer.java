@@ -35,8 +35,11 @@ import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
@@ -157,9 +160,11 @@ public class RobotContainer {
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX()));
 
-        _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
-        _controller.b().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
-        _controller.x().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.SourcePickup));
+        _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.SourcePickup));
+        //_controller.b().onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+        _controller.b().onTrue(new CmdIntakeRollersAcquire(_intake));
+
+        _controller.x().onTrue(new CmdIntakeRollersSpit(_intake));
         _controller.y().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
         // _controller
         //         .a()
@@ -186,5 +191,9 @@ public class RobotContainer {
 
     public Command getShooterRunPIDCommand() {
         return new CmdShooterRunPids(_shooter);
+    }
+
+    public Command getIntakeSetStowed() {
+        return new CmdIntakeSetPosition(_intake, IntakePosition.Stowed);
     }
 }

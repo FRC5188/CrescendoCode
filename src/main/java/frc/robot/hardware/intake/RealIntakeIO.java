@@ -27,7 +27,6 @@ public class RealIntakeIO implements IntakeIO {
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
         inputs._pivotMotorCurrent = _pivotMotor.getOutputCurrent();
-        //inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getPosition();
         inputs._pivotEncoderPositionDegrees = (_pivotMotorEncoder.getAbsolutePosition() * 360) - HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES;
 
         inputs._rollerMotorTemperature = _rollerMotor.getMotorTemperature();

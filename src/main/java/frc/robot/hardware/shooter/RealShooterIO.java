@@ -40,8 +40,7 @@ public class RealShooterIO implements ShooterIO {
         inputs._angleMotorVelocityRotationsPerMin = _angleMotor.getEncoder().getVelocity();
         inputs._angleMotorVoltage = _angleMotor.getAppliedOutput() * _angleMotor.getBusVoltage();
         inputs._angleMotorCurrent = _angleMotor.getOutputCurrent();
-        //inputs._angleEncoderPositionDegrees = _angleEncoder.getPosition();
-        inputs._angleEncoderPositionDegrees = _angleEncoder.getAbsolutePosition();
+        inputs._angleEncoderPositionDegrees = (_angleEncoder.getAbsolutePosition() * 360) - HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES;
     }
 
     public void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {
@@ -104,8 +103,6 @@ public class RealShooterIO implements ShooterIO {
         // _angleEncoder.setPositionConversionFactor(360);
         // _angleEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
         _angleEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);
-        _angleEncoder.setDistancePerRotation(360);
-        _angleEncoder.setPositionOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
     }
 
     private void configFlywheelPIDs(double p, double i, double d) {

@@ -150,7 +150,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
         Rotation2d.fromRotations(_turnAbsolutePosition.getValueAsDouble())
             .minus(_absoluteEncoderOffset);
     inputs._turnPosition =
-        Rotation2d.fromRotations(_turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
+      Rotation2d.fromRotations(_cancoder.getAbsolutePosition().getValueAsDouble() - _absoluteEncoderOffset.getRotations());
+        //Rotation2d.fromRotations(_turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
     inputs._turnVelocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(_turnRelativeEncoder.getVelocity())
             / TURN_GEAR_RATIO;

@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.intake.IntakeIO;
@@ -29,6 +30,7 @@ public class Intake extends SubsystemBase {
     protected IntakePosition _intakePosition;
     private final IntakeIO _intakeIO;
     private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged();
+    private IntakeVisualizer _intakeVisualizer = new IntakeVisualizer();
 
     public Intake(IntakeIO intakeIO) {
         this._intakeIO = intakeIO;
@@ -82,5 +84,9 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run
         _intakeIO.updateInputs(_intakeInputs);
         Logger.processInputs("Intake", _intakeInputs);
+        double angle = _intakeInputs._pivotMotorPositionDegrees;
+        Logger.recordOutput("Mechanism2d/Intake", _intakeVisualizer.getMechanism());
+        Logger.recordOutput("Mechanism3d/Intake", _intakeVisualizer.getPose3d(angle));
+        Logger.recordOutput("Intake/AngleDegrees", angle);
     }
 }

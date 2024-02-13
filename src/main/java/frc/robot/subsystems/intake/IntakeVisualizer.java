@@ -4,6 +4,7 @@ package frc.robot.subsystems.intake;
 
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -30,7 +31,7 @@ public class IntakeVisualizer {
   
      }
      public void update(double pivotAngle) {
-         _mechanismLigament.setAngle(pivotAngle);
+         _mechanismLigament.setAngle(new Rotation2d(pivotAngle));
      }
 
      public Mechanism2d getMechanism(){

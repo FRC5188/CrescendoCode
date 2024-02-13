@@ -118,12 +118,11 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake Desired Pivot Angle", _pivotPid.getSetpoint().position);
         SmartDashboard.putNumber("Intake PID Error", _pivotPid.getPositionError());
         SmartDashboard.putBoolean("Intake Has Note", _hasNote);
-        SmartDashboard.putData(_intakeVisualizer.getMechanism());
+        // SmartDashboard.putData(_intakeVisualizer.getMechanism());
 
         double angle = _intakeInputs._pivotEncoderPositionDegrees;
         _intakeVisualizer.update(angle);
-        Logger.recordOutput("Mechanism2d/Intake", _intakeVisualizer.getMechanism());
-        Logger.recordOutput("Mechanism3d/Intake", _intakeVisualizer.getPose3d(angle));
         Logger.recordOutput("Intake/AngleDegrees", angle);
+        Logger.recordOutput("Mechanism2D/Intake", _intakeVisualizer.getMechanism());
     }
 }

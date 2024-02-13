@@ -64,7 +64,8 @@ public class Shooter extends SubsystemBase {
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
-    _anglePid = new PIDController(0, 0, 0);
+    _anglePid = new PIDController(0.005, 0, 0);
+    setTargetPositionAsAngle(45);
   }
 
   public void runAnglePid() {

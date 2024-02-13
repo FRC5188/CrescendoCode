@@ -1,7 +1,6 @@
 package frc.robot.hardware.shooter;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
@@ -66,7 +65,8 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setAngleMotorSpeed(double speed) {
-        _angleMotor.set(speed);
+        // _angleMotor.set(speed);
+        System.out.println("This is the speed:" + speed);
     }
 
     private void configAngleMotor() {

@@ -1,7 +1,6 @@
 package frc.robot.hardware.intake;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.SparkAbsoluteEncoder;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 

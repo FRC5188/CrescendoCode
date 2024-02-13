@@ -14,11 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.hardware.intake.IntakeIO;
@@ -35,15 +31,12 @@ import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
-import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
-import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
-import frc.robot.subsystems.shooter.commands.CmdShooterSetAutoshootEnabled;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -162,10 +155,13 @@ public class RobotContainer {
 
         _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.SourcePickup));
         //_controller.b().onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
-        _controller.b().onTrue(new CmdIntakeRollersAcquire(_intake));
+        
+        // _controller.b().onTrue(new CmdIntakeRollersAcquire(_intake));
 
         _controller.x().onTrue(new CmdIntakeRollersSpit(_intake));
         _controller.y().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
+        _controller.b().whileTrue(new CmdShooterRunPids(_shooter));
+        
         // _controller
         //         .a()
         //         .whileTrue(new CmdShooterSetAutoshootEnabled(_shooter, true))

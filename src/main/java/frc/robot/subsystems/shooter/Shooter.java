@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void runAnglePid() {
-    _shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
+    //_shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -76,12 +76,12 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setTargetPositionAsAngle(double angle) {
-    if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
+    if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
       // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
       // 2024/01/23
       return;
 
-    } else if (angle > ShooterConstants.MAX_SHOOTER_ANGLE) {
+    } else if (angle > ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE) {
       // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
       // 2024/01/23
       return;
@@ -92,15 +92,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
-    double encoderValueAsRotations = _shooterInputs._angleEncoderPositionDegrees;
-    if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
-        + Rotation2d.fromDegrees(10).getRotations()
-        || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS
-            - Rotation2d.fromDegrees(10).getRotations()) {
+    if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
+        + 10
+        || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
+            - 10) {
       throw new RuntimeException(
           "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
     } else {
-      return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
+      return _shooterInputs._angleEncoderPositionDegrees;
     }
   }
 

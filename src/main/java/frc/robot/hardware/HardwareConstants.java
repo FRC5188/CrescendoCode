@@ -26,7 +26,7 @@ public class HardwareConstants {
     }
 
     public class DIOPorts {
-        public static int SHOOTER_ANGLE_ENCODER_PORT = 9; // These must be configured when robot is wired. 
+        public static int SHOOTER_ANGLE_ENCODER_PORT = 7; // These must be configured when robot is wired. 
         public static int INTAKE_PIVOT_ENCODER_PORT = 8;
     }
 

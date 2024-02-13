@@ -113,12 +113,13 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run
         _intakeIO.updateInputs(_intakeInputs);
         Logger.processInputs("Intake", _intakeInputs);
+
+        //smart dashboard testing
         SmartDashboard.putNumber("Intake PID Speed", _pivotPid.calculate(_intakeInputs._pivotEncoderPositionDegrees));
         SmartDashboard.putNumber("Intake Current Pivot Angle", _intakeInputs._pivotEncoderPositionDegrees);
         SmartDashboard.putNumber("Intake Desired Pivot Angle", _pivotPid.getSetpoint().position);
         SmartDashboard.putNumber("Intake PID Error", _pivotPid.getPositionError());
         SmartDashboard.putBoolean("Intake Has Note", _hasNote);
-        // SmartDashboard.putData(_intakeVisualizer.getMechanism());
 
         double angle = _intakeInputs._pivotEncoderPositionDegrees;
         _intakeVisualizer.update(angle);

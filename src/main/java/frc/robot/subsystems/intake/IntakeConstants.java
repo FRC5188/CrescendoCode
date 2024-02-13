@@ -4,6 +4,7 @@ public class IntakeConstants {
     public static final double INTAKE_WIDTH = 4;
     public static final double INTAKE_HEIGHT = 3;
     public static final double INTAKE_LENGTH = 0.3;
+    public static final double INTAKE_OFFSET_DEGREES = 136;// 57.2 degrees
     // Intake Range Values
     public static double MIN_INTAKE_ANGLE = -2.0;
     public static double MAX_INTAKE_ANGLE = 180.0;

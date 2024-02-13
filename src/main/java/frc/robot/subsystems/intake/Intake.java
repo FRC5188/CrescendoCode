@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,6 +38,7 @@ public class Intake extends SubsystemBase {
     private boolean _hasNote;
     private boolean _intakeHasBeenRunning;
     private ProfiledPIDController _pivotPid;
+    private IntakeVisualizer _intakeVisualizer = new IntakeVisualizer();
 
     public Intake(IntakeIO intakeIO) {
         this._intakeIO = intakeIO;
@@ -117,5 +119,9 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake PID Error", _pivotPid.getPositionError());
         SmartDashboard.putBoolean("Intake Has Note", _hasNote);
 
+        double angle = _intakeInputs._pivotMotorPositionDegrees;
+        Logger.recordOutput("Mechanism2d/Intake", _intakeVisualizer.getMechanism());
+        Logger.recordOutput("Mechanism3d/Intake", _intakeVisualizer.getPose3d(angle));
+        Logger.recordOutput("Intake/AngleDegrees", angle);
     }
 }

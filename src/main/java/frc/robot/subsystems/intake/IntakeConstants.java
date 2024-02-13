@@ -1,9 +1,9 @@
 package frc.robot.subsystems.intake;
 
 public class IntakeConstants {
-    public static final double INTAKE_WIDTH = 0;
-    public static final double INTAKE_HEIGHT = 2;
-    public static final double INTAKE_LENGTH = 3;
+    public static final double INTAKE_WIDTH = 4;
+    public static final double INTAKE_HEIGHT = 3;
+    public static final double INTAKE_LENGTH = 0.3;
     // Intake Range Values
     public static double MIN_INTAKE_ANGLE = -2.0;
     public static double MAX_INTAKE_ANGLE = 180.0;

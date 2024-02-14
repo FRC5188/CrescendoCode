@@ -7,7 +7,6 @@ package frc.robot.subsystems.shooter;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
@@ -64,8 +63,8 @@ public class Shooter extends SubsystemBase {
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
-    _anglePid = new PIDController(0.001, 0, 0);
-    setTargetPositionAsAngle(45);
+    _anglePid = new PIDController(0.055, 0, 0);
+    setTargetPositionAsAngle(15);
   }
 
   public void runAnglePid() {

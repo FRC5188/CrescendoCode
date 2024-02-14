@@ -34,6 +34,7 @@ import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
@@ -154,13 +155,13 @@ public class RobotContainer {
                         () -> -_controller.getLeftX()));
 
         _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.SourcePickup));
-        //_controller.b().onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+        _controller.b().onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
         
         // _controller.b().onTrue(new CmdIntakeRollersAcquire(_intake));
 
         _controller.x().onTrue(new CmdIntakeRollersSpit(_intake));
         _controller.y().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
-        _controller.b().whileTrue(new CmdShooterRunPids(_shooter));
+        // _controller.b().whileTrue(new CmdShooterRunPids(_shooter));
         
         // _controller
         //         .a()

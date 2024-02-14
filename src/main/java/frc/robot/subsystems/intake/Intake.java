@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -13,7 +14,7 @@ import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
         SourcePickup(50),
-        GroundPickup(175),
+        GroundPickup(185),
         Stowed(5),
         AmpScore(60),
         SpeakerScore(115);
@@ -103,6 +104,11 @@ public class Intake extends SubsystemBase {
 
     public double getPivotAngle() {
         return _intakeInputs._pivotEncoderPositionDegrees;
+    }
+
+    @AutoLogOutput(key = "Intake/TargetAngle")
+    public double getTargetPosition(){
+        return this._intakePosition.getAngle();
     }
 
     @Override

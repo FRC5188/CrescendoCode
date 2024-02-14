@@ -64,7 +64,7 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setAngleMotorSpeed(double speed) {
-        // _angleMotor.set(speed);
+        _angleMotor.set(speed);
         System.out.println("This is the speed:" + speed);
     }
 

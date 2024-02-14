@@ -10,7 +10,7 @@ public class GrpIntakeAcquireNoteFromPosition extends SequentialCommandGroup {
         addRequirements(intakeSubsystem);
 
         addCommands(
-                //new GrpIntakeMoveToPosition(intakeSubsystem, intakePosition),
+                new GrpIntakeMoveToPosition(intakeSubsystem, intakePosition),
                 new CmdIntakeRollersAcquire(intakeSubsystem),
                 new CmdIntakeWaitForNote(timeoutInMs, intakeSubsystem),
                 new CmdIntakeStopRollers(intakeSubsystem)

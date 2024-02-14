@@ -64,12 +64,12 @@ public class Shooter extends SubsystemBase {
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
-    _anglePid = new PIDController(0.005, 0, 0);
+    _anglePid = new PIDController(0.001, 0, 0);
     setTargetPositionAsAngle(45);
   }
 
   public void runAnglePid() {
-    //_shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
+    _shooterIO.setAngleMotorSpeed(-_anglePid.calculate(getCurrentPositionInDegrees()));
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -172,5 +172,6 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
     Logger.processInputs("Shooter", _shooterInputs);
+    Logger.recordOutput("Shooter/AnglePIDTargetDegrees", _anglePid.getSetpoint());
   }
 }

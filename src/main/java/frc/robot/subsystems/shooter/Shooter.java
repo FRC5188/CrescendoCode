@@ -60,6 +60,8 @@ public class Shooter extends SubsystemBase {
 
   private ShooterZone _currentShooterZone;
 
+  private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
+
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
@@ -171,6 +173,9 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
     Logger.processInputs("Shooter", _shooterInputs);
-    Logger.recordOutput("Shooter/AnglePIDTargetDegrees", _anglePid.getSetpoint());
+    double angle = _shooterInputs._angleEncoderPositionDegrees;
+    _shooterVisualizer.update(angle);
+    Logger.recordOutput("Shooter/AngleDegrees", angle);
+    Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
   }
 }

@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
 import frc.robot.hardware.HardwareConstants;
+import frc.robot.util.MotorFrameConfigurator;
 
 public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;
@@ -53,6 +54,9 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor = new CANSparkFlex(HardwareConstants.CanIds.PIVOT_MOTOR_ID, MotorType.kBrushless);
         
         _pivotMotor.setCANTimeout(100);
+
+        MotorFrameConfigurator.configDutyCycleSensor(_pivotMotor);
+
         _pivotMotor.setInverted(false);
 
         _pivotMotor.setSmartCurrentLimit(40);
@@ -67,6 +71,9 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor = new CANSparkFlex(HardwareConstants.CanIds.ROLLER_MOTOR_ID, MotorType.kBrushless);
 
         _rollerMotor.setCANTimeout(100);
+
+        MotorFrameConfigurator.configNoSensor(_rollerMotor);
+
         _rollerMotor.setInverted(false);
 
         _rollerMotor.setSmartCurrentLimit(40);

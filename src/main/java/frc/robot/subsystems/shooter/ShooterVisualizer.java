@@ -19,10 +19,11 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 /** Add your docs here. */
 public class ShooterVisualizer {
 
-  private static Translation2d _rootPosition = new Translation2d(0.28, 0.197);
+  private static Translation2d _rootPosition = new Translation2d(0.28, 0);
   private Mechanism2d _mechanism;
   private MechanismRoot2d _mechanismRoot;
-  private MechanismLigament2d _mechanismLigament;
+  private MechanismLigament2d _fixedLigament;
+  private MechanismLigament2d _pivotLigament;
      
    public ShooterVisualizer() {
       // Create mechanism
@@ -30,14 +31,19 @@ public class ShooterVisualizer {
                                     ShooterConstants.SHOOTER_HEIGHT, 
                                     new Color8Bit(Color.kGray));
       _mechanismRoot = _mechanism.getRoot("shooter",  2.0 + _rootPosition.getX(), _rootPosition.getY());
-      _mechanismLigament = _mechanismRoot.append(
-            new MechanismLigament2d("ShooterArm", 
-            ShooterConstants.SHOOTER_LENGTH, 
-            ShooterConstants.SHOOTER_OFFSET_DEGREES, 
-            4, new Color8Bit(Color.kLightGreen))
-        );
+      _fixedLigament = _mechanismRoot.append(
+            new MechanismLigament2d("ShooterBase", 
+            ShooterConstants.SHOOTER_HEIGHT, 
+            90, 
+            6, new Color8Bit(Color.kLightGreen)));
+            _pivotLigament = _fixedLigament.append(
+            new MechanismLigament2d("ShooterPivot",
+            ShooterConstants.SHOOTER_LENGTH,
+            ShooterConstants.SHOOTER_OFFSET_DEGREES,
+            4, 
+            new Color8Bit(Color.kAquamarine)));
 
-        // SmartDashboard.putData("Shooter_Mech", _mechanism);
+        // SmartDashboard.putData("Shooter_Mech", _mechanism);  
      }
      
      /***
@@ -45,7 +51,7 @@ public class ShooterVisualizer {
       * @param pivotAngle angle in degrees
       */
      public void update(double pivotAngleDegrees) {
-         _mechanismLigament.setAngle(new Rotation2d(Math.toRadians(-pivotAngleDegrees + ShooterConstants.SHOOTER_OFFSET_DEGREES)));
+         _pivotLigament.setAngle(new Rotation2d(Math.toRadians(-pivotAngleDegrees + ShooterConstants.SHOOTER_OFFSET_DEGREES)));
      }
 
      public Mechanism2d getMechanism(){

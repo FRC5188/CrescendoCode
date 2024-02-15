@@ -15,7 +15,8 @@ public class Shooter extends SubsystemBase {
   public enum ShooterZone {
     // Here we define all of the zones for the shooter
     Subwoofer(0, 2.5, 45, 3000, 3000),
-    Unknown(-1, -1, 0, 3000, 3000);
+    Unknown(-1, -1, 0, 3000, 3000),
+    Speaker(0, 0, 0, 0, 0);
 
     private final double _lowBound;
     private final double _highBound;

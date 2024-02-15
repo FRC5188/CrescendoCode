@@ -14,10 +14,15 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.hardware.intake.IntakeIO;
+import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
@@ -26,6 +31,12 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -42,6 +53,9 @@ public class RobotContainer {
     // Subsystems
     private final Drive _drive;
     // private final Flywheel flywheel;
+
+    private final Shooter _shooterSubsystem;
+    private final Intake _intake;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
@@ -67,6 +81,12 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
                 // flywheel = new Flywheel(new FlywheelIOSparkMax());
+                _shooterSubsystem = new Shooter(new ShooterIO() {
+                        
+                });
+                _intake = new Intake(new IntakeIO() {
+
+                });
                 break;
 
             case SIM:
@@ -79,6 +99,12 @@ public class RobotContainer {
                         new ModuleIOSim(),
                         new ModuleIOSim());
                 // flywheel = new Flywheel(new FlywheelIOSim());
+                _shooterSubsystem = new Shooter(new ShooterIO() {
+                        
+                });
+                 _intake = new Intake(new IntakeIO() {
+
+                });
                 break;
 
             default:
@@ -95,6 +121,12 @@ public class RobotContainer {
                         new ModuleIO() {
                         });
                 // flywheel = new Flywheel(new FlywheelIO() {});
+                _shooterSubsystem = new Shooter(new ShooterIO() {
+                        
+                });
+                 _intake = new Intake(new IntakeIO() {
+
+                });
                 break;
         }
 
@@ -107,7 +139,9 @@ public class RobotContainer {
          * flywheel)
          * .withTimeout(5.0));
          */
+        NamedCommands.registerCommand("Shoot", new CmdShooterRunShooterForZone(_shooterSubsystem, ShooterZone.Speaker));
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        NamedCommands.registerCommand("Pick Up", new GrpIntakeAcquireNoteFromGround(_intake, 0));
 
         // Set up SysId routines
         _autoChooser.addOption(
@@ -120,6 +154,8 @@ public class RobotContainer {
                 "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         _autoChooser.addOption(
                 "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        _autoChooser.addOption(
+                "(1.5 Game Piece)", new PathPlannerAuto("1.5 Game Piece"));
         /*
          * autoChooser.addOption(
          * "Flywheel SysId (Quasistatic Forward)",

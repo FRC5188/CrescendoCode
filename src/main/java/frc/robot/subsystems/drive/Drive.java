@@ -18,6 +18,7 @@ import static edu.wpi.first.units.Units.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -75,6 +76,7 @@ public class Drive extends SubsystemBase {
     _modules[1] = new Module(frModuleIO, 1);
     _modules[2] = new Module(blModuleIO, 2);
     _modules[3] = new Module(brModuleIO, 3);
+  
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
@@ -117,7 +119,8 @@ public class Drive extends SubsystemBase {
                 this));
     _centerOfRotation = new Translation2d();
     _field = new Field2d();
-  }
+
+      }
 
   public void periodic() {
     _gyroIO.updateInputs(_gyroInputs);
@@ -255,6 +258,11 @@ public class Drive extends SubsystemBase {
     _poseEstimator.resetPosition(_rawGyroRotation, getModulePositions(), pose);
   }
 
+  public void resetPose() {
+    Pose2d pose = new Pose2d();
+    _poseEstimator.resetPosition(_rawGyroRotation, getModulePositions(), pose);
+  }
+
   public Rotation2d getGyroscopeRotation() {
     return _rawGyroRotation;
   }
@@ -376,4 +384,5 @@ public class Drive extends SubsystemBase {
       new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0)
     };
   }
-}
+
+  }

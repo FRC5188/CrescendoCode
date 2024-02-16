@@ -23,6 +23,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.MotorFrameConfigurator;
 
 /**
  * Module IO implementation for SparkMax drive motor controller, SparkMax turn motor controller (NEO
@@ -108,30 +109,14 @@ public class ModuleIOSparkFlex implements ModuleIO {
     _turnRelativeEncoder.setMeasurementPeriod(10);
     _turnRelativeEncoder.setAverageDepth(2);
 
+    MotorFrameConfigurator.configNoSensor(_driveSparkFlex);
+    MotorFrameConfigurator.configNoSensor(_turnSparkFlex);
+    
+    _driveSparkFlex.setPeriodicFramePeriod(
+        CANSparkLowLevel.PeriodicFrame.kStatus2, 10); // Motor position. 
+
     _driveSparkFlex.setCANTimeout(0);
     _turnSparkFlex.setCANTimeout(0);
-
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus3, 65520); // Analog Sensor Info
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus4, 65522); // Alternate Encoder Info
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus5, 65524); // Duty Cycle Encoder Position
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus6, 65526); // Duty Cycle Encoder Velocity
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus7, 65528); // Iaccum for PID
-
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus3, 65520); // Analog Sensor Info
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus4, 65522); // Alternate Encoder Info
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus5, 65524); // Duty Cycle Encoder Position
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus6, 65526); // Duty Cycle Encoder Velocity
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus7, 65528); // Iaccum for PID
 
     _driveSparkFlex.burnFlash();
     _turnSparkFlex.burnFlash();

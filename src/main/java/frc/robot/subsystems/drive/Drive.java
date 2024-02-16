@@ -36,6 +36,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.hardware.HardwareConstants;
+import frc.robot.hardware.vision.VisionIO;
+import frc.robot.hardware.vision.VisionIOInputsAutoLogged;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -46,6 +49,9 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged _gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] _modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine _sysId;
+
+  private final VisionIO _visionIO;
+  private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
 
   private SwerveDriveKinematics _kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d _rawGyroRotation = new Rotation2d();
@@ -66,11 +72,13 @@ public class Drive extends SubsystemBase {
 
   public Drive(
       GyroIO gyroIO,
+      VisionIO visionIO,
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
       ModuleIO brModuleIO) {
     this._gyroIO = gyroIO;
+    this._visionIO = visionIO;
     _modules[0] = new Module(flModuleIO, 0);
     _modules[1] = new Module(frModuleIO, 1);
     _modules[2] = new Module(blModuleIO, 2);
@@ -122,6 +130,10 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     _gyroIO.updateInputs(_gyroInputs);
     Logger.processInputs("Drive/Gyro", _gyroInputs);
+
+    _visionIO.updateInputs(_visionInputs);
+    Logger.processInputs("Drive/Vision", _visionInputs);
+    
     for (var module : _modules) {
       module.periodic();
     }
@@ -160,6 +172,11 @@ public class Drive extends SubsystemBase {
       _rawGyroRotation = _rawGyroRotation.plus(new Rotation2d(twist.dtheta));
     }
     // Apply odometry update
+    for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
+      if (_visionInputs._hasPose[i]) {
+        _poseEstimator.addVisionMeasurement(_visionInputs._poses[i], _visionInputs._timestamps[i]);
+      }
+    }
     _poseEstimator.update(_rawGyroRotation, modulePositions);
 
     _field.setRobotPose(_poseEstimator.getEstimatedPosition());
@@ -293,6 +310,14 @@ public class Drive extends SubsystemBase {
   public double getRadiusToSpeakerInInches() {
     
     return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
+  }
+
+  public SwerveDrivePoseEstimator getPoseEstimator() {
+    return _poseEstimator;
+  }
+
+  public Drive getObject() {
+    return this;
   }
 
   // this setup lets us test the math, but when we actually run the code we don't have to give a pose estimator

@@ -14,6 +14,13 @@ public class CmdLEDsRunLEDs extends Command {
   private Climber _climber;
   private int _timer;
   
+  /**
+   * Runs LEDs for shooter, intake, and climber
+   * @param leds
+   * @param shooter
+   * @param intake
+   * @param climber
+   */
   public CmdLEDsRunLEDs(LEDs leds, Shooter shooter, Intake intake, Climber climber) {
     _leds = leds;
     _shooter = shooter;
@@ -22,11 +29,17 @@ public class CmdLEDsRunLEDs extends Command {
   }
 
   @Override
+  /**
+   * Initializes command and sets timer to 0
+   */
   public void initialize() {
     _timer = 0;
   }
 
   @Override
+  /**
+   * Runs the corresponding LED sequence for each circumstance
+   */
   public void execute() {
     // Stop running the current animation if it's run for long enough
     _leds.stopAnimationIfTimedOut(_timer);
@@ -48,9 +61,15 @@ public class CmdLEDsRunLEDs extends Command {
   }
 
   @Override
+  /**
+   * Ends the command if the sequence is interrupted or if commanded to do so
+   */
   public void end(boolean interrupted) {}
 
   @Override
+  /**
+   * Returns false for isFinished, so loops back to the beginning and starts the sequences again
+   */
   public boolean isFinished() {
     return false;
   }

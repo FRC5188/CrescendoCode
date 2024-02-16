@@ -8,6 +8,11 @@ public class CmdShooterMoveManually extends Command {
     private Shooter _shooterSubsystem;
     private double _changeAmount;
 
+    /**
+     * Allows the shooter to be moved manually
+     * @param shooterSubsystem
+     * @param changeAmount
+     */
     public CmdShooterMoveManually(Shooter shooterSubsystem, double changeAmount) {
         _shooterSubsystem = shooterSubsystem;
         _changeAmount = changeAmount;
@@ -16,6 +21,9 @@ public class CmdShooterMoveManually extends Command {
     }
 
     @Override
+    /**
+     * Initializes the shooter and confirms the change in shooter position
+     */
     public void initialize() {
         double setpoint = _shooterSubsystem.getCurrentZone().getShooterAngle() + _changeAmount;
         System.out.println ("Changing Shooter Position from " + _shooterSubsystem.getCurrentZone().getShooterAngle() + " to " + setpoint);
@@ -23,6 +31,9 @@ public class CmdShooterMoveManually extends Command {
 
     }
     @Override
+    /**
+     * Ends the command
+     */
     public boolean isFinished() {
         return true;
     }

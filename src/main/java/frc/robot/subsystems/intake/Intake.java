@@ -38,6 +38,10 @@ public class Intake extends SubsystemBase {
     private ProfiledPIDController _pivotPid;
     private IntakeVisualizer _intakeVisualizer = new IntakeVisualizer();
 
+    /**
+     * Initializes Intake
+     * @param intakeIO
+     */
     public Intake(IntakeIO intakeIO) {
         this._intakeIO = intakeIO;
         _hasNote = false;
@@ -45,31 +49,47 @@ public class Intake extends SubsystemBase {
         _pivotPid = new ProfiledPIDController(0.004, 0.0002, 0.001, new Constraints(50, 80));
     }
 
+   // runs pivot motor PID once
     public void runPivotPID() {
         _intakeIO.setPivotMotorSpeed(_pivotPid.calculate(getPivotAngle()));
     }
 
+    /**
+     * returns curent intake position as enum
+     * @return
+     */
     public IntakePosition getIntakePosition() {
         return this._intakePosition;
     }
 
+    /**
+     * This method doesn’t move the intake, it only sets the PID’s setpoint based on the given position enum 
+     * and updates the current position to whatever position was passed in. - copy pasted from documentation 
+     * @param position
+     */
     public void setIntakePosition(IntakePosition position) {
         _intakePosition = position;
         setIntakePositionWithAngle(position.getAngle());
     }
 
+   // set roller motor to the speed for acquiring 
     public void setRollerMotorSpeedAcquire() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
     }
 
+   // sets roller motor to speed for spitting
     public void setRollerMotorSpeedSpit() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED);
     }
-
+    // set roller motor speed to 0
     public void stopRollerMotor() {
         _intakeIO.setRollerMotorSpeed(0.05);
     }
-
+/**
+ * sets intake position to inputted angle 
+ * also logs error if angle invalid :(
+ * @param angle
+ */
     public void setIntakePositionWithAngle(Double angle) {
         if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
             // TODO: log an error, but don't throw exception
@@ -80,12 +100,20 @@ public class Intake extends SubsystemBase {
         _pivotPid.setGoal(angle);
     }
 
+    /**
+     * returns true if pivot is at its setpoint or false if not
+     * @return
+     */
+
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionDegrees);
         double targetPositionDegrees = _intakePosition.getAngle();
         return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
-
+/**
+ * detects if intake is holding note, returns true if it does have a note
+ * @return
+ */
     public boolean hasNote() {
         if (!_hasNote) {
             _hasNote = (_intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF) && _intakeHasBeenRunning;
@@ -93,20 +121,34 @@ public class Intake extends SubsystemBase {
 
         return _hasNote;
     }
-
+  
+   // resets hasNote
     public void resetHasNote() {
         _hasNote = false;
     }
-
+/**
+ * sets _intakeHasBeenRunning if intake has been running 
+ * @param running
+ */
     public void setIntakeHasBeenRunning(boolean running) {
         _intakeHasBeenRunning = running;
     }
+
+/**
+ * gets pivot angle (in degrees?)
+ * @return
+ */
 
     public double getPivotAngle() {
         return _intakeInputs._pivotEncoderPositionDegrees;
     }
 
     @AutoLogOutput(key = "Intake/TargetAngle")
+
+    /**
+     * returns target position 
+     * @return
+     */
     public double getTargetPosition(){
         return this._intakePosition.getAngle();
     }

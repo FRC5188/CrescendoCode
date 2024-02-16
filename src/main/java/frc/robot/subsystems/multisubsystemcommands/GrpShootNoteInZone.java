@@ -12,6 +12,12 @@ import frc.robot.subsystems.shooter.commands.CmdShooterWaitUntilReady;
 
 public class GrpShootNoteInZone extends SequentialCommandGroup {
 
+    /**
+     * prepares shooter to spit a note
+     * @param intakeSubsystem
+     * @param shooterSubsystem
+     * @param zone
+     */
     public GrpShootNoteInZone(Intake intakeSubsystem, Shooter shooterSubsystem, ShooterZone zone) {
 
         addRequirements(intakeSubsystem, shooterSubsystem);

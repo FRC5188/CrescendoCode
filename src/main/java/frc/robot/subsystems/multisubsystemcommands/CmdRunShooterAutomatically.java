@@ -12,17 +12,28 @@ public class CmdRunShooterAutomatically extends Command {
     private Shooter _shooterSubsystem;
     private Intake _intakeSubsystem;
 
+        /**
+         * makes shooter run automatically ?
+         * @param drive
+         * @param shooter
+         * @param intake
+         */
     public CmdRunShooterAutomatically(Drive drive, Shooter shooter, Intake intake) {
         _drive = drive;
         _shooterSubsystem = shooter;
         _intakeSubsystem = intake;
     }
-
+    /** initializes
+     * 
+     */
     @Override
     public void initialize() {
 
     }
 
+    /**
+     * executes code for auto shooting
+     */
     @Override
     public void execute() {
         ShooterZone zone = _shooterSubsystem.getZoneFromRadius(_drive.getRadiusToSpeakerInInches());
@@ -50,11 +61,15 @@ public class CmdRunShooterAutomatically extends Command {
         }
     }
 
+        /**
+         * end 
+         */
     @Override
     public void end(boolean interrupted) {
 
     }
 
+        // returns false always so the cmd never finishes
     @Override
     public boolean isFinished() {
         return false;

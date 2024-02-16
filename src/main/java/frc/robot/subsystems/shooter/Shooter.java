@@ -37,14 +37,26 @@ public class Shooter extends SubsystemBase {
       return (radius >= _lowBound) && (radius < _highBound);
     }
 
+    /**
+     * Returns current shooter angle
+     * @return
+     */
     public double getShooterAngle() {
       return this._shooterAngle;
     }
 
+    /**
+     * Returns current speed of Left Flywheel
+     * @return
+     */
     public double getLeftFlywheelSpeed() {
       return this._leftFlywheelSpeed;
     }
 
+    /**
+     * Returns current speed of Right Flywheel
+     * @return
+     */
     public double getRightFlywheelSpeed() {
       return this._rightFlywheelSpeed;
     }
@@ -62,6 +74,10 @@ public class Shooter extends SubsystemBase {
 
   private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
 
+  /**
+   * Initializes shooter
+   * @param shooterIO
+   */
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
@@ -69,14 +85,25 @@ public class Shooter extends SubsystemBase {
     setTargetPositionAsAngle(15);
   }
 
+  /**
+   * Initializes angle motor
+   */
   public void runAnglePid() {
     _shooterIO.setAngleMotorSpeed(-_anglePid.calculate(getCurrentPositionInDegrees()));
   }
 
+  /**
+   * Sets the target position to correspond to the desired zone
+   * @param zone
+   */
   public void setTargetPosition(ShooterZone zone) {
     setTargetPositionAsAngle(zone.getShooterAngle());
   }
 
+  /**
+   * Ensures that desired shooter angle is possible to achieve
+   * @param angle
+   */
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
       // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
@@ -93,6 +120,11 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  /**
+   * Throws RuntimeException if _angleEncoderPositionDegrees <= MINIMUM_ANGLE_ENCODER_ANGLE - 10
+   * @return
+   * @throws RuntimeException
+   */
   public double getCurrentPositionInDegrees() throws RuntimeException {
     if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
         + 10
@@ -105,10 +137,18 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  /**
+   * Returns what the occupied shooter zone currently is
+   * @return
+   */
   public ShooterZone getCurrentZone() {
     return _currentShooterZone;
   }
 
+  /**
+   * Checks if the flywheels are at the target speed in any direction
+   * @return
+   */
   private boolean areFlywheelsAtTargetSpeed() {
     return Math
         .abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin
@@ -118,12 +158,21 @@ public class Shooter extends SubsystemBase {
             - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
   }
 
+  /**
+   * Sets the shooter position and flywheel speeds according to the current shooter zone
+   * @param zone
+   */
   public void runShooterForZone(ShooterZone zone) {
     setShooterPositionWithZone(zone);
     setLeftFlywheelSpeed(zone._leftFlywheelSpeed);
     setRightFlywheelSpeed(zone._rightFlywheelSpeed);
   }
 
+  /**
+   * Gets zone from radius
+   * @param radius
+   * @return
+   */
   public ShooterZone getZoneFromRadius(double radius) {
     for (ShooterZone zone : ShooterZone.values()) {
       if (zone.radiusInZone(radius)) {
@@ -134,36 +183,68 @@ public class Shooter extends SubsystemBase {
     return ShooterZone.Unknown;
   }
 
+  /**
+   * Returns whether the autoshooter is enabled
+   * @return
+   */
   public boolean isAutoShootEnabled() {
     return _autoShootEnabled;
   }
 
+  /**
+   * Enables autoshoot
+   * @param enabled
+   */
   public void setAutoShootEnabled(boolean enabled) {
     _autoShootEnabled = enabled;
   }
 
+  /**
+   * Sets the angle of the shooter depending on what zone the robot is in
+   * @param targetZone
+   */
   public void setShooterPositionWithZone(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
       setTargetPositionAsAngle(targetZone.getShooterAngle());
   }
 
+  /**
+   * Checks if the shooter is in the right position
+   * @return
+   */
   private boolean shooterInPosition() {
     return Math.abs(_targetShooterPosition
         - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
 
+  /**
+   * Stops flywheels
+   */
   public void stopFlywheels() {
     _shooterIO.stopFlywheels();
   }
 
+  /**
+   * Tells the left flywheel motor how fast to spin the flywheel
+   * @param speedInRPM
+   */
   public void setLeftFlywheelSpeed(double speedInRPM) {
     _shooterIO.setLeftFlywheelSpeedRPM(speedInRPM);
   }
 
+  /**
+   * Tells the right flywheel motor how fast to spin the flywheel
+   * @param speedInRPM
+   */
   public void setRightFlywheelSpeed(double speedInRPM) {
     _shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
   }
 
+  /**
+   * Checks if the shooter is at the right angle and if the flywheels are at the right speeds and if the robot is in a known zone
+   * If all three criteria return true then it's ready to shoot
+   * @return
+   */
   public boolean isReady() {
     return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
   }

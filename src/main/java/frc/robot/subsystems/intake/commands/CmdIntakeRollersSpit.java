@@ -16,6 +16,7 @@ public class CmdIntakeRollersSpit extends Command {
 
     @Override
     public void initialize() {
+        _counter = 0;
         _intakeSubsytem.setRollerMotorSpeedSpit();
     }
 
@@ -27,6 +28,7 @@ public class CmdIntakeRollersSpit extends Command {
     @Override
     public void end(boolean interrupted) {
         _intakeSubsytem.stopRollerMotor();
+        _intakeSubsytem.resetHasNote();
     }
 
     @Override

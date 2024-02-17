@@ -21,17 +21,18 @@ public interface IntakeIO {
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
 
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
-        public double _pivotEncoderPositionRotations;
+        public double _pivotEncoderPositionDegrees;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}
 
     // |============================== PIVOT MOTOR METHODS ============================== |
-    public default void configPivotPID(double p, double i, double d) {}
 
     public default void setTargetPositionAsDegrees(double degrees) {}
 
     // |============================== ROLLER MOTOR METHODS ============================== |  
     public default void setRollerMotorSpeed(double speed) {}
+
+    public default void setPivotMotorSpeed(double speed) {}
 }

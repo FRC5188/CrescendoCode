@@ -18,13 +18,14 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.vision.RealVisionIO;
 import frc.robot.hardware.vision.VisionIO;
+import frc.robot.hardware.intake.RealIntakeIO;
+import frc.robot.hardware.shooter.RealShooterIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
@@ -40,6 +41,11 @@ import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
+import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
+import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
+import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -55,10 +61,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
     // Subsystems
     private final Drive _drive;
-    // private final Flywheel flywheel;
-
-    private final Shooter _shooterSubsystem;
     private final Intake _intake;
+    private final Shooter _shooter;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
@@ -84,13 +88,8 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
-                // flywheel = new Flywheel(new FlywheelIOSparkMax());
-                _shooterSubsystem = new Shooter(new ShooterIO() {
-                        
-                });
-                _intake = new Intake(new IntakeIO() {
-
-                });
+                _intake = new Intake(new RealIntakeIO());
+                _shooter = new Shooter(new RealShooterIO());
                 break;
 
             case SIM:
@@ -104,13 +103,8 @@ public class RobotContainer {
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim());
-                // flywheel = new Flywheel(new FlywheelIOSim());
-                _shooterSubsystem = new Shooter(new ShooterIO() {
-                        
-                });
-                 _intake = new Intake(new IntakeIO() {
-
-                });
+                _intake = new Intake(new IntakeIO(){});
+                _shooter = new Shooter(new ShooterIO(){});
                 break;
 
             default:
@@ -128,26 +122,11 @@ public class RobotContainer {
                         },
                         new ModuleIO() {
                         });
-                // flywheel = new Flywheel(new FlywheelIO() {});
-                _shooterSubsystem = new Shooter(new ShooterIO() {
-                        
-                });
-                 _intake = new Intake(new IntakeIO() {
-
-                });
+                _intake = new Intake(new IntakeIO(){});
+                _shooter = new Shooter(new ShooterIO(){});
                 break;
         }
 
-        // Set up auto routines
-        /*
-         * NamedCommands.registerCommand(
-         * "Run Flywheel",
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel)
-         * .withTimeout(5.0));
-         */
-        
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
         // Define auto events here
@@ -201,20 +180,26 @@ public class RobotContainer {
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX(),
                         () -> _controller.getRightX()));
-        _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+        //_controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         _controller
-                .b()
+                .leftBumper()
                 .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX()));
-        /*
-         * controller
-         * .a()
-         * .whileTrue(
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel));
-         */
+
+        _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.SourcePickup));
+        _controller.b().onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+        
+        // _controller.b().onTrue(new CmdIntakeRollersAcquire(_intake));
+
+        _controller.x().onTrue(new CmdIntakeRollersSpit(_intake));
+        _controller.y().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
+        // _controller.b().whileTrue(new CmdShooterRunPids(_shooter));
+        
+        // _controller
+        //         .a()
+        //         .whileTrue(new CmdShooterSetAutoshootEnabled(_shooter, true))
+        //         .whileFalse(new CmdShooterSetAutoshootEnabled(_shooter, false));
     }
 
     /**
@@ -224,5 +209,21 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return _autoChooser.get();
+    }
+
+    public Command getAutoShootCommand() {
+        return new CmdRunShooterAutomatically(_drive, _shooter, _intake);
+    }
+
+    public Command getIntakeRunPIDCommand() {
+        return new CmdIntakeRunPID(_intake);
+    }
+
+    public Command getShooterRunPIDCommand() {
+        return new CmdShooterRunPids(_shooter);
+    }
+
+    public Command getIntakeSetStowed() {
+        return new CmdIntakeSetPosition(_intake, IntakePosition.Stowed);
     }
 }

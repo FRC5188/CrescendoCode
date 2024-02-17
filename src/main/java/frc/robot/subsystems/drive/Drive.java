@@ -184,8 +184,6 @@ public class Drive extends SubsystemBase {
 
     _field.setRobotPose(_poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("Field", _field);
-    double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
-    SmartDashboard.putNumberArray("CoR", cor);
   }
 
   /**

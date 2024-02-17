@@ -11,7 +11,7 @@ public class GrpIntakeMoveToPosition extends SequentialCommandGroup {
         addRequirements(intakeSubsystem);
 
         addCommands(
-                new CmdIntakeSetPosition(intakeSubsystem, intakePosition),
-                new CmdIntakeWaitForIntake(intakeSubsystem));
+                new CmdIntakeSetPosition(intakeSubsystem, intakePosition));
+               // new CmdIntakeWaitForIntake(intakeSubsystem));
     }
 }

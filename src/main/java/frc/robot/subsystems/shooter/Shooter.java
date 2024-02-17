@@ -6,7 +6,7 @@ package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
@@ -57,12 +57,21 @@ public class Shooter extends SubsystemBase {
   private double _leftTargetFlywheelSpeed = 0;
   private double _rightTargetFlywheelSpeed = 0;
   private double _targetShooterPosition;
+  private PIDController _anglePid;
 
   private ShooterZone _currentShooterZone;
+
+  private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
+    _anglePid = new PIDController(0.055, 0, 0);
+    setTargetPositionAsAngle(15);
+  }
+
+  public void runAnglePid() {
+    _shooterIO.setAngleMotorSpeed(-_anglePid.calculate(getCurrentPositionInDegrees()));
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -70,30 +79,30 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setTargetPositionAsAngle(double angle) {
-    if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
+    if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
       // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
       // 2024/01/23
       return;
 
-    } else if (angle > ShooterConstants.MAX_SHOOTER_ANGLE) {
+    } else if (angle > ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE) {
       // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
       // 2024/01/23
       return;
     } else {
-      _shooterIO.setTargetPositionAsDegrees(angle);
+      //_shooterIO.setTargetPositionAsDegrees(angle);
+      _anglePid.setSetpoint(angle);
     }
   }
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
-    double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
-    if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
-        + Rotation2d.fromDegrees(10).getRotations()
-        || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS
-            - Rotation2d.fromDegrees(10).getRotations()) {
+    if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
+        + 10
+        || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
+            - 10) {
       throw new RuntimeException(
           "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
     } else {
-      return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
+      return _shooterInputs._angleEncoderPositionDegrees;
     }
   }
 
@@ -136,10 +145,7 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPositionWithZone(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-    if (targetZone != ShooterZone.Unknown) {
       setTargetPositionAsAngle(targetZone.getShooterAngle());
-    }
-    // If we don't know what zone we are in, don't move the shooter
   }
 
   private boolean shooterInPosition() {
@@ -168,5 +174,9 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
     Logger.processInputs("Shooter", _shooterInputs);
+    double angle = _shooterInputs._angleEncoderPositionDegrees;
+    _shooterVisualizer.update(angle);
+    Logger.recordOutput("Shooter/AngleDegrees", angle);
+    Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
   }
 }

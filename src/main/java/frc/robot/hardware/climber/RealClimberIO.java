@@ -11,8 +11,8 @@ public class RealClimberIO implements ClimberIO {
     private CANSparkFlex _rightClimberMotor;
 
     public RealClimberIO() {
-        _leftClimberMotor = getConfiguredLeftClimberMotor();
-        _rightClimberMotor = getConfiguredRightClimberMotor();
+        // _leftClimberMotor = getConfiguredLeftClimberMotor();
+        // _rightClimberMotor = getConfiguredRightClimberMotor();
     }
 
     public void updateInputs(ClimberIOInputs inputs) {

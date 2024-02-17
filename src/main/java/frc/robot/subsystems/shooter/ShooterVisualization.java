@@ -15,7 +15,7 @@ public class ShooterVisualization {
     // shooter dimensions: 
     public ShooterVisualization() {
         _shooterVisualizer = new Mechanism2d(ShooterConstants.SHOOTER_WIDTH, ShooterConstants.SHOOTER_HEIGHT);
-        _shooterRoot =_shooterVisualizer.getRoot("shooterRoot", ShooterConstants.SHOOTER_ROOT_WIDTH, ShooterConstants.SHOOTER_ROOT_HEIGHT);
+        _shooterRoot =_shooterVisualizer.getRoot("shooterRoot", ShooterConstants.SHOOTER_ROOT_X, ShooterConstants.SHOOTER_ROOT_Y);
         _shooter = _shooterRoot.append(new MechanismLigament2d("shooter", ShooterConstants.SHOOTER_LENGTH, ShooterConstants.SHOOTER_ANGLE));
         SmartDashboard.putData("ShooterVisualizer", _shooterVisualizer);
     }

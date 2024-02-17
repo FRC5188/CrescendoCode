@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.hardware.shooter.ShooterIO;
+import frc.robot.hardware.vision.RealVisionIO;
+import frc.robot.hardware.vision.VisionIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
@@ -76,6 +78,7 @@ public class RobotContainer {
                 // Real robot, instantiate hardware IO implementations
                 _drive = new Drive(
                         new GyroIONavX2(),
+                        new RealVisionIO(),
                         new ModuleIOSparkFlex(0),
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
@@ -94,6 +97,8 @@ public class RobotContainer {
                 _drive = new Drive(
                         new GyroIO() {
                         },
+                        new VisionIO() {
+                        },
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim(),
@@ -111,6 +116,8 @@ public class RobotContainer {
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
                         new GyroIO() {
+                        },
+                        new VisionIO() {
                         },
                         new ModuleIO() {
                         },

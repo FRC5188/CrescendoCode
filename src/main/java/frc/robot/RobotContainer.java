@@ -35,6 +35,7 @@ import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
@@ -146,9 +147,12 @@ public class RobotContainer {
          * flywheel)
          * .withTimeout(5.0));
          */
-        NamedCommands.registerCommand("Shoot", new CmdShooterRunShooterForZone(_shooterSubsystem, ShooterZone.Speaker));
+        
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-        NamedCommands.registerCommand("Pick Up", new GrpIntakeAcquireNoteFromGround(_intake, 0));
+
+        // Define auto events here
+        NamedCommands.registerCommand("Shoot", new CmdIntakeRollersSpit(_intake));
+        NamedCommands.registerCommand("Pick Up", new GrpIntakeAcquireNoteFromGround(_intake, 6000));
 
         // Set up SysId routines
         _autoChooser.addOption(

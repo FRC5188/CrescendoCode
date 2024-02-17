@@ -14,9 +14,12 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.hardware.vision.RealVisionIO;
 import frc.robot.hardware.vision.VisionIO;
@@ -41,148 +44,184 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // Subsystems
-    private final Drive _drive;
-    // private final Flywheel flywheel;
+        // Subsystems
+        private final Drive _drive;
+        // private final Flywheel flywheel;
 
-    // Controller
-    private final CommandXboxController _controller = new CommandXboxController(0);
+        // Controller
+        private final CommandXboxController _controller = new CommandXboxController(0);
 
-    // Dashboard inputs
-    private final LoggedDashboardChooser<Command> _autoChooser;
-    /*
-     * private final LoggedDashboardNumber flywheelSpeedInput =
-     * new LoggedDashboardNumber("Flywheel Speed", 1500.0);
-     */
+        // Button box
+        // Top row of buttons
+        private final Joystick _operatorController1 = new Joystick(1);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        switch (Constants.CURRENT_MODE) {
-            case REAL:
-                // Real robot, instantiate hardware IO implementations
-                _drive = new Drive(
-                        new GyroIONavX2(),
-                        new RealVisionIO(),
-                        new ModuleIOSparkFlex(0),
-                        new ModuleIOSparkFlex(1),
-                        new ModuleIOSparkFlex(2),
-                        new ModuleIOSparkFlex(3));
-                // flywheel = new Flywheel(new FlywheelIOSparkMax());
-                break;
+        // Bottom row of buttons
+        private final Joystick _operatorController2 = new Joystick(2);
 
-            case SIM:
-                // Sim robot, instantiate physics sim IO implementations
-                _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
-                        new ModuleIOSim(),
-                        new ModuleIOSim(),
-                        new ModuleIOSim(),
-                        new ModuleIOSim());
-                // flywheel = new Flywheel(new FlywheelIOSim());
-                break;
+        // Left column, top to bottom
+        private JoystickButton _opButtonOne = new JoystickButton(_operatorController1, 1);
+        private JoystickButton _opButtonTwo = new JoystickButton(_operatorController1, 2);
+        private JoystickButton _opButtonThree = new JoystickButton(_operatorController1, 3);
 
-            default:
-                // Replayed robot, disable IO implementations
-                _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        });
-                // flywheel = new Flywheel(new FlywheelIO() {});
-                break;
+        // Middle column, top to bottom
+        private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
+        private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
+        private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
+
+        // Right column, top to bottom
+        private JoystickButton _opButtonSeven = new JoystickButton(_operatorController1, 7);
+        private JoystickButton _opButtonEight = new JoystickButton(_operatorController1, 8);
+        private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
+
+        // Side Toggle Switch
+        private JoystickButton _opButtonTen = new JoystickButton(_operatorController1, 10);
+        
+        // Bottom rows, left to right (not top then bottom!)
+        private JoystickButton _op2ButtonOne = new JoystickButton(_operatorController2, 1);
+        private JoystickButton _op2ButtonTwo = new JoystickButton(_operatorController2, 2);
+        private JoystickButton _op2ButtonThree = new JoystickButton(_operatorController2, 3);
+        private JoystickButton _op2ButtonFour = new JoystickButton(_operatorController2, 4);
+        private JoystickButton _op2ButtonFive = new JoystickButton(_operatorController2, 5);
+        private JoystickButton _op2ButtonSix = new JoystickButton(_operatorController2, 6);
+        
+        // Bottom right button (Frowny face)
+        private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
+
+        // Dashboard inputs
+        private final LoggedDashboardChooser<Command> _autoChooser;
+        /*
+         * private final LoggedDashboardNumber flywheelSpeedInput =
+         * new LoggedDashboardNumber("Flywheel Speed", 1500.0);
+         */
+
+        /**
+         * The container for the robot. Contains subsystems, OI devices, and commands.
+         */
+        public RobotContainer() {
+                switch (Constants.CURRENT_MODE) {
+                        case REAL:
+                                // Real robot, instantiate hardware IO implementations
+                                _drive = new Drive(
+                                                new GyroIONavX2(),
+                                                new RealVisionIO(),
+                                                new ModuleIOSparkFlex(0),
+                                                new ModuleIOSparkFlex(1),
+                                                new ModuleIOSparkFlex(2),
+                                                new ModuleIOSparkFlex(3));
+                                // flywheel = new Flywheel(new FlywheelIOSparkMax());
+                                break;
+
+                        case SIM:
+                                // Sim robot, instantiate physics sim IO implementations
+                                _drive = new Drive(
+                                                new GyroIO() {
+                                                },
+                                                new VisionIO() {
+                                                },
+                                                new ModuleIOSim(),
+                                                new ModuleIOSim(),
+                                                new ModuleIOSim(),
+                                                new ModuleIOSim());
+                                // flywheel = new Flywheel(new FlywheelIOSim());
+                                break;
+
+                        default:
+                                // Replayed robot, disable IO implementations
+                                _drive = new Drive(
+                                                new GyroIO() {
+                                                },
+                                                new VisionIO() {
+                                                },
+                                                new ModuleIO() {
+                                                },
+                                                new ModuleIO() {
+                                                },
+                                                new ModuleIO() {
+                                                },
+                                                new ModuleIO() {
+                                                });
+                                // flywheel = new Flywheel(new FlywheelIO() {});
+                                break;
+                }
+
+                // Set up auto routines
+                /*
+                 * NamedCommands.registerCommand(
+                 * "Run Flywheel",
+                 * Commands.startEnd(
+                 * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
+                 * flywheel)
+                 * .withTimeout(5.0));
+                 */
+                _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+                // Set up SysId routines
+                _autoChooser.addOption(
+                                "Drive SysId (Quasistatic Forward)",
+                                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                _autoChooser.addOption(
+                                "Drive SysId (Quasistatic Reverse)",
+                                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                _autoChooser.addOption(
+                                "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                _autoChooser.addOption(
+                                "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+                /*
+                 * autoChooser.addOption(
+                 * "Flywheel SysId (Quasistatic Forward)",
+                 * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                 * autoChooser.addOption(
+                 * "Flywheel SysId (Quasistatic Reverse)",
+                 * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                 * autoChooser.addOption(
+                 * "Flywheel SysId (Dynamic Forward)",
+                 * flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                 * autoChooser.addOption(
+                 * "Flywheel SysId (Dynamic Reverse)",
+                 * flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+                 */
+
+                // Configure the button bindings
+                configureButtonBindings();
         }
 
-        // Set up auto routines
-        /*
-         * NamedCommands.registerCommand(
-         * "Run Flywheel",
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel)
-         * .withTimeout(5.0));
+        /**
+         * Use this method to define your button->command mappings. Buttons can be
+         * created by
+         * instantiating a {@link GenericHID} or one of its subclasses ({@link
+         * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+         * it to a {@link
+         * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
          */
-        _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        private void configureButtonBindings() {
+                _drive.setDefaultCommand(
+                                DriveCommands.joystickDrive(
+                                                _drive,
+                                                () -> -_controller.getLeftY(),
+                                                () -> -_controller.getLeftX(),
+                                                () -> _controller.getRightX()));
+                _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+                _controller
+                                .b()
+                                .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
+                                                () -> -_controller.getLeftY(),
+                                                () -> -_controller.getLeftX()));
+                /*
+                 * controller
+                 * .a()
+                 * .whileTrue(
+                 * Commands.startEnd(
+                 * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
+                 * flywheel));
+                 */
+        }
 
-        // Set up SysId routines
-        _autoChooser.addOption(
-                "Drive SysId (Quasistatic Forward)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        _autoChooser.addOption(
-                "Drive SysId (Quasistatic Reverse)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        _autoChooser.addOption(
-                "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        _autoChooser.addOption(
-                "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        /*
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Forward)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Reverse)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Forward)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Reverse)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        /**
+         * Use this to pass the autonomous command to the main {@link Robot} class.
+         *
+         * @return the command to run in autonomous
          */
-
-        // Configure the button bindings
-        configureButtonBindings();
-    }
-
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-     * it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings() {
-        _drive.setDefaultCommand(
-                DriveCommands.joystickDrive(
-                        _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> _controller.getRightX()));
-        _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
-        _controller
-                .b()
-                .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX()));
-        /*
-         * controller
-         * .a()
-         * .whileTrue(
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel));
-         */
-    }
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return _autoChooser.get();
-    }
+        public Command getAutonomousCommand() {
+                return _autoChooser.get();
+        }
 }

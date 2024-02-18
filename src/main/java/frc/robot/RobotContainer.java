@@ -37,7 +37,9 @@ import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -154,8 +156,9 @@ public class RobotContainer {
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX()));
 
-        _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.SourcePickup));
-        _controller.b().onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+        _controller.a().onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
+        //_controller.b().onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+        _controller.b().onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
         
         // _controller.b().onTrue(new CmdIntakeRollersAcquire(_intake));
 

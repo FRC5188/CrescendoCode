@@ -10,10 +10,10 @@ public class IntakeConstants {
     public static double MAX_INTAKE_ANGLE = 180.0;
 
     // Intake Roller Values
-    public static double INTAKE_ACQUIRE_SPEED = 0.85;
+    public static double INTAKE_ACQUIRE_SPEED = 0.7;
     public static double INTAKE_SPIT_SPEED = -0.4;
 
-    public static double INTAKE_CURRENT_CUTOFF = 38;
+    public static double INTAKE_CURRENT_CUTOFF = 55;
 
     // Intake Pivot Deadband
     public static double INTAKE_PIVOT_DEADBAND = 10;

@@ -7,6 +7,7 @@ package frc.robot.subsystems.shooter;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
@@ -15,7 +16,7 @@ public class Shooter extends SubsystemBase {
   public enum ShooterZone {
     // Here we define all of the zones for the shooter
     Subwoofer(0, 2.5, 45, 3000, 3000),
-    Unknown(-1, -1, 0, 3000, 3000);
+    Unknown(-1, -1, 30, 1000, 1000);
 
     private final double _lowBound;
     private final double _highBound;
@@ -66,11 +67,12 @@ public class Shooter extends SubsystemBase {
     _shooterIO = shooterIO;
     _targetShooterPosition = getCurrentPositionInDegrees();
     _anglePid = new PIDController(0.055, 0, 0);
-    setTargetPositionAsAngle(15);
+    _currentShooterZone = ShooterZone.Unknown;
+    setTargetPositionAsAngle(getCurrentPositionInDegrees());
   }
 
   public void runAnglePid() {
-    _shooterIO.setAngleMotorSpeed(-_anglePid.calculate(getCurrentPositionInDegrees()));
+    _shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -144,7 +146,7 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPositionWithZone(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-      setTargetPositionAsAngle(targetZone.getShooterAngle());
+    setTargetPositionAsAngle(targetZone.getShooterAngle());
   }
 
   private boolean shooterInPosition() {
@@ -177,5 +179,7 @@ public class Shooter extends SubsystemBase {
     _shooterVisualizer.update(angle);
     Logger.recordOutput("Shooter/AngleDegrees", angle);
     Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
+    SmartDashboard.putString("Shooter Zone", _currentShooterZone.toString());
+    SmartDashboard.putNumber("Shooter Pivot Speed", _anglePid.calculate(getCurrentPositionInDegrees()));
   }
 }

@@ -71,10 +71,10 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor = new CANSparkFlex(HardwareConstants.CanIds.ROLLER_MOTOR_ID, MotorType.kBrushless);
 
         _rollerMotor.setCANTimeout(100);
-        _rollerMotor.setInverted(false);
+        _rollerMotor.setInverted(true);
         _rollerMotor.setIdleMode(IdleMode.kBrake);
 
-        _rollerMotor.setSmartCurrentLimit(40);
+        //_rollerMotor.setSmartCurrentLimit(50);
         _rollerMotor.setSecondaryCurrentLimit(55);
 
         _rollerMotor.enableVoltageCompensation(12.0);

@@ -13,15 +13,15 @@ public class HardwareConstants {
 
         // |====================== SHOOTER SUBSYSTEM CAN IDs ======================|
         public static int ANGLE_MOTOR_ID = 30;
-        public static int TOP_FLYWHEEL_MOTOR_ID = 3;
-        public static int BOTTOM_FLYWHEEL_MOTOR_ID = 4;
+        public static int LEFT_FLYWHEEL_MOTOR_ID = 31;
+        public static int RIGHT_FLYWHEEL_MOTOR_ID = 32;
 
         //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
-        public static int LEFT_CLIMBER_MOTOR = 5;
-        public static int RIGHT_CLIMBER_MOTOR = 6;
+        public static int LEFT_CLIMBER_MOTOR = 40;
+        public static int RIGHT_CLIMBER_MOTOR = 41;
 
         //|====================== LED SUBSYSTEM CAN IDS ==========================|
-        public static int CANDLE_ID = 7;
+        public static int CANDLE_ID = 50;
         
     }
 

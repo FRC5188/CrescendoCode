@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.hardware.HardwareConstants;
+import frc.robot.util.MotorFrameConfigurator;
 
 public class RealShooterIO implements ShooterIO {
     private static final double GEAR_RATIO = 1.0;
@@ -17,24 +18,24 @@ public class RealShooterIO implements ShooterIO {
 
     public RealShooterIO() {
         configAngleMotor();
-        // configFlywheelMotors();
+        configFlywheelMotors();
         configEncoder();
         // configAnglePID(0, 0, 0);
-        // configFlywheelPIDs(0, 0, 0);
+        configFlywheelPIDs(0.01, 0, 0);
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
-        // inputs._leftFlywheelMotorTemperature = _leftFlywheelMotor.getMotorTemperature();
-        // inputs._leftFlywheelMotorVelocityRotationsPerMin = (_leftFlywheelMotor.getEncoder().getVelocity()) / GEAR_RATIO;
-        // inputs._leftFlywheelMotorVoltage = _leftFlywheelMotor.getAppliedOutput() * _leftFlywheelMotor.getBusVoltage();
-        // inputs._leftFlywheelMotorCurrent = _leftFlywheelMotor.getOutputCurrent();
+        inputs._leftFlywheelMotorTemperature = _leftFlywheelMotor.getMotorTemperature();
+        inputs._leftFlywheelMotorVelocityRotationsPerMin = (_leftFlywheelMotor.getEncoder().getVelocity()) / GEAR_RATIO;
+        inputs._leftFlywheelMotorVoltage = _leftFlywheelMotor.getAppliedOutput() * _leftFlywheelMotor.getBusVoltage();
+        inputs._leftFlywheelMotorCurrent = _leftFlywheelMotor.getOutputCurrent();
 
-        // inputs._rightFlywheelMotorTemperature = _rightFlywheelMotor.getMotorTemperature();
-        // inputs._rightFlywheelMotorVelocityRotationsPerMin = (_rightFlywheelMotor.getEncoder().getVelocity())
-        //         / GEAR_RATIO;
-        // inputs._rightFlywheelMotorVoltage = _rightFlywheelMotor.getAppliedOutput()
-        //         * _rightFlywheelMotor.getBusVoltage();
-        // inputs._rightFlywheelMotorCurrent = _rightFlywheelMotor.getOutputCurrent();
+        inputs._rightFlywheelMotorTemperature = _rightFlywheelMotor.getMotorTemperature();
+        inputs._rightFlywheelMotorVelocityRotationsPerMin = (_rightFlywheelMotor.getEncoder().getVelocity())
+                / GEAR_RATIO;
+        inputs._rightFlywheelMotorVoltage = _rightFlywheelMotor.getAppliedOutput()
+                * _rightFlywheelMotor.getBusVoltage();
+        inputs._rightFlywheelMotorCurrent = _rightFlywheelMotor.getOutputCurrent();
 
         inputs._angleMotorTemperature = _angleMotor.getMotorTemperature();
         inputs._angleMotorVelocityRotationsPerMin = _angleMotor.getEncoder().getVelocity();
@@ -44,12 +45,12 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {
-        _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute / 60.0) * GEAR_RATIO),
+        _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
                 ControlType.kVelocity);
     }
 
     public void setRightFlywheelSpeedRPM(double velocityRotationsPerMinute) {
-        _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute / 60.0) * GEAR_RATIO),
+        _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
                 ControlType.kVelocity);
     }
 
@@ -65,31 +66,36 @@ public class RealShooterIO implements ShooterIO {
 
     public void setAngleMotorSpeed(double speed) {
         _angleMotor.set(speed);
-        System.out.println("This is the speed:" + speed);
     }
 
     private void configAngleMotor() {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
 
         _angleMotor.enableVoltageCompensation(12.0);
-        _angleMotor.setInverted(true);
+        _angleMotor.setInverted(false);
         _angleMotor.setCANTimeout(100);
+
+        MotorFrameConfigurator.configDutyCycleSensor(_angleMotor);
 
         _angleMotor.setSmartCurrentLimit(40);
         _angleMotor.setSecondaryCurrentLimit(40);
     }
 
     private void configFlywheelMotors() {
-        _leftFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.TOP_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
-        _rightFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.BOTTOM_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        _leftFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.LEFT_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
+        _rightFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.RIGHT_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
 
         _leftFlywheelMotor.enableVoltageCompensation(12.0);
         _leftFlywheelMotor.setInverted(true);
         _leftFlywheelMotor.setCANTimeout(100);
 
+        MotorFrameConfigurator.configNoSensor(_leftFlywheelMotor);
+
         _rightFlywheelMotor.enableVoltageCompensation(12.0);
         _rightFlywheelMotor.setInverted(false);
         _rightFlywheelMotor.setCANTimeout(100);
+
+        MotorFrameConfigurator.configNoSensor(_rightFlywheelMotor);
 
         _leftFlywheelMotor.setSmartCurrentLimit(40);
         _leftFlywheelMotor.setSecondaryCurrentLimit(40);

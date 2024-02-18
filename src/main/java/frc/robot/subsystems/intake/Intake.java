@@ -14,7 +14,7 @@ import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
 public class Intake extends SubsystemBase {
     public enum IntakePosition {
         SourcePickup(50),
-        GroundPickup(185),
+        GroundPickup(175),
         Stowed(5),
         AmpScore(60),
         SpeakerScore(115);
@@ -42,6 +42,7 @@ public class Intake extends SubsystemBase {
         this._intakeIO = intakeIO;
         _hasNote = false;
         _intakeHasBeenRunning = false;
+        _intakePosition = IntakePosition.Stowed;
         _pivotPid = new ProfiledPIDController(0.004, 0.0002, 0.001, new Constraints(50, 80));
     }
 
@@ -67,7 +68,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopRollerMotor() {
-        _intakeIO.setRollerMotorSpeed(0.05);
+        _intakeIO.setRollerMotorSpeed(0.02);
     }
 
     public void setIntakePositionWithAngle(Double angle) {
@@ -106,7 +107,6 @@ public class Intake extends SubsystemBase {
         return _intakeInputs._pivotEncoderPositionDegrees;
     }
 
-    @AutoLogOutput(key = "Intake/TargetAngle")
     public double getTargetPosition(){
         return this._intakePosition.getAngle();
     }

@@ -15,12 +15,17 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.hardware.intake.IntakeIO;
+// import frc.robot.hardware.intake.IntakeIOInputsAutoLogged;
+import frc.robot.hardware.intake.RealIntakeIO;
 import frc.robot.hardware.vision.RealVisionIO;
 import frc.robot.hardware.vision.VisionIO;
 import frc.robot.subsystems.drive.Drive;
@@ -31,6 +36,14 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
+import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
+import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -46,6 +59,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
         // Subsystems
         private final Drive _drive;
+        private final Intake _intake;
         // private final Flywheel flywheel;
 
         // Controller
@@ -56,12 +70,12 @@ public class RobotContainer {
         private final Joystick _operatorController1 = new Joystick(1);
 
         // Bottom row of buttons
-        private final Joystick _operatorController2 = new Joystick(2);
+        // private final Joystick _operatorController2 = new Joystick(2);
 
         // Left column, top to bottom
-        private JoystickButton _opButtonOne = new JoystickButton(_operatorController1, 1);
-        private JoystickButton _opButtonTwo = new JoystickButton(_operatorController1, 2);
-        private JoystickButton _opButtonThree = new JoystickButton(_operatorController1, 3);
+        // private JoystickButton _opButtonOne = new JoystickButton(_operatorController1, 1);
+        // private JoystickButton _opButtonTwo = new JoystickButton(_operatorController1, 2);
+        // private JoystickButton _opButtonThree = new JoystickButton(_operatorController1, 3);
 
         // Middle column, top to bottom
         private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
@@ -69,23 +83,23 @@ public class RobotContainer {
         private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
 
         // Right column, top to bottom
-        private JoystickButton _opButtonSeven = new JoystickButton(_operatorController1, 7);
-        private JoystickButton _opButtonEight = new JoystickButton(_operatorController1, 8);
+        // private JoystickButton _opButtonSeven = new JoystickButton(_operatorController1, 7);
+        // private JoystickButton _opButtonEight = new JoystickButton(_operatorController1, 8);
         private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
 
         // Side Toggle Switch
-        private JoystickButton _opButtonTen = new JoystickButton(_operatorController1, 10);
+        // private JoystickButton _opButtonTen = new JoystickButton(_operatorController1, 10);
         
         // Bottom rows, left to right (not top then bottom!)
-        private JoystickButton _op2ButtonOne = new JoystickButton(_operatorController2, 1);
-        private JoystickButton _op2ButtonTwo = new JoystickButton(_operatorController2, 2);
-        private JoystickButton _op2ButtonThree = new JoystickButton(_operatorController2, 3);
-        private JoystickButton _op2ButtonFour = new JoystickButton(_operatorController2, 4);
-        private JoystickButton _op2ButtonFive = new JoystickButton(_operatorController2, 5);
-        private JoystickButton _op2ButtonSix = new JoystickButton(_operatorController2, 6);
+        // private JoystickButton _op2ButtonOne = new JoystickButton(_operatorController2, 1);
+        // private JoystickButton _op2ButtonTwo = new JoystickButton(_operatorController2, 2);
+        // private JoystickButton _op2ButtonThree = new JoystickButton(_operatorController2, 3);
+        // private JoystickButton _op2ButtonFour = new JoystickButton(_operatorController2, 4);
+        // private JoystickButton _op2ButtonFive = new JoystickButton(_operatorController2, 5);
+        // private JoystickButton _op2ButtonSix = new JoystickButton(_operatorController2, 6);
         
         // Bottom right button (Frowny face)
-        private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
+        // private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
 
         // Dashboard inputs
         private final LoggedDashboardChooser<Command> _autoChooser;
@@ -108,6 +122,9 @@ public class RobotContainer {
                                                 new ModuleIOSparkFlex(1),
                                                 new ModuleIOSparkFlex(2),
                                                 new ModuleIOSparkFlex(3));
+                                _intake = new Intake(
+                                                new RealIntakeIO());
+
                                 // flywheel = new Flywheel(new FlywheelIOSparkMax());
                                 break;
 
@@ -122,6 +139,10 @@ public class RobotContainer {
                                                 new ModuleIOSim(),
                                                 new ModuleIOSim(),
                                                 new ModuleIOSim());
+                                _intake = new Intake(
+                                                new IntakeIO() {
+                                                });
+
                                 // flywheel = new Flywheel(new FlywheelIOSim());
                                 break;
 
@@ -140,8 +161,14 @@ public class RobotContainer {
                                                 },
                                                 new ModuleIO() {
                                                 });
+                                _intake = new Intake(
+                                                new IntakeIO() {
+                                                });
+                                
                                 // flywheel = new Flywheel(new FlywheelIO() {});
                                 break;
+
+        
                 }
 
                 // Set up auto routines
@@ -214,6 +241,31 @@ public class RobotContainer {
                  * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
                  * flywheel));
                  */
+
+                // -- Operator Controls -- 
+
+                //  _opButtonOne.onTrue();
+                //  _opButtonTwo.onTrue();
+                //  _opButtonThree.onTrue();
+
+                // Source Position
+                _opButtonFour.onTrue(new GrpIntakeAcquireNoteFromSource(_intake, 0));
+                
+                // Stow
+                _opButtonFive.onTrue(new GrpIntakeMoveToPosition(_intake, IntakePosition.Stowed));
+
+                // Ground Pickup Position
+                _opButtonSix.onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+
+                //  _opButtonSeven.onTrue();
+                //  _opButtonEight.onTrue();
+
+                _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
+                _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
+
+                // Autoshoot toggle switch
+                // _opButtonTen.onTrue();
+                // _opButtonTen.onFalse();
         }
 
         /**

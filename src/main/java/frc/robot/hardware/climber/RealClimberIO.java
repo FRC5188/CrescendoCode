@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.hardware.HardwareConstants;
+import frc.robot.util.MotorFrameConfigurator;
 
 public class RealClimberIO implements ClimberIO {
     private CANSparkFlex _leftClimberMotor;
@@ -46,6 +47,8 @@ public class RealClimberIO implements ClimberIO {
         _leftClimberMotor.setSmartCurrentLimit(40);
         _leftClimberMotor.setSecondaryCurrentLimit(55); // This will use an on/off switch to limit current. Not smart, but if we get above 55 amps we have a problem.
 
+        MotorFrameConfigurator.configNoSensor(_leftClimberMotor);
+
         _leftClimberMotor.enableVoltageCompensation(12); // Even if the battery isn't 12V we'll compensate for it.
 
         _leftClimberMotor.setInverted(false);
@@ -59,6 +62,8 @@ public class RealClimberIO implements ClimberIO {
         _rightClimberMotor.setCANTimeout(100);
         _rightClimberMotor.setSmartCurrentLimit(40);
         _rightClimberMotor.setSecondaryCurrentLimit(55); // This will use an on/off switch to limit current. Not smart, but if we get above 55 amps we have a problem.
+
+        MotorFrameConfigurator.configNoSensor(_rightClimberMotor);
 
         _rightClimberMotor.enableVoltageCompensation(12); // Even if the battery isn't 12V we'll compensate for it.
 

@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.hardware.HardwareConstants;
+import frc.robot.util.MotorFrameConfigurator;
 
 public class RealShooterIO implements ShooterIO {
     private static final double GEAR_RATIO = 1.0;
@@ -74,6 +75,8 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor.setInverted(false);
         _angleMotor.setCANTimeout(100);
 
+        MotorFrameConfigurator.configDutyCycleSensor(_angleMotor);
+
         _angleMotor.setSmartCurrentLimit(40);
         _angleMotor.setSecondaryCurrentLimit(40);
     }
@@ -86,9 +89,13 @@ public class RealShooterIO implements ShooterIO {
         _leftFlywheelMotor.setInverted(true);
         _leftFlywheelMotor.setCANTimeout(100);
 
+        MotorFrameConfigurator.configNoSensor(_leftFlywheelMotor);
+
         _rightFlywheelMotor.enableVoltageCompensation(12.0);
         _rightFlywheelMotor.setInverted(false);
         _rightFlywheelMotor.setCANTimeout(100);
+
+        MotorFrameConfigurator.configNoSensor(_rightFlywheelMotor);
 
         _leftFlywheelMotor.setSmartCurrentLimit(40);
         _leftFlywheelMotor.setSecondaryCurrentLimit(40);

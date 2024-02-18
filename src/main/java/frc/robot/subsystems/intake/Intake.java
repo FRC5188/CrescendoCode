@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setIntakePosition(IntakePosition position) {
-        _intakePosition = position;
+        this._intakePosition = position;
         setIntakePositionWithAngle(position.getAngle());
     }
 

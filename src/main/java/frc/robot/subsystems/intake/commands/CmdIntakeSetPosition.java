@@ -13,8 +13,8 @@ public class CmdIntakeSetPosition extends Command {
     private IntakePosition _intakePosition;
 
     public CmdIntakeSetPosition(Intake intakeSubsystem, IntakePosition intakePosition) {
-        _intakeSubsystem = intakeSubsystem;
-        _intakePosition = intakePosition;
+        this._intakeSubsystem = intakeSubsystem;
+        this._intakePosition = intakePosition;
 
         addRequirements(intakeSubsystem);
     }
@@ -22,7 +22,7 @@ public class CmdIntakeSetPosition extends Command {
     // // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        _intakeSubsystem.setIntakePosition(_intakePosition);
+        _intakeSubsystem.setIntakePosition(this._intakePosition);
     }
 
     // Called every time the scheduler runs while the command is scheduled.

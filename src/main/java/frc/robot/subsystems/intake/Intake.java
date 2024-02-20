@@ -13,7 +13,7 @@ import frc.robot.util.LoggedTunableNumber;
 
 public class Intake extends SubsystemBase {
 
-    public static final LoggedTunableNumber test = new LoggedTunableNumber("Intake/test");
+    public static final LoggedTunableNumber TEST = new LoggedTunableNumber("Intake/test");
 
     public enum IntakePosition {
         SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
@@ -51,7 +51,7 @@ public class Intake extends SubsystemBase {
                                             IntakeConstants.PIVOT_PID_KD, 
                                             new Constraints(
                                                 IntakeConstants.PIVOT_PID_MAX_VEL,
-                                             IntakeConstants.PIVOT_PID_MAX_ACCEL));
+                                                IntakeConstants.PIVOT_PID_MAX_ACCEL));
 
         // might want to call this to make sure inputs are always initialized??
         // this.periodic();

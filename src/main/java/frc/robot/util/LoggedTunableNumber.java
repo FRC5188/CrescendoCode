@@ -18,13 +18,13 @@ import frc.robot.Constants;
  * value not in dashboard.
  */
 public class LoggedTunableNumber {
-  private static final String tableKey = "TunableNumbers";
+  private static final String TABLE_KEY = "TunableNumbers";
 
-  private final String key;
-  private boolean hasDefault = false;
-  private double defaultValue;
-  private LoggedDashboardNumber dashboardNumber;
-  private Map<Integer, Double> lastHasChangedValues = new HashMap<>();
+  private final String KEY;
+  private boolean _hasDefault = false;
+  private double _defaultValue;
+  private LoggedDashboardNumber _dashboardNumber;
+  private Map<Integer, Double> _lastHasChangedValues = new HashMap<>();
 
   /**
    * Create a new LoggedTunableNumber
@@ -32,7 +32,7 @@ public class LoggedTunableNumber {
    * @param dashboardKey Key on dashboard
    */
   public LoggedTunableNumber(String dashboardKey) {
-    this.key = tableKey + "/" + dashboardKey;
+    this.KEY = TABLE_KEY + "/" + dashboardKey;
   }
 
   /**
@@ -52,11 +52,11 @@ public class LoggedTunableNumber {
    * @param defaultValue The default value
    */
   public void initDefault(double defaultValue) {
-    if (!hasDefault) {
-      hasDefault = true;
-      this.defaultValue = defaultValue;
-      if (Constants.tuningMode) {
-        dashboardNumber = new LoggedDashboardNumber(key, defaultValue);
+    if (!_hasDefault) {
+      _hasDefault = true;
+      this._defaultValue = defaultValue;
+      if (Constants.TUNING_MODE) {
+        _dashboardNumber = new LoggedDashboardNumber(KEY, defaultValue);
       }
     }
   }
@@ -67,10 +67,10 @@ public class LoggedTunableNumber {
    * @return The current value
    */
   public double get() {
-    if (!hasDefault) {
+    if (!_hasDefault) {
       return 0.0;
     } else {
-      return Constants.tuningMode ? dashboardNumber.get() : defaultValue;
+      return Constants.TUNING_MODE ? _dashboardNumber.get() : _defaultValue;
     }
   }
 
@@ -84,9 +84,9 @@ public class LoggedTunableNumber {
    */
   public boolean hasChanged(int id) {
     double currentValue = get();
-    Double lastValue = lastHasChangedValues.get(id);
+    Double lastValue = _lastHasChangedValues.get(id);
     if (lastValue == null || currentValue != lastValue) {
-      lastHasChangedValues.put(id, currentValue);
+      _lastHasChangedValues.put(id, currentValue);
       return true;
     }
 

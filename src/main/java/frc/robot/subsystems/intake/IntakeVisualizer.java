@@ -3,6 +3,8 @@
 package frc.robot.subsystems.intake;
 
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 // import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -12,7 +14,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 public class IntakeVisualizer {
 
   private static Translation2d _rootPosition = new Translation2d(0.28, 0.197);
+  @AutoLogOutput(key = "Mechanism2D/Intake")
   private Mechanism2d _mechanism;
   private MechanismRoot2d _mechanismRoot;
   private MechanismLigament2d _mechanismLigament;
@@ -36,8 +38,6 @@ public class IntakeVisualizer {
             IntakeConstants.INTAKE_OFFSET_DEGREES, 
             4, new Color8Bit(Color.kLightGreen))
         );
-
-        // SmartDashboard.putData("Inkate_Mech", _mechanism);
      }
      
      /***

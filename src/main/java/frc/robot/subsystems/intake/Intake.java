@@ -9,14 +9,18 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
+import frc.robot.util.LoggedTunableNumber;
 
 public class Intake extends SubsystemBase {
+
+    public static final LoggedTunableNumber test = new LoggedTunableNumber("Intake/test");
+
     public enum IntakePosition {
-        SourcePickup(50),
-        GroundPickup(175),
-        Stowed(23.0), //5.0
-        AmpScore(60),
-        SpeakerScore(115);
+        SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
+        GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),
+        Stowed(IntakeConstants.POSITION_STOWED), //5.0
+        AmpScore(IntakeConstants.POSITION_AMP_SCORE),
+        SpeakerScore(IntakeConstants.POSITION_SPEAKER_SCORE);
 
         private final double _angle;
 
@@ -42,7 +46,15 @@ public class Intake extends SubsystemBase {
         _hasNote = false;
         _intakeHasBeenRunning = false;
         _intakePosition = IntakePosition.Stowed;
-        _pivotPid = new ProfiledPIDController(0.005, 0.0002, 0.001, new Constraints(50, 80));
+        _pivotPid = new ProfiledPIDController(IntakeConstants.PIVOT_PID_KP, 
+                                            IntakeConstants.PIVOT_PID_KI, 
+                                            IntakeConstants.PIVOT_PID_KD, 
+                                            new Constraints(
+                                                IntakeConstants.PIVOT_PID_MAX_VEL,
+                                             IntakeConstants.PIVOT_PID_MAX_ACCEL));
+
+        // might want to call this to make sure inputs are always initialized??
+        // this.periodic();
     }
 
     public void runPivotPID() {
@@ -123,9 +135,16 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake PID Error", _pivotPid.getPositionError());
         SmartDashboard.putBoolean("Intake Has Note", _hasNote);
 
+        // VISUALIZATION
         double angle = _intakeInputs._pivotEncoderPositionDegrees;
         _intakeVisualizer.update(angle);
+
+        // LOGGING
         Logger.recordOutput("Intake/AngleDegrees", angle);
-        Logger.recordOutput("Mechanism2D/Intake", _intakeVisualizer.getMechanism());
+        Logger.recordOutput("Intake/PID Speed", _pivotPid.calculate(_intakeInputs._pivotEncoderPositionDegrees));
+        Logger.recordOutput("Intake/Current-Pivot-Angle", _intakeInputs._pivotEncoderPositionDegrees);
+        Logger.recordOutput("Intake/Desired-Pivot-Angle", _pivotPid.getSetpoint().position);
+        Logger.recordOutput("Intake/PID-Error", _pivotPid.getPositionError());
+        Logger.recordOutput("Intake/Has-Note", _hasNote);
     }
 }

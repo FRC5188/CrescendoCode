@@ -144,59 +144,35 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
-                _intake = new Intake(
-                        new RealIntakeIO());
-                _shooter = new Shooter(
-                    new RealShooterIO());
-
-                // flywheel = new Flywheel(new FlywheelIOSparkMax());
+                _intake = new Intake( new RealIntakeIO());
+                _shooter = new Shooter(new RealShooterIO());
                 break;
 
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
+                        new GyroIO() {},
+                        new VisionIO() {},
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim());
-                _intake = new Intake(
-                        new IntakeIO() {
-                        });
-                _shooter = new Shooter(
-                        new ShooterIO() {
-                        });
-                // flywheel = new Flywheel(new FlywheelIOSim());
+                _intake = new Intake( new IntakeIO() {});
+                _shooter = new Shooter( new ShooterIO() {});
                 break;
 
             default:
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        });
-                _intake = new Intake(
-                        new IntakeIO() {
-                        });
-                _shooter = new Shooter(
-                        new ShooterIO() {
-                        });
-
-                // flywheel = new Flywheel(new FlywheelIO() {});
+                        new GyroIO() {},
+                        new VisionIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {});
+                _intake = new Intake( new IntakeIO() {});
+                _shooter = new Shooter( new ShooterIO() {});
                 break;
-
         }
 
         // Set up auto routines

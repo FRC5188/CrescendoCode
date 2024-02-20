@@ -186,10 +186,18 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
     Logger.processInputs("Shooter", _shooterInputs);
+
+    // VISUALIZATION
     double angle = _shooterInputs._angleEncoderPositionDegrees;
     _shooterVisualizer.update(angle);
+
+    // LOGGING
     Logger.recordOutput("Shooter/AngleDegrees", angle);
-    Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
+    Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());
+    Logger.recordOutput("Shooter/AngleDesiredDegrees", _currentShooterZone.getShooterAngle());
+    
+    // SMARTDASHBOARD
+    // Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
     SmartDashboard.putString("Shooter Zone", _currentShooterZone.toString());
     SmartDashboard.putNumber("Shooter Pivot Speed", _anglePid.calculate(getCurrentPositionInDegrees()));
     SmartDashboard.putNumber("Shooter Desired", _currentShooterZone.getShooterAngle());

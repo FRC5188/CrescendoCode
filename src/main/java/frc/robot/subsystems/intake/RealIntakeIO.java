@@ -20,7 +20,9 @@ public class RealIntakeIO implements IntakeIO {
         configPivotMotor();
         configRollerMotor();
         configEncoder();
-        configPivotPID(0, 0, 0);
+        configPivotPID(IntakeConstants.ROLLERS_PID_KD,
+                        IntakeConstants.ROLLERS_PID_KI,
+                        IntakeConstants.ROLLERS_PID_KD);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
@@ -63,8 +65,8 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor.setInverted(true);
         _pivotMotor.setIdleMode(IdleMode.kBrake);
 
-        _pivotMotor.setSmartCurrentLimit(40);
-        _pivotMotor.setSecondaryCurrentLimit(55);
+        _pivotMotor.setSmartCurrentLimit(IntakeConstants.INTAKE_PIVOT_SMART_CURRENT_LIMIT);
+        _pivotMotor.setSecondaryCurrentLimit(IntakeConstants.INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT);
 
         _pivotMotor.enableVoltageCompensation(12.0);
     }
@@ -76,8 +78,8 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor.setInverted(true);
         _rollerMotor.setIdleMode(IdleMode.kBrake);
 
-        //_rollerMotor.setSmartCurrentLimit(50);
-        _rollerMotor.setSecondaryCurrentLimit(55);
+        _rollerMotor.setSmartCurrentLimit(IntakeConstants.INTAKE_ROLLER_SMART_CURRENT_LIMIT);
+        _rollerMotor.setSecondaryCurrentLimit(IntakeConstants.INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT);
 
         _rollerMotor.enableVoltageCompensation(12.0);
     }

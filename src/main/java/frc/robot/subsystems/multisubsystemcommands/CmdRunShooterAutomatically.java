@@ -25,7 +25,7 @@ public class CmdRunShooterAutomatically extends Command {
 
     @Override
     public void execute() {
-        ShooterZone zone = _shooterSubsystem.getZoneFromRadius(_drive.getRadiusToSpeakerInInches());
+        ShooterZone zone = _shooterSubsystem.getZoneFromRadius(_drive.getRadiusToSpeakerInMeters());
         if (_shooterSubsystem.isAutoShootEnabled()) {
             if (_intakeSubsystem.hasNote()) {
                 // TODO: Maybe add in a tolerance for when we straddle zones so we don't go back and forth
@@ -34,17 +34,17 @@ public class CmdRunShooterAutomatically extends Command {
                     // We actually want to shoot
                     _shooterSubsystem.runShooterForZone(zone);
 
-                    if (zone == ShooterZone.Unknown) {
-                        _intakeSubsystem.setIntakePosition(IntakePosition.Stowed);
-                    } else {
-                        _intakeSubsystem.setIntakePosition(IntakePosition.SpeakerScore);
-                    }
+                    // if (zone == ShooterZone.Unknown) {
+                    //     _intakeSubsystem.setIntakePosition(IntakePosition.Stowed);
+                    // } else {
+                    //     _intakeSubsystem.setIntakePosition(IntakePosition.SpeakerScore);
+                    // }
                 }
             } else {
                 if (_shooterSubsystem.getCurrentZone() != ShooterZone.Unknown) {
                     // We don't have a note, so enter our safe mode, which is kept in Unknown
                     _shooterSubsystem.runShooterForZone(ShooterZone.Unknown);
-                    _intakeSubsystem.setIntakePosition(IntakePosition.Stowed);
+                    //_intakeSubsystem.setIntakePosition(IntakePosition.Stowed);
                 }
             }
         }

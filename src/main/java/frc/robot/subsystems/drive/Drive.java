@@ -181,6 +181,7 @@ public class Drive extends SubsystemBase {
 
     _field.setRobotPose(_poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("Field", _field);
+    SmartDashboard.putNumber("Radius to Speaker", getRadiusToSpeakerInMeters());
   }
 
   /**
@@ -305,7 +306,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the distance from the center of the robot to the alliance's speaker */
-  public double getRadiusToSpeakerInInches() {
+  public double getRadiusToSpeakerInMeters() {
     
     return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
   }

@@ -21,7 +21,7 @@ public class RealShooterIO implements ShooterIO {
         configFlywheelMotors();
         configEncoder();
         // configAnglePID(0, 0, 0);
-        configFlywheelPIDs(0.01, 0, 0);
+        configFlywheelPIDs(0.05, 0, 0);
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
@@ -41,12 +41,16 @@ public class RealShooterIO implements ShooterIO {
         inputs._angleMotorVelocityRotationsPerMin = _angleMotor.getEncoder().getVelocity();
         inputs._angleMotorVoltage = _angleMotor.getAppliedOutput() * _angleMotor.getBusVoltage();
         inputs._angleMotorCurrent = _angleMotor.getOutputCurrent();
-        inputs._angleEncoderPositionDegrees = -((_angleEncoder.getAbsolutePosition() * 360) - HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
+        inputs._angleEncoderPositionDegrees = -((_angleEncoder.getAbsolutePosition() * 360)
+                - HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
     }
 
     public void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {
         _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
                 ControlType.kVelocity);
+        _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
+                ControlType.kVelocity);
+        System.out.println("RUNNING SHOOTER");
     }
 
     public void setRightFlywheelSpeedRPM(double velocityRotationsPerMinute) {
@@ -72,7 +76,7 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
 
         _angleMotor.enableVoltageCompensation(12.0);
-        _angleMotor.setInverted(false);
+        _angleMotor.setInverted(true);
         _angleMotor.setCANTimeout(100);
 
         MotorFrameConfigurator.configDutyCycleSensor(_angleMotor);
@@ -97,15 +101,16 @@ public class RealShooterIO implements ShooterIO {
 
         MotorFrameConfigurator.configNoSensor(_rightFlywheelMotor);
 
-        _leftFlywheelMotor.setSmartCurrentLimit(40);
-        _leftFlywheelMotor.setSecondaryCurrentLimit(40);
+        _leftFlywheelMotor.setSmartCurrentLimit(100);
+        _leftFlywheelMotor.setSecondaryCurrentLimit(100);
 
-        _rightFlywheelMotor.setSmartCurrentLimit(40);
-        _rightFlywheelMotor.setSecondaryCurrentLimit(40);
+        _rightFlywheelMotor.setSmartCurrentLimit(100);
+        _rightFlywheelMotor.setSecondaryCurrentLimit(100);
     }
 
     private void configEncoder() {
-        //_angleEncoder = _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        // _angleEncoder =
+        // _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         // _angleEncoder.setPositionConversionFactor(360);
         // _angleEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
         _angleEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);

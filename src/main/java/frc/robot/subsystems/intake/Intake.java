@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
     public enum IntakePosition {
         SourcePickup(50),
         GroundPickup(175),
-        Stowed(5),
+        Stowed(23.0), //5.0
         AmpScore(60),
         SpeakerScore(115);
 
@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase {
         _hasNote = false;
         _intakeHasBeenRunning = false;
         _intakePosition = IntakePosition.Stowed;
-        _pivotPid = new ProfiledPIDController(0.004, 0.0002, 0.001, new Constraints(50, 80));
+        _pivotPid = new ProfiledPIDController(0.005, 0.0002, 0.001, new Constraints(50, 80));
     }
 
     public void runPivotPID() {

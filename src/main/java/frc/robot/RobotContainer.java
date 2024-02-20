@@ -33,6 +33,7 @@ import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
@@ -41,7 +42,9 @@ import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
 import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.hardware.intake.RealIntakeIO;
 import frc.robot.hardware.shooter.RealShooterIO;
@@ -69,19 +72,19 @@ public class RobotContainer {
     private final CommandXboxController _controller = new CommandXboxController(0);
 
     // Button box
-    // Top row of buttons
+    // Top half of buttons
     private final Joystick _operatorController1 = new Joystick(1);
 
-    // Bottom row of buttons
-    // private final Joystick _operatorController2 = new Joystick(2);
+    // Bottom half of buttons
+    private final Joystick _operatorController2 = new Joystick(2);
 
     // Left column, top to bottom
     // private JoystickButton _opButtonOne = new
     // JoystickButton(_operatorController1, 1);
     // private JoystickButton _opButtonTwo = new
     // JoystickButton(_operatorController1, 2);
-    // private JoystickButton _opButtonThree = new
-    // JoystickButton(_operatorController1, 3);
+    private JoystickButton _opButtonThree = new
+    JoystickButton(_operatorController1, 3);
 
     // Middle column, top to bottom
     private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
@@ -100,10 +103,10 @@ public class RobotContainer {
     // JoystickButton(_operatorController1, 10);
 
     // Bottom rows, left to right (not top then bottom!)
-    // private JoystickButton _op2ButtonOne = new
-    // JoystickButton(_operatorController2, 1);
-    // private JoystickButton _op2ButtonTwo = new
-    // JoystickButton(_operatorController2, 2);
+    private JoystickButton _op2ButtonOne = new
+    JoystickButton(_operatorController2, 1);
+    private JoystickButton _op2ButtonTwo = new
+    JoystickButton(_operatorController2, 2);
     // private JoystickButton _op2ButtonThree = new
     // JoystickButton(_operatorController2, 3);
     // private JoystickButton _op2ButtonFour = new
@@ -112,6 +115,9 @@ public class RobotContainer {
     // JoystickButton(_operatorController2, 5);
     // private JoystickButton _op2ButtonSix = new
     // JoystickButton(_operatorController2, 6);
+
+    private JoystickButton _op2ButtonEight = new
+    JoystickButton(_operatorController2, 8);
 
     // Bottom right button (Frowny face)
     // private JoystickButton _op2ButtonNine = new
@@ -246,20 +252,21 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> -_controller.getLeftY() * .60,
-                        () -> -_controller.getLeftX() * .60,
-                        () -> _controller.getRightX() * .65));
+                        () -> -_controller.getLeftY() * 1.0,
+                        () -> -_controller.getLeftX() * 1.0,
+                        () -> _controller.getRightX() * 1.0));
         _controller
-                .b()
+                .leftBumper()
                 .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX()));
+                        () -> _controller.getLeftY(),
+                        () -> _controller.getLeftX()));
 
         // -- Operator Controls --
 
-        // _opButtonOne.onTrue();
-        // _opButtonTwo.onTrue();
-        // _opButtonThree.onTrue();
+        //_opButtonOne.onTrue();
+        //_opButtonTwo.onTrue();
+        
+        _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
 
         // Source Position
         _opButtonFour.onTrue(new GrpIntakeAcquireNoteFromSource(_intake, 0));
@@ -279,6 +286,17 @@ public class RobotContainer {
         // Autoshoot toggle switch
         // _opButtonTen.onTrue();
         // _opButtonTen.onFalse();
+
+        _op2ButtonOne.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Podium));
+
+        // _op2ButtonThree.onTrue();
+        // _op2ButtonFour.onTrue();
+        // _op2ButtonFive.onTrue();
+        // _op2ButtonSix.onTrue();
+        // _op2ButtonSeven.onTrue();
+
+        _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
     }
 
     /**

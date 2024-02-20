@@ -15,8 +15,11 @@ import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
     // Here we define all of the zones for the shooter
-    Subwoofer(0, 2.5, 45, 3000, 3000),
-    Unknown(-1, -1, 30, 1000, 1000);
+    // these are in RPM
+    // subwoofer was 1000
+    Subwoofer(0, 2.5, 45, 100, 100),
+    Podium(2.5, 4, 40, 2000, 2000),
+    Unknown(-1, -1, 35, 0, 0);
 
     private final double _lowBound;
     private final double _highBound;
@@ -65,10 +68,10 @@ public class Shooter extends SubsystemBase {
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
-    _targetShooterPosition = getCurrentPositionInDegrees();
-    _anglePid = new PIDController(0.055, 0, 0);
     _currentShooterZone = ShooterZone.Unknown;
-    setTargetPositionAsAngle(getCurrentPositionInDegrees());
+    _targetShooterPosition = _currentShooterZone.getShooterAngle();
+    _anglePid = new PIDController(0.055, 0, 0);
+    setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
   }
 
   public void runAnglePid() {
@@ -96,15 +99,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
-    if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
-        + 10
-        || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
-            - 10) {
-      throw new RuntimeException(
-          "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
-    } else {
+    // if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
+    //     + 10
+    //     || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
+    //         - 10) {
+    //   throw new RuntimeException(
+    //       "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
+    // } else {
       return _shooterInputs._angleEncoderPositionDegrees;
-    }
+    // }
   }
 
   public ShooterZone getCurrentZone() {
@@ -163,7 +166,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setRightFlywheelSpeed(double speedInRPM) {
-    _shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
+    //_shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
   }
 
   public boolean isReady() {
@@ -181,5 +184,6 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
     SmartDashboard.putString("Shooter Zone", _currentShooterZone.toString());
     SmartDashboard.putNumber("Shooter Pivot Speed", _anglePid.calculate(getCurrentPositionInDegrees()));
+    SmartDashboard.putNumber("Shooter Desired", _currentShooterZone.getShooterAngle());
   }
 }

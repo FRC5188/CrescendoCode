@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -41,15 +43,13 @@ import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
 import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
+import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
-import frc.robot.hardware.intake.IntakeIO;
-import frc.robot.hardware.intake.RealIntakeIO;
-import frc.robot.hardware.shooter.RealShooterIO;
-import frc.robot.hardware.shooter.ShooterIO;
-import frc.robot.hardware.vision.*;
+import frc.robot.subsystems.vision.*;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -289,6 +289,8 @@ public class RobotContainer {
 
         _op2ButtonOne.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Subwoofer));
         _op2ButtonTwo.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Podium));
+        _op2ButtonTwo.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
+        _op2ButtonOne.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
 
         // _op2ButtonThree.onTrue();
         // _op2ButtonFour.onTrue();

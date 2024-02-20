@@ -1,4 +1,4 @@
-package frc.robot.hardware.intake;
+package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkFlex;
 
@@ -8,7 +8,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import frc.robot.hardware.HardwareConstants;
+import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
 
 public class RealIntakeIO implements IntakeIO {
@@ -28,7 +28,8 @@ public class RealIntakeIO implements IntakeIO {
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
         inputs._pivotMotorCurrent = _pivotMotor.getOutputCurrent();
-        inputs._pivotEncoderPositionDegrees = (_pivotMotorEncoder.getAbsolutePosition() * 360) - HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES;
+        inputs._pivotEncoderPositionDegrees = (_pivotMotorEncoder.getAbsolutePosition() * 360) - 
+                                HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES;
 
         inputs._rollerMotorTemperature = _rollerMotor.getMotorTemperature();
         inputs._rollerMotorVelocityRotationsPerMin = _rollerMotor.getEncoder().getVelocity();

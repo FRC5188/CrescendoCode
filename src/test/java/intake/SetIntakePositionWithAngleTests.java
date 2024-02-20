@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.hal.HAL;
-import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.intake.IntakeIO;
 
 public class SetIntakePositionWithAngleTests {
     // Define the subsystem and hardware you're testing with

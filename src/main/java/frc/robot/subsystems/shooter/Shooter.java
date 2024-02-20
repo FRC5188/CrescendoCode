@@ -9,17 +9,25 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.hardware.shooter.ShooterIO;
-import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
+import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
-    // Here we define all of the zones for the shooter
-    // these are in RPM
-    // subwoofer was 1000
-    Subwoofer(0, 2.5, 45, 100, 100),
-    Podium(2.5, 4, 40, 2000, 2000),
-    Unknown(-1, -1, 35, 0, 0);
+    Subwoofer(ShooterConstants.ZONE_SUBWOOFER_LOW_BOUND, 
+              ShooterConstants.ZONE_SUBWOOFER_UPPER_BOUND,
+              ShooterConstants.ZONE_SUBWOOFER_SHOOTER_ANGLE,
+              ShooterConstants.ZONE_SUBWOOFER_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE_SUBWOOFER_FLYWHEEL_SPEED),
+    Podium(ShooterConstants.ZONE_PODIUM_LOW_BOUND, 
+              ShooterConstants.ZONE_PODIUM_UPPER_BOUND,
+              ShooterConstants.ZONE_PODIUM_SHOOTER_ANGLE,
+              ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED),
+    Unknown(ShooterConstants.ZONE_UNKOWN_LOW_BOUND, 
+              ShooterConstants.ZONE_UNKOWN_UPPER_BOUND,
+              ShooterConstants.ZONE_UNKOWN_SHOOTER_ANGLE,
+              ShooterConstants.ZONE_UNKOWN_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE_UNKOWN_FLYWHEEL_SPEED);
 
     private final double _lowBound;
     private final double _highBound;

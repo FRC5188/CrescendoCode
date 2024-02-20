@@ -1,4 +1,4 @@
-package frc.robot.hardware.intake;
+package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -11,6 +11,8 @@ public interface IntakeIO {
         public double _pivotMotorVelocityRotationsPerMin;
         public double _pivotMotorCurrent;
         public double _pivotMotorVoltage;
+        // i think this should be something we log?? GH 2/20/24 (pivotmotorpidsetpoint)
+        // public double _pivotMotorPIDSetpoint;
         // |================= END PIVOT MOTOR LOGGING =================|
 
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|

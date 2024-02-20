@@ -1,11 +1,12 @@
-package frc.robot.hardware.shooter;
+package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import frc.robot.hardware.HardwareConstants;
+import frc.robot.HardwareConstants;
+import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.robot.util.MotorFrameConfigurator;
 
 public class RealShooterIO implements ShooterIO {
@@ -21,7 +22,7 @@ public class RealShooterIO implements ShooterIO {
         configFlywheelMotors();
         configEncoder();
         // configAnglePID(0, 0, 0);
-        configFlywheelPIDs(0.05, 0, 0);
+        configFlywheelPIDs(0.001, 0.000, 0);
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
@@ -48,14 +49,14 @@ public class RealShooterIO implements ShooterIO {
     public void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {
         _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
                 ControlType.kVelocity);
-        _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
-                ControlType.kVelocity);
+        // _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
+                // ControlType.kVelocity);
         System.out.println("RUNNING SHOOTER");
     }
 
     public void setRightFlywheelSpeedRPM(double velocityRotationsPerMinute) {
-        _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
-                ControlType.kVelocity);
+        // _rightFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
+                // ControlType.kVelocity);
     }
 
     public void stopFlywheels() {
@@ -90,13 +91,13 @@ public class RealShooterIO implements ShooterIO {
         _rightFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.RIGHT_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
 
         _leftFlywheelMotor.enableVoltageCompensation(12.0);
-        _leftFlywheelMotor.setInverted(true);
+        _leftFlywheelMotor.setInverted(false);
         _leftFlywheelMotor.setCANTimeout(100);
 
         MotorFrameConfigurator.configNoSensor(_leftFlywheelMotor);
 
         _rightFlywheelMotor.enableVoltageCompensation(12.0);
-        _rightFlywheelMotor.setInverted(false);
+        // _rightFlywheelMotor.setInverted(false);
         _rightFlywheelMotor.setCANTimeout(100);
 
         MotorFrameConfigurator.configNoSensor(_rightFlywheelMotor);
@@ -106,6 +107,7 @@ public class RealShooterIO implements ShooterIO {
 
         _rightFlywheelMotor.setSmartCurrentLimit(100);
         _rightFlywheelMotor.setSecondaryCurrentLimit(100);
+        _rightFlywheelMotor.follow(_leftFlywheelMotor, true);
     }
 
     private void configEncoder() {

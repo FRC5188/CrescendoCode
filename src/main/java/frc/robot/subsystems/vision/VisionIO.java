@@ -1,9 +1,9 @@
-package frc.robot.hardware.vision;
+package frc.robot.subsystems.vision;
 
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.hardware.HardwareConstants;
+import frc.robot.HardwareConstants;
 
 public interface VisionIO {
     

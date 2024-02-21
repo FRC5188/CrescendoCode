@@ -13,8 +13,8 @@
             "/RealOutputs/Mechanism2D",
             "/AdvantageKit/RealOutputs/Shooter",
             "/AdvantageKit/RealOutputs",
-            "/AdvantageKit/Shooter",
-            "/AdvantageKit"
+            "/AdvantageKit",
+            "/AdvantageKit/PowerDistribution"
           ]
         },
         "tabs": {
@@ -69,6 +69,11 @@
                     {
                       "key": "NT:/AdvantageKit/Shooter/_rightFlywheelMotorVoltage",
                       "color": "#e5b31b",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/PowerDistribution/Voltage",
+                      "color": "#aacaee",
                       "show": true
                     }
                   ]

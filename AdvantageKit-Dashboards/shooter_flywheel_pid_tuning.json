@@ -1,0 +1,86 @@
+{
+  "hubs": [
+    {
+      "x": 54,
+      "y": -8,
+      "width": 1874,
+      "height": 1096,
+      "state": {
+        "sidebar": {
+          "width": 371,
+          "expanded": [
+            "/RealOutputs/Shooter",
+            "/RealOutputs/Mechanism2D",
+            "/AdvantageKit/RealOutputs/Shooter",
+            "/AdvantageKit/RealOutputs",
+            "/AdvantageKit/Shooter",
+            "/AdvantageKit"
+          ]
+        },
+        "tabs": {
+          "selected": 1,
+          "tabs": [
+            {
+              "type": 0,
+              "path": "../docs/INDEX.md"
+            },
+            {
+              "type": 1,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": [
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_leftFlywheelMotorVelocityRotationsPerMin",
+                      "color": "#af2437",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_rightFlywheelMotorVelocityRotationsPerMin",
+                      "color": "#80588e",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/RealOutputs/Shooter/FlywheelSetpoint",
+                      "color": "#e48b32",
+                      "show": true
+                    }
+                  ]
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": [
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_leftFlywheelMotorVoltage",
+                      "color": "#2b66a2",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_rightFlywheelMotorVoltage",
+                      "color": "#e5b31b",
+                      "show": true
+                    }
+                  ]
+                }
+              },
+              "title": "Flywheel PID"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "3.1.0"
+}

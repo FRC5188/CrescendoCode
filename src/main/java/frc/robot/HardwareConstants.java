@@ -33,7 +33,6 @@ public class HardwareConstants {
 
     public class ComponentTransformations {
     // |====================== START VISION SUBSYSTEM TRANSFORMATIONS ======================|
-
         /*
         * Assume that you're looking at the robot from above it. In our code we treat
         * the robot like a single point in an XY-Plane. Where the front of the robot is

@@ -13,8 +13,8 @@ public class CmdIntakeSetPosition extends Command {
     private IntakePosition _intakePosition;
 
     public CmdIntakeSetPosition(Intake intakeSubsystem, IntakePosition intakePosition) {
-        _intakeSubsystem = intakeSubsystem;
-        _intakePosition = intakePosition;
+        this._intakeSubsystem = intakeSubsystem;
+        this._intakePosition = intakePosition;
 
         addRequirements(intakeSubsystem);
     }

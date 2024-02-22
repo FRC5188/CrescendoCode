@@ -1,4 +1,4 @@
-package frc.robot.hardware.shooter;
+package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -19,6 +19,12 @@ public interface ShooterIO {
         public double _rightFlywheelMotorVoltage;
         public double _rightFlywheelMotorCurrent;
         // |================= END RIGHT FLYWHEEL MOTOR LOGGING =================|
+
+        public double _flywheelPIDKP;
+        public double _flywheelPIDKI;
+        public double _flywheelPIDKD;
+        public double _flywheelPIDISum;
+        public double _flywheelPIDKF;
         
         // |================= START ANGLE MOTOR LOGGING =================|
         public double _angleMotorTemperature;
@@ -29,7 +35,7 @@ public interface ShooterIO {
         // |================= END ANGLE MOTOR LOGGING =================|
 
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
-        public double _angleEncoderPositionRotations;
+        public double _angleEncoderPositionDegrees;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
     }
 
@@ -43,15 +49,13 @@ public interface ShooterIO {
 
     public default void stopFlywheels(){}
 
-    public default void configFlywheelPID(double p, double i, double d){}
-
-    public default void setLeftFlywheelSpeedRPM(double velocityRotationsPerMinute) {}
+    public default void setFlywheelSpeedRPM(double velocityRotationsPerMinute) {}
 
     public default void setRightFlywheelSpeedRPM(double velocityRotationsPerMinute) {}
 
     // |============================== ANGLE MOTOR METHODS ============================== |
 
-    public default void configAnglePID(double p, double i, double d){}
-
     public default void setTargetPositionAsDegrees(double degrees){}
+
+    public default void setAngleMotorSpeed(double speed){}
 }

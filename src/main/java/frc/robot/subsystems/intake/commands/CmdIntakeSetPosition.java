@@ -22,7 +22,11 @@ public class CmdIntakeSetPosition extends Command {
     // // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        _intakeSubsystem.setIntakePosition(this._intakePosition);
+        _intakeSubsystem.setIntakePosition(_intakePosition);
+
+        if (_intakePosition == IntakePosition.Stowed) {
+            _intakeSubsystem.stopRollerMotor();
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.

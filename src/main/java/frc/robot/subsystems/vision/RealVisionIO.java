@@ -1,4 +1,4 @@
-package frc.robot.hardware.vision;
+package frc.robot.subsystems.vision;
 
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
@@ -8,7 +8,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.hardware.HardwareConstants;
+import frc.robot.HardwareConstants;
 
 public class RealVisionIO implements VisionIO {
         private static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -36,7 +36,7 @@ public class RealVisionIO implements VisionIO {
                         estimators[i] = new PhotonPoseEstimator(
                                 FIELD_LAYOUT,
                                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                                new PhotonCamera("photoncamera_" + (i + 1)),
+                                new PhotonCamera("photonvision" + (i + 1)),
                                 HardwareConstants.ComponentTransformations._cameraPosition[i]);
                         
                         estimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);

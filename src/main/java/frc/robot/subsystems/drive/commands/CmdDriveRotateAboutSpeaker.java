@@ -15,7 +15,7 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     private final DoubleSupplier _translationYSupplier;
     private PIDController _angleController;
 
-    final double _autoRotateP = 0.1;
+    final double _autoRotateP = 0.13;
     final double _autoRotateI = 0.003;
     final double _autoRotateD = 0.00075;
     final double _autoRotateTolerance = 3.0;
@@ -61,8 +61,9 @@ public class CmdDriveRotateAboutSpeaker extends Command {
         // using enableContinuousInput on the PID Controller
         // means that our robot will always take the shortest path to the angle.
         // copied this from windham
-        double rotationVal = this._angleController.calculate(
+        double rotationVal = -this._angleController.calculate(
                 (MathUtil.inputModulus(this._drive.getGyroscopeRotation().getDegrees(), -180, 180)));
+        System.out.println(rotationVal);
 
         this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -70,8 +71,8 @@ public class CmdDriveRotateAboutSpeaker extends Command {
                         _translationYSupplier.getAsDouble(),
                         rotationVal,
                         _drive.getGyroscopeRotation()));
-        System.out.println(
-                "desired: " + _drive.calcAngleToSpeaker() + " actual: " + _drive.getGyroscopeRotation().getDegrees());
+        // System.out.println(
+        //         "desired: " + _drive.calcAngleToSpeaker() + " actual: " + _drive.getGyroscopeRotation().getDegrees());
     }
 
     // Called once the command ends or is interrupted.

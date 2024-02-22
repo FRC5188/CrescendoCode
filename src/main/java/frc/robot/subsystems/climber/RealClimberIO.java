@@ -1,9 +1,9 @@
-package frc.robot.hardware.climber;
+package frc.robot.subsystems.climber;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import frc.robot.hardware.HardwareConstants;
+import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
 
 public class RealClimberIO implements ClimberIO {
@@ -11,8 +11,8 @@ public class RealClimberIO implements ClimberIO {
     private CANSparkFlex _rightClimberMotor;
 
     public RealClimberIO() {
-        _leftClimberMotor = getConfiguredLeftClimberMotor();
-        _rightClimberMotor = getConfiguredRightClimberMotor();
+        // _leftClimberMotor = getConfiguredLeftClimberMotor();
+        // _rightClimberMotor = getConfiguredRightClimberMotor();
     }
 
     public void updateInputs(ClimberIOInputs inputs) {

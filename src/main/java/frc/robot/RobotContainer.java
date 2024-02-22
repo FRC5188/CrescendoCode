@@ -14,13 +14,16 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.hardware.vision.RealVisionIO;
-import frc.robot.hardware.vision.VisionIO;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -28,6 +31,21 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
+import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
+import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
+import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
+import frc.robot.subsystems.multisubsystemcommands.GrpSetUp;
+import frc.robot.subsystems.shooter.RealShooterIO;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
+import frc.robot.subsystems.vision.*;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -43,10 +61,63 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
     // Subsystems
     private final Drive _drive;
-    // private final Flywheel flywheel;
+    private final Intake _intake;
+    private final Shooter _shooter;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
+
+    // Button box
+    // Top half of buttons
+    private final Joystick _operatorController1 = new Joystick(1);
+
+    // Bottom half of buttons
+    private final Joystick _operatorController2 = new Joystick(2);
+
+    // Left column, top to bottom
+    // private JoystickButton _opButtonOne = new
+    // JoystickButton(_operatorController1, 1);
+    // private JoystickButton _opButtonTwo = new
+    // JoystickButton(_operatorController1, 2);
+    private JoystickButton _opButtonThree = new
+    JoystickButton(_operatorController1, 3);
+
+    // Middle column, top to bottom
+    private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
+    private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
+    private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
+
+    // Right column, top to bottom
+    // private JoystickButton _opButtonSeven = new
+    // JoystickButton(_operatorController1, 7);
+    // private JoystickButton _opButtonEight = new
+    // JoystickButton(_operatorController1, 8);
+    private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
+
+    // Side Toggle Switch
+    // private JoystickButton _opButtonTen = new
+    // JoystickButton(_operatorController1, 10);
+
+    // Bottom rows, left to right (not top then bottom!)
+    private JoystickButton _op2ButtonOne = new
+    JoystickButton(_operatorController2, 1);
+    private JoystickButton _op2ButtonTwo = new
+    JoystickButton(_operatorController2, 2);
+    // private JoystickButton _op2ButtonThree = new
+    // JoystickButton(_operatorController2, 3);
+    // private JoystickButton _op2ButtonFour = new
+    // JoystickButton(_operatorController2, 4);
+    // private JoystickButton _op2ButtonFive = new
+    // JoystickButton(_operatorController2, 5);
+    // private JoystickButton _op2ButtonSix = new
+    // JoystickButton(_operatorController2, 6);
+
+    private JoystickButton _op2ButtonEight = new
+    JoystickButton(_operatorController2, 8);
+
+    // Bottom right button (Frowny face)
+    // private JoystickButton _op2ButtonNine = new
+    // JoystickButton(_operatorController2, 9);
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> _autoChooser;
@@ -69,39 +140,34 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
-                // flywheel = new Flywheel(new FlywheelIOSparkMax());
+                _intake = new Intake( new RealIntakeIO());
+                _shooter = new Shooter(new RealShooterIO());
                 break;
 
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
+                        new GyroIO() {},
+                        new VisionIO() {},
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim());
-                // flywheel = new Flywheel(new FlywheelIOSim());
+                _intake = new Intake( new IntakeIO() {});
+                _shooter = new Shooter( new ShooterIO() {});
                 break;
 
             default:
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        });
-                // flywheel = new Flywheel(new FlywheelIO() {});
+                        new GyroIO() {},
+                        new VisionIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {});
+                _intake = new Intake( new IntakeIO() {});
+                _shooter = new Shooter( new ShooterIO() {});
                 break;
         }
 
@@ -158,23 +224,53 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> _controller.getRightX()));
-        _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+                        () -> -_controller.getLeftY() * 1.0,
+                        () -> -_controller.getLeftX() * 1.0,
+                        () -> _controller.getRightX() * 1.0));
         _controller
-                .b()
+                .leftBumper()
                 .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX()));
-        /*
-         * controller
-         * .a()
-         * .whileTrue(
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel));
-         */
+                        () -> _controller.getLeftY(),
+                        () -> _controller.getLeftX()));
+
+        // -- Operator Controls --
+
+        //_opButtonOne.onTrue();
+        //_opButtonTwo.onTrue();
+        
+        _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
+
+        // Source Position
+        _opButtonFour.onTrue(new GrpIntakeAcquireNoteFromSource(_intake, 0));
+
+        // Stow
+        _opButtonFive.onTrue(new GrpIntakeMoveToPosition(_intake, IntakePosition.Stowed));
+
+        // Ground Pickup Position
+        _opButtonSix.onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+
+        // _opButtonSeven.onTrue();
+        // _opButtonEight.onTrue();
+
+        _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
+        _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
+
+        // Autoshoot toggle switch
+        // _opButtonTen.onTrue();
+        // _opButtonTen.onFalse();
+
+        _op2ButtonOne.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Podium));
+        _op2ButtonTwo.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
+        _op2ButtonOne.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
+
+        // _op2ButtonThree.onTrue();
+        // _op2ButtonFour.onTrue();
+        // _op2ButtonFive.onTrue();
+        // _op2ButtonSix.onTrue();
+        // _op2ButtonSeven.onTrue();
+
+        _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
     }
 
     /**
@@ -184,5 +280,9 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return _autoChooser.get();
+    }
+
+    public Command getSetupCommand() {
+        return new GrpSetUp(_drive, _shooter, _intake);
     }
 }

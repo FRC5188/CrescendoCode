@@ -36,9 +36,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.hardware.HardwareConstants;
-import frc.robot.hardware.vision.VisionIO;
-import frc.robot.hardware.vision.VisionIOInputsAutoLogged;
+import frc.robot.HardwareConstants;
+import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
+import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -181,8 +181,7 @@ public class Drive extends SubsystemBase {
 
     _field.setRobotPose(_poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("Field", _field);
-    double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
-    SmartDashboard.putNumberArray("CoR", cor);
+    SmartDashboard.putNumber("Radius to Speaker", getRadiusToSpeakerInMeters());
   }
 
   /**
@@ -307,7 +306,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the distance from the center of the robot to the alliance's speaker */
-  public double getRadiusToSpeakerInInches() {
+  public double getRadiusToSpeakerInMeters() {
     
     return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
   }

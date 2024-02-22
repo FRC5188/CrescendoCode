@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.HardwareConstants;
-import frc.robot.util.MotorFrameConfigurator;
 
 public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;

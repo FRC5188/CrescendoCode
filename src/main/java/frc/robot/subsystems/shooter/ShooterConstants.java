@@ -1,7 +1,6 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 
 public abstract class ShooterConstants {
 

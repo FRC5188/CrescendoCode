@@ -7,9 +7,7 @@ package frc.robot.subsystems.shooter;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
@@ -69,7 +67,6 @@ public class Shooter extends SubsystemBase {
   private double _rightTargetFlywheelSpeed = 0;
   private double _targetShooterPosition;
   private PIDController _anglePid;
-  private double prevFlywheelError = 0;
 
   private ShooterZone _currentShooterZone;
 
@@ -108,15 +105,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
-    // if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
-    //     + 10
-    //     || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
-    //         - 10) {
-    //   throw new RuntimeException(
-    //       "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
-    // } else {
+    if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
+        + 10
+        || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
+            - 10) {
+      throw new RuntimeException(
+          "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
+    } else {
       return _shooterInputs._angleEncoderPositionDegrees;
-    // }
+    }
   }
 
   public ShooterZone getCurrentZone() {
@@ -188,22 +185,10 @@ public class Shooter extends SubsystemBase {
     _shooterVisualizer.update(_shooterInputs._angleEncoderPositionDegrees);
 
     // LOGGING
-    double currentFlywheelError = (_targetFlywheelSpeed - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin);
-    double PComponent = _shooterInputs._flywheelPIDKP * currentFlywheelError;
-    double IComponent = _shooterInputs._flywheelPIDKI * _shooterInputs._flywheelPIDISum;
-    double DComponent = _shooterInputs._flywheelPIDKD * (currentFlywheelError - prevFlywheelError);
 
     Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());
     Logger.recordOutput("Shooter/AngleDesiredDegrees", _currentShooterZone.getShooterAngle());
     Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);
-    Logger.recordOutput("Shooter/FlywheelPIDPComponent", PComponent);
-    Logger.recordOutput("Shooter/FlywheelPIDIComponent", IComponent);
-    Logger.recordOutput("Shooter/FlywheelPIDDComponent", DComponent);
-    
-    // SMARTDASHBOARD
     // Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
-    SmartDashboard.putString("Shooter Zone", _currentShooterZone.toString());
-    SmartDashboard.putNumber("Shooter Pivot Speed", _anglePid.calculate(getCurrentPositionInDegrees()));
-    SmartDashboard.putNumber("Shooter Desired", _currentShooterZone.getShooterAngle());
   }
 }

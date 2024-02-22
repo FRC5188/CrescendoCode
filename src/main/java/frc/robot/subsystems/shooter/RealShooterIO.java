@@ -6,7 +6,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.HardwareConstants;
-import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import frc.robot.util.MotorFrameConfigurator;
 
 public class RealShooterIO implements ShooterIO {

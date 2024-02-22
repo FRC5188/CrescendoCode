@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -8,7 +7,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
 import frc.robot.util.LoggedTunableNumber;
 
 public class Intake extends SubsystemBase {

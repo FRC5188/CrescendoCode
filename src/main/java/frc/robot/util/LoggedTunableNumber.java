@@ -20,7 +20,7 @@ import frc.robot.Constants;
 public class LoggedTunableNumber {
   private static final String TABLE_KEY = "TunableNumbers";
 
-  private final String KEY;
+  private final String _key;
   private boolean _hasDefault = false;
   private double _defaultValue;
   private LoggedDashboardNumber _dashboardNumber;
@@ -32,7 +32,7 @@ public class LoggedTunableNumber {
    * @param dashboardKey Key on dashboard
    */
   public LoggedTunableNumber(String dashboardKey) {
-    this.KEY = TABLE_KEY + "/" + dashboardKey;
+    this._key = TABLE_KEY + "/" + dashboardKey;
   }
 
   /**
@@ -56,7 +56,7 @@ public class LoggedTunableNumber {
       _hasDefault = true;
       this._defaultValue = defaultValue;
       if (Constants.TUNING_MODE) {
-        _dashboardNumber = new LoggedDashboardNumber(KEY, defaultValue);
+        _dashboardNumber = new LoggedDashboardNumber(_key, defaultValue);
       }
     }
   }

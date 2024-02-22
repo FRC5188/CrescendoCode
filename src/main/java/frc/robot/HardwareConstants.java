@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class HardwareConstants {
-    public static final int NUMBER_OF_CAMERAS = 1;
+    public static final int NUMBER_OF_CAMERAS = 2;
     public class CanIds {
         
         // |====================== INTAKE SUBSYSTEM CAN IDs ======================|
@@ -41,7 +41,7 @@ public class HardwareConstants {
         * positive X, and where the left side of the robot is the negative Y.
         */
         // How far foward/backward the camera is from robot center.
-        private static final double CAMERA_ONE_X_FROM_ROBOT_CENTER = -0.1586;
+        private static final double CAMERA_ONE_X_FROM_ROBOT_CENTER = 0.1586; //Ch
         // How far left/right the camera is from robot center.
         private static final double CAMERA_ONE_Y_FROM_ROBOT_CENTER = 0.2794;
         // How far up/down the camera is from center if we look at robot from side in 3D
@@ -62,7 +62,7 @@ public class HardwareConstants {
 
         private static final double CAMERA_TWO_ROLL = 0;
         private static final double CAMERA_TWO_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_TWO_YAW = 0;
+        private static final double CAMERA_TWO_YAW = Math.toRadians(180.0);
 
         private static Transform3d _cameraTwoPosition = new Transform3d(
         new Translation3d(CAMERA_TWO_X_FROM_ROBOT_CENTER, CAMERA_TWO_Y_FROM_ROBOT_CENTER, CAMERA_TWO_Z_FROM_ROBOT_CENTER),

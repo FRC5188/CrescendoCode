@@ -120,10 +120,7 @@ public class Robot extends LoggedRobot {
       _autonomousCommand.schedule();
     }
 
-    _robotContainer.getAutoShootCommand().schedule();
-    _robotContainer.getIntakeRunPIDCommand().schedule();
-    _robotContainer.getIntakeSetStowed().schedule();
-    _robotContainer.getShooterRunPIDCommand().schedule();
+    _robotContainer.getSetupCommand().schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -141,10 +138,7 @@ public class Robot extends LoggedRobot {
       _autonomousCommand.cancel();
     }
 
-    //_robotContainer.getAutoShootCommand().schedule();
-    _robotContainer.getIntakeRunPIDCommand().schedule();
-    _robotContainer.getIntakeSetStowed().schedule();
-    _robotContainer.getShooterRunPIDCommand().schedule();
+    _robotContainer.getSetupCommand().schedule();
   }
 
   /** This function is called periodically during operator control. */

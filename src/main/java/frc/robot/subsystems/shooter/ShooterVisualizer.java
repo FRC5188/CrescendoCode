@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 /** Add your docs here. */
 public class ShooterVisualizer {
 
-    private static Translation2d _rootPosition = new Translation2d(0.28, 0);
+    private static Translation2d _rootPosition = new Translation2d(0.28, 0.197);
     @AutoLogOutput(key = "Mechanism2D/Shooter")
     private Mechanism2d _mechanism;
     private MechanismRoot2d _mechanismRoot;
@@ -29,15 +29,15 @@ public class ShooterVisualizer {
      
     public ShooterVisualizer() {
       // Create mechanism
-      _mechanism = new Mechanism2d(ShooterConstants.SHOOTER_WIDTH, 
-                                    ShooterConstants.SHOOTER_HEIGHT, 
+      _mechanism = new Mechanism2d(ShooterConstants.SHOOTER_CANVAS_WIDTH, 
+                                    ShooterConstants.SHOOTER_CANVAS_HEIGHT, 
                                     new Color8Bit(Color.kGray));
       _mechanismRoot = _mechanism.getRoot("shooter",  2.0 + _rootPosition.getX(), _rootPosition.getY());
       _fixedLigament = _mechanismRoot.append(
             new MechanismLigament2d("ShooterBase", 
-            ShooterConstants.SHOOTER_HEIGHT, 
+            ShooterConstants.SHOOTER_HEIGHT_FROM_BASE, 
             90, 
-            6, new Color8Bit(Color.kLightGreen)));
+            6, new Color8Bit(Color.kDarkBlue)));
             _pivotLigament = _fixedLigament.append(
             new MechanismLigament2d("ShooterPivot",
             ShooterConstants.SHOOTER_LENGTH,

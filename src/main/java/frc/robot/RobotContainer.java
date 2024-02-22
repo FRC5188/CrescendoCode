@@ -43,6 +43,7 @@ import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
 import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
+import frc.robot.subsystems.multisubsystemcommands.GrpSetUp;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -286,19 +287,7 @@ public class RobotContainer {
         return _autoChooser.get();
     }
 
-    public Command getAutoShootCommand() {
-        return new CmdRunShooterAutomatically(_drive, _shooter, _intake);
-    }
-
-    public Command getIntakeRunPIDCommand() {
-        return new CmdIntakeRunPID(_intake);
-    }
-
-    public Command getShooterRunPIDCommand() {
-        return new CmdShooterRunPids(_shooter);
-    }
-
-    public Command getIntakeSetStowed() {
-        return new CmdIntakeSetPosition(_intake, IntakePosition.Stowed);
+    public Command getSetupCommand() {
+        return new GrpSetUp(_drive, _shooter, _intake);
     }
 }

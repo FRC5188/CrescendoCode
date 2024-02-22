@@ -8,8 +8,8 @@ public class IntakeConstants {
      *************************/
     // intake pivot
     public static final double PIVOT_PID_KP = 0.005;
-    public static final double PIVOT_PID_KI = 0.0002;
-    public static final double PIVOT_PID_KD = 0.001;
+    public static final double PIVOT_PID_KI = 0.000;
+    public static final double PIVOT_PID_KD = 0.00;
     public static final double PIVOT_PID_MAX_VEL = 50;
     public static final double PIVOT_PID_MAX_ACCEL = 80;
 
@@ -28,7 +28,7 @@ public class IntakeConstants {
      **********************/
     public static final double POSITION_SOURCE_PICKUP = 50;
     public static final double POSITION_GROUND_PICKUP = 175;
-    public static final double POSITION_STOWED = 23;
+    public static final double POSITION_STOWED = 5;
     public static final double POSITION_AMP_SCORE = 60;
     public static final double POSITION_SPEAKER_SCORE = 115;
 
@@ -51,7 +51,7 @@ public class IntakeConstants {
      **************************/
     public static final double INTAKE_ACQUIRE_SPEED = 0.7;
     public static final double INTAKE_SPIT_SPEED = -0.7;
-    public static final double INTAKE_CURRENT_CUTOFF = 65;
+    public static final double INTAKE_CURRENT_CUTOFF = 40;
 
     /*********************
      * 

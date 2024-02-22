@@ -65,10 +65,11 @@ public class Shooter extends SubsystemBase {
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
-  private double _leftTargetFlywheelSpeed = 0;
+  private double _targetFlywheelSpeed = 0;
   private double _rightTargetFlywheelSpeed = 0;
   private double _targetShooterPosition;
   private PIDController _anglePid;
+  private double prevFlywheelError = 0;
 
   private ShooterZone _currentShooterZone;
 
@@ -78,7 +79,7 @@ public class Shooter extends SubsystemBase {
     _shooterIO = shooterIO;
     _currentShooterZone = ShooterZone.Unknown;
     _targetShooterPosition = _currentShooterZone.getShooterAngle();
-    _anglePid = new PIDController(0.055, 0, 0);
+    _anglePid = new PIDController(0.055, 0, 0.02);
     setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
   }
 
@@ -125,7 +126,7 @@ public class Shooter extends SubsystemBase {
   private boolean areFlywheelsAtTargetSpeed() {
     return Math
         .abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin
-            - _leftTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
+            - _targetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
         &&
         Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin
             - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
@@ -133,8 +134,7 @@ public class Shooter extends SubsystemBase {
 
   public void runShooterForZone(ShooterZone zone) {
     setShooterPositionWithZone(zone);
-    setLeftFlywheelSpeed(zone._leftFlywheelSpeed);
-    setRightFlywheelSpeed(zone._rightFlywheelSpeed);
+    setFlywheelSpeed(zone._leftFlywheelSpeed);
   }
 
   public ShooterZone getZoneFromRadius(double radius) {
@@ -169,32 +169,36 @@ public class Shooter extends SubsystemBase {
     _shooterIO.stopFlywheels();
   }
 
-  public void setLeftFlywheelSpeed(double speedInRPM) {
-    _shooterIO.setLeftFlywheelSpeedRPM(speedInRPM);
-  }
-
-  public void setRightFlywheelSpeed(double speedInRPM) {
-    //_shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
+  public void setFlywheelSpeed(double speedInRPM) {
+    this._targetFlywheelSpeed = speedInRPM;
+    _shooterIO.setFlywheelSpeedRPM(speedInRPM);
   }
 
   public boolean isReady() {
     return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
   }
 
-    @Override
+  @Override
   public void periodic() {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
     Logger.processInputs("Shooter", _shooterInputs);
 
     // VISUALIZATION
-    double angle = _shooterInputs._angleEncoderPositionDegrees;
-    _shooterVisualizer.update(angle);
+    _shooterVisualizer.update(_shooterInputs._angleEncoderPositionDegrees);
 
     // LOGGING
-    Logger.recordOutput("Shooter/AngleDegrees", angle);
+    double currentFlywheelError = (_targetFlywheelSpeed - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin);
+    double PComponent = _shooterInputs._flywheelPIDKP * currentFlywheelError;
+    double IComponent = _shooterInputs._flywheelPIDKI * _shooterInputs._flywheelPIDISum;
+    double DComponent = _shooterInputs._flywheelPIDKD * (currentFlywheelError - prevFlywheelError);
+
     Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());
     Logger.recordOutput("Shooter/AngleDesiredDegrees", _currentShooterZone.getShooterAngle());
+    Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);
+    Logger.recordOutput("Shooter/FlywheelPIDPComponent", PComponent);
+    Logger.recordOutput("Shooter/FlywheelPIDIComponent", IComponent);
+    Logger.recordOutput("Shooter/FlywheelPIDDComponent", DComponent);
     
     // SMARTDASHBOARD
     // Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());

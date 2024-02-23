@@ -111,7 +111,7 @@ public class RealShooterIO implements ShooterIO {
         _angleEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);
     }
 
-    private void configFlywheelPIDs(double p, double i, double d, double f) {
+    public void configFlywheelPIDs(double p, double i, double d, double f) {
         _leftFlywheelMotor.getPIDController().setP(p);
         _leftFlywheelMotor.getPIDController().setI(i);
         _leftFlywheelMotor.getPIDController().setD(d);
@@ -124,7 +124,7 @@ public class RealShooterIO implements ShooterIO {
     }
 
     private void configAnglePID(double p, double i, double d) {
-        // _angleMotor.getPIDController().setFeedbackDevice(_angleEncoder);
+        // _angleMotor.getPIDController().setFeedbackDevice(_angleEncoder); // TODO: I don't know why this is disabled??? -MG
         // _angleMotor.getPIDController().setP(p);
         // _angleMotor.getPIDController().setI(i);
         // _angleMotor.getPIDController().setD(d);

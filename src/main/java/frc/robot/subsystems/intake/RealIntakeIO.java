@@ -19,9 +19,9 @@ public class RealIntakeIO implements IntakeIO {
         configPivotMotor();
         configRollerMotor();
         configEncoder();
-        configPivotPID(IntakeConstants.ROLLERS_PID_KD,
-                        IntakeConstants.ROLLERS_PID_KI,
-                        IntakeConstants.ROLLERS_PID_KD);
+        configPivotPID(IntakeConstants.PID.ROLLERS.KD,
+                        IntakeConstants.PID.ROLLERS.KI,
+                        IntakeConstants.PID.ROLLERS.KD);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
@@ -50,11 +50,11 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor.set(speed);
     }
 
-    private void configPivotPID(double p, double i, double d) {
+    public void configPivotPID(double p, double i, double d) {
         // _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
-        // _pivotMotor.getPIDController().setP(p);
-        // _pivotMotor.getPIDController().setI(i);
-        // _pivotMotor.getPIDController().setD(d);
+        _pivotMotor.getPIDController().setP(p);
+        _pivotMotor.getPIDController().setI(i);
+        _pivotMotor.getPIDController().setD(d);
     }
 
     private void configPivotMotor() {
@@ -64,8 +64,8 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor.setInverted(true);
         _pivotMotor.setIdleMode(IdleMode.kBrake);
 
-        _pivotMotor.setSmartCurrentLimit(IntakeConstants.INTAKE_PIVOT_SMART_CURRENT_LIMIT);
-        _pivotMotor.setSecondaryCurrentLimit(IntakeConstants.INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT);
+        _pivotMotor.setSmartCurrentLimit(Double.valueOf(IntakeConstants.SOFTWARE.INTAKE_PIVOT_SMART_CURRENT_LIMIT.get()).intValue());
+        _pivotMotor.setSecondaryCurrentLimit(IntakeConstants.SOFTWARE.INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT.get());
 
         _pivotMotor.enableVoltageCompensation(12.0);
     }
@@ -77,8 +77,8 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor.setInverted(true);
         _rollerMotor.setIdleMode(IdleMode.kBrake);
 
-        _rollerMotor.setSmartCurrentLimit(IntakeConstants.INTAKE_ROLLER_SMART_CURRENT_LIMIT);
-        _rollerMotor.setSecondaryCurrentLimit(IntakeConstants.INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT);
+        _rollerMotor.setSmartCurrentLimit(Double.valueOf(IntakeConstants.SOFTWARE.INTAKE_ROLLER_SMART_CURRENT_LIMIT.get()).intValue());
+        _rollerMotor.setSecondaryCurrentLimit(IntakeConstants.SOFTWARE.INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT.get());
 
         _rollerMotor.enableVoltageCompensation(12.0);
     }

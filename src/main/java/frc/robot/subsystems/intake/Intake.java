@@ -11,14 +11,12 @@ import frc.robot.util.LoggedTunableNumber;
 
 public class Intake extends SubsystemBase {
 
-    public static final LoggedTunableNumber TEST = new LoggedTunableNumber("Intake/test");
-
     public enum IntakePosition {
-        SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
-        GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),
-        Stowed(IntakeConstants.POSITION_STOWED), //5.0
-        AmpScore(IntakeConstants.POSITION_AMP_SCORE),
-        SpeakerScore(IntakeConstants.POSITION_SPEAKER_SCORE);
+        SourcePickup(IntakeConstants.POSITIONS.POSITION_SOURCE_PICKUP.get()), // TODO: There is probably a better way to do this (since we're polling each cycle) but it'll work for now. -MG
+        GroundPickup(IntakeConstants.POSITIONS.POSITION_GROUND_PICKUP.get()),
+        Stowed(IntakeConstants.POSITIONS.POSITION_STOWED.get()), //5.0
+        AmpScore(IntakeConstants.POSITIONS.POSITION_AMP_SCORE.get()),
+        SpeakerScore(IntakeConstants.POSITIONS.POSITION_SPEAKER_SCORE.get());
 
         private final double _angle;
 
@@ -44,12 +42,12 @@ public class Intake extends SubsystemBase {
         _hasNote = false;
         _intakeHasBeenRunning = false;
         _intakePosition = IntakePosition.Stowed;
-        _pivotPid = new ProfiledPIDController(IntakeConstants.PIVOT_PID_KP, 
-                                            IntakeConstants.PIVOT_PID_KI, 
-                                            IntakeConstants.PIVOT_PID_KD, 
+        _pivotPid = new ProfiledPIDController(IntakeConstants.PID.PIVOT.KP, 
+                                            IntakeConstants.PID.PIVOT.KI, 
+                                            IntakeConstants.PID.PIVOT.KD, 
                                             new Constraints(
-                                                IntakeConstants.PIVOT_PID_MAX_VEL,
-                                                IntakeConstants.PIVOT_PID_MAX_ACCEL));
+                                                IntakeConstants.PID.PIVOT.PIVOT_PID_MAX_VEL,
+                                                IntakeConstants.PID.PIVOT.PIVOT_PID_MAX_ACCEL));
 
         // might want to call this to make sure inputs are always initialized??
         // this.periodic();
@@ -69,11 +67,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void setRollerMotorSpeedAcquire() {
-        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE.INTAKE_ACQUIRE_SPEED_DEFAULT);
     }
 
     public void setRollerMotorSpeedSpit() {
-        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE.INTAKE_SPIT_SPEED_DEFAULT);
     }
 
     public void stopRollerMotor() {
@@ -81,8 +79,8 @@ public class Intake extends SubsystemBase {
     }
 
     public void setIntakePositionWithAngle(Double angle) {
-        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
-            // TODO: log an error, but don't throw exception
+        if (angle > IntakeConstants.MECHANICAL.MAX_INTAKE_ANGLE || angle < IntakeConstants.MECHANICAL.MIN_INTAKE_ANGLE) {
+            System.out.println("[ERROR]: Intake angle out of bounds");
             return;
         }
         //_intakeIO.setTargetPositionAsDegrees(angle);
@@ -93,12 +91,12 @@ public class Intake extends SubsystemBase {
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionDegrees);
         double targetPositionDegrees = _intakePosition.getAngle();
-        return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
+        return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.SOFTWARE.INTAKE_PIVOT_DEADBAND;
     }
 
     public boolean hasNote() {
         if (!_hasNote) {
-            _hasNote = (_intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF) && _intakeHasBeenRunning;
+            _hasNote = (_intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE.INTAKE_CURRENT_CUTOFF_DEFAULT) && _intakeHasBeenRunning;
         }
 
         return _hasNote;
@@ -144,5 +142,29 @@ public class Intake extends SubsystemBase {
         Logger.recordOutput("Intake/Desired-Pivot-Angle", _pivotPid.getSetpoint().position);
         Logger.recordOutput("Intake/PID-Error", _pivotPid.getPositionError());
         Logger.recordOutput("Intake/Has-Note", _hasNote);
+    }
+
+    private void pollForTunableChanges() {
+        if (IntakeConstants.PID.PIVOT.KP_TUNABLE.hasChanged(hashCode())){
+            IntakeConstants.PID.PIVOT.KP = IntakeConstants.PID.PIVOT.KP_TUNABLE.get();
+            _pivotPid.setP(IntakeConstants.PID.PIVOT.KP);
+        }
+
+        if (IntakeConstants.PID.PIVOT.KI_TUNABLE.hasChanged(hashCode())){
+            IntakeConstants.PID.PIVOT.KI = IntakeConstants.PID.PIVOT.KI_TUNABLE.get();
+            _pivotPid.setI(IntakeConstants.PID.PIVOT.KI);
+        }
+
+        if (IntakeConstants.PID.PIVOT.KD_TUNABLE.hasChanged(hashCode())){
+            IntakeConstants.PID.PIVOT.KD = IntakeConstants.PID.PIVOT.KD_TUNABLE.get();
+            _pivotPid.setD(IntakeConstants.PID.PIVOT.KD);
+        }
+
+        if (IntakeConstants.PID.PIVOT.KF_TUNABLE.hasChanged(hashCode())){
+            IntakeConstants.PID.PIVOT.KF = IntakeConstants.PID.PIVOT.KF_TUNABLE.get();
+            // This doesn't do anything right now but in case we want a feedfoward its here.
+        }
+
+
     }
 }

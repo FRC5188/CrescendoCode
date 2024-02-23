@@ -28,14 +28,14 @@ public class IntakeVisualizer {
      
    public IntakeVisualizer() {
       // Create mechanism
-      _mechanism = new Mechanism2d(IntakeConstants.INTAKE_WIDTH, 
-                                    IntakeConstants.INTAKE_HEIGHT, 
+      _mechanism = new Mechanism2d(IntakeConstants.MECHANICAL.INTAKE_WIDTH, 
+                                    IntakeConstants.MECHANICAL.INTAKE_HEIGHT, 
                                     new Color8Bit(Color.kGray));
       _mechanismRoot = _mechanism.getRoot("Intake",  2.0 + _rootPosition.getX(), _rootPosition.getY());
       _mechanismLigament = _mechanismRoot.append(
             new MechanismLigament2d("IntakeArm", 
-            IntakeConstants.INTAKE_LENGTH, 
-            IntakeConstants.INTAKE_OFFSET_DEGREES, 
+            IntakeConstants.MECHANICAL.INTAKE_LENGTH, 
+            IntakeConstants.MECHANICAL.INTAKE_OFFSET_DEGREES, 
             4, new Color8Bit(Color.kLightGreen))
         );
      }
@@ -45,7 +45,7 @@ public class IntakeVisualizer {
       * @param pivotAngle angle in degrees
       */
      public void update(double pivotAngleDegrees) {
-         _mechanismLigament.setAngle(new Rotation2d(Math.toRadians(-pivotAngleDegrees + IntakeConstants.INTAKE_OFFSET_DEGREES)));
+         _mechanismLigament.setAngle(new Rotation2d(Math.toRadians(-pivotAngleDegrees + IntakeConstants.MECHANICAL.INTAKE_OFFSET_DEGREES)));
      }
 
      public Mechanism2d getMechanism(){

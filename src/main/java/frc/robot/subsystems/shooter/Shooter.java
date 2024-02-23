@@ -11,21 +11,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
-    Subwoofer(ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.LOW_BOUND, 
-              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.UPPER_BOUND,
-              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.SHOOTER_ANGLE,
-              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.FLYWHEEL_SPEED,
-              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.FLYWHEEL_SPEED),
-    Podium(ShooterConstants.ZONE_CONSTANTS.PODIUM.LOW_BOUND,
-              ShooterConstants.ZONE_CONSTANTS.PODIUM.UPPER_BOUND,
-              ShooterConstants.ZONE_CONSTANTS.PODIUM.SHOOTER_ANGLE,
-              ShooterConstants.ZONE_CONSTANTS.PODIUM.FLYWHEEL_SPEED,
-              ShooterConstants.ZONE_CONSTANTS.PODIUM.FLYWHEEL_SPEED),
-    Unknown(ShooterConstants.ZONE_CONSTANTS.UNKNOWN.LOW_BOUND, 
-              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.UPPER_BOUND,
-              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.SHOOTER_ANGLE,
-              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.FLYWHEEL_SPEED,
-              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.FLYWHEEL_SPEED);
+    Subwoofer(ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.LOW_BOUND_TUNABLE.get(), // In the future we might want to not pull this every cycle though we'll see :) -MG
+              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.UPPER_BOUND_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.SHOOTER_ANGLE_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.FLYWHEEL_SPEED_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.SUBWOOFER.FLYWHEEL_SPEED_TUNABLE.get()),
+    Podium(ShooterConstants.ZONE_CONSTANTS.PODIUM.LOW_BOUND_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.PODIUM.UPPER_BOUND_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.PODIUM.SHOOTER_ANGLE_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.PODIUM.FLYWHEEL_SPEED_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.PODIUM.FLYWHEEL_SPEED_TUNABLE.get()),
+    Unknown(ShooterConstants.ZONE_CONSTANTS.UNKNOWN.LOW_BOUND_TUNABLE.get(), 
+              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.UPPER_BOUND_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.SHOOTER_ANGLE_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.FLYWHEEL_SPEED_TUNABLE.get(),
+              ShooterConstants.ZONE_CONSTANTS.UNKNOWN.FLYWHEEL_SPEED_TUNABLE.get());
 
     private final double _lowBound;
     private final double _highBound;

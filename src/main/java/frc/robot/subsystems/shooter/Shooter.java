@@ -123,7 +123,6 @@ public class Shooter extends SubsystemBase {
     return this._currentShooterZone;
   }
 
-
   private boolean areFlywheelsAtTargetSpeed() {
     return Math
         .abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin
@@ -135,7 +134,7 @@ public class Shooter extends SubsystemBase {
 
   public void runShooterForZone(ShooterZone zone) {
     setShooterPositionWithZone(zone);
-    setFlywheelSpeed(zone._leftFlywheelSpeed); // ODO: If we're going to do this then I don't see the benefit of having speeds for two different speeds for motors.
+    setFlywheelSpeed(zone._leftFlywheelSpeed); // TODO: If we're going to do this then I don't see the benefit of having speeds for two different speeds for motors.
   }
 
   public ShooterZone getZoneFromRadius(double radius) {

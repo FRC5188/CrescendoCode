@@ -3,6 +3,11 @@ package frc.robot.subsystems.intake.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
+/**
+ * <STRONG>Purpose: </STRONG>Sets the speed for acquiring a note </p>
+ * <STRONG>Subsystem: </STRONG>Intake </p>
+ * <STRONG>Status: </STRONG> Working
+ */
 public class CmdIntakeRollersAcquire extends Command {
     private Intake _intakeSubsystem;
 

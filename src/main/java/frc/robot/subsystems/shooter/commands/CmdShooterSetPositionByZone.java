@@ -10,29 +10,20 @@ public class CmdShooterSetPositionByZone extends Command {
     private ShooterZone _zone;
 
     public CmdShooterSetPositionByZone(Shooter shooterSubsystem, ShooterZone zone) {
-        _shooterSubsystem = shooterSubsystem;
-        _zone = zone;
+        this._shooterSubsystem = shooterSubsystem;
+        this._zone = zone;
 
         addRequirements(shooterSubsystem);
     }
 
+    //<STRONG>Purpose:</STRONG> Update the setpoint of the PID based on the zone that our robot is in.
     @Override
     public void initialize() {
         _shooterSubsystem.setShooterPositionWithZone(_zone);
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-
-    }
-
-    @Override
     public boolean isFinished() {
-        return true;
+        return true; // Only run once.
     }
 }

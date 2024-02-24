@@ -10,8 +10,8 @@ public class CmdShooterWaitUntilReady extends Command {
     private Intake _intakeSubsystem;
 
     public CmdShooterWaitUntilReady(Shooter shooterSubsystem, Intake intakeSubsystem) {
-        _shooterSubsystem = shooterSubsystem;
-        _intakeSubsystem = intakeSubsystem;
+        this._shooterSubsystem = shooterSubsystem;
+        this._intakeSubsystem = intakeSubsystem;
 
         addRequirements(shooterSubsystem, intakeSubsystem);
     }

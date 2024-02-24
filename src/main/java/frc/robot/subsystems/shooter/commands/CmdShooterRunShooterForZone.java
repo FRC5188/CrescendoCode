@@ -8,36 +8,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 
+/**<STRONG>Purpose:</STRONG> Will update the target setpoint for the zone that our robot is in based on it's pose. */
+/**<STRONG>Status:</STRONG> Working */
 public class CmdShooterRunShooterForZone extends Command {
-  /** Creates a new CmdShooterRunShooterForZone. */
   private Shooter _shooterSubsystem;
   private ShooterZone _zone;
 
   public CmdShooterRunShooterForZone(Shooter shooterSubsystem, ShooterZone zone) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    _shooterSubsystem = shooterSubsystem;
-    _zone = zone;
-    addRequirements(_shooterSubsystem);
+    this._shooterSubsystem = shooterSubsystem;
+    this._zone = zone;
 
+    addRequirements(this._shooterSubsystem);
   }
 
-  // Called when the command is initially scheduled.
+  /**<STRONG>Purpose:</STRONG> Updates the setpoint of the PID meaning it should run only once.*/
   @Override
   public void initialize() {
-    _shooterSubsystem.runShooterForZone(_zone);
+    this._shooterSubsystem.runShooterForZone(_zone);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return true; // Is only run once.
   }
 }

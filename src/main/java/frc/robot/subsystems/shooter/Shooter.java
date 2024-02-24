@@ -90,16 +90,13 @@ public class Shooter extends SubsystemBase {
 
   public void setTargetPositionAsAngle(double angle) {
     if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
-      // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
-      // 2024/01/23
+      System.err.println("Invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE.");
       return;
 
     } else if (angle > ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE) {
-      // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
-      // 2024/01/23
+      System.err.println("Invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE.");
       return;
     } else {
-      //_shooterIO.setTargetPositionAsDegrees(angle);
       _anglePid.setSetpoint(angle);
     }
   }
@@ -189,6 +186,6 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());
     Logger.recordOutput("Shooter/AngleDesiredDegrees", _currentShooterZone.getShooterAngle());
     Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);
-    // Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
+    Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
   }
 }

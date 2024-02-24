@@ -20,7 +20,6 @@ public class RealShooterIO implements ShooterIO {
         configAngleMotor();
         configFlywheelMotors();
         configEncoder();
-        // configAnglePID(0, 0, 0);
         configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
     }
 
@@ -47,7 +46,6 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setFlywheelSpeedRPM(double velocityRotationsPerMinute) {
-        // Set just the left, since the right side follows
         _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
                 ControlType.kVelocity);
     }
@@ -58,7 +56,6 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
-        // TODO: may need an offset to get sensor and input angle to line up
         _angleMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
     }
 
@@ -90,7 +87,6 @@ public class RealShooterIO implements ShooterIO {
         MotorFrameConfigurator.configNoSensor(_leftFlywheelMotor);
 
         _rightFlywheelMotor.enableVoltageCompensation(12.0);
-        // _rightFlywheelMotor.setInverted(false);
         _rightFlywheelMotor.setCANTimeout(100);
 
         MotorFrameConfigurator.configNoSensor(_rightFlywheelMotor);
@@ -104,10 +100,6 @@ public class RealShooterIO implements ShooterIO {
     }
 
     private void configEncoder() {
-        // _angleEncoder =
-        // _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        // _angleEncoder.setPositionConversionFactor(360);
-        // _angleEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
         _angleEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.SHOOTER_ANGLE_ENCODER_PORT);
     }
 
@@ -121,12 +113,5 @@ public class RealShooterIO implements ShooterIO {
         _rightFlywheelMotor.getPIDController().setI(i);
         _rightFlywheelMotor.getPIDController().setD(d);
         _rightFlywheelMotor.getPIDController().setFF(f, 0);
-    }
-
-    private void configAnglePID(double p, double i, double d) {
-        // _angleMotor.getPIDController().setFeedbackDevice(_angleEncoder);
-        // _angleMotor.getPIDController().setP(p);
-        // _angleMotor.getPIDController().setI(i);
-        // _angleMotor.getPIDController().setD(d);
     }
 }

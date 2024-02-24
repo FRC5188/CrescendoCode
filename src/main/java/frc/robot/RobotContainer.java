@@ -39,6 +39,7 @@ import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeSetPositionNoRollers;
 import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
@@ -226,7 +227,11 @@ public class RobotContainer {
         // BUTTON SEVEN:
         // BUTTON EIGHT:
         // BUTTON NINE: Intake Run Rollers
-
+        _opButtonThree.onTrue(new CmdIntakeSetPositionNoRollers(_intake, IntakePosition.AmpScore));
+        _opButtonFour.onTrue(new CmdIntakeSetPositionNoRollers(_intake, IntakePosition.SourcePickup));
+        _opButtonFive.onTrue(new CmdIntakeSetPositionNoRollers(_intake, IntakePosition.Stowed));
+        _opButtonSix.onTrue(new CmdIntakeSetPositionNoRollers(_intake, IntakePosition.GroundPickup));
+        _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
         // ======= OPERATOR CONOTROLLER 2
         // BUTTON ONE: Run Angle Pivot for Subwoofer
         // BUTTON TWO: Run Angle Pivot for Podium

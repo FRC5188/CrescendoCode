@@ -3,6 +3,11 @@ package frc.robot.subsystems.intake.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
+/**
+ * <STRONG>Purpose: </STRONG> Sets the speed for spitting out a note, then stops the Roller motor and then resets the hasNote boolean to false. </p>
+ * <STRONG>Subsystem: </STRONG> Intake </p>
+ * <STRONG>Status: </STRONG> Working 
+ */
 public class CmdIntakeRollersSpit extends Command {
 
     private Intake _intakeSubsytem;

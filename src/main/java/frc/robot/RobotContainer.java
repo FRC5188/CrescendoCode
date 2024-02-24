@@ -15,12 +15,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -50,9 +47,9 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterMoveManually;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
-import frc.robot.subsystems.vision.*;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.RealVisionIO;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 

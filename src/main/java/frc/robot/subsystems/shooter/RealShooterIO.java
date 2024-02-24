@@ -7,6 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
+import frc.robot.util.tunable.Tunable;
 
 public class RealShooterIO implements ShooterIO {
     private static final double GEAR_RATIO = 1.0;
@@ -21,7 +22,11 @@ public class RealShooterIO implements ShooterIO {
         configFlywheelMotors();
         configEncoder();
         // configAnglePID(0, 0, 0);
-        configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
+        configFlywheelPIDs(
+            ShooterConstants.PID.FLYHWEEL.KP.get(),
+            ShooterConstants.PID.FLYHWEEL.KI.get(),
+            ShooterConstants.PID.FLYHWEEL.KD.get(),
+            ShooterConstants.PID.FLYHWEEL.KF.get());
     }
 
     public void updateInputs(ShooterIOInputs inputs) {

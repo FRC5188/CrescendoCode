@@ -15,8 +15,12 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -44,7 +48,9 @@ import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterMoveManually;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.*;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -100,17 +106,17 @@ public class RobotContainer {
 
     // Bottom rows, left to right (not top then bottom!)
     private JoystickButton _op2ButtonOne = new
-    JoystickButton(_operatorController2, 1);
+        JoystickButton(_operatorController2, 1);
     private JoystickButton _op2ButtonTwo = new
-    JoystickButton(_operatorController2, 2);
-    // private JoystickButton _op2ButtonThree = new
-    // JoystickButton(_operatorController2, 3);
-    // private JoystickButton _op2ButtonFour = new
-    // JoystickButton(_operatorController2, 4);
-    // private JoystickButton _op2ButtonFive = new
-    // JoystickButton(_operatorController2, 5);
-    // private JoystickButton _op2ButtonSix = new
-    // JoystickButton(_operatorController2, 6);
+        JoystickButton(_operatorController2, 2);
+    private JoystickButton _op2ButtonThree = new
+        JoystickButton(_operatorController2, 3);
+    private JoystickButton _op2ButtonFour = new
+        JoystickButton(_operatorController2, 4);
+    private JoystickButton _op2ButtonFive = new
+        JoystickButton(_operatorController2, 5);
+    private JoystickButton _op2ButtonSix = new
+        JoystickButton(_operatorController2, 6);
 
     private JoystickButton _op2ButtonEight = new
     JoystickButton(_operatorController2, 8);
@@ -171,15 +177,7 @@ public class RobotContainer {
                 break;
         }
 
-        // Set up auto routines
-        /*
-         * NamedCommands.registerCommand(
-         * "Run Flywheel",
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel)
-         * .withTimeout(5.0));
-         */
+        // At the momements there are no auto commands to choose from.
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
         // Set up SysId routines
@@ -193,22 +191,6 @@ public class RobotContainer {
                 "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         _autoChooser.addOption(
                 "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        /*
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Forward)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Reverse)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Forward)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Reverse)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-         */
-
-        // Configure the button bindings
         configureButtonBindings();
     }
 
@@ -256,7 +238,6 @@ public class RobotContainer {
         // BUTTON EIGHT: Intake Spit Rollers
         // BUTTON NINE:
         // ======================== END OPERATOR CONTROLS ========================
-        
         _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
 
         // Source Position
@@ -274,14 +255,24 @@ public class RobotContainer {
         _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
         _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
 
-        // Autoshoot toggle switch
-        // _opButtonTen.onTrue();
-        // _opButtonTen.onFalse();
 
-        _op2ButtonOne.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Subwoofer));
-        _op2ButtonTwo.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Podium));
-        _op2ButtonTwo.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
-        _op2ButtonOne.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
+        _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
+        // When nothing is pressed run everything to the unknown zone.
+        _op2ButtonOne.onFalse(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Unknown));
+        _op2ButtonTwo.onFalse(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Unknown));
+
+        _op2ButtonThree.onTrue(
+                new RunCommand(
+                        () -> _shooter.setFlywheelSpeed(_shooter.getCurrentZone().getLeftFlywheelSpeed()),
+                        _shooter
+                )
+        );      
+
+        _op2ButtonFive.onTrue(new CmdShooterMoveManually(_shooter, 1.0));
+        _op2ButtonSix.onTrue(new CmdShooterMoveManually(_shooter, -1.0));
+
+        _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
 
         // _op2ButtonThree.onTrue();
         // _op2ButtonFour.onTrue();

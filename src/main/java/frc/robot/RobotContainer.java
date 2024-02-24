@@ -233,10 +233,29 @@ public class RobotContainer {
                         () -> _controller.getLeftY(),
                         () -> _controller.getLeftX()));
 
-        // -- Operator Controls --
+        // ======================== START OPERATOR CONTROLS ========================
+        // ======= OPERATOR CONTROLLER 1
+        // BUTTON ONE: 
+        // BUTTON TWO:
+        // BUTTON THREE: Intake Position for Amp Score (No Rollers Running)
+        // BUTTON FOUR: Intake Position for Source (No Rollers Running)
+        // BUTTON FIVE: Intake Position for Stow (No Rollers Running)
+        // BUTTON SIX: Intake Position for Ground Pickup (No Rollers Running)
+        // BUTTON SEVEN:
+        // BUTTON EIGHT:
+        // BUTTON NINE: Intake Run Rollers
 
-        //_opButtonOne.onTrue();
-        //_opButtonTwo.onTrue();
+        // ======= OPERATOR CONOTROLLER 2
+        // BUTTON ONE: Run Angle Pivot for Subwoofer
+        // BUTTON TWO: Run Angle Pivot for Podium
+        // BUTTON THREE: Run Flywheels for Subwoofer
+        // BUTTON FOUR: Run Flywheels for Podium
+        // BUTTON FIVE: Manual Increase Angle
+        // BUTTON SIX: Manual Decrease Angle
+        // BUTTON SEVEN:
+        // BUTTON EIGHT: Intake Spit Rollers
+        // BUTTON NINE:
+        // ======================== END OPERATOR CONTROLS ========================
         
         _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
 

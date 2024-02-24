@@ -28,13 +28,13 @@ public class IntakeVisualizer {
      
    public IntakeVisualizer() {
       // Create mechanism
-      _mechanism = new Mechanism2d(IntakeConstants.MECHANICAL.INTAKE_WIDTH, 
-                                    IntakeConstants.MECHANICAL.INTAKE_HEIGHT, 
+      _mechanism = new Mechanism2d(IntakeConstants.MECHANICAL.INTAKE_WIDTH_METERS, 
+                                    IntakeConstants.MECHANICAL.INTAKE_HEIGHT_METERS, 
                                     new Color8Bit(Color.kGray));
       _mechanismRoot = _mechanism.getRoot("Intake",  2.0 + _rootPosition.getX(), _rootPosition.getY());
       _mechanismLigament = _mechanismRoot.append(
             new MechanismLigament2d("IntakeArm", 
-            IntakeConstants.MECHANICAL.INTAKE_LENGTH, 
+            IntakeConstants.MECHANICAL.INTAKE_LENGTH_METERS, 
             IntakeConstants.MECHANICAL.INTAKE_OFFSET_DEGREES, 
             4, new Color8Bit(Color.kLightGreen))
         );

@@ -19,9 +19,10 @@ public class RealIntakeIO implements IntakeIO {
         configPivotMotor();
         configRollerMotor();
         configEncoder();
-        configPivotPID(IntakeConstants.PID.ROLLERS.KD,
-                        IntakeConstants.PID.ROLLERS.KI,
-                        IntakeConstants.PID.ROLLERS.KD);
+        configPivotPID(IntakeConstants.PID.ROLLERS.KD.get(),
+                        IntakeConstants.PID.ROLLERS.KI.get(),
+                        IntakeConstants.PID.ROLLERS.KD.get(),
+                        IntakeConstants.PID.ROLLERS.KF.get());
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
@@ -50,11 +51,12 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor.set(speed);
     }
 
-    public void configPivotPID(double p, double i, double d) {
+    public void configPivotPID(double p, double i, double d, double f) {
         // _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
         _pivotMotor.getPIDController().setP(p);
         _pivotMotor.getPIDController().setI(i);
         _pivotMotor.getPIDController().setD(d);
+        _pivotMotor.getPIDController().setFF(f);
     }
 
     private void configPivotMotor() {
@@ -88,5 +90,40 @@ public class RealIntakeIO implements IntakeIO {
         // _pivotMotorEncoder.setPositionConversionFactor(360);
         // _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
         _pivotMotorEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.INTAKE_PIVOT_ENCODER_PORT);
+    }
+
+    @Override
+    public void poll() {
+        if (IntakeConstants.PID.ROLLERS.KP.hasChanged(hashCode())){
+            _pivotMotor.getPIDController().setP(IntakeConstants.PID.ROLLERS.KP.get());
+        }
+
+        if (IntakeConstants.PID.ROLLERS.KI.hasChanged(hashCode())){
+            _pivotMotor.getPIDController().setI(IntakeConstants.PID.ROLLERS.KI.get());
+        }
+
+        if (IntakeConstants.PID.ROLLERS.KD.hasChanged(hashCode())){
+            _pivotMotor.getPIDController().setD(IntakeConstants.PID.ROLLERS.KD.get());
+        }
+
+        if (IntakeConstants.PID.ROLLERS.KF.hasChanged(hashCode())){
+            _pivotMotor.getPIDController().setFF(IntakeConstants.PID.ROLLERS.KF.get());
+        }
+
+        if (IntakeConstants.SOFTWARE.INTAKE_PIVOT_SMART_CURRENT_LIMIT.hasChanged(hashCode())){
+            _pivotMotor.setSmartCurrentLimit(Double.valueOf(IntakeConstants.SOFTWARE.INTAKE_PIVOT_SMART_CURRENT_LIMIT.get()).intValue());
+        }
+
+        if (IntakeConstants.SOFTWARE.INTAKE_ROLLER_SMART_CURRENT_LIMIT.hasChanged(hashCode())){
+            _rollerMotor.setSmartCurrentLimit(Double.valueOf(IntakeConstants.SOFTWARE.INTAKE_ROLLER_SMART_CURRENT_LIMIT.get()).intValue());
+        }
+
+        if (IntakeConstants.SOFTWARE.INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT.hasChanged(hashCode())){
+            _pivotMotor.setSecondaryCurrentLimit(IntakeConstants.SOFTWARE.INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT.get());
+        }
+
+        if (IntakeConstants.SOFTWARE.INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT.hasChanged(hashCode())){
+            _rollerMotor.setSecondaryCurrentLimit(IntakeConstants.SOFTWARE.INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT.get());
+        }
     }
 }

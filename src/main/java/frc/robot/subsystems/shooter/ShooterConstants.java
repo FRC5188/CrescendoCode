@@ -1,7 +1,8 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.util.LoggedTunableNumber;
+import frc.robot.Robot;
+import frc.robot.util.tunable.LoggedTunableNumber;
 
 public abstract class ShooterConstants {
 
@@ -13,66 +14,101 @@ public abstract class ShooterConstants {
      */
     public abstract class ZONE_CONSTANTS {
         public abstract class PODIUM {
-            public static double FLYWHEEL_SPEED = 2250;
-            public static double LOW_BOUND = 4;
-            public static double UPPER_BOUND = 2.5;
-            public static double SHOOTER_ANGLE = 30;
+            public static LoggedTunableNumber FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/Podium/Flywheel-Speed");
+            public static LoggedTunableNumber LOW_BOUND = new LoggedTunableNumber("Shooter/Podium/Low-Bound");
+            public static LoggedTunableNumber UPPER_BOUND = new LoggedTunableNumber("Shooter/Podium/Upper-Bound");
+            public static LoggedTunableNumber SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/Podium/Shooter-Angle");
 
-            public static LoggedTunableNumber FLYWHEEL_SPEED_TUNABLE = new LoggedTunableNumber("Shooter/Podium/Flywheel Speed", FLYWHEEL_SPEED);
-            public static LoggedTunableNumber LOW_BOUND_TUNABLE = new LoggedTunableNumber("Shooter/Podium/Low Bound", LOW_BOUND);
-            public static LoggedTunableNumber UPPER_BOUND_TUNABLE = new LoggedTunableNumber("Shooter/Podium/Upper Bound", UPPER_BOUND);
-            public static LoggedTunableNumber SHOOTER_ANGLE_TUNABLE = new LoggedTunableNumber("Shooter/Podium/Shooter Angle", SHOOTER_ANGLE);
+            static {
+                if (Robot.isReal()) {
+                    FLYWHEEL_SPEED.initDefault(2250); // FLYWHEEL SPEED
+                    LOW_BOUND.initDefault(4); // LOWER BOUND
+                    UPPER_BOUND.initDefault(2.5); // UPPER BOUND
+                    SHOOTER_ANGLE.initDefault(30); // SHOOTER ANGLE
+                }
+                else if (Robot.isSimulation()) {
+                    throw new UnsupportedOperationException("Robot Simulation isn't supported yet for Shooter");
+                }
+            }
         }
 
         public abstract class SUBWOOFER {
-            public static double FLYWHEEL_SPEED = 1500;
-            public static double LOW_BOUND = 0.0;
-            public static double UPPER_BOUND = 2.5;
-            public static double SHOOTER_ANGLE = 41;
+            public static LoggedTunableNumber FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/Subwoofer/Flywheel-Speed");
+            public static LoggedTunableNumber LOW_BOUND = new LoggedTunableNumber("Shooter/Subwoofer/Low-Bound");
+            public static LoggedTunableNumber UPPER_BOUND = new LoggedTunableNumber("Shooter/Subwoofer/Upper-Bound");
+            public static LoggedTunableNumber SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/Subwoofer/Shooter-Angle");
 
-            public static LoggedTunableNumber FLYWHEEL_SPEED_TUNABLE = new LoggedTunableNumber("Shooter/Subwoofer/Flywheel Speed", FLYWHEEL_SPEED);
-            public static LoggedTunableNumber LOW_BOUND_TUNABLE = new LoggedTunableNumber("Shooter/Subwoofer/Low Bound", LOW_BOUND);
-            public static LoggedTunableNumber UPPER_BOUND_TUNABLE = new LoggedTunableNumber("Shooter/Subwoofer/Upper Bound", UPPER_BOUND);
-            public static LoggedTunableNumber SHOOTER_ANGLE_TUNABLE = new LoggedTunableNumber("Shooter/Subwoofer/Shooter Angle", SHOOTER_ANGLE);
+            static {
+                if (Robot.isReal()) {
+                    FLYWHEEL_SPEED.initDefault(1500); // FLYWHEEL SPEED
+                    LOW_BOUND.initDefault(0.0); // LOWER BOUND
+                    UPPER_BOUND.initDefault(2.5); // UPPER BOUND
+                    SHOOTER_ANGLE.initDefault(41); // SHOOTER ANGLE
+                }
+                else if (Robot.isSimulation()) {
+                    throw new UnsupportedOperationException("Robot Simulation isn't supported yet for Shooter");
+                }
+            }
         }
 
         public abstract class UNKNOWN {
-            public static double FLYWHEEL_SPEED = 200;
-            public static double LOW_BOUND = -1;
-            public static double UPPER_BOUND = -1;
-            public static double SHOOTER_ANGLE = 35;
+            public static LoggedTunableNumber FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/Unknown/Flywheel-Speed");
+            public static LoggedTunableNumber LOW_BOUND = new LoggedTunableNumber("Shooter/Unknown/Low-Bound");
+            public static LoggedTunableNumber UPPER_BOUND = new LoggedTunableNumber("Shooter/Unknown/Upper-Bound");
+            public static LoggedTunableNumber SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/Unknown/Shooter-Angle");
 
-            public static LoggedTunableNumber FLYWHEEL_SPEED_TUNABLE = new LoggedTunableNumber("Shooter/Unknown/Flywheel Speed", FLYWHEEL_SPEED);
-            public static LoggedTunableNumber LOW_BOUND_TUNABLE = new LoggedTunableNumber("Shooter/Unknown/Low Bound", LOW_BOUND);
-            public static LoggedTunableNumber UPPER_BOUND_TUNABLE = new LoggedTunableNumber("Shooter/Unknown/Upper Bound", UPPER_BOUND);
-            public static LoggedTunableNumber SHOOTER_ANGLE_TUNABLE = new LoggedTunableNumber("Shooter/Unknown/Shooter Angle", SHOOTER_ANGLE);
+            static {
+                if (Robot.isReal()) {
+                    FLYWHEEL_SPEED.initDefault(200); // FLYWHEEL SPEED
+                    LOW_BOUND.initDefault(-1.0); // LOWER BOUND
+                    UPPER_BOUND.initDefault(-1.0); // UPPER BOUND
+                    SHOOTER_ANGLE.initDefault(35.0); // SHOOTER ANGLE
+                }
+                else if (Robot.isSimulation()) {
+                    throw new UnsupportedOperationException("Robot Simulation isn't supported yet for Shooter");
+                }
+            }
         }
     }
 
-    /** PID Constants (kP, kI, kD) for the flywheels and pivot. */
+    /** PID Constants (kP, kI, kD) for the Flywheels and Pivot. */
     public abstract class PID {
         public abstract class FLYHWEEL {
-            public static double KP = 0.0001;
-            public static double KI = 0.0000;
-            public static double KD = 0.0000;
-            public static double KF = 0.00022;
+            public static LoggedTunableNumber KP = new LoggedTunableNumber("Shooter/Flywheel/kP");
+            public static LoggedTunableNumber KI = new LoggedTunableNumber("Shooter/Flywheel/kI");
+            public static LoggedTunableNumber KD = new LoggedTunableNumber("Shooter/Flywheel/kD");
+            public static LoggedTunableNumber KF= new LoggedTunableNumber("Shooter/Flywheel/kF");
 
-            public static LoggedTunableNumber KP_TUNABLE = new LoggedTunableNumber("Shooter/Flywheel/kP", KP);
-            public static LoggedTunableNumber KI_TUNABLE = new LoggedTunableNumber("Shooter/Flywheel/kI", KI);
-            public static LoggedTunableNumber KD_TUNABLE = new LoggedTunableNumber("Shooter/Flywheel/kD", KD);
-            public static LoggedTunableNumber KF_TUNABLE = new LoggedTunableNumber("Shooter/Flywheel/kF", KF);
+            static {
+                if (Robot.isReal()) {
+                    KP.initDefault(0.0001); // KP
+                    KI.initDefault(0.0000); // KI
+                    KD.initDefault(0.0000); // KD
+                    KF.initDefault(0.00022); // KF
+                }
+                else if (Robot.isSimulation()) {
+                    throw new UnsupportedOperationException("Robot Simulation isn't supported yet for Shooter");
+                }
+            }
         }
 
         public abstract class ANGLE {
-            public static double KP = 0.0001;
-            public static double KI = 0.0000;
-            public static double KD = 0.0000;
-            public static double KF = 0.00022;
+            public static LoggedTunableNumber KP = new LoggedTunableNumber("Shooter/Angle/kP");
+            public static LoggedTunableNumber KI = new LoggedTunableNumber("Shooter/Angle/kI");
+            public static LoggedTunableNumber KD = new LoggedTunableNumber("Shooter/Angle/kD");
+            public static LoggedTunableNumber KF = new LoggedTunableNumber("Shooter/Angle/kF");
 
-            public static LoggedTunableNumber KP_TUNABLE = new LoggedTunableNumber("Shooter/Angle/kP", KP);
-            public static LoggedTunableNumber KI_TUNABLE = new LoggedTunableNumber("Shooter/Angle/kI", KI);
-            public static LoggedTunableNumber KD_TUNABLE = new LoggedTunableNumber("Shooter/Angle/kD", KD);
-            public static LoggedTunableNumber KF_TUNABLE = new LoggedTunableNumber("Shooter/Angle/kF", KF);
+            static {
+                if (Robot.isReal()) {
+                    KP.initDefault(0.0001); // KP
+                    KI.initDefault(0.0); // KI
+                    KD.initDefault(0.0); // KD
+                    KF.initDefault(0.00022); // KF
+                }
+                else if (Robot.isSimulation()) {
+                    throw new UnsupportedOperationException("Robot Simulation isn't supported yet for Shooter");
+                }
+            }
         }
     }
 
@@ -86,9 +122,16 @@ public abstract class ShooterConstants {
     }
 
     public abstract class SOFTWARE {
-        public static double FLYWHEEL_SPEED_DEADBAND = 250;
+        public static LoggedTunableNumber FLYWHEEL_SPEED_DEADBAND= new LoggedTunableNumber("Shooter/Software/Flywheel Speed Deadband");
 
-        public static LoggedTunableNumber FLYWHEEL_SPEED_DEADBAND_TUNABLE = new LoggedTunableNumber("Shooter/Software/Flywheel Speed Deadband", FLYWHEEL_SPEED_DEADBAND);
+        static {
+            if (Robot.isReal()) {
+                FLYWHEEL_SPEED_DEADBAND.initDefault(250);
+            }
+            else if (Robot.isSimulation()) {
+                throw new UnsupportedOperationException("Robot Simulation isn't supported yet for Shooter");
+            }
+        }
     }
 
     public static double MAXIMUM_ANGLE_ENCODER_ANGLE = 90;

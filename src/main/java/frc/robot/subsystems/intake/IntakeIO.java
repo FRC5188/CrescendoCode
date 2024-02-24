@@ -2,7 +2,9 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface IntakeIO {
+import frc.robot.util.tunable.Tunable;
+
+public interface IntakeIO extends Tunable {
     @AutoLog
     public static class IntakeIOInputs {
         // |================= START PIVOT MOTOR LOGGING =================|

@@ -31,6 +31,9 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
+  public static final boolean ARE_SHOOTER_PIVOT_ENABLED = true;
+  public static final boolean ARE_SHOOTER_FLYWHEELS_ENABLED = true;
+
   private Command _autonomousCommand;
   private RobotContainer _robotContainer;
 

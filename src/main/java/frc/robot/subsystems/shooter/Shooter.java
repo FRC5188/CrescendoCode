@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
@@ -81,7 +82,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void runAnglePid() {
-    _shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
+    _shooterIO.setAngleMotorSpeed((Robot.ARE_SHOOTER_PIVOT_ENABLED) ? (_anglePid.calculate(getCurrentPositionInDegrees())) : 0.0);
   }
 
   public void setTargetPosition(ShooterZone zone) {

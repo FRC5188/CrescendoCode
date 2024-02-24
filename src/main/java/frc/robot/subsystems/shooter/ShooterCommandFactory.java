@@ -1,11 +1,9 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.robot.Robot;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 // TODO: Add a true/false that will disable the PID on each componenet of the shooter. This will be useful for testing and for when we're not using the shooter.
@@ -61,7 +59,7 @@ public class ShooterCommandFactory {
      */
     public Command runFlywheel(double speed) {
         return new InstantCommand(
-            () -> _shooter.setFlywheelSpeed(speed),
+            () -> _shooter.setFlywheelSpeed((Robot.ARE_SHOOTER_FLYWHEELS_ENABLED) ? (speed) : (0.0)),
             _shooter
         );
     }

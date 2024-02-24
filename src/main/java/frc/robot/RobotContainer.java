@@ -46,8 +46,6 @@ import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
-import frc.robot.subsystems.shooter.commands.CmdShooterMoveManually;
-import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.RealVisionIO;
 
@@ -258,21 +256,16 @@ public class RobotContainer {
         _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
 
 
-        _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
-        _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
+        _op2ButtonOne.onTrue(_shooter.buildCommand().setAngle(ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(_shooter.buildCommand().setAngle(ShooterZone.Podium));
         // When nothing is pressed run everything to the unknown zone.
-        _op2ButtonOne.onFalse(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Unknown));
-        _op2ButtonTwo.onFalse(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Unknown));
+        _op2ButtonOne.onFalse(_shooter.buildCommand().setAngle(ShooterZone.Unknown));
+        _op2ButtonTwo.onFalse(_shooter.buildCommand().setAngle(ShooterZone.Unknown));
 
-        _op2ButtonThree.onTrue(
-                new RunCommand(
-                        () -> _shooter.setFlywheelSpeed(_shooter.getCurrentZone().getLeftFlywheelSpeed()),
-                        _shooter
-                )
-        );      
+        _op2ButtonThree.onTrue(_shooter.buildCommand().runFlywheel(_shooter.getCurrentZone().getLeftFlywheelSpeed()));      
 
-        _op2ButtonFive.onTrue(new CmdShooterMoveManually(_shooter, 1.0));
-        _op2ButtonSix.onTrue(new CmdShooterMoveManually(_shooter, -1.0));
+        _op2ButtonFive.onTrue(_shooter.buildCommand().adjustAngle(1.0));
+        _op2ButtonSix.onTrue(_shooter.buildCommand().adjustAngle(-1.0));
 
         _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
 

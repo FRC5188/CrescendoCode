@@ -188,4 +188,8 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);
     Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
   }
+
+  public ShooterCommandFactory buildCommand() {
+    return new ShooterCommandFactory(this);
+  }
 }

@@ -8,8 +8,6 @@ import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 
 public class GrpSetUp extends ParallelCommandGroup {
   // This group gets called whenever we start the robot in auto or teleop
@@ -18,9 +16,9 @@ public class GrpSetUp extends ParallelCommandGroup {
     addCommands(
       //new CmdRunShooterAutomatically(drive, shooter, intake),
       new CmdIntakeSetPosition(intake, IntakePosition.Stowed),
-      new CmdShooterRunShooterForZone(shooter, ShooterZone.Unknown),
+      shooter.buildCommand().runForZone(ShooterZone.Unknown),
       new CmdIntakeRunPID(intake),
-      new CmdShooterRunPids(shooter)
+      shooter.buildCommand().runPID()
     );
   }
 }

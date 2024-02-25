@@ -14,10 +14,21 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.hardware.intake.IntakeIO;
+import frc.robot.hardware.intake.RealIntakeIO;
+import frc.robot.hardware.shooter.RealShooterIO;
+import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.vision.RealVisionIO;
 import frc.robot.hardware.vision.VisionIO;
 import frc.robot.subsystems.drive.Drive;
@@ -28,6 +39,11 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
+import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -41,19 +57,68 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // Subsystems
+ // Subsystems
     private final Drive _drive;
-    // private final Flywheel flywheel;
+    private final Intake _intake;
+    private final Shooter _shooter;
+    private Command _runShooterPIDCommand;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
 
-    // Dashboard inputs
-    private final LoggedDashboardChooser<Command> _autoChooser;
-    /*
-     * private final LoggedDashboardNumber flywheelSpeedInput =
-     * new LoggedDashboardNumber("Flywheel Speed", 1500.0);
-     */
+    // Button box
+    // Top half of buttons
+    private final Joystick _operatorController1 = new Joystick(1);
+
+    // Bottom half of buttons
+    private final Joystick _operatorController2 = new Joystick(2);
+
+    // Left column, top to bottom
+    private JoystickButton _opButtonOne = new
+    JoystickButton(_operatorController1, 1);
+    private JoystickButton _opButtonTwo = new
+    JoystickButton(_operatorController1, 2);
+    private JoystickButton _opButtonThree = new
+    JoystickButton(_operatorController1, 3);
+
+    // Middle column, top to bottom
+    private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
+    private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
+    private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
+
+    // Right column, top to bottom
+    private JoystickButton _opButtonSeven = new
+    JoystickButton(_operatorController1, 7);
+    private JoystickButton _opButtonEight = new
+    JoystickButton(_operatorController1, 8);
+    private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
+
+    // Side Toggle Switch
+    // private JoystickButton _opButtonTen = new
+    // JoystickButton(_operatorController1, 10);
+
+    // Bottom rows, left to right (not top then bottom!)
+    private JoystickButton _op2ButtonOne = new
+        JoystickButton(_operatorController2, 1);
+    private JoystickButton _op2ButtonTwo = new
+        JoystickButton(_operatorController2, 2);
+    private JoystickButton _op2ButtonThree = new
+        JoystickButton(_operatorController2, 3);
+    private JoystickButton _op2ButtonFour = new
+        JoystickButton(_operatorController2, 4);
+    private JoystickButton _op2ButtonFive = new
+        JoystickButton(_operatorController2, 5);
+    private JoystickButton _op2ButtonSix = new
+        JoystickButton(_operatorController2, 6);
+    
+    // this button is broken
+    private JoystickButton _op2ButtonEight = new
+    JoystickButton(_operatorController2, 8);
+
+   // Bottom right button (Frowny face)
+    private JoystickButton _op2ButtonNine = new
+    JoystickButton(_operatorController2, 9);
+
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -69,41 +134,40 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
-                // flywheel = new Flywheel(new FlywheelIOSparkMax());
+                _intake = new Intake( new RealIntakeIO());
+                _shooter = new Shooter(new RealShooterIO());
                 break;
 
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
+                        new GyroIO() {},
+                        new VisionIO() {},
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim());
-                // flywheel = new Flywheel(new FlywheelIOSim());
+                _intake = new Intake( new IntakeIO(){});
+                _shooter = new Shooter(new ShooterIO(){});
                 break;
 
             default:
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
+                        new GyroIO() {},
+                        new VisionIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
                         new ModuleIO() {
                         });
-                // flywheel = new Flywheel(new FlywheelIO() {});
+                _intake = new Intake( new IntakeIO(){});
+                _shooter = new Shooter(new ShooterIO(){});
                 break;
         }
+
+        //setup commands for PID
+        this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
 
         // Set up auto routines
         /*
@@ -114,19 +178,19 @@ public class RobotContainer {
          * flywheel)
          * .withTimeout(5.0));
          */
-        _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        // _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-        // Set up SysId routines
-        _autoChooser.addOption(
-                "Drive SysId (Quasistatic Forward)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        _autoChooser.addOption(
-                "Drive SysId (Quasistatic Reverse)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        _autoChooser.addOption(
-                "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        _autoChooser.addOption(
-                "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // // Set up SysId routines
+        // _autoChooser.addOption(
+        //         "Drive SysId (Quasistatic Forward)",
+        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // _autoChooser.addOption(
+        //         "Drive SysId (Quasistatic Reverse)",
+        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // _autoChooser.addOption(
+        //         "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // _autoChooser.addOption(
+        //         "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         /*
          * autoChooser.addOption(
          * "Flywheel SysId (Quasistatic Forward)",
@@ -162,19 +226,13 @@ public class RobotContainer {
                         () -> -_controller.getLeftX(),
                         () -> _controller.getRightX()));
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
-        _controller
-                .b()
-                .whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
+        _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX()));
-        /*
-         * controller
-         * .a()
-         * .whileTrue(
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel));
-         */
+        
+        // Move the shooter to the podium or subwoofer positions
+        _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
+        _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
     }
 
     /**
@@ -183,6 +241,11 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return _autoChooser.get();
+        return new PrintCommand("DUMMY AUTO COMMAND IS RUNNING FROM ROBOT CONTAINER");
+        // return _autoChooser.get();
+    }
+
+    public Command getRunShooterPIDCommand(){
+        return this._runShooterPIDCommand;
     }
 }

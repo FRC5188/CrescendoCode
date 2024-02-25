@@ -143,9 +143,8 @@ public class Drive extends SubsystemBase {
       for (var module : _modules) {
         module.stop();
       }
-    }
-    // Log empty setpoint states when disabled
-    if (DriverStation.isDisabled()) {
+
+      // Log empty setpoint states when disabled
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
@@ -179,10 +178,12 @@ public class Drive extends SubsystemBase {
     }
     _poseEstimator.update(_rawGyroRotation, modulePositions);
 
-    _field.setRobotPose(_poseEstimator.getEstimatedPosition());
-    SmartDashboard.putData("Field", _field);
-    double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
-    SmartDashboard.putNumberArray("CoR", cor);
+    // commenting this out to see if it helps with loop overrun time gh - 2/25/24
+    // driver.periodic is sometimes running at 20-40ms on its own
+    // _field.setRobotPose(_poseEstimator.getEstimatedPosition());
+    // SmartDashboard.putData("Field", _field);
+    // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
+    // SmartDashboard.putNumberArray("CoR", cor);
   }
 
   /**

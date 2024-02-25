@@ -6,16 +6,28 @@ package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.hardware.shooter.ShooterIO;
 import frc.robot.hardware.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
-    // Here we define all of the zones for the shooter
-    Subwoofer(0, 2.5, 45, 3000, 3000),
-    Unknown(-1, -1, 0, 3000, 3000);
+    Subwoofer(ShooterConstants.ZONE_SUBWOOFER_LOW_BOUND, 
+              ShooterConstants.ZONE_SUBWOOFER_UPPER_BOUND,
+              ShooterConstants.ZONE_SUBWOOFER_SHOOTER_ANGLE,
+              ShooterConstants.ZONE_SUBWOOFER_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE_SUBWOOFER_FLYWHEEL_SPEED),
+    Podium(ShooterConstants.ZONE_PODIUM_LOW_BOUND, 
+              ShooterConstants.ZONE_PODIUM_UPPER_BOUND,
+              ShooterConstants.ZONE_PODIUM_SHOOTER_ANGLE,
+              ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED),
+    Unknown(ShooterConstants.ZONE_UNKOWN_LOW_BOUND, 
+              ShooterConstants.ZONE_UNKOWN_UPPER_BOUND,
+              ShooterConstants.ZONE_UNKOWN_SHOOTER_ANGLE,
+              ShooterConstants.ZONE_UNKOWN_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE_UNKOWN_FLYWHEEL_SPEED);
 
     private final double _lowBound;
     private final double _highBound;
@@ -53,15 +65,25 @@ public class Shooter extends SubsystemBase {
   private static boolean _autoShootEnabled = true;
   private final ShooterIO _shooterIO;
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
-  private double _leftTargetFlywheelSpeed = 0;
+  private double _targetFlywheelSpeed = 0;
   private double _rightTargetFlywheelSpeed = 0;
   private double _targetShooterPosition;
+  private PIDController _anglePid;
 
   private ShooterZone _currentShooterZone;
 
+  private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
+
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
-    _targetShooterPosition = getCurrentPositionInDegrees();
+    _currentShooterZone = ShooterZone.Unknown;
+    _targetShooterPosition = _currentShooterZone.getShooterAngle();
+    _anglePid = new PIDController(0.025, 0, 0.00);
+    setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
+  }
+
+  public void runAnglePid() {
+    _shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
   }
 
   public void setTargetPosition(ShooterZone zone) {
@@ -69,30 +91,27 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setTargetPositionAsAngle(double angle) {
-    if (angle < ShooterConstants.MIN_SHOOTER_ANGLE) {
-      // TODO: Log invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE. -KtH
-      // 2024/01/23
+    if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
+      System.err.println("Invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE.");
       return;
 
-    } else if (angle > ShooterConstants.MAX_SHOOTER_ANGLE) {
-      // TODO: Log invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE. -KtH
-      // 2024/01/23
+    } else if (angle > ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE) {
+      System.err.println("Invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE.");
       return;
     } else {
-      _shooterIO.setTargetPositionAsDegrees(angle);
+      _anglePid.setSetpoint(angle);
     }
   }
 
   public double getCurrentPositionInDegrees() throws RuntimeException {
-    double encoderValueAsRotations = _shooterInputs._angleEncoderPositionRotations;
-    if (encoderValueAsRotations >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_TURNS
-        + Rotation2d.fromDegrees(10).getRotations()
-        || encoderValueAsRotations <= ShooterConstants.MINIMUM_ANGLE_ENCODER_TURNS
-            - Rotation2d.fromDegrees(10).getRotations()) {
+    if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
+        + 10
+        || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
+            - 10) {
       throw new RuntimeException(
           "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
     } else {
-      return Rotation2d.fromRotations(encoderValueAsRotations).getDegrees();
+      return _shooterInputs._angleEncoderPositionDegrees;
     }
   }
 
@@ -103,7 +122,7 @@ public class Shooter extends SubsystemBase {
   private boolean areFlywheelsAtTargetSpeed() {
     return Math
         .abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin
-            - _leftTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
+            - _targetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
         &&
         Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin
             - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
@@ -111,8 +130,7 @@ public class Shooter extends SubsystemBase {
 
   public void runShooterForZone(ShooterZone zone) {
     setShooterPositionWithZone(zone);
-    setLeftFlywheelSpeed(zone._leftFlywheelSpeed);
-    setRightFlywheelSpeed(zone._rightFlywheelSpeed);
+    setFlywheelSpeed(zone._leftFlywheelSpeed);
   }
 
   public ShooterZone getZoneFromRadius(double radius) {
@@ -135,10 +153,7 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPositionWithZone(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
-    if (targetZone != ShooterZone.Unknown) {
-      setTargetPositionAsAngle(targetZone.getShooterAngle());
-    }
-    // If we don't know what zone we are in, don't move the shooter
+    setTargetPositionAsAngle(targetZone.getShooterAngle());
   }
 
   private boolean shooterInPosition() {
@@ -150,22 +165,29 @@ public class Shooter extends SubsystemBase {
     _shooterIO.stopFlywheels();
   }
 
-  public void setLeftFlywheelSpeed(double speedInRPM) {
-    _shooterIO.setLeftFlywheelSpeedRPM(speedInRPM);
-  }
-
-  public void setRightFlywheelSpeed(double speedInRPM) {
-    _shooterIO.setRightFlywheelSpeedRPM(speedInRPM);
+  public void setFlywheelSpeed(double speedInRPM) {
+    this._targetFlywheelSpeed = speedInRPM;
+    _shooterIO.setFlywheelSpeedRPM(speedInRPM);
   }
 
   public boolean isReady() {
     return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
   }
 
-    @Override
+  @Override
   public void periodic() {
     // This method will be called once per scheduler run
     _shooterIO.updateInputs(_shooterInputs);
     Logger.processInputs("Shooter", _shooterInputs);
+
+    // VISUALIZATION
+    _shooterVisualizer.update(_shooterInputs._angleEncoderPositionDegrees);
+
+    // LOGGING
+
+    Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());
+    Logger.recordOutput("Shooter/AngleDesiredDegrees", _currentShooterZone.getShooterAngle());
+    Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);
+    Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
   }
 }

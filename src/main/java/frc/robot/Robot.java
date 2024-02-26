@@ -134,6 +134,13 @@ public class Robot extends LoggedRobot {
     if (_autonomousCommand != null) {
       _autonomousCommand.cancel();
     }
+
+    // MITCHELL READ THIS: I decided to run the PID from telopinit for now. I dont think this
+    // is the best way or what we should do forever. But I'm also suspicious about
+    // what we were doin with the grpSetupCommand. Looking at this commit: https://github.com/FRC5188/CrescendoCode/blob/main/src/main/java/frc/robot/RobotContainer.java
+    // we were scheduling a new instance of the grpSetupCommand command and auto and telop but never canceling the auto one.
+    // I wanted to be super specific and explicit about what commands and functions we were running as we try to detangle our
+    // code and get it working
     _robotContainer.getRunShooterPIDCommand().schedule();
   }
 

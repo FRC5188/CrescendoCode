@@ -232,8 +232,15 @@ public class RobotContainer {
                         () -> -_controller.getLeftX()));
         
         // Move the shooter to the podium or subwoofer positions
+        /* ---------------- START MANUAL ROBOT CONTROL BUTTON BINDINGS-------------------------- */
+        // consider adding a boolean to constants.java to put the robot into "pit" mode or something to
+        // switch the buttons to manual control for testing.
+        
+        // shooter position angle manual control 
         _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
+
+        // shooter fly wheel manual control. Only sets the flywheel speed while holding the button
         _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
         _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
     }

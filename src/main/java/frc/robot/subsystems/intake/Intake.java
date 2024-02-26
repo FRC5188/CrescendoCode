@@ -91,7 +91,8 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopRollerMotor() {
-        _intakeIO.setRollerMotorSpeed(0.02);
+
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_STOP_SPEED);
     }
 
     public void setIntakePositionWithAngle(Double angle) {

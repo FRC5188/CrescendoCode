@@ -53,6 +53,9 @@ public class IntakeConstants {
     public static final double INTAKE_ACQUIRE_SPEED = 0.7;
     public static final double INTAKE_SPIT_SPEED = -0.7;
     public static final double INTAKE_CURRENT_CUTOFF = 40;
+    // this constant allows us to make the rollers slowly spin to
+    // keep hold of a game piece if we want to. Right now we dont want to
+    public static final double INTAKE_STOP_SPEED = 0; 
 
     /*********************
      * 
@@ -62,6 +65,6 @@ public class IntakeConstants {
     public static final double INTAKE_PIVOT_DEADBAND = 10;
     public static final int INTAKE_PIVOT_SMART_CURRENT_LIMIT = 40;
     public static final double INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT = 55;
-    public static final int INTAKE_ROLLER_SMART_CURRENT_LIMIT = 40;
-    public static final double INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT = 55;
+    public static final int INTAKE_ROLLER_SMART_CURRENT_LIMIT = 50;
+    public static final double INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT = 60;
 }

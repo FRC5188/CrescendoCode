@@ -172,7 +172,7 @@ public class Drive extends SubsystemBase {
       _rawGyroRotation = _rawGyroRotation.plus(new Rotation2d(twist.dtheta));
     }
     // Apply odometry update
-    for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
+    for (int i = 0; i < HardwareConstants.NUMBER_OF_PHOTONVISION_CAMERAS; i++) {
       if (_visionInputs._hasPose[i]) {
         _poseEstimator.addVisionMeasurement(_visionInputs._poses[i], _visionInputs._timestamps[i]);
       }

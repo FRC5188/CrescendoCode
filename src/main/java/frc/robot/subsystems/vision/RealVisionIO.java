@@ -16,7 +16,7 @@ public class RealVisionIO implements VisionIO {
 
         public void updateInputs(VisionIOInputs inputs) {
         
-                for (int n = 0; n < HardwareConstants.NUMBER_OF_CAMERAS; n++) {
+                for (int n = 0; n < HardwareConstants.NUMBER_OF_PHOTONVISION_CAMERAS; n++) {
                         Optional<EstimatedRobotPose> estimatedPose = ESTIMATORS[n].update();
 
                         if (estimatedPose.isPresent()){
@@ -28,11 +28,15 @@ public class RealVisionIO implements VisionIO {
                                 inputs._poses[n] = new Pose2d();
                         }
                 }
+
+                for (int n = 0; n < HardwareConstants.NUMBER_OF_LIMELIGHT_CAMERAS; n++) {
+                        
+                }
         }
 
         private static PhotonPoseEstimator[] createPoseEstimators() {
-                final PhotonPoseEstimator[] estimators = new PhotonPoseEstimator[HardwareConstants.NUMBER_OF_CAMERAS];
-                for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
+                final PhotonPoseEstimator[] estimators = new PhotonPoseEstimator[HardwareConstants.NUMBER_OF_PHOTONVISION_CAMERAS];
+                for (int i = 0; i < HardwareConstants.NUMBER_OF_PHOTONVISION_CAMERAS; i++) {
                         estimators[i] = new PhotonPoseEstimator(
                                 FIELD_LAYOUT,
                                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,

@@ -248,9 +248,7 @@ public class RobotContainer {
         _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
 
         // FROM MAIN
-        //_opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
-
-        //_opButtonFive.onTrue(new GrpIntakeMoveToPosition(_intake, IntakePosition.Stowed));
+        // _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
 
         _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
         _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));

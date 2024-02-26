@@ -7,11 +7,12 @@ public class IntakeConstants {
      * 
      *************************/
     // intake pivot
-    public static final double PIVOT_PID_KP = 0.005;
+    // RETUNE THESE PID NUMBERS
+    public static final double PIVOT_PID_KP = 0.001;
     public static final double PIVOT_PID_KI = 0.000;
     public static final double PIVOT_PID_KD = 0.00;
-    public static final double PIVOT_PID_MAX_VEL = 50;
-    public static final double PIVOT_PID_MAX_ACCEL = 80;
+    public static final double PIVOT_PID_MAX_VEL = 30;
+    public static final double PIVOT_PID_MAX_ACCEL = 60;
 
     // intake rollers
     public static final double ROLLERS_PID_KP = 0.0;

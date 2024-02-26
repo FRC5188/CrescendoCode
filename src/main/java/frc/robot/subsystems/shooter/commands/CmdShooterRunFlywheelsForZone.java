@@ -8,25 +8,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 
-/**
- * Set the flywheel speed based on the zone passed into the command.
- * This command is meant to be used with a button press. It will not stop by default.
- * Use this command with the button.whileTrue function.
- * 
- */
+
 public class CmdShooterRunFlywheelsForZone extends Command {
   /** Creates a new CmdShooterRunShooterForZone. */
   private Shooter _shooterSubsystem;
   private ShooterZone _zone;
 
-  /**
-   * Set the shooter angle and flywheel speed for a zone.
-   * 
-   * @param shooterSubsystem
-   * @param zone
-   */
+/**
+ * Set the flywheel speed based on the zone passed into the command.
+ * This command is meant to be used with a button press. It will not stop by default.
+ * Use this command with the button.whileTrue function.
+ * 
+ * @param shooterSubsystem
+ * @param zone
+ */
   public CmdShooterRunFlywheelsForZone(Shooter shooterSubsystem, ShooterZone zone) {
-    // Use addRequirements() here to declare subsystem dependencies.
     _shooterSubsystem = shooterSubsystem;
     _zone = zone;
     addRequirements(_shooterSubsystem);

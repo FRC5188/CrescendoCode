@@ -248,40 +248,14 @@ public class RobotContainer {
         _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
 
         // FROM MAIN
-        _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
+        //_opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
 
-        // Source Position
-        _opButtonFour.onTrue(new GrpIntakeAcquireNoteFromSource(_intake, 0));
-
-        // Stow
-        _opButtonFive.onTrue(new GrpIntakeMoveToPosition(_intake, IntakePosition.Stowed));
-
-        // Ground Pickup Position
-        _opButtonSix.onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
-
-        // _opButtonSeven.onTrue();
-        // _opButtonEight.onTrue();
+        //_opButtonFive.onTrue(new GrpIntakeMoveToPosition(_intake, IntakePosition.Stowed));
 
         _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
         _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
 
-        // Autoshoot toggle switch
-        // _opButtonTen.onTrue();
-        // _opButtonTen.onFalse();
-
-        _op2ButtonOne.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Subwoofer));
-        _op2ButtonTwo.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Podium));
-        _op2ButtonTwo.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
-        _op2ButtonOne.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
-
-        // _op2ButtonThree.onTrue();
-        // _op2ButtonFour.onTrue();
-        // _op2ButtonFive.onTrue();
-        // _op2ButtonSix.onTrue();
-        // _op2ButtonSeven.onTrue();
-
         _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
-        
     }
 
     /**

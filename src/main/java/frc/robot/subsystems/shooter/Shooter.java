@@ -67,17 +67,14 @@ public class Shooter extends SubsystemBase {
   private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
   private double _targetFlywheelSpeed = 0;
   private double _rightTargetFlywheelSpeed = 0;
-  private double _targetShooterPosition;
+  private double _targetShooterPositionAngle;
   private PIDController _anglePid;
-
   private ShooterZone _currentShooterZone;
-
   private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _currentShooterZone = ShooterZone.Unknown;
-    _targetShooterPosition = _currentShooterZone.getShooterAngle();
     _anglePid = new PIDController(0.025, 0, 0.00);
     setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
   }
@@ -100,21 +97,44 @@ public class Shooter extends SubsystemBase {
       return;
     } else {
       _anglePid.setSetpoint(angle);
+      _targetShooterPositionAngle = angle;
     }
   }
 
-  public double getCurrentPositionInDegrees() throws RuntimeException {
-    if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
-        + 10
-        || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
-            - 10) {
-      throw new RuntimeException(
-          "It's impossible for the encoder to be this value. There must be a hardware error. Shut down this subsystem to not break everything.");
-    } else {
+  /**
+   * Get the desired position of the shooter in degrees.
+   * This is the same as the setpoint of the PID.
+   * 
+   * @return The target position of the shooter
+   */
+  public double getTargetPositionAsAngle(){
+    return this._targetShooterPositionAngle;
+  }
+
+  /**
+   * The current angle of the shooter in degrees. This value is determined directly
+   * from the rev encoder on the pivot shaft.
+   * 
+   * @return shooter angle in degrees
+   */
+  public double getCurrentPositionInDegrees(){
+    // TODO: log an error but do not throw an exception. Not right now at least. Maybe later
+    // Garrett 2/26/24
+
+    // if (_shooterInputs._angleEncoderPositionDegrees >= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE
+    //     + 10
+    //     || _shooterInputs._angleEncoderPositionDegrees <= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE
+    //         - 10) {
+    // } else {
       return _shooterInputs._angleEncoderPositionDegrees;
-    }
+    // }
   }
 
+  /**
+   * The current zone the shooter thinks it is in.
+   * 
+   * @return Current Zone
+   */
   public ShooterZone getCurrentZone() {
     return _currentShooterZone;
   }
@@ -128,11 +148,23 @@ public class Shooter extends SubsystemBase {
             - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
   }
 
+  /**
+   * Set the shooter position for a given zone and also set the flywheel speed for that zone
+   * 
+   * @param zone
+   */
   public void runShooterForZone(ShooterZone zone) {
     setShooterPositionWithZone(zone);
     setFlywheelSpeed(zone._leftFlywheelSpeed);
   }
 
+  /**
+   * Figure out what zone matches a given radius from the speaker.
+   * Returns the unkown zone if no zone matches.
+   * 
+   * @param radius
+   * @return the zone used for that radius
+   */
   public ShooterZone getZoneFromRadius(double radius) {
     for (ShooterZone zone : ShooterZone.values()) {
       if (zone.radiusInZone(radius)) {
@@ -151,16 +183,24 @@ public class Shooter extends SubsystemBase {
     _autoShootEnabled = enabled;
   }
 
+  /**
+   * Set the position angle of the shooter based on a zone.
+   * 
+   * @param targetZone
+   */
   public void setShooterPositionWithZone(ShooterZone targetZone) {
     _currentShooterZone = targetZone;
     setTargetPositionAsAngle(targetZone.getShooterAngle());
   }
 
   private boolean shooterInPosition() {
-    return Math.abs(_targetShooterPosition
+    return Math.abs(_targetShooterPositionAngle
         - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
 
+  /**
+   * Set the fly wheel speed to zero.
+   */
   public void stopFlywheels() {
     _shooterIO.stopFlywheels();
   }
@@ -184,7 +224,6 @@ public class Shooter extends SubsystemBase {
     _shooterVisualizer.update(_shooterInputs._angleEncoderPositionDegrees);
 
     // LOGGING
-
     Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());
     Logger.recordOutput("Shooter/AngleDesiredDegrees", _currentShooterZone.getShooterAngle());
     Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);

@@ -28,10 +28,6 @@ public class RealVisionIO implements VisionIO {
                                 inputs._poses[n] = new Pose2d();
                         }
                 }
-
-                for (int n = 0; n < HardwareConstants.NUMBER_OF_LIMELIGHT_CAMERAS; n++) {
-                        
-                }
         }
 
         private static PhotonPoseEstimator[] createPoseEstimators() {

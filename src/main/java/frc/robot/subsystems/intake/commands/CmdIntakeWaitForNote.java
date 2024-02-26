@@ -10,8 +10,10 @@ import frc.robot.subsystems.intake.*;
 public class CmdIntakeWaitForNote extends Command {
   /** Creates a new CmdIntakeWaitForNote. */
   private int _countdownInCycles;
+  private int _timeoutInMs;
   private boolean _commandTimesOut;
   private Intake _intakeSubsystem;
+  private int _intakeTimer;
 
   /**
    * Waits for the intake to acquire a note or for the timeout to be reached.
@@ -24,9 +26,7 @@ public class CmdIntakeWaitForNote extends Command {
   public CmdIntakeWaitForNote(int timeoutInMs, Intake intakeSubsystem) {
 
     _intakeSubsystem = intakeSubsystem;
-
-    // Current state of the countdown in cycles. 20 ms per robot cycle.
-    _countdownInCycles = (int) Math.ceil(timeoutInMs / 20.0);
+    _timeoutInMs = timeoutInMs;
 
     // If a timeout of <=0 is given, this command will never time out.
     _commandTimesOut = !(timeoutInMs <= 0);
@@ -35,12 +35,20 @@ public class CmdIntakeWaitForNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Current state of the countdown in cycles. 20 ms per robot cycle.
+    _countdownInCycles = (int) Math.ceil(_timeoutInMs / 20.0);
+    _intakeTimer = 0;
+    _intakeSubsystem.setIntakeHasBeenRunning(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (_intakeTimer >= 10) {
+      _intakeSubsystem.setIntakeHasBeenRunning(true);
+    }
     _countdownInCycles--;
+    _intakeTimer++;
   }
 
   // Called once the command ends or is interrupted.

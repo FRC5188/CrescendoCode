@@ -13,18 +13,14 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.hardware.intake.IntakeIO;
 import frc.robot.hardware.intake.RealIntakeIO;
 import frc.robot.hardware.shooter.RealShooterIO;
@@ -40,12 +36,19 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
+import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
+import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
+import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
+import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
+import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
-
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -233,6 +236,42 @@ public class RobotContainer {
         // Move the shooter to the podium or subwoofer positions
         _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
+
+        // FROM MAIN
+        _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
+
+        // Source Position
+        _opButtonFour.onTrue(new GrpIntakeAcquireNoteFromSource(_intake, 0));
+
+        // Stow
+        _opButtonFive.onTrue(new GrpIntakeMoveToPosition(_intake, IntakePosition.Stowed));
+
+        // Ground Pickup Position
+        _opButtonSix.onTrue(new GrpIntakeAcquireNoteFromGround(_intake, 0));
+
+        // _opButtonSeven.onTrue();
+        // _opButtonEight.onTrue();
+
+        _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
+        _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
+
+        // Autoshoot toggle switch
+        // _opButtonTen.onTrue();
+        // _opButtonTen.onFalse();
+
+        _op2ButtonOne.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Podium));
+        _op2ButtonTwo.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
+        _op2ButtonOne.onFalse(new CmdShooterRunShooterForZone(_shooter, ShooterZone.Unknown));
+
+        // _op2ButtonThree.onTrue();
+        // _op2ButtonFour.onTrue();
+        // _op2ButtonFive.onTrue();
+        // _op2ButtonSix.onTrue();
+        // _op2ButtonSeven.onTrue();
+
+        _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
+        
     }
 
     /**

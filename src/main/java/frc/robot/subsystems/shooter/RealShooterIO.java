@@ -1,11 +1,11 @@
-package frc.robot.hardware.shooter;
+package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import frc.robot.hardware.HardwareConstants;
+import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
 
 public class RealShooterIO implements ShooterIO {

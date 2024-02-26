@@ -1,9 +1,9 @@
-package frc.robot.hardware.climber;
+package frc.robot.subsystems.climber;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import frc.robot.hardware.HardwareConstants;
+import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
 
 public class RealClimberIO implements ClimberIO {

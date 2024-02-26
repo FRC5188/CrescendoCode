@@ -1,4 +1,4 @@
-package frc.robot.hardware.climber;
+package frc.robot.subsystems.climber;
 
 import org.littletonrobotics.junction.AutoLog;
 

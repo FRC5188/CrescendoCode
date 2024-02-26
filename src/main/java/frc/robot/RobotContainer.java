@@ -21,12 +21,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.hardware.intake.IntakeIO;
-import frc.robot.hardware.intake.RealIntakeIO;
-import frc.robot.hardware.shooter.RealShooterIO;
-import frc.robot.hardware.shooter.ShooterIO;
-import frc.robot.hardware.vision.RealVisionIO;
-import frc.robot.hardware.vision.VisionIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
@@ -36,6 +30,8 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
@@ -44,12 +40,16 @@ import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
 import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
+import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunFlywheelsForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
+import frc.robot.subsystems.vision.RealVisionIO;
+import frc.robot.subsystems.vision.VisionIO;
 
 /**
  * This class is where the bulk of the robot should be declared. Since

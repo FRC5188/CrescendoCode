@@ -20,15 +20,8 @@ public interface ShooterIO {
         public double _rightFlywheelMotorCurrent;
         // |================= END RIGHT FLYWHEEL MOTOR LOGGING =================|
 
-        public double _flywheelPIDKP;
-        public double _flywheelPIDKI;
-        public double _flywheelPIDKD;
-        public double _flywheelPIDISum;
-        public double _flywheelPIDKF;
-        
         // |================= START ANGLE MOTOR LOGGING =================|
         public double _angleMotorTemperature;
-        public double _angleMotorPositionDegrees;
         public double _angleMotorVelocityRotationsPerMin;
         public double _angleMotorCurrent;
         public double _angleMotorVoltage;
@@ -44,8 +37,6 @@ public interface ShooterIO {
     // |============================== FLYWHEEL MOTOR METHODS ============================== |
 
     public default void setLeftFlywheelMotorVelocity(double velocityRadiansPerSecond){}
-
-    public default void setRightFlywheelMotorVelocity(double velocityRadiansPerSecond){}
 
     public default void stopFlywheels(){}
 

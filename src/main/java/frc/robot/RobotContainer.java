@@ -42,6 +42,7 @@ import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterRunFlywheelsForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 
@@ -233,6 +234,8 @@ public class RobotContainer {
         // Move the shooter to the podium or subwoofer positions
         _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
+        _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
+        _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
     }
 
     /**

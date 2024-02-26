@@ -24,37 +24,55 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
+        // |================= START LEFT FLYWHEEL MOTOR LOGGING =================|
         inputs._leftFlywheelMotorTemperature = _leftFlywheelMotor.getMotorTemperature();
         inputs._leftFlywheelMotorVelocityRotationsPerMin = (_leftFlywheelMotor.getEncoder().getVelocity()) / GEAR_RATIO;
         inputs._leftFlywheelMotorVoltage = _leftFlywheelMotor.getAppliedOutput() * _leftFlywheelMotor.getBusVoltage();
         inputs._leftFlywheelMotorCurrent = _leftFlywheelMotor.getOutputCurrent();
+        // |================= END LEFT FLYWHEEL MOTOR LOGGING =================|
 
+        // |================= START RIGHT FLYWHEEL MOTOR LOGGING =================|
         inputs._rightFlywheelMotorTemperature = _rightFlywheelMotor.getMotorTemperature();
         inputs._rightFlywheelMotorVelocityRotationsPerMin = (_rightFlywheelMotor.getEncoder().getVelocity())
                 / GEAR_RATIO;
         inputs._rightFlywheelMotorVoltage = _rightFlywheelMotor.getAppliedOutput()
                 * _rightFlywheelMotor.getBusVoltage();
         inputs._rightFlywheelMotorCurrent = _rightFlywheelMotor.getOutputCurrent();
+        // |================= END RIGHT FLYWHEEL MOTOR LOGGING =================|
 
+        // |================= START ANGLE MOTOR LOGGING =================|
         inputs._angleMotorTemperature = _angleMotor.getMotorTemperature();
         inputs._angleMotorVelocityRotationsPerMin = _angleMotor.getEncoder().getVelocity();
         inputs._angleMotorVoltage = _angleMotor.getAppliedOutput() * _angleMotor.getBusVoltage();
         inputs._angleMotorCurrent = _angleMotor.getOutputCurrent();
+        // |================= END ANGLE MOTOR LOGGING =================|
+        
+        // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
         inputs._angleEncoderPositionDegrees = -((_angleEncoder.getAbsolutePosition() * 360)
                 - HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
+        // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
 
     }
 
+    /***
+     * Set the reference of the PID controller to the RPM provided. The pid controller is set to 
+     * velocity control. 
+     */
     public void setFlywheelSpeedRPM(double velocityRotationsPerMinute) {
         _leftFlywheelMotor.getPIDController().setReference(((velocityRotationsPerMinute) * GEAR_RATIO),
                 ControlType.kVelocity);
     }
 
+    /**
+     * Stop the fly wheel motors by calling the stopMotor function.
+     */
     public void stopFlywheels() {
         _leftFlywheelMotor.stopMotor();
-        _rightFlywheelMotor.stopMotor();
     }
 
+    /**
+     * Set the shooter angle postion
+     */
     public void setTargetPositionAsDegrees(double degrees) {
         _angleMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
     }

@@ -48,8 +48,10 @@ public class Intake extends SubsystemBase {
                                                 IntakeConstants.PIVOT_PID_MAX_VEL,
                                                 IntakeConstants.PIVOT_PID_MAX_ACCEL));
 
+        _pivotPid.setIntegratorRange(-IntakeConstants.PIVOT_PID_MAX_ISUM, IntakeConstants.PIVOT_PID_MAX_ISUM);                                        
         // might want to call this to make sure inputs are always initialized??
         // this.periodic();
+        this.setIntakePosition(IntakePosition.Stowed);
     }
 
     /**
@@ -152,7 +154,6 @@ public class Intake extends SubsystemBase {
         _intakeVisualizer.update(angle);
 
         // LOGGING
-        Logger.recordOutput("Intake/AngleDegrees", angle);
         Logger.recordOutput("Intake/PID Speed", _pivotPid.calculate(_intakeInputs._pivotEncoderPositionDegrees));
         Logger.recordOutput("Intake/Current-Pivot-Angle", _intakeInputs._pivotEncoderPositionDegrees);
         Logger.recordOutput("Intake/Desired-Pivot-Angle", _pivotPid.getSetpoint().position);

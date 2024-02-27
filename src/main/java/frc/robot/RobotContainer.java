@@ -35,6 +35,7 @@ import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
+import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
 import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
@@ -66,6 +67,7 @@ public class RobotContainer {
     private final Intake _intake;
     private final Shooter _shooter;
     private Command _runShooterPIDCommand;
+    private Command _runIntakePIDCommand;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
@@ -172,6 +174,7 @@ public class RobotContainer {
 
         //setup commands for PID
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
+        this._runIntakePIDCommand = new CmdIntakeRunPID(_intake);
 
         // Set up auto routines
         /*
@@ -248,7 +251,9 @@ public class RobotContainer {
         _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
 
         // FROM MAIN
-        // _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
+        _opButtonFive.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
+        _opButtonSix.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
+        _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
 
         _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
         _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
@@ -268,5 +273,9 @@ public class RobotContainer {
 
     public Command getRunShooterPIDCommand(){
         return this._runShooterPIDCommand;
+    }
+
+    public Command getRunIntakePIDCommand() {
+        return this._runIntakePIDCommand;
     }
 }

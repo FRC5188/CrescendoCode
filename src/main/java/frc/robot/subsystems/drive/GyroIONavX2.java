@@ -20,4 +20,10 @@ public class GyroIONavX2 implements GyroIO {
       inputs._yawVelocityRadPerSec = Units.degreesToRadians(_gyro.getRate());
     }
   }
+
+  // add and implement the resetYaw function.
+  // if this doesnt work for resetting our heading we could try the
+  // enable board level reset. 
+  // add a wrapper to this function in drive.java and then 
+  // a command to call that function in robotContainer.java
 }

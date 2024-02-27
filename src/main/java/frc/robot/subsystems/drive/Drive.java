@@ -254,7 +254,10 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the module positions (turn angles and drive velocities) for all of the modules. */
-  @AutoLogOutput(key = "SwerveStates/Measured")
+  // TODO: Garrett 2/27/24
+  // should this return _module[i].getModueState() instead? Advantagekit cannot show a SwerveModulePosition. 
+  // only a swerve module state.
+  @AutoLogOutput(key = "SwerveStates/MeasuredPosition")
   private SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {

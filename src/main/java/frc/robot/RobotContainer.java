@@ -46,6 +46,8 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 import frc.robot.subsystems.vision.*;
+import frc.robot.subsystems.visiondrive.RealVisionDriveIO;
+import frc.robot.subsystems.visiondrive.VisionDriveIO;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -136,6 +138,7 @@ public class RobotContainer {
                 _drive = new Drive(
                         new GyroIONavX2(),
                         new RealVisionIO(),
+                        new RealVisionDriveIO(),
                         new ModuleIOSparkFlex(0),
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
@@ -149,6 +152,7 @@ public class RobotContainer {
                 _drive = new Drive(
                         new GyroIO() {},
                         new VisionIO() {},
+                        new VisionDriveIO() {},
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim(),
@@ -162,6 +166,7 @@ public class RobotContainer {
                 _drive = new Drive(
                         new GyroIO() {},
                         new VisionIO() {},
+                        new VisionDriveIO() {},
                         new ModuleIO() {},
                         new ModuleIO() {},
                         new ModuleIO() {},

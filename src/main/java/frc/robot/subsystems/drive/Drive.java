@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
+import frc.robot.subsystems.visiondrive.VisionDriveIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -73,6 +74,7 @@ public class Drive extends SubsystemBase {
   public Drive(
       GyroIO gyroIO,
       VisionIO visionIO,
+      VisionDriveIO visionDriveIO,
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,

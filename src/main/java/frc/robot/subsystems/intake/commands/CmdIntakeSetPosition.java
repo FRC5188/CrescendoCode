@@ -12,6 +12,12 @@ public class CmdIntakeSetPosition extends Command {
     private Intake _intakeSubsystem;
     private IntakePosition _intakePosition;
 
+    /**
+     * Sets the intake position based on given intake position like amp, stowed, ground pickup, etc.
+     * Use with the button.whileTrue function
+     * @param intakeSubsystem
+     * @param intakePosition
+     */
     public CmdIntakeSetPosition(Intake intakeSubsystem, IntakePosition intakePosition) {
         this._intakeSubsystem = intakeSubsystem;
         this._intakePosition = intakePosition;

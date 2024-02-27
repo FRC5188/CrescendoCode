@@ -8,6 +8,10 @@ public class CmdIntakeRollersSpit extends Command {
     private Intake _intakeSubsytem;
     private int _counter;
 
+    /**
+     * Sets the intake motor to the spit speed
+     * @param intakeSubsystem
+     */
     public CmdIntakeRollersSpit(Intake intakeSubsystem) {
         _intakeSubsytem = intakeSubsystem;
 

@@ -67,7 +67,7 @@ public class Intake extends SubsystemBase {
      * returns the position of the intake but not in degrees. 
      * Returns one of the known positions such as stowed, ground pickup, 
      * source, amp, etc
-     * @return
+     * @return intakePosition
      */
     public IntakePosition getIntakePosition() {
         return this._intakePosition;
@@ -83,19 +83,32 @@ public class Intake extends SubsystemBase {
         setIntakePositionWithAngle(position.getAngle());
     }
 
+    /**
+     * Sets the roller motor to the acquire speed
+     */
     public void setRollerMotorSpeedAcquire() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
     }
 
+    /**
+     * Sets the roller motor to the spit speed
+     */
     public void setRollerMotorSpeedSpit() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED);
     }
 
+    /**
+     * Stops the roller motor
+     */
     public void stopRollerMotor() {
 
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_STOP_SPEED);
     }
 
+    /**
+     * Sets the intake position based on the angle. If the angle is too small or big, return nothing.
+     * @param angle
+     */
     public void setIntakePositionWithAngle(Double angle) {
         if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
             // TODO: log an error, but don't throw exception
@@ -106,12 +119,20 @@ public class Intake extends SubsystemBase {
         _pivotPid.setGoal(angle);
     }
 
+    /**
+     * Checks if the pivot is at the desired setpoint using encoder position.
+     * @return boolean
+     */
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionDegrees);
         double targetPositionDegrees = _intakePosition.getAngle();
         return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
 
+    /**
+     * Checks if the intake has a note
+     * @return _hasNote
+     */
     public boolean hasNote() {
         if (!_hasNote) {
             _hasNote = (_intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF) && _intakeHasBeenRunning;
@@ -120,18 +141,33 @@ public class Intake extends SubsystemBase {
         return _hasNote;
     }
 
+    /**
+     * Sets _hasNote to false
+     */
     public void resetHasNote() {
         _hasNote = false;
     }
 
+    /**
+     * Sets intakeHasBeenRunning to a boolean
+     * @param running
+     */
     public void setIntakeHasBeenRunning(boolean running) {
         _intakeHasBeenRunning = running;
     }
 
+    /**
+     * Returns the pivot angle
+     * @return pivotEncoderPositionDegrees
+     */
     public double getPivotAngle() {
         return _intakeInputs._pivotEncoderPositionDegrees;
     }
 
+    /**
+     * Returns the target position
+     * @return intakePosition as an angle (double)
+     */
     public double getTargetPosition(){
         return this._intakePosition.getAngle();
     }

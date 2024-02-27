@@ -6,6 +6,10 @@ import frc.robot.subsystems.intake.Intake;
 public class CmdIntakeRollersAcquire extends Command {
     private Intake _intakeSubsystem;
 
+    /**
+     * Sets the intake motor to the acquire speed
+     * @param intakeSubsystem
+     */
     public CmdIntakeRollersAcquire(Intake intakeSubsystem) {
         _intakeSubsystem = intakeSubsystem;
 

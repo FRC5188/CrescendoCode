@@ -13,9 +13,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -38,16 +36,12 @@ import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
-import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
-import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
-import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunFlywheelsForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;

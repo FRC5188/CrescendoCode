@@ -68,7 +68,6 @@ public class Shooter extends SubsystemBase {
   private PIDController _anglePid;
   private ShooterZone _currentShooterZone;
   private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
-  private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;

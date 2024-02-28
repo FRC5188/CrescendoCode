@@ -7,6 +7,10 @@ public class CmdIntakeStopRollers extends Command {
 
     private Intake _intakeSubsystem;
 
+    /**
+     * Stops the intake roller
+     * @param intakeSubsystem
+     */
     public CmdIntakeStopRollers(Intake intakeSubsystem) {
         _intakeSubsystem = intakeSubsystem;
 

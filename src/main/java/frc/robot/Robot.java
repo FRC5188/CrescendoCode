@@ -83,7 +83,6 @@ public class Robot extends LoggedRobot {
     Logger.start();
     // log the pdh with a can ID of 13
     LoggedPowerDistribution.getInstance(13, ModuleType.kRev);
-    
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     _robotContainer = new RobotContainer();

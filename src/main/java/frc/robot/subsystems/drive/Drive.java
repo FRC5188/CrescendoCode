@@ -317,7 +317,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the distance from the center of the robot to the alliance's speaker */
-  public double getRadiusToSpeakerInInches() {
+  public double getRadiusToSpeakerInMeters() {
     
     return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
   }

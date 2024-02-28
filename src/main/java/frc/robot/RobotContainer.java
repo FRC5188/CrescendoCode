@@ -13,21 +13,16 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -44,16 +39,12 @@ import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
 import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
 import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
-import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromGround;
-import frc.robot.subsystems.intake.commands.GrpIntakeAcquireNoteFromSource;
-import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunFlywheelsForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
@@ -132,9 +123,6 @@ public class RobotContainer {
     private JoystickButton _op2ButtonNine = new
     JoystickButton(_operatorController2, 9);
 
-    // Defines autoChooser
-    private final LoggedDashboardChooser<Command> autoChooser;
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -165,7 +153,6 @@ public class RobotContainer {
                 _intake = new Intake( new IntakeIO(){});
                 _shooter = new Shooter(new ShooterIO(){});
                 break;
-
             default:
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
@@ -186,20 +173,27 @@ public class RobotContainer {
         this._runIntakePIDCommand = new CmdIntakeRunPID(_intake);
 
         // Set up auto routines
-        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        /*
+         * NamedCommands.registerCommand(
+         * "Run Flywheel",
+         * Commands.startEnd(
+         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
+         * flywheel)
+         * .withTimeout(5.0));
+         */
+        // _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-        // Set up SysId routines
-        autoChooser.addOption(
-                "Drive SysId (Quasistatic Forward)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Drive SysId (Quasistatic Reverse)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        autoChooser.addOption(
-                "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        
+        // // Set up SysId routines
+        // _autoChooser.addOption(
+        //         "Drive SysId (Quasistatic Forward)",
+        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // _autoChooser.addOption(
+        //         "Drive SysId (Quasistatic Reverse)",
+        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // _autoChooser.addOption(
+        //         "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // _autoChooser.addOption(
+        //         "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         /*
          * autoChooser.addOption(
          * "Flywheel SysId (Quasistatic Forward)",

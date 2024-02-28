@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.HardwareConstants;
-
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;

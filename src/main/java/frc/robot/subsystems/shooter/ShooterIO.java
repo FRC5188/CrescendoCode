@@ -22,6 +22,7 @@ public interface ShooterIO {
 
         // |================= START ANGLE MOTOR LOGGING =================|
         public double _angleMotorTemperature;
+
         public double _angleMotorVelocityRotationsPerMin;
         public double _angleMotorCurrent;
         public double _angleMotorVoltage;

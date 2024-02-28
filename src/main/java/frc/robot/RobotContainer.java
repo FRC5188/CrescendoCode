@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -45,6 +48,7 @@ import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -119,7 +123,6 @@ public class RobotContainer {
     private JoystickButton _op2ButtonNine = new
     JoystickButton(_operatorController2, 9);
 
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -150,7 +153,6 @@ public class RobotContainer {
                 _intake = new Intake( new IntakeIO(){});
                 _shooter = new Shooter(new ShooterIO(){});
                 break;
-
             default:
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
@@ -271,5 +273,9 @@ public class RobotContainer {
 
     public Command getRunIntakePIDCommand() {
         return this._runIntakePIDCommand;
+    }
+
+    public Command getSetupCommand() {
+        return new GrpSetUp(_drive, _shooter, _intake);
     }
 }

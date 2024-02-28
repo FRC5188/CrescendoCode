@@ -29,7 +29,6 @@ public class CmdIntakeSetPosition extends Command {
     @Override
     public void initialize() {
         _intakeSubsystem.setIntakePosition(this._intakePosition);
-
         if (_intakePosition == IntakePosition.Stowed) {
             _intakeSubsystem.stopRollerMotor();
         }

@@ -3,9 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.shooter;
-
 import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
@@ -70,11 +68,13 @@ public class Shooter extends SubsystemBase {
   private PIDController _anglePid;
   private ShooterZone _currentShooterZone;
   private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
+  private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
 
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _currentShooterZone = ShooterZone.Unknown;
     _anglePid = new PIDController(0.025, 0, 0.00);
+
     setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
   }
 

@@ -83,7 +83,6 @@ public class Robot extends LoggedRobot {
     Logger.start();
     // log the pdh with a can ID of 13
     LoggedPowerDistribution.getInstance(13, ModuleType.kRev);
-    
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     _robotContainer = new RobotContainer();
@@ -117,7 +116,6 @@ public class Robot extends LoggedRobot {
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
     }
-    
   }
 
   /** This function is called periodically during autonomous. */
@@ -143,6 +141,7 @@ public class Robot extends LoggedRobot {
     // code and get it working
     _robotContainer.getRunShooterPIDCommand().schedule();
     _robotContainer.getRunIntakePIDCommand().schedule();
+
   }
 
   /** This function is called periodically during operator control. */

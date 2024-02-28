@@ -20,6 +20,7 @@ public class RealShooterIO implements ShooterIO {
         configAngleMotor();
         configFlywheelMotors();
         configEncoder();
+
         configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
     }
 
@@ -32,6 +33,7 @@ public class RealShooterIO implements ShooterIO {
         // |================= END LEFT FLYWHEEL MOTOR LOGGING =================|
 
         // |================= START RIGHT FLYWHEEL MOTOR LOGGING =================|
+
         inputs._rightFlywheelMotorTemperature = _rightFlywheelMotor.getMotorTemperature();
         inputs._rightFlywheelMotorVelocityRotationsPerMin = (_rightFlywheelMotor.getEncoder().getVelocity())
                 / GEAR_RATIO;

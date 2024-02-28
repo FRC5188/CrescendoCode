@@ -79,12 +79,9 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
-
-    // See http://bit.ly/3YIzFZ6 for more information on timestamps in AdvantageKit.
-    // Logger.disableDeterministicTimestamps()
-
     // Start AdvantageKit logger
     Logger.start();
+    // log the pdh with a can ID of 13
     LoggedPowerDistribution.getInstance(13, ModuleType.kRev);
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
@@ -119,8 +116,6 @@ public class Robot extends LoggedRobot {
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
     }
-
-    _robotContainer.getSetupCommand().schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -138,7 +133,15 @@ public class Robot extends LoggedRobot {
       _autonomousCommand.cancel();
     }
 
-    _robotContainer.getSetupCommand().schedule();
+    // MITCHELL READ THIS: I decided to run the PID from telopinit for now. I dont think this
+    // is the best way or what we should do forever. But I'm also suspicious about
+    // what we were doin with the grpSetupCommand. Looking at this commit: https://github.com/FRC5188/CrescendoCode/blob/main/src/main/java/frc/robot/RobotContainer.java
+    // we were scheduling a new instance of the grpSetupCommand command and auto and telop but never canceling the auto one.
+    // I wanted to be super specific and explicit about what commands and functions we were running as we try to detangle our
+    // code and get it working
+    _robotContainer.getRunShooterPIDCommand().schedule();
+    _robotContainer.getRunIntakePIDCommand().schedule();
+
   }
 
   /** This function is called periodically during operator control. */

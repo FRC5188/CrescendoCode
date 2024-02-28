@@ -12,6 +12,12 @@ public class CmdIntakeSetPosition extends Command {
     private Intake _intakeSubsystem;
     private IntakePosition _intakePosition;
 
+    /**
+     * Sets the intake position based on given intake position like amp, stowed, ground pickup, etc.
+     * Use with the button.whileTrue function
+     * @param intakeSubsystem
+     * @param intakePosition
+     */
     public CmdIntakeSetPosition(Intake intakeSubsystem, IntakePosition intakePosition) {
         this._intakeSubsystem = intakeSubsystem;
         this._intakePosition = intakePosition;
@@ -22,8 +28,7 @@ public class CmdIntakeSetPosition extends Command {
     // // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        _intakeSubsystem.setIntakePosition(_intakePosition);
-
+        _intakeSubsystem.setIntakePosition(this._intakePosition);
         if (_intakePosition == IntakePosition.Stowed) {
             _intakeSubsystem.stopRollerMotor();
         }

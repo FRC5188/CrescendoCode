@@ -36,7 +36,7 @@ public class RealVisionIO implements VisionIO {
                         estimators[i] = new PhotonPoseEstimator(
                                 FIELD_LAYOUT,
                                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                                new PhotonCamera("photonvision" + (i + 1)),
+                                new PhotonCamera("photoncamera_" + (i + 1)),
                                 HardwareConstants.ComponentTransformations._cameraPosition[i]);
                         
                         estimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);

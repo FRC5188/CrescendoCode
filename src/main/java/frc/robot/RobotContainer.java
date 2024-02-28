@@ -13,12 +13,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
@@ -49,6 +52,9 @@ import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -123,6 +129,11 @@ public class RobotContainer {
     private JoystickButton _op2ButtonNine = new
     JoystickButton(_operatorController2, 9);
 
+    private LoggedDashboardChooser<Command> autoChooser
+    
+    // Defines autoChooser
+     = new LoggedDashboardChooser<Command>("Auto Choices", AutoBuilder.buildAutoChooser());
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -181,19 +192,20 @@ public class RobotContainer {
          * flywheel)
          * .withTimeout(5.0));
          */
-        // _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-        // // Set up SysId routines
-        // _autoChooser.addOption(
-        //         "Drive SysId (Quasistatic Forward)",
-        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        // _autoChooser.addOption(
-        //         "Drive SysId (Quasistatic Reverse)",
-        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        // _autoChooser.addOption(
-        //         "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        // _autoChooser.addOption(
-        //         "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+        // Set up SysId routines
+        autoChooser.addOption(
+                "Drive SysId (Quasistatic Forward)",
+                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        autoChooser.addOption(
+                "Drive SysId (Quasistatic Reverse)",
+                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        autoChooser.addOption(
+                "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        autoChooser.addOption(
+                "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         /*
          * autoChooser.addOption(
          * "Flywheel SysId (Quasistatic Forward)",

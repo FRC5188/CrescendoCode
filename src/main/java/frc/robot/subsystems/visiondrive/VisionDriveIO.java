@@ -11,7 +11,9 @@ public interface VisionDriveIO {
         public double _range;
     }
 
-    public void updateInputs(VisionDriveIOInputs inputs);
+    public default void updateInputs(VisionDriveIOInputs inputs) {}
 
-    public boolean hasTarget();
+    public default boolean hasTarget() {
+        return false;
+    }
 }

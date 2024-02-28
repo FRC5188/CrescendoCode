@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
+import frc.robot.subsystems.visiondrive.VisionDriveIO.VisionDriveIOInputs;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -52,7 +53,11 @@ public class Drive extends SubsystemBase {
   private final SysIdRoutine _sysId;
 
   private final VisionIO _visionIO;
+  private final VisionDriveIO _visionDriveIO;
+
   private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
+  private final VisionDriveIOInputs _visionDriveInputs = new VisionDriveIOInputs();
+
 
   private SwerveDriveKinematics _kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d _rawGyroRotation = new Rotation2d();
@@ -81,6 +86,8 @@ public class Drive extends SubsystemBase {
       ModuleIO brModuleIO) {
     this._gyroIO = gyroIO;
     this._visionIO = visionIO;
+    this._visionDriveIO = visionDriveIO;
+
     _modules[0] = new Module(flModuleIO, 0);
     _modules[1] = new Module(frModuleIO, 1);
     _modules[2] = new Module(blModuleIO, 2);
@@ -135,7 +142,9 @@ public class Drive extends SubsystemBase {
 
     _visionIO.updateInputs(_visionInputs);
     Logger.processInputs("Drive/Vision", _visionInputs);
-    
+
+    _visionDriveIO.updateInputs(_visionDriveInputs);
+        
     for (var module : _modules) {
       module.periodic();
     }

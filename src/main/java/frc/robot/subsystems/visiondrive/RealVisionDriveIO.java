@@ -23,8 +23,8 @@ public class RealVisionDriveIO implements VisionDriveIO {
     private NetworkTable _table;
 
     public RealVisionDriveIO() {
-        _translatePID = new PIDController(0.1, 0, 0.05);
-        _rotatePID = new PIDController(7.0, 0, 0.05);
+        _translatePID = new PIDController(0.5, 0, 0);
+        _rotatePID = new PIDController(7.0, 0, 0);
 
         _table = NetworkTableInstance.getDefault().getTable("limelight");
     }
@@ -35,8 +35,11 @@ public class RealVisionDriveIO implements VisionDriveIO {
 
     public void updateInputs(VisionDriveIOInputs inputs) {
         if (hasTarget()) {
+
+            System.out.print("Target acquired! ");
             _tx = _table.getEntry("tx").getDouble(100.0);
             _ty = _table.getEntry("ty").getDouble(100.0);
+            System.out.println(" tx is:" + _tx + " and ty is: " + _ty + " and speed is: " + inputs._forwardSpeed);
 
             inputs._range = PhotonUtils.calculateDistanceToTargetMeters(
                     CAMERA_HEIGHT_IN_METERS,
@@ -44,8 +47,8 @@ public class RealVisionDriveIO implements VisionDriveIO {
                     CAMERA_PITCH_RADIANS,
                     _ty);
             
-            inputs._forwardSpeed = -_translatePID.calculate(inputs._range, GOAL_RANGE_METERS);
-            inputs._rotSpeed = -_rotatePID.calculate(_tx, 0);
+            inputs._forwardSpeed = _translatePID.calculate(inputs._range, GOAL_RANGE_METERS);
+            inputs._rotSpeed = _rotatePID.calculate(_tx, 0);
         }
     }
 }

@@ -2,8 +2,6 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.util.Arrays;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -66,9 +64,9 @@ public class Limelight extends SubsystemBase {
                 this._timestampSeconds = Timer.getFPGATimestamp() - (this._botpose[6]/1000.0);
                 // System.out.println("Timestamp " + this._timestampSeconds + ": Bot pose changed to " + Arrays.toString(this._botpose));
             }
-        } else { 
-            // System.out.println("Bad botpose data received from getBotPose()");
-        }
+        } // else { 
+        //     // System.out.println("Bad botpose data received from getBotPose()");
+        // }
     }
 
     /** getPose2d

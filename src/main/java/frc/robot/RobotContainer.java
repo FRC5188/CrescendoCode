@@ -274,8 +274,4 @@ public class RobotContainer {
     public Command getRunIntakePIDCommand() {
         return this._runIntakePIDCommand;
     }
-
-    public Command getSetupCommand() {
-        return new GrpSetUp(_drive, _shooter, _intake);
-    }
 }

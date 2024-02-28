@@ -10,9 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
 
 public class Intake extends SubsystemBase {
-
-    public static final LoggedTunableNumber TEST = new LoggedTunableNumber("Intake/test");
-
     public enum IntakePosition {
         SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
         GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),

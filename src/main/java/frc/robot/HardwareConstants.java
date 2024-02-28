@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class HardwareConstants {
-    public static final int NUMBER_OF_CAMERAS = 2;
+    public static final int NUMBER_OF_CAMERAS = 0;
     public class CanIds {
         
         // |====================== INTAKE SUBSYSTEM CAN IDs ======================|

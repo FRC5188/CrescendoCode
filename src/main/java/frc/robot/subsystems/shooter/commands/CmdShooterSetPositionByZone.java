@@ -9,6 +9,13 @@ public class CmdShooterSetPositionByZone extends Command {
     private Shooter _shooterSubsystem;
     private ShooterZone _zone;
 
+    /**
+     * Sets the shooter position in the intialize of the command based on the zone provided.
+     * Command immidiatly exits
+     * 
+     * @param shooterSubsystem
+     * @param zone
+     */
     public CmdShooterSetPositionByZone(Shooter shooterSubsystem, ShooterZone zone) {
         _shooterSubsystem = shooterSubsystem;
         _zone = zone;

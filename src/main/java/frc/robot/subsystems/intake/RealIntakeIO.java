@@ -3,12 +3,10 @@ package frc.robot.subsystems.intake;
 import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-
+import frc.robot.HardwareConstants;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import frc.robot.HardwareConstants;
 
 public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;

@@ -25,4 +25,6 @@ public interface GyroIO {
   }
 
   public default void updateInputs(GyroIOInputs inputs) {}
+
+  // add a resetYaw function. Don't implement it here though
 }

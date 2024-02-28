@@ -32,7 +32,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -143,9 +142,8 @@ public class Drive extends SubsystemBase {
       for (var module : _modules) {
         module.stop();
       }
-    }
-    // Log empty setpoint states when disabled
-    if (DriverStation.isDisabled()) {
+
+      // Log empty setpoint states when disabled
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
@@ -179,9 +177,19 @@ public class Drive extends SubsystemBase {
     }
     _poseEstimator.update(_rawGyroRotation, modulePositions);
 
-    _field.setRobotPose(_poseEstimator.getEstimatedPosition());
-    SmartDashboard.putData("Field", _field);
-    SmartDashboard.putNumber("Radius to Speaker", getRadiusToSpeakerInMeters());
+    // MITCHELL READ THIS COMMENT. I'm still getting the loop overrun issue from the driver station
+    // so this did not solve the issue. but i wanted to bring it to your attention. 
+    // as of the commit which added this block of comments, the only errors I'm getting from the driver
+    // station is about photon vision cameras and the loop over run from drive periodic. i am a little 
+    // worried that this drive periodic overrun issue might come back to bite us so I don't want to 
+    // leave it not addressed for too long. But, first, lets get the rest of the robot back up and going
+  
+    // commenting this out to see if it helps with loop overrun time gh - 2/25/24
+    // driver.periodic is sometimes running at 20-40ms on its own
+    // _field.setRobotPose(_poseEstimator.getEstimatedPosition());
+    // SmartDashboard.putData("Field", _field);
+    // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
+    // SmartDashboard.putNumberArray("CoR", cor);
   }
 
   /**
@@ -246,7 +254,10 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the module positions (turn angles and drive velocities) for all of the modules. */
-  @AutoLogOutput(key = "SwerveStates/Measured")
+  // TODO: Garrett 2/27/24
+  // should this return _module[i].getModueState() instead? Advantagekit cannot show a SwerveModulePosition. 
+  // only a swerve module state.
+  @AutoLogOutput(key = "SwerveStates/MeasuredPosition")
   private SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {

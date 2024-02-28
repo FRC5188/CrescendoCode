@@ -18,6 +18,7 @@ public class CmdShooterMoveManually extends Command {
     @Override
     public void initialize() {
         double setpoint = _shooterSubsystem.getCurrentZone().getShooterAngle() + _changeAmount;
+        // TODO: this won't print out the correct value if you change the setpoint more than once
         System.out.println ("Changing Shooter Position from " + _shooterSubsystem.getCurrentZone().getShooterAngle() + " to " + setpoint);
         _shooterSubsystem.setTargetPositionAsAngle(setpoint);
 

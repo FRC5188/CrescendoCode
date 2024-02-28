@@ -129,10 +129,11 @@ public class RobotContainer {
     private JoystickButton _op2ButtonNine = new
     JoystickButton(_operatorController2, 9);
 
-    private LoggedDashboardChooser<Command> autoChooser
+    // auto chooser is causing code ot break. I'm not sure why. GH - 2/27/24
+    // private LoggedDashboardChooser<Command> autoChooser
     
     // Defines autoChooser
-     = new LoggedDashboardChooser<Command>("Auto Choices", AutoBuilder.buildAutoChooser());
+    //  = new LoggedDashboardChooser<Command>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -193,19 +194,19 @@ public class RobotContainer {
          * .withTimeout(5.0));
          */
 
-        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        // autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
         // Set up SysId routines
-        autoChooser.addOption(
-                "Drive SysId (Quasistatic Forward)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Drive SysId (Quasistatic Reverse)",
-                _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        autoChooser.addOption(
-                "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // autoChooser.addOption(
+        //         "Drive SysId (Quasistatic Forward)",
+        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // autoChooser.addOption(
+        //         "Drive SysId (Quasistatic Reverse)",
+        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // autoChooser.addOption(
+        //         "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // autoChooser.addOption(
+        //         "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         /*
          * autoChooser.addOption(
          * "Flywheel SysId (Quasistatic Forward)",

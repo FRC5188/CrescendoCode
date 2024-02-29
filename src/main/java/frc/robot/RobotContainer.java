@@ -225,9 +225,9 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> _controller.getRightX()));
+                        () -> _controller.getLeftY(),
+                        () -> _controller.getLeftX(),
+                        () -> -_controller.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         // face the speaker while we hold this button
@@ -265,10 +265,10 @@ public class RobotContainer {
 
         _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
 
-        _controller.povLeft().onTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        _controller.povRight().onTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        _controller.povUp().onTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        _controller.povDown().onTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**

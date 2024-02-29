@@ -171,43 +171,6 @@ public class RobotContainer {
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = new CmdIntakeRunPID(_intake);
 
-        // Set up auto routines
-        /*
-         * NamedCommands.registerCommand(
-         * "Run Flywheel",
-         * Commands.startEnd(
-         * () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
-         * flywheel)
-         * .withTimeout(5.0));
-         */
-        // _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
-        // // Set up SysId routines
-        // _autoChooser.addOption(
-        //         "Drive SysId (Quasistatic Forward)",
-        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        // _autoChooser.addOption(
-        //         "Drive SysId (Quasistatic Reverse)",
-        //         _drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        // _autoChooser.addOption(
-        //         "Drive SysId (Dynamic Forward)", _drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        // _autoChooser.addOption(
-        //         "Drive SysId (Dynamic Reverse)", _drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        /*
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Forward)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Quasistatic Reverse)",
-         * flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Forward)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
-         * autoChooser.addOption(
-         * "Flywheel SysId (Dynamic Reverse)",
-         * flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-         */
-
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -224,9 +187,9 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> _controller.getRightX()));
+                        () -> _controller.getLeftY(),
+                        () -> _controller.getLeftX(),
+                        () -> -_controller.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         // face the speaker while we hold this button
@@ -263,6 +226,30 @@ public class RobotContainer {
         _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
 
         _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
+
+        /***
+         * 
+         * SYSID BUTTON MAPPINGS
+         * These lines map the sysid routines to the d-pad on the driver's controller. These should NEVER
+         * be enabled for a match. Read the links below for more about how to use sysid
+         * 
+         * - how the code is setup (that's what these lines below do)
+         * https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/creating-routine.html#creating-an-identification-routine
+         * 
+         * - running the routines
+         * https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/running-routine.html#running-the-identification-routine
+         * 
+         * - looking at the data
+         * https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
+         *  - note: use advantagescope to connect from the robot and download a log file with the data
+         *  - you can use the position, velocity, and voltage of one module to represent the whole drivetrain
+         * 
+         * - take the feedforward and feedback numbers and put them in driveconstants.java
+         */
+       // _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+       // _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+       // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+       // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**

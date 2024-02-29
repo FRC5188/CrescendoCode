@@ -6,7 +6,7 @@ package frc.robot.subsystems.shooter;
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
+// import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {

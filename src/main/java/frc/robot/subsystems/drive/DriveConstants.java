@@ -1,8 +1,14 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Time;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 
 public class DriveConstants {
     // Swerve constants
@@ -32,17 +38,40 @@ public class DriveConstants {
      *  - deploy code
      *  - use something flat and make all modules face exactly forward.
      *      - the bevel gear needs to face to the right on BOTH sides on the drive train
-     *      - right if you the intake is facing forward and you are also facing forward
+     *      - right is if you the intake is facing forward and you are also facing forward
      *  - read the module roations from shuffle board or advantage scope
      *      - put these new module rotations here in the constants
      * 
-     * - 
+     * - redeploy code
      * 
      */
     
-    public static final double FL_OFFSET = -0.453711;
-    public static final double FR_OFFSET = 0.716553;
-    public static final double BL_OFFSET = 0.230787455240885;
-    public static final double BR_OFFSET = -0.380286458333333;
+    public static final double FL_OFFSET = 0.0583; // was -0.453711
+    public static final double FR_OFFSET = 0.2138; // was 0.716553
+    public static final double BL_OFFSET = -0.268; // was 0.230787455240885
+    public static final double BR_OFFSET = 0.1169; // was -0.380286458333333
 
+    /*****************************
+     * 
+     * SYSID TEST TUNING
+     * 
+     *****************************/
+    public static final Measure<Velocity<Voltage>> SYSID_RAMP_RRATE =
+                        Volts.of(1.0).per(Seconds.of(1));
+    public static final Measure<Voltage> SYSID_STEP_VOLTAGE = Volts.of(7);
+    public static final Measure<Time> SYSID_TIMEOUT = Seconds.of(10);
+
+    /*********************
+     * 
+     * MODULE FEEDFORWARD AND PID CONSTANTS
+     * 
+     **********************/
+    public static final double MODULE_FEEDFORWARD_KS = 0.1;
+    public static final double MODULE_FEEDFORWARD_KV = 0.13;
+    public static final double MODULE_DRIVEPID_KP = 0.05;
+    public static final double MODULE_DRIVEPID_KI = 0.0;
+    public static final double MODULE_DRIVEPID_KD = 0.0;
+    public static final double MODULE_TURNPID_KP = 7.0;
+    public static final double MODULE_TURNPID_KI = 0.0;
+    public static final double MODULE_TURNPID_KD = 0.0;
 }

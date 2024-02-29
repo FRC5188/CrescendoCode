@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
@@ -263,6 +264,11 @@ public class RobotContainer {
         _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
 
         _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
+
+        _controller.povLeft().onTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        _controller.povRight().onTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        _controller.povUp().onTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        _controller.povDown().onTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**

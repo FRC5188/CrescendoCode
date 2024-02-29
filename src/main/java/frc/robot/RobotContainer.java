@@ -15,6 +15,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.derive;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -275,8 +277,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PrintCommand("DUMMY AUTO COMMAND IS RUNNING FROM ROBOT CONTAINER");
+        // return new PrintCommand("DUMMY AUTO COMMAND IS RUNNING FROM ROBOT CONTAINER");
         // return _autoChooser.get();
+        return new PathPlannerAuto("drive-straight.auto");
     }
 
     public Command getRunShooterPIDCommand(){

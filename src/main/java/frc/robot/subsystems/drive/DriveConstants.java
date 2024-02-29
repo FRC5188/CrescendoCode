@@ -40,9 +40,9 @@ public class DriveConstants {
      * 
      */
     
-    public static final double FL_OFFSET = 0.0588;
-    public static final double FR_OFFSET = 0.2110;
-    public static final double BL_OFFSET = -0.2687;
-    public static final double BR_OFFSET = 0.1160;
+    public static final double FL_OFFSET = -0.453711;
+    public static final double FR_OFFSET = 0.716553;
+    public static final double BL_OFFSET = 0.230787455240885;
+    public static final double BR_OFFSET = -0.380286458333333;
 
 }

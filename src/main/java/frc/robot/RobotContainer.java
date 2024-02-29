@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -30,9 +32,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
 import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
@@ -228,10 +227,19 @@ public class RobotContainer {
                         () -> _controller.getLeftY(),
                         () -> _controller.getLeftX(),
                         () -> _controller.getRightX()));
+        // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+        // face the speaker while we hold this button
         _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX()));
+
+        // reset the orientation of the robot. changes which way it thinks is forward
+        _controller.y().onTrue(
+                            Commands.runOnce(
+                            () -> _drive.setPose(
+                            new Pose2d(_drive.getPose().getTranslation(), new Rotation2d())),
+                            _drive) .ignoringDisable(true));
         
         // Move the shooter to the podium or subwoofer positions
         /* ---------------- START MANUAL ROBOT CONTROL BUTTON BINDINGS-------------------------- */

@@ -16,7 +16,7 @@ public class GyroIONavX2 implements GyroIO {
   public void updateInputs(GyroIOInputs inputs) {
     inputs._connected = _gyro.isConnected();
     if (!_gyro.isCalibrating()) {
-      inputs._yawPosition = Rotation2d.fromDegrees(_gyro.getYaw());
+      inputs._yawPosition = Rotation2d.fromDegrees(-_gyro.getYaw());
       inputs._yawVelocityRadPerSec = Units.degreesToRadians(_gyro.getRate());
     }
   }

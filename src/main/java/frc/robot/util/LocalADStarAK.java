@@ -28,7 +28,7 @@ public class LocalADStarAK implements Pathfinder {
    */
   @Override
   public boolean isNewPathAvailable() {
-    if (Logger.hasReplaySource()) {
+    if (!Logger.hasReplaySource()) {
       _io.updateIsNewPathAvailable();
     }
 
@@ -46,7 +46,7 @@ public class LocalADStarAK implements Pathfinder {
    */
   @Override
   public PathPlannerPath getCurrentPath(PathConstraints constraints, GoalEndState goalEndState) {
-    if (Logger.hasReplaySource()) {
+    if (!Logger.hasReplaySource()) {
       _io.updateCurrentPathPoints(constraints, goalEndState);
     }
 
@@ -67,7 +67,7 @@ public class LocalADStarAK implements Pathfinder {
    */
   @Override
   public void setStartPosition(Translation2d startPosition) {
-    if (Logger.hasReplaySource()) {
+    if (!Logger.hasReplaySource()) {
       _io._adStar.setStartPosition(startPosition);
     }
   }
@@ -80,7 +80,7 @@ public class LocalADStarAK implements Pathfinder {
    */
   @Override
   public void setGoalPosition(Translation2d goalPosition) {
-    if (Logger.hasReplaySource()) {
+    if (!Logger.hasReplaySource()) {
       _io._adStar.setGoalPosition(goalPosition);
     }
   }
@@ -95,8 +95,10 @@ public class LocalADStarAK implements Pathfinder {
    */
   @Override
   public void setDynamicObstacles(
-      List<Pair<Translation2d, Translation2d>> obs, Translation2d currentRobotPos) {
-    _io._adStar.setDynamicObstacles(obs, currentRobotPos);
+    List<Pair<Translation2d, Translation2d>> obs, Translation2d currentRobotPos) {
+    if(!Logger.hasReplaySource()){
+      _io._adStar.setDynamicObstacles(obs, currentRobotPos);
+    }
   }
 
   private static class ADStarIO implements LoggableInputs {

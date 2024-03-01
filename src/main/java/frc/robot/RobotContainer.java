@@ -201,9 +201,9 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> -_controller.getLeftY() * 0.5,
-                        () -> -_controller.getLeftX() * 0.5,
-                        () -> -_controller.getRightX() * 0.5));
+                        () -> -_controller.getLeftY(),
+                        () -> -_controller.getLeftX(),
+                        () -> -_controller.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         // face the speaker while we hold this button
@@ -285,9 +285,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // return new PrintCommand("DUMMY AUTO COMMAND IS RUNNING FROM ROBOT CONTAINER");
-        // return _autoChooser.get();
-        return new PathPlannerAuto("drive-straight");
+        return autoChooser.get();    
     }
 
     public Command getRunShooterPIDCommand(){

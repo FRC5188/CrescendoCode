@@ -53,6 +53,8 @@ import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 
 
 /**
@@ -265,10 +267,10 @@ public class RobotContainer {
          * 
          * - take the feedforward and feedback numbers and put them in driveconstants.java
          */
-       // _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-       // _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-       // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-       // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    //    _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    //    _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    //    _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    //    _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**
@@ -279,7 +281,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // return new PrintCommand("DUMMY AUTO COMMAND IS RUNNING FROM ROBOT CONTAINER");
         // return _autoChooser.get();
-        return new PathPlannerAuto("drive-straight.auto");
+        return new PathPlannerAuto("drive-straight");
     }
 
     public Command getRunShooterPIDCommand(){

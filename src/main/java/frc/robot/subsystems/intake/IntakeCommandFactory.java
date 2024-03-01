@@ -62,8 +62,11 @@ public class IntakeCommandFactory {
                 this._intake.resetHasNote();
 
          }, this._intake)
+            .until(() -> this._intake.hasNote())
             .withTimeout(timeSeconds)
-            .until(() -> this._intake.hasNote());
+            .andThen(this.aquire())
+            .withTimeout(1.0);
+            
     }
 
     public Command pickUpNoteFrom(Intake.IntakePosition position) {

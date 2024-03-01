@@ -13,22 +13,14 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.derive;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
@@ -53,9 +45,6 @@ import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -75,7 +64,7 @@ public class RobotContainer {
     private Command _runIntakePIDCommand;
 
     // logged dashboard inputs
-    private final LoggedDashboardChooser<Command> autoChooser;
+    private final LoggedDashboardChooser<Command> _autoChooser;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
@@ -88,23 +77,23 @@ public class RobotContainer {
     private final Joystick _operatorController2 = new Joystick(2);
 
     // Left column, top to bottom
-    private JoystickButton _opButtonOne = new
-    JoystickButton(_operatorController1, 1);
-    private JoystickButton _opButtonTwo = new
-    JoystickButton(_operatorController1, 2);
+    // private JoystickButton _opButtonOne = new
+    // JoystickButton(_operatorController1, 1);
+    // private JoystickButton _opButtonTwo = new
+    // JoystickButton(_operatorController1, 2);
     private JoystickButton _opButtonThree = new
     JoystickButton(_operatorController1, 3);
 
     // Middle column, top to bottom
-    private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
+    // private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
     private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
     private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
 
     // Right column, top to bottom
-    private JoystickButton _opButtonSeven = new
-    JoystickButton(_operatorController1, 7);
-    private JoystickButton _opButtonEight = new
-    JoystickButton(_operatorController1, 8);
+    // private JoystickButton _opButtonSeven = new
+    // JoystickButton(_operatorController1, 7);
+    // private JoystickButton _opButtonEight = new
+    // JoystickButton(_operatorController1, 8);
     private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
 
     // Side Toggle Switch
@@ -182,7 +171,7 @@ public class RobotContainer {
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
 
-        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
         // Configure the button bindings
@@ -285,7 +274,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.get();    
+        return _autoChooser.get();    
     }
 
     public Command getRunShooterPIDCommand(){

@@ -15,12 +15,17 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.derive;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -73,6 +78,9 @@ public class RobotContainer {
     private final Shooter _shooter;
     private Command _runShooterPIDCommand;
     private Command _runIntakePIDCommand;
+
+    // logged dashboard inputs
+    private final LoggedDashboardChooser<Command> autoChooser;
 
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
@@ -179,6 +187,9 @@ public class RobotContainer {
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = new CmdIntakeRunPID(_intake);
 
+        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -195,9 +206,9 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> -_controller.getRightX()));
+                        () -> -_controller.getLeftY() * 0.5,
+                        () -> -_controller.getLeftX() * 0.5,
+                        () -> -_controller.getRightX() * 0.5));
         // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         // face the speaker while we hold this button

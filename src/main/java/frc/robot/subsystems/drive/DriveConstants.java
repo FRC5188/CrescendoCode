@@ -67,9 +67,10 @@ public class DriveConstants {
      * 
      **********************/
     // ka was 0.02617
-    public static final double MODULE_FEEDFORWARD_KS = 0.091847; //0.1
-    public static final double MODULE_FEEDFORWARD_KV = 0.10214; //0.13
-    public static final double MODULE_DRIVEPID_KP = 0.014526; // was 0.05
+    public static final double MODULE_FEEDFORWARD_KS = 0.074229; //0.1
+    public static final double MODULE_FEEDFORWARD_KV = 0.10251; //0.13
+    public static final double MODULE_FEEDFORWARD_KA = 0.02738; //
+    public static final double MODULE_DRIVEPID_KP = 0.05; // was 0.05 // 0.14436 from sysid
     public static final double MODULE_DRIVEPID_KI = 0.0;
     public static final double MODULE_DRIVEPID_KD = 0.0;
     public static final double MODULE_TURNPID_KP = 7.0;

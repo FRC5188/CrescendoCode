@@ -10,6 +10,12 @@
           "data": {
             "pathName": "drive straight"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "right-arc"
+          }
         }
       ]
     }

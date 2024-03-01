@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.248376211038137,
-        "y": 5.585253456221199
+        "x": 3.4326354366994454,
+        "y": 4.881599477484669
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2483762110381385,
-        "y": 5.585253456221199
+        "x": 4.432635436699446,
+        "y": 4.881599477484669
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "practice-demo-end-pt2"
     },
     {
       "anchor": {
-        "x": 2.3185166370330106,
-        "y": 5.585253456221199
+        "x": 6.2,
+        "y": 6.376864182299793
       },
       "prevControl": {
-        "x": 1.2577459343338298,
-        "y": 5.585253456221199
+        "x": 5.646213578141442,
+        "y": 5.673210203563265
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "2nd-note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 48.876097368993065,
     "rotateFast": false
   },
   "reversed": false,

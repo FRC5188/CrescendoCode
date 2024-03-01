@@ -69,7 +69,7 @@ public class IntakeCommandFactory {
     public Command pickUpNoteFrom(Intake.IntakePosition position) {
         return this.setPosition(position)
             .alongWith(this.aquire())
-            .beforeStarting(this.waitForNote())
+            .beforeStarting(this.waitForNote(1.0))
             .beforeStarting(this.stop());
     }
 

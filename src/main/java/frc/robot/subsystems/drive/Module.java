@@ -21,7 +21,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
@@ -49,7 +48,8 @@ public class Module {
       // notice missing break statement. replay and real modes should have the same values
       case REPLAY:
         _driveFeedforward = new SimpleMotorFeedforward(DriveConstants.MODULE_FEEDFORWARD_KS, 
-                                                       DriveConstants.MODULE_FEEDFORWARD_KV);
+                                                       DriveConstants.MODULE_FEEDFORWARD_KV,
+                                                       DriveConstants.MODULE_FEEDFORWARD_KA);
         _driveFeedback = new PIDController(DriveConstants.MODULE_DRIVEPID_KP, 
                                            DriveConstants.MODULE_DRIVEPID_KI, 
                                            DriveConstants.MODULE_DRIVEPID_KD);

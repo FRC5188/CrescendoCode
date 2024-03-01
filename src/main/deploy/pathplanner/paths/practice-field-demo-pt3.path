@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.4326354366994454,
+        "y": 4.881599477484669
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.432635436699446,
+        "y": 4.881599477484669
+      },
+      "isLocked": false,
+      "linkedName": "practice-demo-end-pt2"
+    },
+    {
+      "anchor": {
+        "x": 6.2,
+        "y": 6.376864182299793
+      },
+      "prevControl": {
+        "x": 5.646213578141442,
+        "y": 5.673210203563265
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 48.876097368993065,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

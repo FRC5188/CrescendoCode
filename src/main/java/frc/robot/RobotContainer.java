@@ -220,7 +220,7 @@ public class RobotContainer {
         _opButtonNine.onTrue(this._intake.buildCommand().aquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonEight.onTrue(this._intake.buildCommand().spit());
+        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(1.0));
 
         /***
          * 

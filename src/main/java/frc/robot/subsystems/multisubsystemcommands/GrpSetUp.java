@@ -3,7 +3,6 @@ package frc.robot.subsystems.multisubsystemcommands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;

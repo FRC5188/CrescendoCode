@@ -44,11 +44,6 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
-import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
-import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
-import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
-import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
-import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -185,7 +180,7 @@ public class RobotContainer {
 
         //setup commands for PID
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
-        this._runIntakePIDCommand = new CmdIntakeRunPID(_intake);
+        this._runIntakePIDCommand = _intake.buildCommand().runPID();
 
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -250,14 +245,14 @@ public class RobotContainer {
         _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
 
         // FROM MAIN
-        _opButtonFive.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
-        _opButtonSix.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
-        _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
+        _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
+        _opButtonSix.onTrue(this._intake.buildCommand().setPosition(IntakePosition.GroundPickup));
+        _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
 
-        _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
-        _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
+        _opButtonNine.onTrue(this._intake.buildCommand().aquire());
+        _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
+        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(1.0));
 
         /***
          * 

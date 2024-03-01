@@ -2,9 +2,6 @@ package frc.robot.subsystems.multisubsystemcommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.Intake.IntakePosition;
-import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
-import frc.robot.subsystems.intake.commands.GrpIntakeMoveToPosition;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
@@ -21,10 +18,9 @@ public class GrpShootNoteInZone extends SequentialCommandGroup {
                 new CmdShooterSetAutoshootEnabled(shooterSubsystem, false),
                 new CmdShooterRunShooterForZone(shooterSubsystem, zone),
                 new CmdShooterWaitUntilReady(shooterSubsystem, intakeSubsystem),
-                new CmdIntakeRollersSpit(intakeSubsystem),
-                new CmdShooterRunShooterForZone(shooterSubsystem, ShooterZone.Unknown),
-                new GrpIntakeMoveToPosition(intakeSubsystem, IntakePosition.Stowed));
-
+                //new CmdIntakeRollersSpit(intakeSubsystem),
+                new CmdShooterRunShooterForZone(shooterSubsystem, ShooterZone.Unknown));
+                //new GrpIntakeMoveToPosition(intakeSubsystem, IntakePosition.Stowed));
     }
 
 }

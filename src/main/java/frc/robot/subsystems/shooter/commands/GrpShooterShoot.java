@@ -25,12 +25,16 @@ public class GrpShooterShoot extends ParallelCommandGroup {
         _shooterSubsystem = shooterSubsystem;
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
-        addCommands(new CmdShooterRunShooter(_shooterSubsystem, _intakeSubsystem, _driveSubsystem), 
-        new CmdShooterWaitUntilReady(_shooterSubsystem, 
-        _intakeSubsystem), _intakeSubsystem.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME),
-        new InstantCommand(
-            () -> {
-                this._shooterSubsystem.setFlywheelSpeed(0);
-            }, this._shooterSubsystem));
+        if (_intakeSubsystem.hasNote()) {
+            addCommands(new CmdShooterRunShooter(_shooterSubsystem, _intakeSubsystem, _driveSubsystem),
+                    new CmdShooterWaitUntilReady(_shooterSubsystem,
+                            _intakeSubsystem),
+                    _intakeSubsystem.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME),
+                    new InstantCommand(
+                            () -> {
+                                this._shooterSubsystem.setFlywheelSpeed(0);
+                            }, this._shooterSubsystem));
+        }
+
     }
 }

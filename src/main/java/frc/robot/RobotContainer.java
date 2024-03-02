@@ -238,8 +238,8 @@ public class RobotContainer {
 
         // shooter fly wheel manual control. Only sets the flywheel speed while holding
         // the button
-        _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
-        _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
+        //_op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
+        //_op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
 
         // FROM MAIN
         _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
@@ -248,6 +248,11 @@ public class RobotContainer {
 
         _opButtonNine.onTrue(this._intake.buildCommand().aquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
+
+        _op2ButtonFour.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+        _op2ButtonThree.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+
+
 
         _op2ButtonSix.onTrue(new GrpShootNoteInZone(_intake, _shooter, _shooter.getCurrentZone()));
 

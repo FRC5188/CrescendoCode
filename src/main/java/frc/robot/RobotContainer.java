@@ -33,7 +33,6 @@ import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
-import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
@@ -206,7 +205,27 @@ public class RobotContainer {
         _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX()));
+
+        // reset the orientation of the robot. changes which way it thinks is forward
+        _controller.y().onTrue(
+                            Commands.runOnce(
+                            () -> _drive.setPose(
+                            new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
+                            _drive) .ignoringDisable(true));
         
+
+        double inchesFromSubwoofer = 39.0;
+        double robotWidth = 13.0 + 1.5;
+        Pose2d robotOnSubwoofer = new Pose2d(
+            DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
+            DriveConstants.RED_SPEAKER.getY(),
+            new Rotation2d(Math.PI)
+        );
+        _controller.b().onTrue(
+                        Commands.runOnce(
+                        () -> _drive.setPose(robotOnSubwoofer)
+                            , _drive).ignoringDisable(true));
+
         // Move the shooter to the podium or subwoofer positions
         /* ---------------- START MANUAL ROBOT CONTROL BUTTON BINDINGS-------------------------- */
         // consider adding a boolean to constants.java to put the robot into "pit" mode or something to

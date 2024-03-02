@@ -116,6 +116,9 @@ public class Robot extends LoggedRobot {
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
     }
+
+    _robotContainer.getRunShooterPIDCommand().schedule();
+    
   }
 
   /** This function is called periodically during autonomous. */
@@ -139,6 +142,7 @@ public class Robot extends LoggedRobot {
     // we were scheduling a new instance of the grpSetupCommand command and auto and telop but never canceling the auto one.
     // I wanted to be super specific and explicit about what commands and functions we were running as we try to detangle our
     // code and get it working
+    _robotContainer.getRunShooterPIDCommand().cancel();
     _robotContainer.getRunShooterPIDCommand().schedule();
     //_robotContainer.getRunIntakePIDCommand().schedule(); // MITCHELL WAS HERE :) REMOVE THIS IF IM NOT
 

@@ -175,7 +175,7 @@ public class RobotContainer {
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
 
-        NamedCommands.registerCommand("intake GroundPos", new IntakeCommandFactory(_intake).pickUpFromGround());
+        NamedCommands.registerCommand("intake GroundPos", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
         NamedCommands.registerCommand("intake Stow", new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
 
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

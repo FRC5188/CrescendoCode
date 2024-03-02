@@ -10,7 +10,7 @@ import frc.robot.subsystems.intake.*;
 public class CmdIntakeWaitForNote extends Command {
   /** Creates a new CmdIntakeWaitForNote. */
   private int _countdownInCycles;
-  private int _timeoutInMs;
+  private int _timeoutInMS;
   private boolean _commandTimesOut;
   private Intake _intakeSubsystem;
   private int _intakeTimer;
@@ -26,7 +26,7 @@ public class CmdIntakeWaitForNote extends Command {
   public CmdIntakeWaitForNote(int timeoutInMs, Intake intakeSubsystem) {
 
     _intakeSubsystem = intakeSubsystem;
-    _timeoutInMs = timeoutInMs;
+    _timeoutInMS = timeoutInMs;
 
     // If a timeout of <=0 is given, this command will never time out.
     _commandTimesOut = !(timeoutInMs <= 0);
@@ -36,7 +36,7 @@ public class CmdIntakeWaitForNote extends Command {
   @Override
   public void initialize() {
     // Current state of the countdown in cycles. 20 ms per robot cycle.
-    _countdownInCycles = (int) Math.ceil(_timeoutInMs / 20.0);
+    _countdownInCycles = (int) Math.ceil(_timeoutInMS / 20.0);
     _intakeTimer = 0;
     _intakeSubsystem.setIntakeHasBeenRunning(false);
   }

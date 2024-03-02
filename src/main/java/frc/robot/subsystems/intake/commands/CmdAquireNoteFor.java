@@ -13,12 +13,12 @@ import frc.robot.subsystems.intake.Intake;
  */
 public class CmdAquireNoteFor extends Command {
   private int _cyclesLeft;
-  private int _timeToRun;
+  private int _timeToRunMS;
   private Intake _intake;
 
-  public CmdAquireNoteFor(int timeToRun, Intake intake) {
+  public CmdAquireNoteFor(int timeToRunMS, Intake intake) {
     this._intake = intake;
-    this._timeToRun = timeToRun;
+    this._timeToRunMS = timeToRunMS;
 
     this.addRequirements(this._intake);
   }
@@ -26,7 +26,7 @@ public class CmdAquireNoteFor extends Command {
   @Override
   public void initialize() {
     // Sets the amount of cycles that you want to run the command for based on the time given.
-    this._cyclesLeft = (int) Math.ceil(this._timeToRun / 20.0);
+    this._cyclesLeft = (int) Math.ceil(this._timeToRunMS / 20.0);
     this._intake.setRollerMotorSpeedAcquire();
   }
 

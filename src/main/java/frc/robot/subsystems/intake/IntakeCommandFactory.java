@@ -66,13 +66,6 @@ public class IntakeCommandFactory {
             .until(() -> this._intake.hasNote());
     }
 
-    public Command pickUpNoteFrom(Intake.IntakePosition position) {
-        return this.setPosition(position)
-            .alongWith(this.aquire())
-            .beforeStarting(this.waitForNote())
-            .beforeStarting(this.stop());
-    }
-
     public Command pickUpFromGround() {
         return this.pickUpNoteFrom(Intake.IntakePosition.GroundPickup);
     }

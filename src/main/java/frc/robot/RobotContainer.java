@@ -15,6 +15,8 @@ package frc.robot;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -26,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeCommandFactory;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.drive.GyroIO;
@@ -170,6 +173,9 @@ public class RobotContainer {
         //setup commands for PID
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
+
+        NamedCommands.registerCommand("intake GroundPos", new IntakeCommandFactory(_intake).pickUpFromGround());
+        NamedCommands.registerCommand("intake Stow", new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
 
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");

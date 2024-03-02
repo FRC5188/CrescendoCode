@@ -235,15 +235,16 @@ public class RobotContainer {
         // shooter position angle manual control
         _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
-
+      
         // shooter fly wheel manual control. Only sets the flywheel speed while holding
         // the button
         //_op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
         //_op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
 
+
         // FROM MAIN
         _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
-        _opButtonSix.onTrue(this._intake.buildCommand().setPosition(IntakePosition.GroundPickup));
+        _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround());
         _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
 
         _opButtonNine.onTrue(this._intake.buildCommand().aquire());

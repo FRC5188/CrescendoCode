@@ -79,4 +79,8 @@ public class IntakeCommandFactory {
     public Command pickUpFromSource() {
         return this.pickUpNoteFrom(Intake.IntakePosition.SourcePickup);
     }
+
+    public Command aquire(int timeMS) {
+        return new CmdAquireNoteFor(timeMS, this._intake);
+    }
 }

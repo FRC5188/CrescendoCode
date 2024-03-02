@@ -6,6 +6,7 @@ package frc.robot.subsystems.shooter.commands;
 
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.intake.IntakeConstants;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
@@ -24,7 +25,7 @@ public class GrpShooterShoot extends ParallelCommandGroup {
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(new CmdShooterRunShooter(_shooterSubsystem, _intakeSubsystem), 
         new CmdShooterWaitUntilReady(_shooterSubsystem, 
-        _intakeSubsystem), _intakeSubsystem.buildCommand().spit(1.0),
+        _intakeSubsystem), _intakeSubsystem.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME),
         new InstantCommand(
             () -> {
                 this._shooterSubsystem.setFlywheelSpeed(0);

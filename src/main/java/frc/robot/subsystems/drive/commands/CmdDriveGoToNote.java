@@ -18,10 +18,6 @@ public class CmdDriveGoToNote extends Command {
 
     _chassisSpeeds = _drive._visionDriveIO.getChassisSpeeds();
 
-    // _forwardSpeed = chassisSpeeds.vxMetersPerSecond;
-    // _rotSpeed = chassisSpeeds.vyMetersPerSecond;
-    // _range = chassisSpeeds.omegaRadiansPerSecond;
-
     addRequirements(drivetrainSubsystem);
   }
 
@@ -43,7 +39,7 @@ public class CmdDriveGoToNote extends Command {
 
   @Override
   public boolean isFinished() {
-    // TODO: Edit
-    return false;
+    // TODO: Edit?
+    return true;
   }
 }

@@ -30,6 +30,7 @@ public class CmdShooterRunShooterForZone extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    _shooterSubsystem.setCurrentZone(_zone);
     _shooterSubsystem.runShooterForZone(_zone);
   }
 

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.robot.subsystems.intake.Intake.IntakePosition;
 
 public class IntakeCommandFactory {
     private Intake _intake;
@@ -69,7 +70,7 @@ public class IntakeCommandFactory {
             
     }
 
-    public Command pickUpNoteFrom(Intake.IntakePosition position) {
+    public Command pickUpNoteFrom(IntakePosition position) {
         return this.setPosition(position)
             .alongWith(this.aquire())
             .beforeStarting(this.waitForNote(1.0))

@@ -4,21 +4,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.Intake.IntakePosition;
 
 public class ShooterCommandFactory {
     private Shooter _shooter;
     private Shooter _shooterSubsystem;
     private ShooterZone _zone;
-    private Intake _intakeSubsystem;
     private boolean _enabled;
 
-    public ShooterCommandFactory(Shooter shooter, Shooter shooterSubsystem, ShooterZone zone, Intake intakeSubsystem, boolean enabled) {
+    public ShooterCommandFactory(Shooter shooter, Shooter shooterSubsystem, ShooterZone zone, boolean enabled) {
         this._shooter = shooter;
         this._shooterSubsystem = shooterSubsystem;
         this._zone = zone;
-        this._intakeSubsystem = intakeSubsystem;
         this._enabled = enabled;
     }
 
@@ -35,15 +31,17 @@ public class ShooterCommandFactory {
             this._shooter);
     }
 
-    // HELP
-    // public Command runFlywheelsForZone(double speedInRPM) {
-    //     return StartEndCommand(
-    //     this._shooterSubsystem.setFlywheelSpeed(_zone.getLeftFlywheelSpeed()),
-    //     () -> {
-    //         this._shooterSubsystem.stopFlywheels();
-    //     }, this._shooterSubsystem)
+    public Command runFlywheelsForZone(double speedInRPM) {
+        return new StartEndCommand(
+        // starts flywheels at beginning of command
+        () -> 
+        this._shooterSubsystem.setFlywheelSpeed(_zone.getLeftFlywheelSpeed()),
+        // stops flywhells at end of command
+        () -> 
+        this._shooterSubsystem.stopFlywheels(),
+        this._shooterSubsystem);
+        }
 
-    // }
 
     public Command runPIDs() {
         return new InstantCommand(
@@ -72,16 +70,4 @@ public class ShooterCommandFactory {
         this._shooterSubsystem
         );
     }
-
-   // HELP
-    //  public Command waitUntilReady() {
-    //     return new Command() {
-    //         @Override
-    //         public boolean isFinished() {
-    //             return this._shooterSubsystem.isReady() && 
-    //             this._intakeSubsystem.pivotAtSetpoint() && 
-    //             this._intakeSubsystem.getIntakePosition() == IntakePosition.SpeakerScore;
-    //         }
-    //     };
-    // }
 }

@@ -140,7 +140,7 @@ public class Robot extends LoggedRobot {
     // I wanted to be super specific and explicit about what commands and functions we were running as we try to detangle our
     // code and get it working
     _robotContainer.getRunShooterPIDCommand().schedule();
-    _robotContainer.getRunIntakePIDCommand().schedule();
+    //_robotContainer.getRunIntakePIDCommand().schedule(); // MITCHELL WAS HERE :) REMOVE THIS IF IM NOT
 
   }
 

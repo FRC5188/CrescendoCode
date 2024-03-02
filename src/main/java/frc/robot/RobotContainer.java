@@ -13,15 +13,18 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
@@ -33,11 +36,7 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
-import frc.robot.subsystems.intake.commands.CmdIntakeRollersAcquire;
-import frc.robot.subsystems.intake.commands.CmdIntakeRollersSpit;
-import frc.robot.subsystems.intake.commands.CmdIntakeRunPID;
-import frc.robot.subsystems.intake.commands.CmdIntakeSetPosition;
-import frc.robot.subsystems.intake.commands.CmdIntakeStopRollers;
+import frc.robot.subsystems.intake.commands.CmdAquireNoteFor;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -47,7 +46,6 @@ import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -66,6 +64,9 @@ public class RobotContainer {
     private Command _runShooterPIDCommand;
     private Command _runIntakePIDCommand;
 
+    // logged dashboard inputs
+    private final LoggedDashboardChooser<Command> _autoChooser;
+
     // Controller
     private final CommandXboxController _controller = new CommandXboxController(0);
 
@@ -77,23 +78,23 @@ public class RobotContainer {
     private final Joystick _operatorController2 = new Joystick(2);
 
     // Left column, top to bottom
-    private JoystickButton _opButtonOne = new
-    JoystickButton(_operatorController1, 1);
-    private JoystickButton _opButtonTwo = new
-    JoystickButton(_operatorController1, 2);
+    // private JoystickButton _opButtonOne = new
+    // JoystickButton(_operatorController1, 1);
+    // private JoystickButton _opButtonTwo = new
+    // JoystickButton(_operatorController1, 2);
     private JoystickButton _opButtonThree = new
     JoystickButton(_operatorController1, 3);
 
     // Middle column, top to bottom
-    private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
+    // private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
     private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
     private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
 
     // Right column, top to bottom
-    private JoystickButton _opButtonSeven = new
-    JoystickButton(_operatorController1, 7);
-    private JoystickButton _opButtonEight = new
-    JoystickButton(_operatorController1, 8);
+    // private JoystickButton _opButtonSeven = new
+    // JoystickButton(_operatorController1, 7);
+    // private JoystickButton _opButtonEight = new
+    // JoystickButton(_operatorController1, 8);
     private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
 
     // Side Toggle Switch
@@ -169,7 +170,10 @@ public class RobotContainer {
 
         //setup commands for PID
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
-        this._runIntakePIDCommand = new CmdIntakeRunPID(_intake);
+        this._runIntakePIDCommand = _intake.buildCommand().runPID();
+
+        _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
         // Configure the button bindings
         configureButtonBindings();
@@ -187,8 +191,8 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> _controller.getLeftY(),
-                        () -> _controller.getLeftX(),
+                        () -> -_controller.getLeftY(),
+                        () -> -_controller.getLeftX(),
                         () -> -_controller.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
@@ -201,9 +205,22 @@ public class RobotContainer {
         _controller.y().onTrue(
                             Commands.runOnce(
                             () -> _drive.setPose(
-                            new Pose2d(_drive.getPose().getTranslation(), new Rotation2d())),
+                            new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
                             _drive) .ignoringDisable(true));
         
+
+        double inchesFromSubwoofer = 39.0;
+        double robotWidth = 13.0 + 1.5;
+        Pose2d robotOnSubwoofer = new Pose2d(
+            DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
+            DriveConstants.RED_SPEAKER.getY(),
+            new Rotation2d(Math.PI)
+        );
+        _controller.b().onTrue(
+                        Commands.runOnce(
+                        () -> _drive.setPose(robotOnSubwoofer)
+                            , _drive).ignoringDisable(true));
+
         // Move the shooter to the podium or subwoofer positions
         /* ---------------- START MANUAL ROBOT CONTROL BUTTON BINDINGS-------------------------- */
         // consider adding a boolean to constants.java to put the robot into "pit" mode or something to
@@ -215,17 +232,18 @@ public class RobotContainer {
 
         // shooter fly wheel manual control. Only sets the flywheel speed while holding the button
         _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
-        _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
+        //_op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
+        _op2ButtonThree.onTrue(new CmdAquireNoteFor(2000, _intake));
 
         // FROM MAIN
-        _opButtonFive.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.Stowed));
-        _opButtonSix.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.GroundPickup));
-        _opButtonThree.onTrue(new CmdIntakeSetPosition(_intake, IntakePosition.AmpScore));
+        _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
+        _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround());
+        _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
 
-        _opButtonNine.onTrue(new CmdIntakeRollersAcquire(_intake));
-        _opButtonNine.onFalse(new CmdIntakeStopRollers(_intake));
+        _opButtonNine.onTrue(this._intake.buildCommand().aquire());
+        _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonEight.onTrue(new CmdIntakeRollersSpit(_intake));
+        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(1.0));
 
         /***
          * 
@@ -246,10 +264,10 @@ public class RobotContainer {
          * 
          * - take the feedforward and feedback numbers and put them in driveconstants.java
          */
-       // _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-       // _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-       // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-       // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    //    _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    //    _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    //    _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    //    _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**
@@ -258,8 +276,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PrintCommand("DUMMY AUTO COMMAND IS RUNNING FROM ROBOT CONTAINER");
-        // return _autoChooser.get();
+        return _autoChooser.get();    
     }
 
     public Command getRunShooterPIDCommand(){

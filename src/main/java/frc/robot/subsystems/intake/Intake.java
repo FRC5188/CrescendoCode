@@ -29,8 +29,11 @@ public class Intake extends SubsystemBase {
     }
 
     protected IntakePosition _intakePosition;
+    private final IntakeCommandFactory _intakeCommandFactory = new IntakeCommandFactory(this);
+
     private final IntakeIO _intakeIO;
     private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged();
+
     private boolean _hasNote;
     private boolean _intakeHasBeenRunning;
     private ProfiledPIDController _pivotPid;
@@ -52,6 +55,9 @@ public class Intake extends SubsystemBase {
         // might want to call this to make sure inputs are always initialized??
         // this.periodic();
         this.setIntakePosition(IntakePosition.Stowed);
+
+        // REMOVE THESE COMMENTS IF IT DOESN'T WORK :)
+        setDefaultCommand(_intakeCommandFactory.runPID());
     }
 
     /**
@@ -169,6 +175,10 @@ public class Intake extends SubsystemBase {
      */
     public double getTargetPosition(){
         return this._intakePosition.getAngle();
+    }
+
+    public IntakeCommandFactory buildCommand() {
+        return this._intakeCommandFactory;
     }
 
     @Override

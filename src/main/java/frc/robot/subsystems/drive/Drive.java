@@ -116,9 +116,9 @@ public class Drive extends SubsystemBase {
     _sysId =
         new SysIdRoutine(
             new SysIdRoutine.Config(
-                null,
-                null,
-                null,
+              DriveConstants.SYSID_RAMP_RRATE,
+              DriveConstants.SYSID_STEP_VOLTAGE,
+              DriveConstants.SYSID_TIMEOUT,
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> {

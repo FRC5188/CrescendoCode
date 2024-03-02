@@ -5,11 +5,25 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class HardwareConstants {
-    public static final int NUMBER_OF_PHOTONVISION_CAMERAS = 2;
-    public static final int NUMBER_OF_LIMELIGHT_CAMERAS = 1;
-
+    public static final int NUMBER_OF_CAMERAS = 0;
     public class CanIds {
-        
+        // |====================== SWERVE MODULE CAN IDs ======================|
+        public static int FL_DRIVE = 1;
+        public static int FL_TURN = 2;
+        public static int FL_CANCODER = 3;
+
+        public static int FR_DRIVE = 4;
+        public static int FR_TURN = 5;
+        public static int FR_CANCODER = 6;
+
+        public static int BL_DRIVE = 7;
+        public static int BL_TURN = 8;
+        public static int BL_CANCODER = 9;
+
+        public static int BR_DRIVE = 10;
+        public static int BR_TURN = 11;
+        public static int BR_CANCODER = 12;
+
         // |====================== INTAKE SUBSYSTEM CAN IDs ======================|
         public static int PIVOT_MOTOR_ID = 21;
         public static int ROLLER_MOTOR_ID = 20;

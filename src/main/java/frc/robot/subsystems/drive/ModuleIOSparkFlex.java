@@ -23,6 +23,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
 
 /**
@@ -56,28 +57,28 @@ public class ModuleIOSparkFlex implements ModuleIO {
   public ModuleIOSparkFlex(int index) {
     switch (index) {
       case 0: //Front Left
-        _driveSparkFlex = new CANSparkFlex(1, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(2, MotorType.kBrushless);
-        _cancoder = new CANcoder(3);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.453711); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FL_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FL_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.FL_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.FL_OFFSET); // MUST BE CALIBRATED
         break;
       case 1: //Front Right
-        _driveSparkFlex = new CANSparkFlex(4, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(5, MotorType.kBrushless);
-        _cancoder = new CANcoder(6);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.716553); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FR_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FR_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.FR_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.FR_OFFSET); // MUST BE CALIBRATED
         break;
       case 2: //Back Left
-        _driveSparkFlex = new CANSparkFlex(7, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(8, MotorType.kBrushless);
-        _cancoder = new CANcoder(9);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.230787455240885); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BL_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BL_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.BL_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.BL_OFFSET); // MUST BE CALIBRATED
         break;
       case 3: //Back Right
-        _driveSparkFlex = new CANSparkFlex(10, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(11, MotorType.kBrushless);
-        _cancoder = new CANcoder(12);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.380286458333333); // MUST BE CALIBRATED
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BR_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BR_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.BR_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.BR_OFFSET); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");

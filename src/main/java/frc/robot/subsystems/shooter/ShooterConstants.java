@@ -18,13 +18,13 @@ public abstract class ShooterConstants {
 
 
     // podium
-    public static final double ZONE_PODIUM_FLYWHEEL_SPEED = 2250;
+    public static final double ZONE_PODIUM_FLYWHEEL_SPEED = 1750;
     public static final double ZONE_PODIUM_LOW_BOUND = 4;
     public static final double ZONE_PODIUM_UPPER_BOUND = 2.5;
     public static final double ZONE_PODIUM_SHOOTER_ANGLE = 30;
 
     // subwoofer
-    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1500;
+    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1000;
     public static final double ZONE_SUBWOOFER_LOW_BOUND = 0.0;
     public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
     public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 41;

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.drive.GyroIO;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -43,7 +45,6 @@ import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunFlywheelsForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
-import frc.robot.subsystems.shooter.commands.GrpShooterShoot;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 
@@ -61,6 +62,7 @@ public class RobotContainer {
     private final Drive _drive;
     private final Intake _intake;
     private final Shooter _shooter;
+    private ShooterZone _zone;
     private Command _runShooterPIDCommand;
     private Command _runIntakePIDCommand;
 
@@ -247,9 +249,13 @@ public class RobotContainer {
         _opButtonNine.onTrue(this._intake.buildCommand().aquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonFive.onTrue(new GrpShooterShoot(_intake, _shooter, _drive));
+        _op2ButtonSix.onTrue(new GrpShootNoteInZone(_intake, _shooter, _shooter.getCurrentZone()));
 
-        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(1.0));
+        //_opButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter, _drive));
+
+
+
+        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
 
         /***
          * 

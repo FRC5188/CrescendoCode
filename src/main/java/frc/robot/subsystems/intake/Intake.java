@@ -129,8 +129,9 @@ public class Intake extends SubsystemBase {
      * @return boolean
      */
     public boolean pivotAtSetpoint() {
-        double pivotEncoderPositionDegrees = Units.rotationsToDegrees(_intakeInputs._pivotEncoderPositionDegrees);
+        double pivotEncoderPositionDegrees = _intakeInputs._pivotEncoderPositionDegrees;
         double targetPositionDegrees = _intakePosition.getAngle();
+        System.out.printf("angle offset: %f %f\n", pivotEncoderPositionDegrees, targetPositionDegrees);
         return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
 

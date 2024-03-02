@@ -28,6 +28,7 @@ import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
+import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
@@ -233,6 +234,7 @@ public class RobotContainer {
         _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                         () -> -_controller.getLeftY(),
                         () -> -_controller.getLeftX()));
+        _controller.a().whileTrue(new CmdDriveGoToNote(_drive));
         
         // Move the shooter to the podium or subwoofer positions
         /* ---------------- START MANUAL ROBOT CONTROL BUTTON BINDINGS-------------------------- */

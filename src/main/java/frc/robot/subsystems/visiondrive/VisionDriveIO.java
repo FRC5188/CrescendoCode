@@ -1,17 +1,12 @@
 package frc.robot.subsystems.visiondrive;
 
-import org.littletonrobotics.junction.AutoLog;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public interface VisionDriveIO {
     
-    @AutoLog
-    public static class VisionDriveIOInputs {
-        public double _forwardSpeed;
-        public double _rotSpeed;
-        public double _range;
+    public default ChassisSpeeds getChassisSpeeds() {
+        return new ChassisSpeeds();
     }
-
-    public default void updateInputs(VisionDriveIOInputs inputs) {}
 
     public default boolean hasTarget() {
         return false;

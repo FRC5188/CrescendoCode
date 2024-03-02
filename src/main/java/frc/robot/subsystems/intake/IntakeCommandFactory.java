@@ -4,67 +4,80 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import frc.robot.subsystems.intake.Intake.IntakePosition;
 
-class ShooterCommandFactory {
+public class IntakeCommandFactory {
     private Intake _intake;
-    private Intake _intakeSubsystem;
-    private IntakePosition _intakePosition;
 
-    protected void IntakeCommandFactory(Intake intake, Intake intakeSubsystem) {
+    public IntakeCommandFactory(Intake intake) {
         this._intake = intake;
-        this._intakeSubsystem = intakeSubsystem;
-    }
-    // sets the roller speed to acquire
-    protected Command rollerAcquire() {
-        return new InstantCommand(() ->
-        _intake.setRollerMotorSpeedAcquire(),
-        _intake);
     }
 
-    // sets the roller speed to spit
-    protected Command rollerSpit() {
-        return new InstantCommand(() ->
-        _intake.setRollerMotorSpeedSpit(),
-        _intake);
-
+    public Command aquire() {
+        return new InstantCommand(
+            this._intake::setRollerMotorSpeedAcquire,
+            this._intake);
     }
 
-    // runs the PID
-    protected Command runPID() {
-        return new RunCommand(() ->
-        _intakeSubsystem.runPivotPID(),
-        _intakeSubsystem);
+    public Command spit(double timeSeconds) {
+
+        return new StartEndCommand(
+         this._intake::setRollerMotorSpeedSpit,
+         () -> {
+                this._intake.stopRollerMotor();
+                this._intake.resetHasNote();
+
+         }, 
+         this._intake).withTimeout(timeSeconds);
     }
 
-    // sets intake position to a given IntakePosition
-    protected Command setPosition() {
-        return new InstantCommand(() ->
-        _intake.setIntakePosition(_intakePosition),
-        _intake);
+    public Command runPID() {
+        return new RunCommand(
+            this._intake::runPivotPID, this._intake);
     }
 
-    // stops the roller motors
-    protected Command stopRollers() {
-        return new InstantCommand(() ->
-        _intakeSubsystem.stopRollerMotor(),
-        _intakeSubsystem);
-    }
-    
-    // waits until pivot is at its setpoint
-    protected Command waitForIntake() {
-        return new Command() {
-            @Override
-            public boolean isFinished() {
-                return _intakeSubsystem.pivotAtSetpoint();
-            }
-        };
+    public Command setPosition(Intake.IntakePosition position) {
+        return new InstantCommand(
+            () -> {
+                this._intake.setIntakePosition(position);
+                if (position == Intake.IntakePosition.Stowed) {
+                    this._intake.stopRollerMotor();
+                }
+            }, this._intake);
     }
 
-    protected Command waitForNote() {
-        return new Command() {
-            //TODO
-            }
-        }
-    // 
+    public Command stop(){
+        return new InstantCommand(
+            this._intake::stopRollerMotor, this._intake);
+    }
+
+    public Command waitForIntake() {
+        return new RunCommand(() -> {}, this._intake).until(() -> this._intake.pivotAtSetpoint());
+    }
+
+    public Command waitForNote(double timeSeconds) {
+        return new StartEndCommand(
+         this._intake::setRollerMotorSpeedSpit,
+         () -> {
+                this._intake.stopRollerMotor();
+                this._intake.resetHasNote();
+
+         }, this._intake)
+            .withTimeout(timeSeconds)
+            .until(() -> this._intake.hasNote());
+    }
+
+    public Command pickUpNoteFrom(Intake.IntakePosition position) {
+        return this.setPosition(position)
+            .alongWith(this.aquire())
+            .beforeStarting(this.waitForNote())
+            .beforeStarting(this.stop());
+    }
+
+    public Command pickUpFromGround() {
+        return this.pickUpNoteFrom(Intake.IntakePosition.GroundPickup);
+    }
+
+    public Command pickUpFromSource() {
+        return this.pickUpNoteFrom(Intake.IntakePosition.SourcePickup);
+    }
 }

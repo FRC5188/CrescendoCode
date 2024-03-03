@@ -186,6 +186,16 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake Stow", new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
         NamedCommands.registerCommand("Subwoofer Shoot", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
         NamedCommands.registerCommand("Podium Shoot", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+        NamedCommands.registerCommand("set has note", new Command() {
+            @Override
+            public void initialize() {
+                _intake.setHasNote();
+            }
+            @Override
+            public boolean isFinished() {
+                return true;
+            }
+        });
 
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");

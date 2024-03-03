@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Subwoofer Shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "drive straight"

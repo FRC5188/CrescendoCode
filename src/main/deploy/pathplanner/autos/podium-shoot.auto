@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "set has note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Subwoofer Shoot"
           }
         },

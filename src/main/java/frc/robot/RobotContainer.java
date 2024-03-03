@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.drive.GyroIO;
@@ -36,12 +37,11 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
-import frc.robot.subsystems.intake.commands.CmdAquireNoteFor;
+import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunFlywheelsForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
@@ -59,10 +59,11 @@ import frc.robot.subsystems.visiondrive.VisionDriveIO;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
- // Subsystems
+    // Subsystems
     private final Drive _drive;
     private final Intake _intake;
     private final Shooter _shooter;
+    private ShooterZone _zone;
     private Command _runShooterPIDCommand;
     private Command _runIntakePIDCommand;
 
@@ -84,11 +85,11 @@ public class RobotContainer {
     // JoystickButton(_operatorController1, 1);
     // private JoystickButton _opButtonTwo = new
     // JoystickButton(_operatorController1, 2);
-    private JoystickButton _opButtonThree = new
-    JoystickButton(_operatorController1, 3);
+    private JoystickButton _opButtonThree = new JoystickButton(_operatorController1, 3);
 
     // Middle column, top to bottom
-    // private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
+    // private JoystickButton _opButtonFour = new
+    // JoystickButton(_operatorController1, 4);
     private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
     private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
 
@@ -104,26 +105,18 @@ public class RobotContainer {
     // JoystickButton(_operatorController1, 10);
 
     // Bottom rows, left to right (not top then bottom!)
-    private JoystickButton _op2ButtonOne = new
-        JoystickButton(_operatorController2, 1);
-    private JoystickButton _op2ButtonTwo = new
-        JoystickButton(_operatorController2, 2);
-    private JoystickButton _op2ButtonThree = new
-        JoystickButton(_operatorController2, 3);
-    private JoystickButton _op2ButtonFour = new
-        JoystickButton(_operatorController2, 4);
-    private JoystickButton _op2ButtonFive = new
-        JoystickButton(_operatorController2, 5);
-    private JoystickButton _op2ButtonSix = new
-        JoystickButton(_operatorController2, 6);
-    
-    // this button is broken
-    private JoystickButton _op2ButtonEight = new
-    JoystickButton(_operatorController2, 8);
+    private JoystickButton _op2ButtonOne = new JoystickButton(_operatorController2, 1);
+    private JoystickButton _op2ButtonTwo = new JoystickButton(_operatorController2, 2);
+    private JoystickButton _op2ButtonThree = new JoystickButton(_operatorController2, 3);
+    private JoystickButton _op2ButtonFour = new JoystickButton(_operatorController2, 4);
+    private JoystickButton _op2ButtonFive = new JoystickButton(_operatorController2, 5);
+    private JoystickButton _op2ButtonSix = new JoystickButton(_operatorController2, 6);
 
-   // Bottom right button (Frowny face)
-    private JoystickButton _op2ButtonNine = new
-    JoystickButton(_operatorController2, 9);
+    // this button is broken
+    private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 8);
+
+    // Bottom right button (Frowny face)
+    private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -140,7 +133,7 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
                         new ModuleIOSparkFlex(3));
-                _intake = new Intake( new RealIntakeIO());
+                _intake = new Intake(new RealIntakeIO());
                 _shooter = new Shooter(new RealShooterIO());
                 break;
 
@@ -154,8 +147,10 @@ public class RobotContainer {
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim());
-                _intake = new Intake( new IntakeIO(){});
-                _shooter = new Shooter(new ShooterIO(){});
+                _intake = new Intake(new IntakeIO() {
+                });
+                _shooter = new Shooter(new ShooterIO() {
+                });
                 break;
             default:
                 // Replayed robot, disable IO implementations
@@ -168,12 +163,14 @@ public class RobotContainer {
                         new ModuleIO() {},
                         new ModuleIO() {
                         });
-                _intake = new Intake( new IntakeIO(){});
-                _shooter = new Shooter(new ShooterIO(){});
+                _intake = new Intake(new IntakeIO() {
+                });
+                _shooter = new Shooter(new ShooterIO() {
+                });
                 break;
         }
 
-        //setup commands for PID
+        // setup commands for PID
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
 
@@ -203,42 +200,44 @@ public class RobotContainer {
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         // face the speaker while we hold this button
         _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX()));
+                () -> -_controller.getLeftY(),
+                () -> -_controller.getLeftX()));
 
         // reset the orientation of the robot. changes which way it thinks is forward
         _controller.y().onTrue(
-                            Commands.runOnce(
-                            () -> _drive.setPose(
-                            new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
-                            _drive) .ignoringDisable(true));
-        
+                Commands.runOnce(
+                        () -> _drive.setPose(
+                                new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
+                        _drive).ignoringDisable(true));
 
         double inchesFromSubwoofer = 39.0;
         double robotWidth = 13.0 + 1.5;
         Pose2d robotOnSubwoofer = new Pose2d(
-            DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
-            DriveConstants.RED_SPEAKER.getY(),
-            new Rotation2d(Math.PI)
-        );
+                DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
+                DriveConstants.RED_SPEAKER.getY(),
+                new Rotation2d(Math.PI));
         _controller.b().onTrue(
-                        Commands.runOnce(
-                        () -> _drive.setPose(robotOnSubwoofer)
-                            , _drive).ignoringDisable(true));
+                Commands.runOnce(
+                        () -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
 
         // Move the shooter to the podium or subwoofer positions
-        /* ---------------- START MANUAL ROBOT CONTROL BUTTON BINDINGS-------------------------- */
-        // consider adding a boolean to constants.java to put the robot into "pit" mode or something to
+        /*
+         * ---------------- START MANUAL ROBOT CONTROL BUTTON
+         * BINDINGS--------------------------
+         */
+        // consider adding a boolean to constants.java to put the robot into "pit" mode
+        // or something to
         // switch the buttons to manual control for testing.
-        
-        // shooter position angle manual control 
+
+        // shooter position angle manual control
         _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
-
-        // shooter fly wheel manual control. Only sets the flywheel speed while holding the button
-        _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
+      
+        // shooter fly wheel manual control. Only sets the flywheel speed while holding
+        // the button
+        //_op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
         //_op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
-        _op2ButtonThree.onTrue(new CmdAquireNoteFor(2000, _intake));
+
 
         // FROM MAIN
         _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
@@ -248,12 +247,37 @@ public class RobotContainer {
         _opButtonNine.onTrue(this._intake.buildCommand().aquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(1.0));
+        _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+        _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+
+
+
+        _op2ButtonSix.onTrue(new GrpShootNoteInZone(_intake, _shooter, _shooter.getCurrentZone()));
+        _op2ButtonSix.onTrue(new Command() {
+
+            @Override
+            public void initialize(){
+                _shooter.setFlywheelSpeed(0.0);
+            }
+
+            @Override
+            public boolean isFinished(){
+                return true;
+            }
+        }
+        );
+
+        //_opButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter, _drive));
+
+
+
+        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
 
         /***
          * 
          * SYSID BUTTON MAPPINGS
-         * These lines map the sysid routines to the d-pad on the driver's controller. These should NEVER
+         * These lines map the sysid routines to the d-pad on the driver's controller.
+         * These should NEVER
          * be enabled for a match. Read the links below for more about how to use sysid
          * 
          * - how the code is setup (that's what these lines below do)
@@ -264,15 +288,18 @@ public class RobotContainer {
          * 
          * - looking at the data
          * https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
-         *  - note: use advantagescope to connect from the robot and download a log file with the data
-         *  - you can use the position, velocity, and voltage of one module to represent the whole drivetrain
+         * - note: use advantagescope to connect from the robot and download a log file
+         * with the data
+         * - you can use the position, velocity, and voltage of one module to represent
+         * the whole drivetrain
          * 
-         * - take the feedforward and feedback numbers and put them in driveconstants.java
+         * - take the feedforward and feedback numbers and put them in
+         * driveconstants.java
          */
-    //    _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    //    _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    //    _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    //    _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // _controller.povRight().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**
@@ -281,10 +308,10 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return _autoChooser.get();    
+        return _autoChooser.get();
     }
 
-    public Command getRunShooterPIDCommand(){
+    public Command getRunShooterPIDCommand() {
         return this._runShooterPIDCommand;
     }
 

@@ -77,6 +77,10 @@ public class Shooter extends SubsystemBase {
     setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
   }
 
+  public void setCurrentZone(ShooterZone zone){
+    _currentShooterZone = zone;
+  }
+
   public void runAnglePid() {
     _shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
   }
@@ -137,13 +141,11 @@ public class Shooter extends SubsystemBase {
     return _currentShooterZone;
   }
 
+  // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
   private boolean areFlywheelsAtTargetSpeed() {
-    return Math
-        .abs(_shooterInputs._leftFlywheelMotorVelocityRotationsPerMin
-            - _targetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
+    return _targetFlywheelSpeed - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
         &&
-        Math.abs(_shooterInputs._rightFlywheelMotorVelocityRotationsPerMin
-            - _rightTargetFlywheelSpeed) <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+            _rightTargetFlywheelSpeed - _shooterInputs._rightFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
   }
 
   /**
@@ -192,6 +194,7 @@ public class Shooter extends SubsystemBase {
   }
 
   private boolean shooterInPosition() {
+    //System.out.printf("target shooter angle: %f, current shooter angle: %f\n", _targetShooterPositionAngle, getCurrentPositionInDegrees());
     return Math.abs(_targetShooterPositionAngle
         - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
@@ -209,6 +212,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isReady() {
+    //System.out.printf("Shooter in Position: %b,\n speed: %f, target speed: %f \n current shooter zone: ", shooterInPosition(), _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin, _targetFlywheelSpeed);
+    System.out.println(_currentShooterZone);
     return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
   }
 

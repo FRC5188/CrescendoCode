@@ -154,6 +154,15 @@ public class Intake extends SubsystemBase {
     }
 
     /**
+     * Set has note to true. Needed as a work around for autos for the time being.
+     * 
+     * Using this to tell the robot it has a note so it can do auto shoot
+     */
+    public void setHasNote() {
+        _hasNote = true;
+    }
+
+    /**
      * Sets intakeHasBeenRunning to a boolean
      * @param running
      */

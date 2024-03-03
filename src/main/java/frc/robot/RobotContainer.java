@@ -42,7 +42,6 @@ import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunFlywheelsForZone;
 import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
@@ -250,12 +249,25 @@ public class RobotContainer {
         _opButtonNine.onTrue(this._intake.buildCommand().aquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonFour.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
-        _op2ButtonThree.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+        _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
 
 
 
         _op2ButtonSix.onTrue(new GrpShootNoteInZone(_intake, _shooter, _shooter.getCurrentZone()));
+        _op2ButtonSix.onTrue(new Command() {
+
+            @Override
+            public void initialize(){
+                _shooter.setFlywheelSpeed(0.0);
+            }
+
+            @Override
+            public boolean isFinished(){
+                return true;
+            }
+        }
+        );
 
         //_opButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter, _drive));
 

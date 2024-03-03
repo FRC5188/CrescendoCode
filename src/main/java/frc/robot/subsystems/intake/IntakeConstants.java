@@ -31,7 +31,7 @@ public class IntakeConstants {
      * 
      **********************/
     public static final double POSITION_SOURCE_PICKUP = 50;
-    public static final double POSITION_GROUND_PICKUP = 175;
+    public static final double POSITION_GROUND_PICKUP = 172;
     public static final double POSITION_STOWED = 5;
     public static final double POSITION_AMP_SCORE = 60;
     public static final double POSITION_SPEAKER_SCORE = 115;

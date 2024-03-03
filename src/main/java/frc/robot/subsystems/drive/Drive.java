@@ -138,8 +138,6 @@ public class Drive extends SubsystemBase {
 
     _visionIO.updateInputs(_visionInputs);
     Logger.processInputs("Drive/Vision", _visionInputs);
-
-    _visionDriveIO.getChassisSpeeds();
         
     for (var module : _modules) {
       module.periodic();

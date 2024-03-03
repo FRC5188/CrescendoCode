@@ -44,13 +44,11 @@ public class RealVisionDriveIO implements VisionDriveIO {
         if (hasTarget()) {
 
             System.out.print("Target acquired! ");
-            _tx = _table.getEntry("tx").getDouble(100.0);
-            _ty = _table.getEntry("ty").getDouble(100.0);
+            _tx = _table.getEntry("tx").getDouble(0.0);
+            _ty = _table.getEntry("ty").getDouble(0.0);
             
             _chassisSpeeds.vxMetersPerSecond = _translatePID.calculate(_tx, 0);
             _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_ty, 0);
-
-            System.out.println(" vx is:" + _chassisSpeeds.vxMetersPerSecond + " and vy is: " + _chassisSpeeds.vyMetersPerSecond);
 
             return _chassisSpeeds;
 
@@ -59,6 +57,8 @@ public class RealVisionDriveIO implements VisionDriveIO {
             _chassisSpeeds.vyMetersPerSecond = 0.0;
             _chassisSpeeds.omegaRadiansPerSecond = 0.0;
         }
+
+        System.out.println(" vx is:" + _chassisSpeeds.vxMetersPerSecond + " and vy is: " + _chassisSpeeds.vyMetersPerSecond);
 
         return _chassisSpeeds;
     }

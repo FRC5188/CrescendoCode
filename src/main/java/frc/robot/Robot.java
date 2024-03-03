@@ -214,6 +214,7 @@ public class Robot extends LoggedRobot {
       _robotContainer.getRunShooterPIDCommand()
     )){
       _robotContainer.getRunShooterPIDCommand().schedule();
+    }
   }
 
   /** This function is called periodically during operator control. */

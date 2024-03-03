@@ -7,15 +7,9 @@ import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 
 public class ShooterCommandFactory {
     private Shooter _shooter;
-    private Shooter _shooterSubsystem;
-    private ShooterZone _zone;
-    private boolean _enabled;
 
-    public ShooterCommandFactory(Shooter shooter, Shooter shooterSubsystem, ShooterZone zone, boolean enabled) {
+    public ShooterCommandFactory(Shooter shooter) {
         this._shooter = shooter;
-        this._shooterSubsystem = shooterSubsystem;
-        this._zone = zone;
-        this._enabled = enabled;
     }
 
     /** Sets the angle of the Shooter. */
@@ -31,43 +25,49 @@ public class ShooterCommandFactory {
             this._shooter);
     }
 
-    public Command runFlywheelsForZone(double speedInRPM) {
+    public Command runFlywheelsForZone(Shooter.ShooterZone zone) {
         return new StartEndCommand(
         // starts flywheels at beginning of command
         () -> 
-        this._shooterSubsystem.setFlywheelSpeed(_zone.getLeftFlywheelSpeed()),
+        this._shooter.setFlywheelSpeed(zone.getLeftFlywheelSpeed()),
         // stops flywhells at end of command
         () -> 
-        this._shooterSubsystem.stopFlywheels(),
-        this._shooterSubsystem);
+        this._shooter.stopFlywheels(),
+        this._shooter);
         }
 
 
     public Command runPIDs() {
-        return new InstantCommand(
-        this._shooterSubsystem::runAnglePid,
-        this._shooterSubsystem
-        );
+        return new Command() {
+          @Override
+          public void execute() {
+              _shooter.runAnglePid();
+          }  
+          @Override
+              public boolean isFinished() {
+                  return false;
+              }
+        };
     }
 
     public Command runForZone(ShooterZone zone) {
         return new InstantCommand (() ->
-        this._shooterSubsystem.runShooterForZone(_zone),
-        this._shooterSubsystem
+        this._shooter.runShooterForZone(zone),
+        this._shooter
         );
 
     }
 
     public Command setAutoShootEnabled(boolean enabled) {
         return new InstantCommand(() ->
-        this._shooterSubsystem.setAutoShootEnabled(_enabled),
-        this._shooterSubsystem);
+        this._shooter.setAutoShootEnabled(enabled),
+        this._shooter);
     }
 
-    public Command setPositionByZone() {
+    public Command setPositionByZone(Shooter.ShooterZone zone) {
         return new InstantCommand (() ->
-        this._shooterSubsystem.setShooterPositionWithZone(_zone),
-        this._shooterSubsystem
+        this._shooter.setShooterPositionWithZone(zone),
+        this._shooter
         );
     }
 }

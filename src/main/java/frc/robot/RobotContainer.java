@@ -18,7 +18,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -250,12 +252,23 @@ public class RobotContainer {
         _opButtonNine.onTrue(this._intake.buildCommand().aquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonFour.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
-        _op2ButtonThree.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+        _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
 
 
 
         _op2ButtonSix.onTrue(new GrpShootNoteInZone(_intake, _shooter, _shooter.getCurrentZone()));
+        _op2ButtonSix.onTrue(new Command() {
+
+            @Override
+            public void initialize(){
+                _shooter.setFlywheelSpeed(0.0);
+            }
+
+            @Override
+            public boolean isFinished(){return true;}
+        }
+        );
 
         //_opButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter, _drive));
 

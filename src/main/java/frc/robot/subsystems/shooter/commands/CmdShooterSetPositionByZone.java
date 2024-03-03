@@ -26,6 +26,7 @@ public class CmdShooterSetPositionByZone extends Command {
     @Override
     public void initialize() {
         _shooterSubsystem.setShooterPositionWithZone(_zone);
+        _shooterSubsystem.setCurrentZone(_zone);
     }
 
     @Override
@@ -35,7 +36,8 @@ public class CmdShooterSetPositionByZone extends Command {
 
     @Override
     public void end(boolean interrupted) {
-
+        System.out.printf("Current zone set to: ");
+        System.out.println(_zone);
     }
 
     @Override

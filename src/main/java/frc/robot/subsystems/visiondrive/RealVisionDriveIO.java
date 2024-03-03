@@ -24,8 +24,8 @@ public class RealVisionDriveIO implements VisionDriveIO {
     private NetworkTable _table;
 
     public RealVisionDriveIO() {
-        _translatePID = new PIDController(0.5, 0, 0);
-        _rotatePID = new PIDController(7.0, 0, 0);
+        _translatePID = new PIDController(0.1, 0, 0);
+        _rotatePID = new PIDController(0.05, 0, 0);
 
         _chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
@@ -47,10 +47,8 @@ public class RealVisionDriveIO implements VisionDriveIO {
             _tx = _table.getEntry("tx").getDouble(0.0);
             _ty = _table.getEntry("ty").getDouble(0.0);
             
-            _chassisSpeeds.vxMetersPerSecond = _translatePID.calculate(_tx, 0);
-            _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_ty, 0);
-
-            return _chassisSpeeds;
+            _chassisSpeeds.vxMetersPerSecond = -1.0*_translatePID.calculate(_ty, 0);
+            _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_tx, 0);
 
         } else {
             _chassisSpeeds.vxMetersPerSecond = 0.0;
@@ -58,7 +56,7 @@ public class RealVisionDriveIO implements VisionDriveIO {
             _chassisSpeeds.omegaRadiansPerSecond = 0.0;
         }
 
-        System.out.println(" vx is:" + _chassisSpeeds.vxMetersPerSecond + " and vy is: " + _chassisSpeeds.vyMetersPerSecond);
+        System.out.println( _chassisSpeeds);
 
         return _chassisSpeeds;
     }

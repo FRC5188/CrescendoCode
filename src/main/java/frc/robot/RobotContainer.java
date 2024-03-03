@@ -39,6 +39,7 @@ import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
+import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
@@ -219,10 +220,13 @@ public class RobotContainer {
                         () -> -_controller.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+
         // face the speaker while we hold this button
         _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                 () -> -_controller.getLeftY(),
                 () -> -_controller.getLeftX()));
+
+        _controller.a().whileTrue(new CmdDriveGoToNote(_drive));
 
         // reset the orientation of the robot. changes which way it thinks is forward
         _controller.y().onTrue(

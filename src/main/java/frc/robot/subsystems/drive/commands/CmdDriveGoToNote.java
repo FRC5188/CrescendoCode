@@ -29,17 +29,16 @@ public class CmdDriveGoToNote extends Command {
   public void execute() {
     System.out.println("Button A was pressed.");
     _chassisSpeeds = _drive._visionDriveIO.getChassisSpeeds();
-
     this._drive.runVelocity(_chassisSpeeds);
   }
 
   @Override
   public void end(boolean interrupted) {
+    System.out.println("CmdDriveGoToNote terminated");
   }
 
   @Override
   public boolean isFinished() {
-    // TODO: Edit?
-    return true;
+    return false;
   }
 }

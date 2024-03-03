@@ -158,6 +158,18 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     _autonomousCommand = _robotContainer.getAutonomousCommand();
 
+    // if the intakePID command is NOT scheduled, then schedule it
+    if(!CommandScheduler.getInstance().isScheduled(
+          _robotContainer.getRunIntakePIDCommand())){
+          _robotContainer.getRunIntakePIDCommand().schedule();
+          }
+    // if the shooterPID command is NOT scheduled then schedule it
+    if(!CommandScheduler.getInstance().isScheduled(
+      _robotContainer.getRunShooterPIDCommand()
+    )){
+      _robotContainer.getRunShooterPIDCommand().schedule();
+    }
+
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
@@ -185,9 +197,20 @@ public class Robot extends LoggedRobot {
     // we were scheduling a new instance of the grpSetupCommand command and auto and telop but never canceling the auto one.
     // I wanted to be super specific and explicit about what commands and functions we were running as we try to detangle our
     // code and get it working
-    _robotContainer.getRunShooterPIDCommand().schedule();
-    //_robotContainer.getRunIntakePIDCommand().schedule(); // MITCHELL WAS HERE :) REMOVE THIS IF IM NOT
+    // _robotContainer.getRunShooterPIDCommand().schedule();
+    // _robotContainer.getRunIntakePIDCommand().schedule(); // MITCHELL WAS HERE :) REMOVE THIS IF IM NOT
 
+
+    // if the intakePID command is NOT scheduled, then schedule it
+    if(!CommandScheduler.getInstance().isScheduled(
+          _robotContainer.getRunIntakePIDCommand())){
+          _robotContainer.getRunIntakePIDCommand().schedule();
+          }
+    // if the shooterPID command is NOT scheduled then schedule it
+    if(!CommandScheduler.getInstance().isScheduled(
+      _robotContainer.getRunShooterPIDCommand()
+    )){
+      _robotContainer.getRunShooterPIDCommand().schedule();
   }
 
   /** This function is called periodically during operator control. */

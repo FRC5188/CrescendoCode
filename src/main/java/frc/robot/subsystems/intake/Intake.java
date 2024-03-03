@@ -57,7 +57,7 @@ public class Intake extends SubsystemBase {
         this.setIntakePosition(IntakePosition.Stowed);
 
         // REMOVE THESE COMMENTS IF IT DOESN'T WORK :)
-        setDefaultCommand(_intakeCommandFactory.runPID());
+        // setDefaultCommand(_intakeCommandFactory.runPID());
     }
 
     /**

@@ -22,7 +22,9 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -75,8 +77,8 @@ public class RobotContainer {
     private final LoggedDashboardChooser<Command> _autoChooser;
 
     // Controller
-    private final CommandXboxController _controller = new CommandXboxController(0);
-
+    private final Joystick driveJoystick = new Joystick(0); 
+    
     // Button box
     // Top half of buttons
     private final Joystick _operatorController1 = new Joystick(1);
@@ -122,6 +124,12 @@ public class RobotContainer {
     // Bottom right button (Frowny face)
     private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
 
+    // Joystick buttons
+    private JoystickButton _driverOperatorButton5 = new JoystickButton(driveJoystick, 5);
+    private JoystickButton _driverOperatorButton3 = new JoystickButton(driveJoystick, 3);
+    private JoystickButton _driverOperatorButton4 = new JoystickButton(driveJoystick, 4);
+    private JoystickButton _driverOperatorButton6 = new JoystickButton(driveJoystick, 6);
+    
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -214,20 +222,22 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         _drive.setDefaultCommand(
-                DriveCommands.joystickDrive(
+                DriveCommands.driveJoystick(
                         _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> -_controller.getRightX()));
+                        () -> - driveJoystick.getY(),
+                        () -> - driveJoystick.getX(),
+                        () -> - driveJoystick.getTwist()));
         // create an x shaped pattern with the wheels to make it harder to push us
-        _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+        _driverOperatorButton3.onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+        
+        // Keep for later. Reenable Later
         // face the speaker while we hold this button
-        _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                () -> -_controller.getLeftY(),
-                () -> -_controller.getLeftX()));
+        _driverOperatorButton4.whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
+                 () -> -driveJoystick.getY(),
+                 () -> -driveJoystick.getX()));
 
         // reset the orientation of the robot. changes which way it thinks is forward
-        _controller.y().onTrue(
+        _driverOperatorButton5.onTrue(
                 Commands.runOnce(
                         () -> _drive.setPose(
                                 new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
@@ -239,7 +249,7 @@ public class RobotContainer {
                 DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
                 DriveConstants.RED_SPEAKER.getY(),
                 new Rotation2d(Math.PI));
-        _controller.b().onTrue(
+        _driverOperatorButton6.onTrue(
                 Commands.runOnce(
                         () -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
 

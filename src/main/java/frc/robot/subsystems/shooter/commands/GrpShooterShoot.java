@@ -25,7 +25,7 @@ public class GrpShooterShoot extends ParallelCommandGroup {
         _shooterSubsystem = shooterSubsystem;
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
-        if (_intakeSubsystem.hasNote()) {
+        if (true) {
             addCommands(new CmdShooterRunShooter(_shooterSubsystem, _intakeSubsystem, _driveSubsystem),
                     new CmdShooterWaitUntilReady(_shooterSubsystem,
                             _intakeSubsystem),

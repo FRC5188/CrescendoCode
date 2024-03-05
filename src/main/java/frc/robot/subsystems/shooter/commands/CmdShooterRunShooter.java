@@ -20,13 +20,13 @@ public class CmdShooterRunShooter extends Command {
     public CmdShooterRunShooter(Shooter shooterSubsystem, Intake intakeSubsystem, Drive driveSubsystem) {
         _shooterSubsystem = shooterSubsystem;
         _intakeSubsystem = intakeSubsystem;
-        addRequirements(_shooterSubsystem, _intakeSubsystem, _driveSubsystem);
+        add]\[Requirements(_shooterSubsystem, _intakeSubsystem, _driveSubsystem);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if (_intakeSubsystem.hasNote()) {
+        if (true) {
             _zone = _shooterSubsystem.getZoneFromRadius(_driveSubsystem.getRadiusToSpeakerInMeters());
             _shooterSubsystem.runShooterForZone(_zone);
         }

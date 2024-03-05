@@ -12,14 +12,23 @@ public class CmdShooterWaitUntilReady extends Command {
     public CmdShooterWaitUntilReady(Shooter shooterSubsystem, Intake intakeSubsystem) {
         _shooterSubsystem = shooterSubsystem;
         _intakeSubsystem = intakeSubsystem;
+        System.out.println("Wait until ready initialized");
 
         addRequirements(shooterSubsystem, intakeSubsystem);
     }
 
     @Override
+    public void end(boolean interrupted) {
+        
+
+    }
+
+    @Override
     public boolean isFinished() {
-        return _shooterSubsystem.isReady() && 
-        _intakeSubsystem.pivotAtSetpoint() && 
-        _intakeSubsystem.getIntakePosition() == IntakePosition.SpeakerScore;
+        //System.out.println(_shooterSubsystem.isReady());
+        //System.out.println(_intakeSubsystem.pivotAtSetpoint());
+        //System.out.println(_intakeSubsystem.getIntakePosition());
+        return _shooterSubsystem.isReady();
+        //return _shooterSubsystem.isReady() && _intakeSubsystem.pivotAtSetpoint() && _intakeSubsystem.getIntakePosition() == IntakePosition.Stowed;
     }
 }

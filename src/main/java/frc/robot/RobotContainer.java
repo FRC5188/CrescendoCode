@@ -36,7 +36,7 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
-import frc.robot.subsystems.intake.commands.CmdAquireNoteFor;
+import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -233,14 +233,14 @@ public class RobotContainer {
         // shooter fly wheel manual control. Only sets the flywheel speed while holding the button
         _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
         //_op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
-        _op2ButtonThree.onTrue(new CmdAquireNoteFor(2000, _intake));
+        _op2ButtonThree.onTrue(new CmdAcquireNoteFor(2000, _intake));
 
         // FROM MAIN
         _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
         _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround());
         _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
 
-        _opButtonNine.onTrue(this._intake.buildCommand().aquire());
+        _opButtonNine.onTrue(this._intake.buildCommand().acquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
         _op2ButtonEight.onTrue(this._intake.buildCommand().spit(1.0));

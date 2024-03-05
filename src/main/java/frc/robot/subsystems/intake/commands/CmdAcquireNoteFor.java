@@ -11,12 +11,12 @@ import frc.robot.subsystems.intake.Intake;
  * Command which will set intake to aquire for a set amount of time as given in the parameter. After that time has ran it'll
  * stop the intake
  */
-public class CmdAquireNoteFor extends Command {
+public class CmdAcquireNoteFor extends Command {
   private int _cyclesLeft;
   private int _timeToRunMS;
   private Intake _intake;
 
-  public CmdAquireNoteFor(int timeToRunMS, Intake intake) {
+  public CmdAcquireNoteFor(int timeToRunMS, Intake intake) {
     this._intake = intake;
     this._timeToRunMS = timeToRunMS;
 

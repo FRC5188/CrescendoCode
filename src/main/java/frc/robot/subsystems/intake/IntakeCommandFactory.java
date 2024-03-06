@@ -38,7 +38,7 @@ public class IntakeCommandFactory {
     /** Should be called every cycle. This should be the default command on Intake. */
     public Command runPID() {
         return new RunCommand(
-            this._intake::runPivotPID, this._intake);
+            this._intake::runPivotPID);
     }
 
     /** Sets the positions of the PID for the Intake. */

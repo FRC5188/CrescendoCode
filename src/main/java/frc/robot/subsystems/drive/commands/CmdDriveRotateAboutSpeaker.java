@@ -8,6 +8,8 @@ import frc.robot.subsystems.drive.Drive;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class CmdDriveRotateAboutSpeaker extends Command {
     private final Drive _drive;
 
@@ -56,14 +58,16 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     @Override
     public void execute() {
         // Calc the current angle to the speaker
-        this._angleController.setSetpoint(_drive.calcAngleToSpeaker());
+        this._angleController.setSetpoint(_drive.calcAngleToSpeaker() - 90);
+
         // inputModulus will wrap the value to between -180 and 180. This combine with
         // using enableContinuousInput on the PID Controller
         // means that our robot will always take the shortest path to the angle.
         // copied this from windham
-        double rotationVal = -this._angleController.calculate(
+        double rotationVal = this._angleController.calculate(
                 (MathUtil.inputModulus(this._drive.getGyroscopeRotation().getDegrees(), -180, 180)));
-        System.out.println(rotationVal);
+        Logger.recordOutput("Drive/autoaim/rotationValue", rotationVal);
+        Logger.recordOutput("Drive/autoaim/angleToSpeaker", _drive.calcAngleToSpeaker());
 
         this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -71,9 +75,11 @@ public class CmdDriveRotateAboutSpeaker extends Command {
                         _translationYSupplier.getAsDouble(),
                         rotationVal,
                         _drive.getGyroscopeRotation()));
-        // System.out.println(
-        //         "desired: " + _drive.calcAngleToSpeaker() + " actual: " + _drive.getGyroscopeRotation().getDegrees());
+      
+                Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", _drive.calcAngleToSpeaker() - 90);
+                Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", _drive.getGyroscopeRotation().getDegrees());
     }
+    
 
     // Called once the command ends or is interrupted.
     @Override

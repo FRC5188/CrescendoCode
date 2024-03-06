@@ -222,7 +222,7 @@ public class RobotContainer {
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
         // face the speaker while we hold this button
-        _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
+        _controller.rightBumper().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                 () -> -_controller.getLeftY(),
                 () -> -_controller.getLeftX()));
 

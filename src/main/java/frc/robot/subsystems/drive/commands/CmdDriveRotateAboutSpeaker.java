@@ -58,26 +58,26 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     @Override
     public void execute() {
         // Calc the current angle to the speaker
-        this._angleController.setSetpoint(_drive.calcAngleToSpeaker() - 90);
+        this._angleController.setSetpoint(_drive.calcAngleToSpeaker());
 
         // inputModulus will wrap the value to between -180 and 180. This combine with
         // using enableContinuousInput on the PID Controller
         // means that our robot will always take the shortest path to the angle.
         // copied this from windham
         double rotationVal = this._angleController.calculate(
-                (MathUtil.inputModulus(this._drive.getGyroscopeRotation().getDegrees(), -180, 180)));
+                (MathUtil.inputModulus(this._drive.getRotation().getDegrees() + 180, -180, 180)));
         Logger.recordOutput("Drive/autoaim/rotationValue", rotationVal);
-        Logger.recordOutput("Drive/autoaim/angleToSpeaker", _drive.calcAngleToSpeaker());
+        Logger.recordOutput("Drive/autoaim/angleToSpeaker", _drive.calcAngleToSpeaker() + 180);
 
         this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         _translationXSupplier.getAsDouble(),
                         _translationYSupplier.getAsDouble(),
                         rotationVal,
-                        _drive.getGyroscopeRotation()));
+                        _drive.getRotation()));
       
-                Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", _drive.calcAngleToSpeaker() - 90);
-                Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", _drive.getGyroscopeRotation().getDegrees());
+                Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", _drive.calcAngleToSpeaker() + 180);
+                Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", _drive.getRotation());
     }
     
 

@@ -17,10 +17,16 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     private final DoubleSupplier _translationYSupplier;
     private PIDController _angleController;
 
+    // TODO
+    // put these in driveconstants.java
     final double _autoRotateP = 0.13;
     final double _autoRotateI = 0.003;
     final double _autoRotateD = 0.00075;
     final double _autoRotateTolerance = 3.0;
+
+    // TODO
+    // rename this command to autoaim or something similar. it no longer rotates
+    // about the speaker.
 
     /**
      * Auto Rotate the robot to a specified angle. This command will still allow the
@@ -58,26 +64,34 @@ public class CmdDriveRotateAboutSpeaker extends Command {
     @Override
     public void execute() {
         // Calc the current angle to the speaker
-        this._angleController.setSetpoint(_drive.calcAngleToSpeaker());
 
         // inputModulus will wrap the value to between -180 and 180. This combine with
         // using enableContinuousInput on the PID Controller
         // means that our robot will always take the shortest path to the angle.
         // copied this from windham
-        double rotationVal = this._angleController.calculate(
-                (MathUtil.inputModulus(this._drive.getRotation().getDegrees() + 180, -180, 180)));
-        Logger.recordOutput("Drive/autoaim/rotationValue", rotationVal);
-        Logger.recordOutput("Drive/autoaim/angleToSpeaker", _drive.calcAngleToSpeaker() + 180);
 
+        // we add 180 because the intake is the front of the robot and we want the shooter to
+        // face the speaker not the intake.
+        double _currentAngleDegrees = _drive.getRotation().getDegrees() + 180;
+        double _desiredAngleDegrees =  _drive.calcAngleToSpeaker();
+
+        this._angleController.setSetpoint(_desiredAngleDegrees);
+        double _rotationVal = this._angleController.calculate(
+                (MathUtil.inputModulus(_currentAngleDegrees, -180, 180)));
+
+
+        Logger.recordOutput("Drive/autoaim/rotationValue", _rotationVal);
+        Logger.recordOutput("Drive/autoaim/angleToSpeaker", _desiredAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", _currentAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", _currentAngleDegrees);
+
+        // this is what
         this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         _translationXSupplier.getAsDouble(),
                         _translationYSupplier.getAsDouble(),
-                        rotationVal,
-                        _drive.getRotation()));
-      
-                Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", _drive.calcAngleToSpeaker() + 180);
-                Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", _drive.getRotation());
+                        _rotationVal,
+                        _drive.getRotation()));          
     }
     
 

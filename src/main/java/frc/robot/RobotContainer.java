@@ -223,8 +223,8 @@ public class RobotContainer {
 
         // face the speaker while we hold this button
         _controller.rightBumper().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                () -> -_controller.getLeftY(),
-                () -> -_controller.getLeftX()));
+                () -> _controller.getLeftY(),
+                () -> _controller.getLeftX()));
 
         _controller.a().whileTrue(new CmdDriveGoToNote(_drive));
 

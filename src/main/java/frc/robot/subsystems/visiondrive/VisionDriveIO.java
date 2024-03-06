@@ -9,7 +9,11 @@ public interface VisionDriveIO {
      * Calculate forward and rotation speeds using PIDs. Return a ChassisSpeeds object. 
      * If a note is not detected, the speeds will be set to 0.0.
      */
-    public default ChassisSpeeds getChassisSpeeds() {
+    public default ChassisSpeeds getChassisSpeedsForDriveToNote() {
+        return new ChassisSpeeds();
+    }
+
+    public default ChassisSpeeds getChassisSpeedsForRotateAboutNote() {
         return new ChassisSpeeds();
     }
 

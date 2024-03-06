@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.450451758046374,
-        "y": 6.186291229725318
+        "x": 2.3159631087780697,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1834246525635916,
-        "y": 6.054356108712217
+        "x": 2.7045150942153735,
+        "y": 4.963140151835859
       },
       "isLocked": false,
-      "linkedName": "mid-field-rotate"
+      "linkedName": "2nd-note"
     },
     {
       "anchor": {
-        "x": 3.4326354366994454,
-        "y": 4.881599477484669
+        "x": 2.750775524699198,
+        "y": 4.0950873244339085
       },
       "prevControl": {
-        "x": 3.34498579099893,
-        "y": 5.948003500174275
+        "x": 2.720667645038994,
+        "y": 4.739704747928015
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "practice-demo-end-pt2"
+      "linkedName": "podium"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -44.99999999999992,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
@@ -48,5 +48,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

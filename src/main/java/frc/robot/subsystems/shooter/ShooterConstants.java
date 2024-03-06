@@ -18,16 +18,16 @@ public abstract class ShooterConstants {
 
 
     // podium
-    public static final double ZONE_PODIUM_FLYWHEEL_SPEED = 2250;
+    public static final double ZONE_PODIUM_FLYWHEEL_SPEED = 1750;
     public static final double ZONE_PODIUM_LOW_BOUND = 4;
     public static final double ZONE_PODIUM_UPPER_BOUND = 2.5;
-    public static final double ZONE_PODIUM_SHOOTER_ANGLE = 30;
+    public static final double ZONE_PODIUM_SHOOTER_ANGLE = 22;
 
     // subwoofer
-    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1500;
+    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1300;
     public static final double ZONE_SUBWOOFER_LOW_BOUND = 0.0;
     public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
-    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 41;
+    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 40;
 
     // unkown
     public static final double ZONE_UNKOWN_FLYWHEEL_SPEED = 200;
@@ -63,6 +63,6 @@ public abstract class ShooterConstants {
      * SHOOTER SOFTWARE CONSTANTS
      * 
      *****************/
-    public static final double FLYWHEEL_SPEED_DEADBAND = 250;
+    public static final double FLYWHEEL_SPEED_DEADBAND = 50;
 
 }

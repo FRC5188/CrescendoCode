@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 
 public class ShooterCommandFactory {
     private Shooter _shooter;
@@ -60,8 +59,8 @@ public class ShooterCommandFactory {
     }
 
     /**
-     * Command to run the angle PID of the 
-     * @return
+     * Command to run the angle PID of the shooter. This command will never finish
+     * @return command to run the shooter angle PID
      */
     public Command runAnglePID() {
         return new Command() {
@@ -76,16 +75,34 @@ public class ShooterCommandFactory {
         };
     }
 
+    /**
+     * Set the shooter angle and flywheel speed for a given zone. A zone
+     * must be one of our predefined zones such as subwoofer, podium, etc
+     * @param zone shooter zone to run shooter for
+     * @return command to run the shooter for a zone
+     */
     public Command runForZone(ShooterZone zone) {
         return new InstantCommand(() -> this._shooter.runShooterForZone(zone),
                 this._shooter);
     }
 
+    /**
+     * Tells the shooter subsystem to enable or disable the autoshoot functionality.
+     * 
+     * @param enabled true to enable autoshoot and false to disable
+     * @return a new command to enable or disable autoshoot
+     */
     public Command setAutoShootEnabled(boolean enabled) {
         return new InstantCommand(() -> this._shooter.setAutoShootEnabled(enabled),
                 this._shooter);
     }
 
+    /**
+     * Sets the shooter angle based on a zone. this does NOT run the flywheels.
+     * The zone must be a predefined Shooter.ShooterZone type such as podium, speaker, etc
+     * @param zone a Shooter.ShooterZone type
+     * @return a command to set the shooter position
+     */
     public Command setPositionByZone(ShooterZone zone) {
         return new InstantCommand(() -> this._shooter.setShooterPositionWithZone(zone),
                 this._shooter);

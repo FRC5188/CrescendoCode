@@ -20,11 +20,16 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.RealClimberIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -40,6 +45,8 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.commands.CmdLEDsRunLEDs;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -64,9 +71,12 @@ public class RobotContainer {
     private final Drive _drive;
     private final Intake _intake;
     private final Shooter _shooter;
+    private final Climber _climber;
+    private final LEDs _leds;
     private ShooterZone _zone;
     private Command _runShooterPIDCommand;
     private Command _runIntakePIDCommand;
+    private Command _runLEDsCommand;
 
     // logged dashboard inputs
     private final LoggedDashboardChooser<Command> _autoChooser;
@@ -135,6 +145,8 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(3));
                 _intake = new Intake(new RealIntakeIO());
                 _shooter = new Shooter(new RealShooterIO());
+                _leds = new LEDs();
+                _climber = new Climber(new RealClimberIO());
                 break;
 
             case SIM:
@@ -152,6 +164,9 @@ public class RobotContainer {
                 });
                 _shooter = new Shooter(new ShooterIO() {
                 });
+                _leds = new LEDs();
+                _climber = new Climber(new ClimberIO() {
+                    });
                 break;
             default:
                 // Replayed robot, disable IO implementations
@@ -172,12 +187,16 @@ public class RobotContainer {
                 });
                 _shooter = new Shooter(new ShooterIO() {
                 });
+                _leds = new LEDs();
+                _climber = new Climber(new ClimberIO() {
+                    });
                 break;
         }
 
         // setup commands for PID
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
+        this._runLEDsCommand = new  CmdLEDsRunLEDs(_leds, _shooter, _intake, _climber);
 
         NamedCommands.registerCommand("intake GroundPos", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
         NamedCommands.registerCommand("intake Stow", new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
@@ -329,5 +348,8 @@ public class RobotContainer {
 
     public Command getRunIntakePIDCommand() {
         return this._runIntakePIDCommand;
+    }
+    public Command getRunLEDs() {
+        return this._runLEDsCommand;
     }
 }

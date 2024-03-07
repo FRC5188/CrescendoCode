@@ -169,6 +169,11 @@ public class Robot extends LoggedRobot {
     )){
       _robotContainer.getRunShooterPIDCommand().schedule();
     }
+    // if the runLED command is NOT scheduled then schedule it
+    if(!CommandScheduler.getInstance().isScheduled(
+          _robotContainer.getRunLEDs())){ 
+          _robotContainer.getRunLEDs().schedule();
+          }
 
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
@@ -215,6 +220,11 @@ public class Robot extends LoggedRobot {
     )){
       _robotContainer.getRunShooterPIDCommand().schedule();
     }
+    //if the runLED command is NOT scheduled then schedule it
+    if(!CommandScheduler.getInstance().isScheduled(
+          _robotContainer.getRunLEDs())){ 
+          _robotContainer.getRunLEDs().schedule();
+          }
   }
 
   /** This function is called periodically during operator control. */

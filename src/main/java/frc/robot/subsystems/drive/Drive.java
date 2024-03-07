@@ -332,6 +332,14 @@ public class Drive extends SubsystemBase {
     return _poseEstimator;
   }
 
+  public ChassisSpeeds getRobotChassisSpeeds() {
+    return _kinematics.toChassisSpeeds(this.getModuleStates());
+  }
+
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(this.getRobotChassisSpeeds(), this.getRotation());
+  }
+
   public Drive getObject() {
     return this;
   }
@@ -360,6 +368,14 @@ public class Drive extends SubsystemBase {
     double xDiff = speakerPos.getX() - robotPose.getX();
     double yDiff = speakerPos.getY() - robotPose.getY();
     return Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
+  /**
+   * NOTE: Only used for CmdShootDriveOnTheMove; otherwise, use calcAngleToSpeaker.
+   */
+
+  public Rotation2d getRotation2dToSpeaker(Translation2d futurePose) {
+    return getSpeakerPos().getTranslation().minus(futurePose).getAngle();
   }
 
   public static Translation2d calcSpeakerCoRForBlue(Pose2d robotPose, Pose2d speakerPos) {

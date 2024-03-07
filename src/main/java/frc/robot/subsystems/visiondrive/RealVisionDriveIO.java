@@ -36,27 +36,38 @@ public class RealVisionDriveIO implements VisionDriveIO {
         return 1.0 == _table.getEntry("tv").getDouble(0.0);
     }
 
-    // public void updateInputs(VisionDriveIOInputs inputs) {
-        
-    //     }
-
-    public ChassisSpeeds getChassisSpeeds() {
+    public ChassisSpeeds getChassisSpeedsForDriveToNote() {
         if (hasTarget()) {
-
-            System.out.print("Target acquired! ");
             _tx = _table.getEntry("tx").getDouble(0.0);
             _ty = _table.getEntry("ty").getDouble(0.0);
             
+            // Note: x and y on the Limelight screen resemble the coordinate plane, with x increasing to the right and y increasing up.
+            // x and y in ChassisSpeeds are different, with negative x representing forward translation and positive y representing right rotation.
             _chassisSpeeds.vxMetersPerSecond = -1.0*_translatePID.calculate(_ty, 0);
             _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_tx, 0);
 
         } else {
+            // Else: stop.
             _chassisSpeeds.vxMetersPerSecond = 0.0;
             _chassisSpeeds.vyMetersPerSecond = 0.0;
             _chassisSpeeds.omegaRadiansPerSecond = 0.0;
         }
 
-        System.out.println( _chassisSpeeds);
+        return _chassisSpeeds;
+    }
+
+    public ChassisSpeeds getChassisSpeedsForRotateAboutNote() {
+        if (hasTarget()) {
+            _tx = _table.getEntry("tx").getDouble(0.0);
+            
+            // Note: x and y on the Limelight screen resemble the coordinate plane, with x increasing to the right and y increasing up.
+            // x and y in ChassisSpeeds are different, with negative x representing forward translation and positive y representing right rotation.
+            _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_tx, 0);
+
+        } else {
+            // Else: stop.
+            _chassisSpeeds.omegaRadiansPerSecond = 0.0;
+        }
 
         return _chassisSpeeds;
     }

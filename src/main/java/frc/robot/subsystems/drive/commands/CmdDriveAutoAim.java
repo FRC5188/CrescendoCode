@@ -5,28 +5,18 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
 
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
-public class CmdDriveRotateAboutSpeaker extends Command {
+public class CmdDriveAutoAim extends Command {
     private final Drive _drive;
 
     private final DoubleSupplier _translationXSupplier;
     private final DoubleSupplier _translationYSupplier;
     private PIDController _angleController;
-
-    // TODO
-    // put these in driveconstants.java
-    final double _autoRotateP = 0.13;
-    final double _autoRotateI = 0.003;
-    final double _autoRotateD = 0.00075;
-    final double _autoRotateTolerance = 3.0;
-
-    // TODO
-    // rename this command to autoaim or something similar. it no longer rotates
-    // about the speaker.
 
     /**
      * Auto Rotate the robot to a specified angle. This command will still allow the
@@ -38,7 +28,7 @@ public class CmdDriveRotateAboutSpeaker extends Command {
      * @param translationYSupplier a souble supplier for the y movement
      * @param angleSetpoint        the target angle of the robot heading
      */
-    public CmdDriveRotateAboutSpeaker(Drive drivetrainSubsystem,
+    public CmdDriveAutoAim(Drive drivetrainSubsystem,
             DoubleSupplier translationXSupplier,
             DoubleSupplier translationYSupplier) {
 
@@ -46,10 +36,10 @@ public class CmdDriveRotateAboutSpeaker extends Command {
         this._translationXSupplier = translationXSupplier;
         this._translationYSupplier = translationYSupplier;
 
-        this._angleController = new PIDController(this._autoRotateP, this._autoRotateI,
-                this._autoRotateD);
+        this._angleController = new PIDController(DriveConstants.AUTO_ROTATE_P, DriveConstants.AUTO_ROTATE_I,
+                DriveConstants.AUTO_ROTATE_D);
 
-        this._angleController.setTolerance(this._autoRotateTolerance);
+        this._angleController.setTolerance(DriveConstants.AUTO_ROTATE_TOLERANCE);
         this._angleController.enableContinuousInput(-180, 180);
 
         addRequirements(drivetrainSubsystem);
@@ -72,25 +62,25 @@ public class CmdDriveRotateAboutSpeaker extends Command {
 
         // we add 180 because the intake is the front of the robot and we want the shooter to
         // face the speaker not the intake.
-        double _currentAngleDegrees = _drive.getRotation().getDegrees() + 180;
-        double _desiredAngleDegrees =  _drive.calcAngleToSpeaker();
+        double currentAngleDegrees = _drive.getRotation().getDegrees() + 180;
+        double desiredAngleDegrees =  _drive.calcAngleToSpeaker();
 
-        this._angleController.setSetpoint(_desiredAngleDegrees);
-        double _rotationVal = this._angleController.calculate(
-                (MathUtil.inputModulus(_currentAngleDegrees, -180, 180)));
+        this._angleController.setSetpoint(desiredAngleDegrees);
+        double rotationVal = this._angleController.calculate(
+                (MathUtil.inputModulus(currentAngleDegrees, -180, 180)));
 
 
-        Logger.recordOutput("Drive/autoaim/rotationValue", _rotationVal);
-        Logger.recordOutput("Drive/autoaim/angleToSpeaker", _desiredAngleDegrees);
-        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", _currentAngleDegrees);
-        Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", _currentAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/rotationValue", rotationVal);
+        Logger.recordOutput("Drive/autoaim/angleToSpeaker", desiredAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", currentAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", currentAngleDegrees);
 
         // this is what drives the robot
         this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         _translationXSupplier.getAsDouble(),
                         _translationYSupplier.getAsDouble(),
-                        _rotationVal,
+                        rotationVal,
                         _drive.getRotation()));          
     }
     

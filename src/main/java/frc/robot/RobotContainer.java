@@ -38,7 +38,7 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
-import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
+import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
@@ -219,7 +219,7 @@ public class RobotContainer {
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
         // face the speaker while we hold this button
-        _controller.rightBumper().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
+        _controller.rightBumper().whileTrue(new CmdDriveAutoAim(_drive,
                 () -> _controller.getLeftY(),
                 () -> _controller.getLeftX()));
 

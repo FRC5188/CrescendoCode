@@ -76,4 +76,10 @@ public class DriveConstants {
     public static final double MODULE_TURNPID_KP = 7.0;
     public static final double MODULE_TURNPID_KI = 0.0;
     public static final double MODULE_TURNPID_KD = 0.0;
+
+    // PID constants for auto aim command
+    public static final double AUTO_ROTATE_P = 0.13;
+    public static final double AUTO_ROTATE_I = 0.003;
+    public static final double AUTO_ROTATE_D = 0.00075;
+    public static final double AUTO_ROTATE_TOLERANCE = 3.0;
 }

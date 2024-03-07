@@ -85,7 +85,7 @@ public class CmdDriveRotateAboutSpeaker extends Command {
         Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", _currentAngleDegrees);
         Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", _currentAngleDegrees);
 
-        // this is what
+        // this is what drives the robot
         this._drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         _translationXSupplier.getAsDouble(),

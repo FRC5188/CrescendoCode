@@ -31,7 +31,20 @@ public class ShooterCommandFactory {
             this._shooter);
     }
 
-    public Command runFlywheelsForZone(double speedInRPM) {
+    public Command adjustOffset(ShooterZone zone, Double diff) {
+        return new InstantCommand(
+                () -> this._shooter.setShooterOffset(zone, this._shooter.getShooterOffset(zone) + diff),
+                this._shooter);
+    }
+
+    /**
+     * Run the flywheels on the shooter for the supplied zone. The command stops the 
+     * fly wheels when the command ends.
+     * @param zone
+     * @return command to run the flywheels
+     */
+    public Command runFlywheelsForZone(ShooterZone zone) {
+        // 
         return new StartEndCommand(
         // starts flywheels at beginning of command
         () -> 

@@ -3,47 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.54
+        "x": 3.015136861627644,
+        "y": 7.000326399702681
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.328460286550203,
-        "y": 6.229183717626695
+        "x": 2.839641213724234,
+        "y": 6.317843324522754
       },
       "isLocked": false,
-      "linkedName": "Subwoofer-start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3580666327999324,
-        "y": 6.708415648312779
+        "x": 2.781142664423097,
+        "y": 6.142347676619344
       },
       "prevControl": {
-        "x": 1.812858658124724,
-        "y": 6.610847115212749
+        "x": 2.9956373451939315,
+        "y": 6.8833293011004075
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "1st-note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 1.25,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 35.0,
+    "rotation": 10.84030545433071,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "Lit Left Ring Auto Paths",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

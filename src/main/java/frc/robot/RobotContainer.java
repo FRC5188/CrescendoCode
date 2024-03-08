@@ -23,6 +23,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
@@ -41,6 +42,8 @@ import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
+import frc.robot.subsystems.multisubsystemcommands.CmdRunShooterAutomatically;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -178,20 +181,11 @@ public class RobotContainer {
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
 
-        NamedCommands.registerCommand("intake GroundPos", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
-        NamedCommands.registerCommand("intake Stow", new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
-        NamedCommands.registerCommand("Subwoofer Shoot", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-        NamedCommands.registerCommand("Podium Shoot", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
-        NamedCommands.registerCommand("set has note", new Command() {
-            @Override
-            public void initialize() {
-                _intake.setHasNote();
-            }
-            @Override
-            public boolean isFinished() {
-                return true;
-            }
-        });
+        NamedCommands.registerCommand("DeployIntake", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
+        NamedCommands.registerCommand("SubwooferShoot", new PrintCommand(null));
+        NamedCommands.registerCommand("AutoShootWithAutoAlign", new PrintCommand(null));
+        NamedCommands.registerCommand("AutoShootWithoutAutoAlign", new PrintCommand(null));
+        NamedCommands.registerCommand("PickUpNoteWithLimelight", new PrintCommand(null));
 
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");

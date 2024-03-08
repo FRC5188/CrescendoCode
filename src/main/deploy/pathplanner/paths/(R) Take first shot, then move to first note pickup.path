@@ -3,34 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.54
+        "x": 0.6361958567147553,
+        "y": 4.387391197585246
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.200000000000002,
-        "y": 5.54
+        "x": 1.3381784483283943,
+        "y": 4.221645307898693
       },
       "isLocked": false,
-      "linkedName": "Subwoofer-start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3159631087780697,
-        "y": 5.54
+        "x": 1.9914122488577533,
+        "y": 4.085148692862707
       },
       "prevControl": {
-        "x": 1.2551924060788888,
-        "y": 5.54
+        "x": 1.3240699648158138,
+        "y": 4.085148692862707
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "2nd-note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "DeployIntake",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.0,
@@ -43,9 +54,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Rad Right Ring Auto Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -59.34933204294721,
     "velocity": 0
   },
   "useDefaultConstraints": true

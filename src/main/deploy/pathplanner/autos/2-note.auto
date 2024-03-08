@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st-note"
+            "pathName": null
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st-to-C1"
+            "pathName": null
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C1-to-1st"
+            "pathName": null
           }
         },
         {

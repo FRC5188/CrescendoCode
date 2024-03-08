@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged; checkstyle says this is redunant
 
 public class Intake extends SubsystemBase {
+
     public enum IntakePosition {
         SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
         GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),
@@ -18,10 +19,19 @@ public class Intake extends SubsystemBase {
 
         private final double _angle;
 
+        /**
+         * These enum represents a prefedined position of the intake. These are what we pass to
+         * commands to set the intake positions
+         * @param angle
+         */
         private IntakePosition(double angle) {
             this._angle = angle;
         }
 
+        /**
+         * Return the angle associated with a given position. These angles are defined in IntakeConstants.java
+         * @return
+         */
         public double getAngle() {
             return this._angle;
         }
@@ -180,6 +190,13 @@ public class Intake extends SubsystemBase {
         return this._intakePosition.getAngle();
     }
 
+    /**
+     * this is how we call commands to run the intake. to call a command use 
+     * "intake.buildCommand.COMMANDTORUN(COMMAND ARGUMENTS)". replace command
+     * to run with a command from {@link IntakeCommandFactory} and replace 
+     * COMMAND ARGUMENTS with the arguments needed for that command, which could be empty.
+     * @return
+     */
     public IntakeCommandFactory buildCommand() {
         return this._intakeCommandFactory;
     }

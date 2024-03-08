@@ -14,9 +14,13 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,17 +31,20 @@ public class CmdShootOnTheMove extends Command {
   /** Creates a new CmdDriveShootOnTheMove. */
   private final Drive _drive;
   private final Shooter _shooter;
+  private final Intake _intake;
+
+  private DoubleSupplier _translationXSupplier;
+  private DoubleSupplier _translationYSupplier;
 
   private boolean _isFinished;
 
   private Translation2d _currentRobotTranslation;
-  private Rotation2d _currentAngleToSpeaker;
 
   private Translation2d _futureRobotTranslation;
   private Rotation2d _futureAngleToSpeaker;
 
   private ChassisSpeeds _speeds;
-  private Rotation2d _correctedRotation;
+  private double _correctedRotation;
   private double _timeUntilShot;
   private Translation2d _moveDelta;
   private DoubleSupplier _trigger;
@@ -47,17 +54,35 @@ public class CmdShootOnTheMove extends Command {
   private Pose2d _futureRobotPose2d;
   private double _triggerThreshold;
 
+  private PIDController _rotationPID;
+
   /**
    * @param drivetrainSubsystem the drive subsystem
    * @param triggerAxis         button binding used
    **/
   public CmdShootOnTheMove(Drive drivetrainSubsystem,
       Shooter shooterSubsystem,
-      DoubleSupplier triggerAxis) {
+      Intake intakeSubsystem,
+      DoubleSupplier triggerAxis,
+      DoubleSupplier translationXSupplier,
+      DoubleSupplier translationYSupplier) {
 
     _drive = drivetrainSubsystem;
     _shooter = shooterSubsystem;
+    _intake = intakeSubsystem;
     _trigger = triggerAxis;
+    _translationXSupplier = translationXSupplier;
+    _translationYSupplier = translationYSupplier;
+
+    _rotationPID = new PIDController(
+      DriveConstants.SHOOT_ON_THE_MOVE_P, 
+      DriveConstants.SHOOT_ON_THE_MOVE_I,
+      DriveConstants.SHOOT_ON_THE_MOVE_D);
+
+    _rotationPID.setTolerance(DriveConstants.SHOOT_ON_THE_MOVE_TOLERANCE);
+    // TODO: Get second set of eyes.
+    _rotationPID.enableContinuousInput(-180.0, 180.0);
+
     _shotTimer = new Timer();
     _hasRunOnce = false;
     _triggerThreshold = 0.01;
@@ -84,7 +109,7 @@ public class CmdShootOnTheMove extends Command {
     // Get *translation only* of the robot
     _currentRobotTranslation = _drive.getPose().getTranslation();
 
-    _currentAngleToSpeaker = _drive.getRotation2dToSpeaker(_currentRobotTranslation);
+    // _currentAngleToSpeaker = _drive.getRotation2dToSpeaker(_currentRobotTranslation);
 
     _speeds = _drive.getFieldRelativeChassisSpeeds();
 
@@ -105,43 +130,54 @@ public class CmdShootOnTheMove extends Command {
     _moveDelta = new Translation2d(_timeUntilShot * (_speeds.vxMetersPerSecond),
         _timeUntilShot * (_speeds.vyMetersPerSecond));
 
-    // Add current position + change in position due to velocity to get future position.
+    // Add current position + change in position due to velocity to get future
+    // position.
     // This is where the robot will be at _timeUntilShot.
     _futureRobotTranslation = _currentRobotTranslation.plus(_moveDelta);
 
     // Angle to the speaker from the future position.
     _futureAngleToSpeaker = _drive.getRotation2dToSpeaker(_futureRobotTranslation);
 
-    // Amount added to the current angle to the speaker to aim for the future.
-    _correctedRotation = _futureAngleToSpeaker;
+    // Angle to the speaker to aim for the future.
+    _correctedRotation = -_rotationPID.calculate(
+        (MathUtil.inputModulus(_futureAngleToSpeaker.getDegrees(), -180, 180)));
 
     // Get a Pose2d based on the newly-calculated future translation and angle.
-    _futureRobotPose2d = new Pose2d(_futureRobotTranslation, _futureAngleToSpeaker); // TODO: Check! -KtH 2024-03-07
+    _futureRobotPose2d = new Pose2d(_futureRobotTranslation, _futureAngleToSpeaker);
 
     _correctedZone = _shooter.getZoneFromRadius(_drive.getRadiusToSpeakerInMeters(_futureRobotPose2d));
 
-    // this._drive.runVelocity( // TODO: Make it go worky
-    // ChassisSpeeds.fromFieldRelativeSpeeds(
-    
-    // _translationYSupplier.getAsDouble(),
-    // _correct,
-    // _drive.getRotation()));
+    _drive.runVelocity(
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+            _translationXSupplier.getAsDouble(),
+            _translationYSupplier.getAsDouble(),
+            _correctedRotation,
+            _drive.getRotation()));
 
-    // TODO: Add if statement like "isAutoShootEnabled"
-    // TODO: Add shooting
-    
+    if (_shooter.isAutoShootEnabled()) {
+      if (_intake.hasNote()) {
+        if (_correctedZone != _shooter.getCurrentZone()) {
+          // We want to shoot!
+          _shooter.runShooterForZone(_correctedZone);
+        }
+
+      } else {
+        if (_shooter.getCurrentZone() != ShooterZone.Unknown) {
+          _shooter.runShooterForZone(ShooterZone.Unknown);
+        }
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // TODO: Should we include?
-    // this._drive.runVelocity(
-    // ChassisSpeeds.fromFieldRelativeSpeeds(
-    // _translationXSupplier.getAsDouble(),
-    // _translationYSupplier.getAsDouble(),
-    // 0,
-    // _drive.getGyroscopeRotation()));
+    this._drive.runVelocity(
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+            _translationXSupplier.getAsDouble(),
+            _translationYSupplier.getAsDouble(),
+            0,
+            _drive.getGyroscopeRotation()));
     _shotTimer.stop();
     _shotTimer.reset();
     _hasRunOnce = false;

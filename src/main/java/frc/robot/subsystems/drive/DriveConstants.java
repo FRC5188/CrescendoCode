@@ -82,4 +82,10 @@ public class DriveConstants {
     public static final double AUTO_ROTATE_I = 0.003;
     public static final double AUTO_ROTATE_D = 0.00075;
     public static final double AUTO_ROTATE_TOLERANCE = 3.0;
+
+    // PID constants for CmdShootOnTheMove
+    public static final double SHOOT_ON_THE_MOVE_P = 0.13;
+    public static final double SHOOT_ON_THE_MOVE_I = 0.003;
+    public static final double SHOOT_ON_THE_MOVE_D = 0.00075;
+    public static final double SHOOT_ON_THE_MOVE_TOLERANCE = 3.0;
 }

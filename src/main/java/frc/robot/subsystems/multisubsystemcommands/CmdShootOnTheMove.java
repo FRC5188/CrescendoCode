@@ -57,8 +57,14 @@ public class CmdShootOnTheMove extends Command {
   private PIDController _rotationPID;
 
   /**
-   * @param drivetrainSubsystem the drive subsystem
-   * @param triggerAxis         button binding used
+   * @param drivetrainSubsystem  the drive subsystem
+   * @param shooterSubsystem     the shooter subsystem
+   * @param intakeSubsystem      the intake subsystem
+   * @param triggerAxis          button binding used
+   * @param translationXSupplier translation x supplied by driver translation
+   *                             joystick
+   * @param translationYSupplier translation y supplied by driver translation
+   *                             joystick
    **/
   public CmdShootOnTheMove(Drive drivetrainSubsystem,
       Shooter shooterSubsystem,
@@ -75,12 +81,11 @@ public class CmdShootOnTheMove extends Command {
     _translationYSupplier = translationYSupplier;
 
     _rotationPID = new PIDController(
-      DriveConstants.SHOOT_ON_THE_MOVE_P, 
-      DriveConstants.SHOOT_ON_THE_MOVE_I,
-      DriveConstants.SHOOT_ON_THE_MOVE_D);
+        DriveConstants.SHOOT_ON_THE_MOVE_P,
+        DriveConstants.SHOOT_ON_THE_MOVE_I,
+        DriveConstants.SHOOT_ON_THE_MOVE_D);
 
     _rotationPID.setTolerance(DriveConstants.SHOOT_ON_THE_MOVE_TOLERANCE);
-    // TODO: Get second set of eyes.
     _rotationPID.enableContinuousInput(-180.0, 180.0);
 
     _shotTimer = new Timer();
@@ -109,7 +114,8 @@ public class CmdShootOnTheMove extends Command {
     // Get *translation only* of the robot
     _currentRobotTranslation = _drive.getPose().getTranslation();
 
-    // _currentAngleToSpeaker = _drive.getRotation2dToSpeaker(_currentRobotTranslation);
+    // _currentAngleToSpeaker =
+    // _drive.getRotation2dToSpeaker(_currentRobotTranslation);
 
     _speeds = _drive.getFieldRelativeChassisSpeeds();
 

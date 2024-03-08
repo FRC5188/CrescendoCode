@@ -1,50 +1,81 @@
 package frc.robot.util.autonomous;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
-
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 
 public abstract class AutonomousPathGenerator {
-    public static void configure(
-        Supplier<Pose2d> poseSupplier, 
-        Consumer<Pose2d> resetPose, 
-        Supplier<ChassisSpeeds> robotRelativeSpeedsSupplier, 
-        Consumer<ChassisSpeeds> robotRelativeOutput, 
-        BooleanSupplier shouldFlipPath, 
-        Subsystem driveSubsystem) {
+
+    public static void configure(Drive drive, SwerveDriveKinematics kinematics, SwerveModuleState[] moduleStates) {
         AutoBuilder.configureHolonomic(
-            poseSupplier, 
-            resetPose, 
-            robotRelativeSpeedsSupplier, 
-            robotRelativeOutput, 
+            drive::getPose,
+            drive::setPose, 
+            () -> kinematics.toChassisSpeeds(moduleStates), 
+            drive::runVelocity, 
             new HolonomicPathFollowerConfig(
-                new PIDConstants(0, 0, 0), //TODO: These are placeholder values, must be updtaed
-                new PIDConstants(0, 0, 0),
-                DriveConstants.MAX_LINEAR_SPEED, // Assumed that this is also maximum module speed.
-                DriveConstants.DRIVE_BASE_RADIUS,
-                new ReplanningConfig(true, true)
-            ), 
-            shouldFlipPath, 
-            driveSubsystem);
+                DriveConstants.MAX_LINEAR_SPEED, 
+                DriveConstants.DRIVE_BASE_RADIUS, 
+                new ReplanningConfig()), 
+            () -> DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get() == Alliance.Red, 
+            drive);
+
+        Pathfinding.setPathfinder(new LocalADStar());
+
+        PathPlannerLogging.setLogActivePathCallback(
+            (activePath) -> {
+              Logger.recordOutput(
+                  "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+            });
+        PathPlannerLogging.setLogTargetPoseCallback(
+            (targetPose) -> {
+              Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+            });
     }
 
-    public static Command getStaticPathWithName(String name) {
+    /**
+     * @param name Name of the file which has the path.
+     * @return Command which will execute the static path.
+     */
+    public static Command getStaticPath(String name) {
         return AutoBuilder.buildAuto(name);
     }
 
-    public static Command getRuntimePath(Pose2d start, Pose2d end){
-        return null; // Implement graph-based algorithm for finding path implementing the Dijsktra algorithm for solving.
+    /**
+     * @param targetPose Pose which you want to navigate toward.
+     * @return Command which goes to that pose.
+     */
+    public static Command getRuntimePath(Pose2d targetPose) {
+        final double END_VELOCITY_GOAL = 0.0; // We want to be stopped at the end of our path.
+
+        final double MAXIMUM_LINEAR_ACCELERATION = 4.0;
+        final double MAXIMUM_ANGULAR_ACCELERATION = Units.degreesToRadians(720);
+
+        return AutoBuilder.pathfindToPose(
+            targetPose,
+            new PathConstraints(
+                DriveConstants.MAX_LINEAR_SPEED, 
+                MAXIMUM_LINEAR_ACCELERATION, 
+                DriveConstants.MAX_ANGULAR_SPEED, 
+                MAXIMUM_ANGULAR_ACCELERATION),
+            END_VELOCITY_GOAL
+        );
     }
 }

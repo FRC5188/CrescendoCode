@@ -39,6 +39,8 @@ import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.LocalADStarAK;
+import frc.robot.util.autonomous.AutonomousPathGenerator;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -83,30 +85,9 @@ public class Drive extends SubsystemBase {
     _modules[2] = new Module(blModuleIO, 2);
     _modules[3] = new Module(brModuleIO, 3);
 
-    // Configure AutoBuilder for PathPlanner
-    AutoBuilder.configureHolonomic(
-        this::getPose,
-        this::setPose,
-        () -> _kinematics.toChassisSpeeds(getModuleStates()),
-        this::runVelocity,
-        new HolonomicPathFollowerConfig(
-            DriveConstants.MAX_LINEAR_SPEED, DriveConstants.DRIVE_BASE_RADIUS, new ReplanningConfig()),
-        () ->
-            DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red,
-        this);
-    Pathfinding.setPathfinder(new LocalADStarAK());
-    PathPlannerLogging.setLogActivePathCallback(
-        (activePath) -> {
-          Logger.recordOutput(
-              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-        });
-    PathPlannerLogging.setLogTargetPoseCallback(
-        (targetPose) -> {
-          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-        });
+    AutonomousPathGenerator.configure(this, _kinematics, getModuleStates());
 
-    // Configure SysId
+    // =============== START CONFIGURATION FOR SYSID ===============
     _sysId =
         new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -125,6 +106,7 @@ public class Drive extends SubsystemBase {
     _centerOfRotation = new Translation2d();
     _field = new Field2d();
   }
+  // =============== END CONFIGURATION FOR SYSID ===============
 
   public void periodic() {
     _gyroIO.updateInputs(_gyroInputs);
@@ -275,6 +257,10 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
+  }
+
+  public void resetPose(Pose2d pose) {
+    _poseEstimator.resetPosition(_rawGyroRotation, getModulePositions(), pose);
   }
 
   /** Resets the current odometry pose. */

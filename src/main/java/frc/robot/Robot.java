@@ -158,25 +158,13 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     _autonomousCommand = _robotContainer.getAutonomousCommand();
 
-    // if the intakePID command is NOT scheduled, then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-          _robotContainer.getRunIntakePIDCommand())){
-          _robotContainer.getRunIntakePIDCommand().schedule();
-          }
-    // if the shooterPID command is NOT scheduled then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-      _robotContainer.getRunShooterPIDCommand()
-    )){
-      _robotContainer.getRunShooterPIDCommand().schedule();
-    }
-
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
     }
 
     _robotContainer.getRunShooterPIDCommand().schedule();
-    
+    _robotContainer.getRunIntakePIDCommand().schedule();
   }
 
   /** This function is called periodically during autonomous. */

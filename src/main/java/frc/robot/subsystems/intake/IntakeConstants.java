@@ -17,11 +17,6 @@ public class IntakeConstants {
 
     // 2/26/24-- P:0.005, I:0.00001, D:0.000045; MAX_VEL:30, MAX_ACCEL: 60, MAX_ISUM:0.1
 
-    // intake rollers
-    public static final double ROLLERS_PID_KP = 0.0;
-    public static final double ROLLERS_PID_KI = 0.0;
-    public static final double ROLLERS_PID_KD = 0.0;
-
     /***********************
      * 
      * INTAKE POSITION SETPOINTS

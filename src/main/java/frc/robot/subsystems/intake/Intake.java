@@ -12,7 +12,7 @@ public class Intake extends SubsystemBase {
     public enum IntakePosition {
         SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
         GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),
-        Stowed(IntakeConstants.POSITION_STOWED), //5.0
+        Stowed(IntakeConstants.POSITION_STOWED),
         AmpScore(IntakeConstants.POSITION_AMP_SCORE),
         SpeakerScore(IntakeConstants.POSITION_SPEAKER_SCORE);
 
@@ -51,12 +51,7 @@ public class Intake extends SubsystemBase {
                                                 IntakeConstants.PIVOT_PID_MAX_ACCEL));
 
         _pivotPid.setIntegratorRange(-IntakeConstants.PIVOT_PID_MAX_ISUM, IntakeConstants.PIVOT_PID_MAX_ISUM);                                        
-        // might want to call this to make sure inputs are always initialized??
-        // this.periodic();
         this.setIntakePosition(IntakePosition.Stowed);
-
-        // REMOVE THESE COMMENTS IF IT DOESN'T WORK :)
-        // setDefaultCommand(_intakeCommandFactory.runPID());
     }
 
     /**
@@ -89,6 +84,20 @@ public class Intake extends SubsystemBase {
     }
 
     /**
+     * Sets the intake position based on the angle. If the angle is too small or big, return nothing.
+     * @param angle
+     */
+    public void setIntakePositionWithAngle(Double angle) {
+        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
+            // TODO: log an error, but don't throw exception
+            return;
+        }
+        //_intakeIO.setTargetPositionAsDegrees(angle);
+        _pivotPid.reset(getPivotAngle());
+        _pivotPid.setGoal(angle);
+    }
+
+    /**
      * Sets the roller motor to the acquire speed
      */
     public void setRollerMotorSpeedAcquire() {
@@ -110,27 +119,12 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Sets the intake position based on the angle. If the angle is too small or big, return nothing.
-     * @param angle
-     */
-    public void setIntakePositionWithAngle(Double angle) {
-        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
-            // TODO: log an error, but don't throw exception
-            return;
-        }
-        //_intakeIO.setTargetPositionAsDegrees(angle);
-        _pivotPid.reset(getPivotAngle());
-        _pivotPid.setGoal(angle);
-    }
-
-    /**
      * Checks if the pivot is at the desired setpoint using encoder position.
      * @return boolean
      */
     public boolean pivotAtSetpoint() {
         double pivotEncoderPositionDegrees = _intakeInputs._pivotEncoderPositionDegrees;
         double targetPositionDegrees = _intakePosition.getAngle();
-        System.out.printf("angle offset: %f %f\n", pivotEncoderPositionDegrees, targetPositionDegrees);
         return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
     }
 

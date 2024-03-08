@@ -20,11 +20,15 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.RealClimberIO;
+import frc.robot.subsystems.climber.commands.CmdClimberMove;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -38,9 +42,9 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
-import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -67,22 +71,25 @@ public class RobotContainer {
     private final Drive _drive;
     private final Intake _intake;
     private final Shooter _shooter;
-    private ShooterZone _zone;
+    private final Climber _climber;
+
     private Command _runShooterPIDCommand;
     private Command _runIntakePIDCommand;
+    private Command _adjustShooterAutomaticallyCommand;
 
     // logged dashboard inputs
     private final LoggedDashboardChooser<Command> _autoChooser;
 
     // Controller
-    private final CommandXboxController _controller = new CommandXboxController(0);
+    private final CommandXboxController _driveController = new CommandXboxController(0);
+    private final CommandXboxController _climberController = new CommandXboxController(1);
 
     // Button box
     // Top half of buttons
-    private final Joystick _operatorController1 = new Joystick(1);
+    private final GenericHID _operatorController1 = new GenericHID(2);
 
     // Bottom half of buttons
-    private final Joystick _operatorController2 = new Joystick(2);
+    private final GenericHID _operatorController2 = new GenericHID(3);
 
     // Left column, top to bottom
     // private JoystickButton _opButtonOne = new
@@ -105,8 +112,7 @@ public class RobotContainer {
     private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
 
     // Side Toggle Switch
-    // private JoystickButton _opButtonTen = new
-    // JoystickButton(_operatorController1, 10);
+    private JoystickButton _autoShootToggle = new JoystickButton(_operatorController1, 10);
 
     // Bottom rows, left to right (not top then bottom!)
     private JoystickButton _op2ButtonOne = new JoystickButton(_operatorController2, 1);
@@ -116,10 +122,8 @@ public class RobotContainer {
     private JoystickButton _op2ButtonFive = new JoystickButton(_operatorController2, 5);
     private JoystickButton _op2ButtonSix = new JoystickButton(_operatorController2, 6);
 
-    // this button is broken
-    private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 8);
-
     // Bottom right button (Frowny face)
+    private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 9);
     private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
 
     /**
@@ -139,14 +143,18 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(3));
                 _intake = new Intake(new RealIntakeIO());
                 _shooter = new Shooter(new RealShooterIO());
+                _climber = new Climber(new RealClimberIO());
                 break;
 
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
                 _drive = new Drive(
-                        new GyroIO() {},
-                        new VisionIO() {},
-                        new VisionDriveIO() {},
+                        new GyroIO() {
+                        },
+                        new VisionIO() {
+                        },
+                        new VisionDriveIO() {
+                        },
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim(),
@@ -155,38 +163,53 @@ public class RobotContainer {
                 });
                 _shooter = new Shooter(new ShooterIO() {
                 });
+                _climber = new Climber(new ClimberIO() {
+                });
                 break;
             default:
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
-                        new GyroIO() {},
-                        new VisionIO() {},
-                        new VisionDriveIO() {},
-                        new ModuleIO() {},
-                        new ModuleIO() {},
-                        new ModuleIO() {},
+                        new GyroIO() {
+                        },
+                        new VisionIO() {
+                        },
+                        new VisionDriveIO() {
+                        },
+                        new ModuleIO() {
+                        },
+                        new ModuleIO() {
+                        },
+                        new ModuleIO() {
+                        },
                         new ModuleIO() {
                         });
                 _intake = new Intake(new IntakeIO() {
                 });
                 _shooter = new Shooter(new ShooterIO() {
                 });
+                _climber = new Climber(new ClimberIO() {
+                });
                 break;
         }
 
-        // setup commands for PID
-        this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
-        this._runIntakePIDCommand = _intake.buildCommand().runPID();
+        // setup hand-scheduled commands
+        _runShooterPIDCommand = new CmdShooterRunPids(_shooter);
+        _runIntakePIDCommand = _intake.buildCommand().runPID();
+        _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
 
-        NamedCommands.registerCommand("intake GroundPos", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
-        NamedCommands.registerCommand("intake Stow", new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
-        NamedCommands.registerCommand("Subwoofer Shoot", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+        NamedCommands.registerCommand("intake GroundPos",
+                new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
+        NamedCommands.registerCommand("intake Stow",
+                new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
+        NamedCommands.registerCommand("Subwoofer Shoot",
+                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
         NamedCommands.registerCommand("Podium Shoot", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
         NamedCommands.registerCommand("set has note", new Command() {
             @Override
             public void initialize() {
                 _intake.setHasNote();
             }
+
             @Override
             public boolean isFinished() {
                 return true;
@@ -209,24 +232,24 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        /*
+         * ================================
+         * Drive Controller
+         * ================================
+         */
         _drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> -_controller.getRightX()));
+                        () -> -_driveController.getLeftY(),
+                        () -> -_driveController.getLeftX(),
+                        () -> -_driveController.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
-        _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+        // _driveController.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
-        // face the speaker while we hold this button
-        _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                () -> -_controller.getLeftY(),
-                () -> -_controller.getLeftX()));
-
-        _controller.a().whileTrue(new CmdDriveGoToNote(_drive));
+        _driveController.a().whileTrue(new CmdDriveGoToNote(_drive));
 
         // reset the orientation of the robot. changes which way it thinks is forward
-        _controller.y().onTrue(
+        _driveController.y().onTrue(
                 Commands.runOnce(
                         () -> _drive.setPose(
                                 new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
@@ -238,27 +261,43 @@ public class RobotContainer {
                 DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
                 DriveConstants.RED_SPEAKER.getY(),
                 new Rotation2d(Math.PI));
-        _controller.b().onTrue(
+        // Change the robot pose to think it is in front of the red speaker
+        _driveController.b().onTrue(
                 Commands.runOnce(
                         () -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
 
-        // Move the shooter to the podium or subwoofer positions
         /*
-         * ---------------- START MANUAL ROBOT CONTROL BUTTON
-         * BINDINGS--------------------------
+         * ================================
+         * Climber Controller
+         * ================================
          */
-        // consider adding a boolean to constants.java to put the robot into "pit" mode
-        // or something to
-        // switch the buttons to manual control for testing.
+        _climberController.a().onTrue(Commands.runOnce(() -> _climber.setCanMove(true)))
+                              .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+
+        _climber.setDefaultCommand(new CmdClimberMove(_climber,
+                                                      () -> -_climberController.getLeftY(),
+                                                      () -> -_climberController.getRightY()));
+
+        /*
+         * ================================
+         * Button Box
+         * ================================
+         */
+
+        // The toggle sends out true when we want to disable autoshoot, so this looks a little flipped around
+        _autoShootToggle.onFalse(Commands.runOnce(() -> _shooter.setAutoShootEnabled(true)))
+                        .onTrue(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
 
         // shooter position angle manual control
         _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
-      
+
         // shooter fly wheel manual control. Only sets the flywheel speed while holding
         // the button
-        //_op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
-        //_op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
+        // _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter,
+        // ShooterZone.Podium));
+        // _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter,
+        // ShooterZone.Subwoofer));
 
         // FROM MAIN
         _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
@@ -271,19 +310,20 @@ public class RobotContainer {
         _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
 
-        _op2ButtonSix.onTrue(new Command() {
+        _op2ButtonFour.onTrue(new Command() {
 
             @Override
-            public void initialize(){
+            public void initialize() {
                 _shooter.setFlywheelSpeed(0.0);
             }
 
             @Override
-            public boolean isFinished(){
+            public boolean isFinished() {
                 return true;
             }
-        }
-        );
+        });
+
+        _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
 
         _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
 
@@ -330,6 +370,10 @@ public class RobotContainer {
     }
 
     public Command getRunIntakePIDCommand() {
+        return this._runIntakePIDCommand;
+    }
+
+    public Command getAdjustShooterAutomaticallyCommand() {
         return this._runIntakePIDCommand;
     }
 }

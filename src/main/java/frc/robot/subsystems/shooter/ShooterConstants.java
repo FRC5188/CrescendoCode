@@ -30,10 +30,10 @@ public abstract class ShooterConstants {
     public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 40;
 
     // unkown
-    public static final double ZONE_UNKOWN_FLYWHEEL_SPEED = 200;
-    public static final double ZONE_UNKOWN_LOW_BOUND = -1;
-    public static final double ZONE_UNKOWN_UPPER_BOUND = -1;
-    public static final double ZONE_UNKOWN_SHOOTER_ANGLE = 35;
+    public static final double ZONE_UNKNOWN_FLYWHEEL_SPEED = 200;
+    public static final double ZONE_UNKNOWN_LOW_BOUND = -1;
+    public static final double ZONE_UNKNOWN_UPPER_BOUND = -1;
+    public static final double ZONE_UNKNOWN_SHOOTER_ANGLE = 35;
 
 
     /**************

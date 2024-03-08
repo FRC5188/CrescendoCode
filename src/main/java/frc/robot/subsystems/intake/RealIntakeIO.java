@@ -17,9 +17,9 @@ public class RealIntakeIO implements IntakeIO {
         configPivotMotor();
         configRollerMotor();
         configEncoder();
-        configPivotPID(IntakeConstants.ROLLERS_PID_KD,
-                        IntakeConstants.ROLLERS_PID_KI,
-                        IntakeConstants.ROLLERS_PID_KD);
+        configPivotPID(IntakeConstants.PIVOT_PID_KP,
+                        IntakeConstants.PIVOT_PID_KI,
+                        IntakeConstants.PIVOT_PID_KD);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {

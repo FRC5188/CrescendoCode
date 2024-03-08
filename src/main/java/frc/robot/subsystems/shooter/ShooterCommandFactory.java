@@ -38,7 +38,7 @@ public class ShooterCommandFactory {
      */
     public Command adjustAngle(double angle) {
         return new InstantCommand(
-                () -> this._shooter.setTargetPositionAsAngle(_shooter.getCurrentZone().getShooterAngle() + angle),
+                () -> this._shooter.adjustShooterAngle(angle),
                 this._shooter);
     }
 
@@ -52,7 +52,7 @@ public class ShooterCommandFactory {
         // 
         return new StartEndCommand(
                 // starts flywheels at beginning of command
-                () -> this._shooter.setFlywheelSpeed(zone.getLeftFlywheelSpeed()),
+                () -> this._shooter.setFlywheelSpeedWithZone(zone),
                 // stops flywheels at end of command
                 () -> this._shooter.stopFlywheels(),
                 this._shooter);

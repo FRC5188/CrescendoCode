@@ -11,8 +11,8 @@ public class RealClimberIO implements ClimberIO {
     private CANSparkFlex _rightClimberMotor;
 
     public RealClimberIO() {
-        _leftClimberMotor = getConfiguredLeftClimberMotor();
-        _rightClimberMotor = getConfiguredRightClimberMotor();
+        configureLeftClimberMotor();
+        configureRightClimberMotor();
     }
 
     public void updateInputs(ClimberIOInputs inputs) {
@@ -39,7 +39,7 @@ public class RealClimberIO implements ClimberIO {
         _rightClimberMotor.set(speed);
     }
 
-    private CANSparkFlex getConfiguredLeftClimberMotor() {
+    private void configureLeftClimberMotor() {
         // While this method does end up setting the motor equal to itself it is better than having to make a seperate local copy of the motor then returning it. 
         _leftClimberMotor = new CANSparkFlex(HardwareConstants.CanIds.LEFT_CLIMBER_MOTOR, MotorType.kBrushless);
         
@@ -52,11 +52,9 @@ public class RealClimberIO implements ClimberIO {
         _leftClimberMotor.enableVoltageCompensation(12); // Even if the battery isn't 12V we'll compensate for it.
 
         _leftClimberMotor.setInverted(false);
-
-        return _leftClimberMotor;
     }
 
-    private CANSparkFlex getConfiguredRightClimberMotor() {
+    private void configureRightClimberMotor() {
         _rightClimberMotor = new CANSparkFlex(HardwareConstants.CanIds.LEFT_CLIMBER_MOTOR, MotorType.kBrushless);
         
         _rightClimberMotor.setCANTimeout(100);
@@ -68,7 +66,5 @@ public class RealClimberIO implements ClimberIO {
         _rightClimberMotor.enableVoltageCompensation(12); // Even if the battery isn't 12V we'll compensate for it.
 
         _rightClimberMotor.setInverted(false);
-
-        return _rightClimberMotor;
     }
 }

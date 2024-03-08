@@ -32,7 +32,7 @@ public class CmdShooterRunFlywheelsForZone extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _shooterSubsystem.setFlywheelSpeed(_zone.getLeftFlywheelSpeed());
+    _shooterSubsystem.setFlywheelSpeed(_zone.getFlywheelSpeed());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

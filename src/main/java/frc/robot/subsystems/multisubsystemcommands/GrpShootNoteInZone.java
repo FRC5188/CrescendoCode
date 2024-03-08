@@ -16,9 +16,6 @@ public class GrpShootNoteInZone extends SequentialCommandGroup {
 
         addRequirements(intakeSubsystem, shooterSubsystem);
 
-        System.out.print("Zone: ");
-        System.out.println(zone);
-
         addCommands(
                 new CmdShooterSetAutoshootEnabled(shooterSubsystem, false),
                 intakeSubsystem.buildCommand().setPosition(IntakePosition.Stowed),

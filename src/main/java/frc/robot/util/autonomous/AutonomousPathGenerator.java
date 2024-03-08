@@ -63,19 +63,19 @@ public abstract class AutonomousPathGenerator {
      * @return Command which goes to that pose.
      */
     public static Command getRuntimePath(Pose2d targetPose) {
-        final double END_VELOCITY_GOAL = 0.0; // We want to be stopped at the end of our path.
+        final double endVelocityGoal = 0.0; // We want to be stopped at the end of our path.
 
-        final double MAXIMUM_LINEAR_ACCELERATION = 4.0;
-        final double MAXIMUM_ANGULAR_ACCELERATION = Units.degreesToRadians(720);
+        final double maxLinearAcceleration = 4.0;
+        final double maxAngularAcceleration = Units.degreesToRadians(720);
 
         return AutoBuilder.pathfindToPose(
             targetPose,
             new PathConstraints(
                 DriveConstants.MAX_LINEAR_SPEED, 
-                MAXIMUM_LINEAR_ACCELERATION, 
+                maxLinearAcceleration, 
                 DriveConstants.MAX_ANGULAR_SPEED, 
-                MAXIMUM_ANGULAR_ACCELERATION),
-            END_VELOCITY_GOAL
+                maxAngularAcceleration),
+            endVelocityGoal
         );
     }
 }

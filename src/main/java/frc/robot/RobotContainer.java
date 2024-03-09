@@ -92,10 +92,8 @@ public class RobotContainer {
     private final GenericHID _operatorController2 = new GenericHID(3);
 
     // Left column, top to bottom
-    // private JoystickButton _opButtonOne = new
-    // JoystickButton(_operatorController1, 1);
-    // private JoystickButton _opButtonTwo = new
-    // JoystickButton(_operatorController1, 2);
+    private JoystickButton _opButtonOne = new JoystickButton(_operatorController1, 1);
+    private JoystickButton _opButtonTwo = new JoystickButton(_operatorController1, 2);
     private JoystickButton _opButtonThree = new JoystickButton(_operatorController1, 3);
 
     // Middle column, top to bottom
@@ -271,12 +269,12 @@ public class RobotContainer {
          * Climber Controller
          * ================================
          */
-        _climberController.a().onTrue(Commands.runOnce(() -> _climber.setCanMove(true)))
-                              .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+        _climberController.rightBumper().onTrue(Commands.runOnce(() -> _climber.setCanMove(true)))
+                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
         _climber.setDefaultCommand(new CmdClimberMove(_climber,
-                                                      () -> -_climberController.getLeftY(),
-                                                      () -> -_climberController.getRightY()));
+                () -> -_climberController.getLeftY(),
+                () -> -_climberController.getRightY()));
 
         /*
          * ================================
@@ -284,47 +282,32 @@ public class RobotContainer {
          * ================================
          */
 
-        // The toggle sends out true when we want to disable autoshoot, so this looks a little flipped around
+        // The toggle sends out true when we want to disable autoshoot, so this looks a
+        // little flipped around
         _autoShootToggle.onFalse(Commands.runOnce(() -> _shooter.setAutoShootEnabled(true)))
-                        .onTrue(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
+                .onTrue(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
 
-        // shooter position angle manual control
-        _op2ButtonTwo.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Podium));
-        _op2ButtonOne.onTrue(new CmdShooterSetPositionByZone(_shooter, ShooterZone.Subwoofer));
+        // Adjust shooter angle from current position
+        _opButtonOne.onTrue(this._shooter.buildCommand().adjustAngle(1));
+        _opButtonTwo.onTrue(this._shooter.buildCommand().adjustAngle(-1));
 
-        // shooter fly wheel manual control. Only sets the flywheel speed while holding
-        // the button
-        // _op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter,
-        // ShooterZone.Podium));
-        // _op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter,
-        // ShooterZone.Subwoofer));
-
-        // FROM MAIN
+        // Move intake to different positions
+        _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
         _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
         _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround());
-        _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
 
-        _opButtonNine.onTrue(this._intake.buildCommand().acquire());
-        _opButtonNine.onFalse(this._intake.buildCommand().stop());
+        // Run intake rollers, stop when we let go of button
+        _opButtonNine.onTrue(this._intake.buildCommand().acquire())
+                .onFalse(this._intake.buildCommand().stop());
 
-        _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+        // Move to shooter positions manually
         _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+        _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
-        _op2ButtonFour.onTrue(new Command() {
-
-            @Override
-            public void initialize() {
-                _shooter.setFlywheelSpeed(0.0);
-            }
-
-            @Override
-            public boolean isFinished() {
-                return true;
-            }
-        });
-
+        // Reset hasNote in case the robot thinks that it has a note when it doesn't
         _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
 
+        // Spit the note out
         _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
 
         /***

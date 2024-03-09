@@ -46,25 +46,6 @@ public class IntakeCommandFactory {
          this._intake).withTimeout(timeSeconds);
     }
 
-    /***
-     * Returns a new Command object where the execute calls _intake.runPivotPID()
-     * and the isFinished is always false. This command does not require the subsystem.
-     * 
-     * @return a new Command
-     */
-    public Command runPID() {
-        return new Command() {
-            @Override
-            public void execute() {
-                _intake.runPivotPID();
-            }
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
-        };
-    }
-
     /**
      * Sets the positions of the PID for the Intake. positon should be a 
      * {@link Intake.IntakePosition}

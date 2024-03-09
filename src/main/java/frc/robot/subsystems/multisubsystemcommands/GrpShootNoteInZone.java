@@ -6,8 +6,6 @@ import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
-import frc.robot.subsystems.shooter.commands.CmdShooterRunShooterForZone;
-import frc.robot.subsystems.shooter.commands.CmdShooterSetAutoshootEnabled;
 import frc.robot.subsystems.shooter.commands.CmdShooterWaitUntilReady;
 
 public class GrpShootNoteInZone extends SequentialCommandGroup {
@@ -17,12 +15,12 @@ public class GrpShootNoteInZone extends SequentialCommandGroup {
         addRequirements(intakeSubsystem, shooterSubsystem);
 
         addCommands(
-                new CmdShooterSetAutoshootEnabled(shooterSubsystem, false),
+                shooterSubsystem.buildCommand().setAutoShootEnabled(false),
                 intakeSubsystem.buildCommand().setPosition(IntakePosition.Stowed),
-                new CmdShooterRunShooterForZone(shooterSubsystem, zone),
-                new CmdShooterWaitUntilReady(shooterSubsystem, intakeSubsystem),
+                shooterSubsystem.buildCommand().runForZone(zone),
+                new CmdShooterWaitUntilReady(shooterSubsystem),
                 intakeSubsystem.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME),                
-                new CmdShooterRunShooterForZone(shooterSubsystem, ShooterZone.Unknown));
+                shooterSubsystem.buildCommand().runForZone(ShooterZone.Unknown));
                 intakeSubsystem.buildCommand().setPosition(IntakePosition.Stowed);
     }
 

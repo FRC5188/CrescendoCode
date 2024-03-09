@@ -1,8 +1,9 @@
 package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.SparkAbsoluteEncoder;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.HardwareConstants;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -11,7 +12,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;
     private CANSparkFlex _rollerMotor;
-    private DutyCycleEncoder _pivotMotorEncoder;
+    private SparkAbsoluteEncoder _pivotMotorEncoder;
+    private DigitalInput _leftLimitSwitch;
+    private DigitalInput _rightLimitSwitch;
 
     public RealIntakeIO() {
         configPivotMotor();
@@ -20,6 +23,8 @@ public class RealIntakeIO implements IntakeIO {
         configPivotPID(IntakeConstants.PIVOT_PID_KP,
                         IntakeConstants.PIVOT_PID_KI,
                         IntakeConstants.PIVOT_PID_KD);
+        _leftLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.LEFT_LIMIT_SWITCH_PORT);
+        _rightLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.RIGHT_LIMIT_SWITCH_PORT);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
@@ -27,13 +32,15 @@ public class RealIntakeIO implements IntakeIO {
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
         inputs._pivotMotorCurrent = _pivotMotor.getOutputCurrent();
-        inputs._pivotEncoderPositionDegrees = (_pivotMotorEncoder.getAbsolutePosition() * 360) - 
-                                HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES;
+        inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getPosition();
 
         inputs._rollerMotorTemperature = _rollerMotor.getMotorTemperature();
         inputs._rollerMotorVelocityRotationsPerMin = _rollerMotor.getEncoder().getVelocity();
         inputs._rollerMotorVoltage = _rollerMotor.getAppliedOutput() * _rollerMotor.getBusVoltage();
         inputs._rollerMotorCurrent = _rollerMotor.getOutputCurrent();
+
+        inputs._leftLimitSwitchIsPushed = _leftLimitSwitch.get();
+        inputs._rightLimitSwitchIsPushed = _rightLimitSwitch.get();
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
@@ -49,10 +56,10 @@ public class RealIntakeIO implements IntakeIO {
     }
 
     private void configPivotPID(double p, double i, double d) {
-        // _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
-        // _pivotMotor.getPIDController().setP(p);
-        // _pivotMotor.getPIDController().setI(i);
-        // _pivotMotor.getPIDController().setD(d);
+        _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
+        _pivotMotor.getPIDController().setP(p);
+        _pivotMotor.getPIDController().setI(i);
+        _pivotMotor.getPIDController().setD(d);
     }
 
     private void configPivotMotor() {
@@ -82,9 +89,8 @@ public class RealIntakeIO implements IntakeIO {
     }
 
     private void configEncoder() {
-        // _pivotMotorEncoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        // _pivotMotorEncoder.setPositionConversionFactor(360);
-        // _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
-        _pivotMotorEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.INTAKE_PIVOT_ENCODER_PORT);
+        _pivotMotorEncoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        _pivotMotorEncoder.setPositionConversionFactor(360);
+        _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
     }
 }

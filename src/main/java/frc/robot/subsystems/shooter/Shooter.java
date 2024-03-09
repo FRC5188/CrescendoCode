@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.littletonrobotics.junction.Logger;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.IntakeCommandFactory;
 
 public class Shooter extends SubsystemBase {
     public enum ShooterZone {
@@ -74,7 +72,6 @@ public class Shooter extends SubsystemBase {
     private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
     private double _targetFlywheelSpeed = 0;
     private double _targetShooterAngle;
-    private PIDController _anglePid;
     private ShooterZone _currentShooterZone;
     private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
     private final ShooterCommandFactory _shooterCommandFactory = new ShooterCommandFactory(this);
@@ -82,7 +79,6 @@ public class Shooter extends SubsystemBase {
     public Shooter(ShooterIO shooterIO) {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
-        _anglePid = new PIDController(0.025, 0, 0.00);
 
         // Set up the zone mappings
         // This is a funky hack that lets us modify zone data during a match, like angle, 
@@ -97,10 +93,6 @@ public class Shooter extends SubsystemBase {
 
     public ShooterCommandFactory buildCommand() {
         return this._shooterCommandFactory;
-    }
-
-    public void runAnglePid() {
-        _shooterIO.setAngleMotorSpeed(_anglePid.calculate(getCurrentPositionInDegrees()));
     }
 
     public void setTargetPosition(ShooterZone zone) {
@@ -128,7 +120,7 @@ public class Shooter extends SubsystemBase {
             System.err.println("Invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE.");
             return;
         } else {
-            _anglePid.setSetpoint(angle);
+            _shooterIO.setTargetPositionAsDegrees(angle);
             _targetShooterAngle = angle;
         }
     }

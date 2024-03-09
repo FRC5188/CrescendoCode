@@ -43,6 +43,8 @@ public class HardwareConstants {
     }
 
     public class DIOPorts {
+        public static int LEFT_LIMIT_SWITCH_PORT = 0;
+        public static int RIGHT_LIMIT_SWITCH_PORT = 1; 
         public static int SHOOTER_ANGLE_ENCODER_PORT = 7; // These must be configured when robot is wired. 
         public static int INTAKE_PIVOT_ENCODER_PORT = 8;
     }

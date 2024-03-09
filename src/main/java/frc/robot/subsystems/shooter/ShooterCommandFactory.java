@@ -59,23 +59,6 @@ public class ShooterCommandFactory {
     }
 
     /**
-     * Command to run the angle PID of the shooter. This command will never finish
-     * @return command to run the shooter angle PID
-     */
-    public Command runAnglePID() {
-        return new Command() {
-            @Override
-            public void execute() {
-                _shooter.runAnglePid();
-            }
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
-        };
-    }
-
-    /**
      * Set the shooter angle and flywheel speed for a given zone. A zone
      * must be one of our predefined zones such as subwoofer, podium, etc
      * @param zone shooter zone to run shooter for

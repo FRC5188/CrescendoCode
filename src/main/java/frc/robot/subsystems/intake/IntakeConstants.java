@@ -8,12 +8,9 @@ public class IntakeConstants {
      *************************/
     // intake pivot
     // RETUNE THESE PID NUMBERS
-    public static final double PIVOT_PID_KP = 0.005;
-    public static final double PIVOT_PID_KI = 0.00001;
-    public static final double PIVOT_PID_KD = 0.000045;
-    public static final double PIVOT_PID_MAX_VEL = 30;
-    public static final double PIVOT_PID_MAX_ACCEL = 60;
-    public static final double PIVOT_PID_MAX_ISUM = 0.1;
+    public static final double PIVOT_PID_KP = 0; //0.005;
+    public static final double PIVOT_PID_KI = 0; //0.00001;
+    public static final double PIVOT_PID_KD = 0;//0.000045;
 
     // 2/26/24-- P:0.005, I:0.00001, D:0.000045; MAX_VEL:30, MAX_ACCEL: 60, MAX_ISUM:0.1
 

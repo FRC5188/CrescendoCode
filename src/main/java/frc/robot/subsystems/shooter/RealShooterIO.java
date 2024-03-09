@@ -23,7 +23,8 @@ public class RealShooterIO implements ShooterIO {
         configFlywheelMotors();
         configFeederMotor();
         configEncoder();
-        configAnglePID(0.025, 0, 0.00);
+        // p: 0.025
+        configAnglePID(0.0, 0, 0.00);
         configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
     }
 

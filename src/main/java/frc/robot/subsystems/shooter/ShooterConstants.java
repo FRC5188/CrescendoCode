@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.LoggedTunableNumber;
 
 public abstract class ShooterConstants {
 
@@ -17,14 +18,14 @@ public abstract class ShooterConstants {
      *********************/
 
 
-    // podium
-    public static final double ZONE_PODIUM_FLYWHEEL_SPEED = 1750;
+    // PODIUM
+    public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/PODIUM_FLYWHEEL_SPEED", 1750);
     public static final double ZONE_PODIUM_LOW_BOUND = 4;
     public static final double ZONE_PODIUM_UPPER_BOUND = 2.5;
     public static final double ZONE_PODIUM_SHOOTER_ANGLE = 22;
 
-    // subwoofer
-    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1300;
+    // SUBWOOFER
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 1300);
     public static final double ZONE_SUBWOOFER_LOW_BOUND = 0.0;
     public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
     public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 40;

@@ -15,11 +15,6 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -39,7 +34,8 @@ import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
 import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.util.LocalADStarAK;
+import frc.robot.util.autonomous.AutonomousPathGenerator;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -89,46 +85,28 @@ public class Drive extends SubsystemBase {
     _modules[2] = new Module(blModuleIO, 2);
     _modules[3] = new Module(brModuleIO, 3);
 
-    // Configure AutoBuilder for PathPlanner
-    AutoBuilder.configureHolonomic(
-        this::getPose,
-        this::setPose,
-        () -> _kinematics.toChassisSpeeds(getModuleStates()),
-        this::runVelocity,
-        new HolonomicPathFollowerConfig(
-            DriveConstants.MAX_LINEAR_SPEED, DriveConstants.DRIVE_BASE_RADIUS, new ReplanningConfig()),
-        () -> DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == Alliance.Red,
-        this);
-    Pathfinding.setPathfinder(new LocalADStarAK());
-    PathPlannerLogging.setLogActivePathCallback(
-        (activePath) -> {
-          Logger.recordOutput(
-              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-        });
-    PathPlannerLogging.setLogTargetPoseCallback(
-        (targetPose) -> {
-          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-        });
+    AutonomousPathGenerator.configure(this, _kinematics, getModuleStates());
 
-    // Configure SysId
-    _sysId = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            DriveConstants.SYSID_RAMP_RRATE,
-            DriveConstants.SYSID_STEP_VOLTAGE,
-            DriveConstants.SYSID_TIMEOUT,
-            (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
-        new SysIdRoutine.Mechanism(
-            (voltage) -> {
-              for (int i = 0; i < 4; i++) {
-                _modules[i].runCharacterization(voltage.in(Volts));
-              }
-            },
-            null,
-            this));
+    // =============== START CONFIGURATION FOR SYSID ===============
+    _sysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+              DriveConstants.SYSID_RAMP_RRATE,
+              DriveConstants.SYSID_STEP_VOLTAGE,
+              DriveConstants.SYSID_TIMEOUT,
+                (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism(
+                (voltage) -> {
+                  for (int i = 0; i < 4; i++) {
+                    _modules[i].runCharacterization(voltage.in(Volts));
+                  }
+                },
+                null,
+                this));
     _centerOfRotation = new Translation2d();
     _field = new Field2d();
   }
+  // =============== END CONFIGURATION FOR SYSID ===============
 
   public void periodic() {
     _gyroIO.updateInputs(_gyroInputs);
@@ -292,6 +270,10 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
+  }
+
+  public void resetPose(Pose2d pose) {
+    _poseEstimator.resetPosition(_rawGyroRotation, getModulePositions(), pose);
   }
 
   /** Resets the current odometry pose. */

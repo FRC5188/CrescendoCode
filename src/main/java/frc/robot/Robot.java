@@ -163,8 +163,11 @@ public class Robot extends LoggedRobot {
       _autonomousCommand.schedule();
     }
 
-    _robotContainer.getAdjustShooterAutomaticallyCommand();
-    _robotContainer.getFeederInitialStateCommand();
+
+    if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -183,8 +186,8 @@ public class Robot extends LoggedRobot {
     }
 
     if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
-      _robotContainer.getAdjustShooterAutomaticallyCommand();
-      _robotContainer.getFeederInitialStateCommand();
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
     }
   }
 

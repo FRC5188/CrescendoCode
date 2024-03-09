@@ -13,6 +13,7 @@ package frc.robot.subsystems.multisubsystemcommands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -36,6 +37,8 @@ public class CmdShootOnTheMove extends Command {
   private DoubleSupplier _translationXSupplier;
   private DoubleSupplier _translationYSupplier;
 
+  private Command _autoAdjustCommand;
+
   private boolean _isFinished;
 
   private Translation2d _currentRobotTranslation;
@@ -58,6 +61,9 @@ public class CmdShootOnTheMove extends Command {
   private PIDController _rotationPID;
 
   /**
+   * CmdAdjustShooterAutomatically is the default command for the shooter. 
+   * Disable it when we run this command.
+   * 
    * @param drivetrainSubsystem  the drive subsystem
    * @param shooterSubsystem     the shooter subsystem
    * @param intakeSubsystem      the intake subsystem
@@ -66,13 +72,15 @@ public class CmdShootOnTheMove extends Command {
    *                             joystick
    * @param translationYSupplier translation y supplied by driver translation
    *                             joystick
+   * @param autoAdjustCommand    CmdAdjustShooterAutomatically
    **/
   public CmdShootOnTheMove(Drive drivetrainSubsystem,
       Shooter shooterSubsystem,
       Intake intakeSubsystem,
       DoubleSupplier triggerAxis,
       DoubleSupplier translationXSupplier,
-      DoubleSupplier translationYSupplier) {
+      DoubleSupplier translationYSupplier,
+      Command autoAdjustCommand) {
 
     _drive = drivetrainSubsystem;
     _shooter = shooterSubsystem;
@@ -80,6 +88,7 @@ public class CmdShootOnTheMove extends Command {
     _trigger = triggerAxis;
     _translationXSupplier = translationXSupplier;
     _translationYSupplier = translationYSupplier;
+    _autoAdjustCommand = autoAdjustCommand;
 
     _rotationPID = new PIDController(
         DriveConstants.SHOOT_ON_THE_MOVE_P,
@@ -100,6 +109,10 @@ public class CmdShootOnTheMove extends Command {
   @Override
   public void initialize() {
     _isFinished = false;
+    // Cancel CmdAdjustShooterAutomatically while this command runs; reenable when it finishes.
+    if (CommandScheduler.getInstance().isScheduled(_autoAdjustCommand)) {
+      _autoAdjustCommand.cancel();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -186,6 +199,9 @@ public class CmdShootOnTheMove extends Command {
     _shotTimer.stop();
     _shotTimer.reset();
     _hasRunOnce = false;
+
+    // Reenable CmdAdjustShooterAutomatically because this command is finished.
+    CommandScheduler.getInstance().schedule(_autoAdjustCommand);
   }
 
   // Returns true when the command should end.

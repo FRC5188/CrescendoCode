@@ -8,8 +8,6 @@ public class CmdShooterWaitUntilReady extends Command {
 
     public CmdShooterWaitUntilReady(Shooter shooterSubsystem) {
         _shooterSubsystem = shooterSubsystem;
-
-        addRequirements(shooterSubsystem);
     }
 
     @Override

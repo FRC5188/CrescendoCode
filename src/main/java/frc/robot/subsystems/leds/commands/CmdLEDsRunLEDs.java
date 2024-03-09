@@ -1,6 +1,7 @@
 package frc.robot.subsystems.leds.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.LEDs;
@@ -41,6 +42,10 @@ public class CmdLEDsRunLEDs extends Command {
     } else if (_climber.isClimbing()) {
       // Runs when climber is active
       _leds.runAnimation(LEDAnimation.ClimberAscending);
+    } else if (_leds.getAmpReady()) {
+      // Runs when human player should activate Amp
+      _leds.runAnimation(LEDAnimation.AmpReady);
+      _leds.setAmpReady(false);
     }
 
     // Increment the timer for another loop

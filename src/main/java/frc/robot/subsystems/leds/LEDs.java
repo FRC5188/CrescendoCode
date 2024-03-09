@@ -13,13 +13,14 @@ public class LEDs {
     static int _numLEDs = 8;
     LEDAnimation _currentAnimation = LEDAnimation.None;
     boolean _prevHasNote;
+    boolean _ampReady = false;
 
     public enum LEDAnimation {
         None(null, null, 0),
         ReadyToShoot(new LEDColor(0, 255, 0), null, 3),
         PickedUpNote(null, new StrobeAnimation(255, 128, 0, 0, 0.5, _numLEDs), 3),
-        ClimberAscending(new LEDColor(255, 215, 0), new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3);
-
+        ClimberAscending(new LEDColor(255, 215, 0), new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3),
+        AmpReady(null, new StrobeAnimation(204, 0, 255, 0, 0.5, _numLEDs), 3);
         LEDColor _color;
         Animation _animation;
         int _secondsToRun;
@@ -88,5 +89,13 @@ public class LEDs {
         boolean ret = hasNote && !_prevHasNote;
         _prevHasNote = hasNote;
         return ret;
+    }
+    
+    public boolean getAmpReady() {
+        return _ampReady;
+    }
+
+    public void setAmpReady(boolean isReady) {
+        _ampReady = isReady;
     }
 }

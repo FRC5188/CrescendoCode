@@ -288,6 +288,20 @@ public class RobotContainer {
         _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
         _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
 
+        _op2ButtonFour.onTrue(new Command() {
+
+            @Override
+            public void initialize(){
+                _leds.setAmpReady(true);
+            }
+
+            @Override
+            public boolean isFinished(){
+                return true;
+            }
+        }
+        );
+
         _op2ButtonSix.onTrue(new Command() {
 
             @Override

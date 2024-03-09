@@ -11,21 +11,21 @@ import frc.robot.util.LoggedTunableNumber;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
-    Subwoofer(ShooterConstants.ZONE_SUBWOOFER_LOW_BOUND, 
-              ShooterConstants.ZONE_SUBWOOFER_UPPER_BOUND,
-              ShooterConstants.ZONE_SUBWOOFER_SHOOTER_ANGLE,
-              ShooterConstants.ZONE_SUBWOOFER_FLYWHEEL_SPEED,
-              ShooterConstants.ZONE_SUBWOOFER_FLYWHEEL_SPEED),
-    Podium(ShooterConstants.ZONE_PODIUM_LOW_BOUND, 
-              ShooterConstants.ZONE_PODIUM_UPPER_BOUND,
-              ShooterConstants.ZONE_PODIUM_SHOOTER_ANGLE,
-              ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED,
-              ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED),
-    Unknown(ShooterConstants.ZONE_UNKNOWN_LOW_BOUND, 
-              ShooterConstants.ZONE_UNKNOWN_UPPER_BOUND,
-              ShooterConstants.ZONE_UNKNOWN_SHOOTER_ANGLE,
-              ShooterConstants.ZONE_UNKNOWN_FLYWHEEL_SPEED,
-              ShooterConstants.ZONE_UNKNOWN_FLYWHEEL_SPEED);
+    Subwoofer(ShooterConstants.ZONE.ZONE_SUBWOOFER_LOW_BOUND, 
+              ShooterConstants.ZONE.ZONE_SUBWOOFER_UPPER_BOUND,
+              ShooterConstants.ZONE.ZONE_SUBWOOFER_SHOOTER_ANGLE,
+              ShooterConstants.ZONE.ZONE_SUBWOOFER_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE.ZONE_SUBWOOFER_FLYWHEEL_SPEED),
+    Podium(ShooterConstants.ZONE.ZONE_PODIUM_LOW_BOUND, 
+              ShooterConstants.ZONE.ZONE_PODIUM_UPPER_BOUND,
+              ShooterConstants.ZONE.ZONE_PODIUM_SHOOTER_ANGLE,
+              ShooterConstants.ZONE.ZONE_PODIUM_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE.ZONE_PODIUM_FLYWHEEL_SPEED),
+    Unknown(ShooterConstants.ZONE.ZONE_UNKNOWN_LOW_BOUND, 
+              ShooterConstants.ZONE.ZONE_UNKNOWN_UPPER_BOUND,
+              ShooterConstants.ZONE.ZONE_UNKNOWN_SHOOTER_ANGLE,
+              ShooterConstants.ZONE.ZONE_UNKNOWN_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE.ZONE_UNKNOWN_FLYWHEEL_SPEED);
 
     private final LoggedTunableNumber _lowBound;
     private final LoggedTunableNumber _highBound;
@@ -76,7 +76,10 @@ public class Shooter extends SubsystemBase {
   public Shooter(ShooterIO shooterIO) {
     _shooterIO = shooterIO;
     _currentShooterZone = ShooterZone.Unknown;
-    _anglePid = new PIDController(0.025, 0, 0.00);
+    _anglePid = new PIDController(
+      ShooterConstants.PID.PIVOT.KP.get(), 
+      ShooterConstants.PID.PIVOT.KI.get(),
+      ShooterConstants.PID.PIVOT.KD.get());
 
     setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
   }
@@ -94,11 +97,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setTargetPositionAsAngle(double angle) {
-    if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
+    if (angle < ShooterConstants.ENCODER.MINIMUM_ANGLE_ENCODER_ANGLE) {
       System.err.println("Invalid angle: Parameter 'angle' must >= MIN_SHOOTER_ANGLE.");
       return;
 
-    } else if (angle > ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE) {
+    } else if (angle > ShooterConstants.ENCODER.MAXIMUM_ANGLE_ENCODER_ANGLE) {
       System.err.println("Invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE.");
       return;
     } else {
@@ -147,9 +150,9 @@ public class Shooter extends SubsystemBase {
 
   // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
   private boolean areFlywheelsAtTargetSpeed() {
-    return _targetFlywheelSpeed - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
+    return _targetFlywheelSpeed - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.PID.FLYHWEELS.TOLERANCE
         &&
-            _rightTargetFlywheelSpeed - _shooterInputs._rightFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+            _rightTargetFlywheelSpeed - _shooterInputs._rightFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.PID.FLYHWEELS.TOLERANCE;
   }
 
   /**
@@ -200,7 +203,7 @@ public class Shooter extends SubsystemBase {
   private boolean shooterInPosition() {
     //System.out.printf("target shooter angle: %f, current shooter angle: %f\n", _targetShooterPositionAngle, getCurrentPositionInDegrees());
     return Math.abs(_targetShooterPositionAngle
-        - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+        - getCurrentPositionInDegrees()) <= ShooterConstants.ENCODER.ANGLE_ENCODER_DEADBAND_DEGREES;
   }
 
   /**
@@ -229,6 +232,19 @@ public class Shooter extends SubsystemBase {
 
     // VISUALIZATION
     _shooterVisualizer.update(_shooterInputs._angleEncoderPositionDegrees);
+
+    // TUNABLES FOR PIVOT PID
+    if (ShooterConstants.PID.PIVOT.KP.hasChanged(hashCode())) {
+      _anglePid.setP(ShooterConstants.PID.PIVOT.KP.get());
+    }
+
+    if (ShooterConstants.PID.PIVOT.KI.hasChanged(hashCode())) {
+      _anglePid.setI(ShooterConstants.PID.PIVOT.KI.get());
+    }
+
+    if (ShooterConstants.PID.PIVOT.KD.hasChanged(hashCode())) {
+      _anglePid.setD(ShooterConstants.PID.PIVOT.KD.get());
+    }
 
     // LOGGING
     Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());

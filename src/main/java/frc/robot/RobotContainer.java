@@ -285,7 +285,7 @@ public class RobotContainer {
         }
         );
 
-        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
+        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.ROLLERS.SPIT_TIME.get()));
 
         /***
          * 

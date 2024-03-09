@@ -4,11 +4,13 @@ import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.HardwareConstants;
+import frc.robot.util.Tunable;
+
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-public class RealIntakeIO implements IntakeIO {
+public class RealIntakeIO implements IntakeIO, Tunable {
     private CANSparkFlex _pivotMotor;
     private CANSparkFlex _rollerMotor;
     private DutyCycleEncoder _pivotMotorEncoder;
@@ -17,9 +19,9 @@ public class RealIntakeIO implements IntakeIO {
         configPivotMotor();
         configRollerMotor();
         configEncoder();
-        configPivotPID(IntakeConstants.ROLLERS_PID_KD,
-                        IntakeConstants.ROLLERS_PID_KI,
-                        IntakeConstants.ROLLERS_PID_KD);
+        configPivotPID(IntakeConstants.PID.ROLLERS.KP.get(),
+                        IntakeConstants.PID.ROLLERS.KI.get(),
+                        IntakeConstants.PID.ROLLERS.KD.get());
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
@@ -34,6 +36,8 @@ public class RealIntakeIO implements IntakeIO {
         inputs._rollerMotorVelocityRotationsPerMin = _rollerMotor.getEncoder().getVelocity();
         inputs._rollerMotorVoltage = _rollerMotor.getAppliedOutput() * _rollerMotor.getBusVoltage();
         inputs._rollerMotorCurrent = _rollerMotor.getOutputCurrent();
+
+        updateTunables();
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
@@ -62,8 +66,8 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor.setInverted(true);
         _pivotMotor.setIdleMode(IdleMode.kBrake);
 
-        _pivotMotor.setSmartCurrentLimit(IntakeConstants.INTAKE_PIVOT_SMART_CURRENT_LIMIT);
-        _pivotMotor.setSecondaryCurrentLimit(IntakeConstants.INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT);
+        _pivotMotor.setSmartCurrentLimit(IntakeConstants.SOFTWARE.PIVOT_CURRENT_LIMIT);
+        _pivotMotor.setSecondaryCurrentLimit(IntakeConstants.SOFTWARE.PIVOT_SECONDARY_CURRENT_LIMIT);
 
         _pivotMotor.enableVoltageCompensation(12.0);
     }
@@ -75,8 +79,8 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor.setInverted(true);
         _rollerMotor.setIdleMode(IdleMode.kBrake);
 
-        _rollerMotor.setSmartCurrentLimit(IntakeConstants.INTAKE_ROLLER_SMART_CURRENT_LIMIT);
-        _rollerMotor.setSecondaryCurrentLimit(IntakeConstants.INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT);
+        _rollerMotor.setSmartCurrentLimit(IntakeConstants.SOFTWARE.ROLLER_CURRENT_LIMIT);
+        _rollerMotor.setSecondaryCurrentLimit(IntakeConstants.SOFTWARE.ROLLER_SECONDARY_CURRENT_LIMIT);
 
         _rollerMotor.enableVoltageCompensation(12.0);
     }
@@ -86,5 +90,20 @@ public class RealIntakeIO implements IntakeIO {
         // _pivotMotorEncoder.setPositionConversionFactor(360);
         // _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
         _pivotMotorEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.INTAKE_PIVOT_ENCODER_PORT);
+    }
+
+    @Override
+    public void updateTunables() {
+        if (IntakeConstants.PID.ROLLERS.KP.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setP(IntakeConstants.PID.ROLLERS.KP.get());
+        }
+
+        if (IntakeConstants.PID.ROLLERS.KI.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setI(IntakeConstants.PID.ROLLERS.KI.get());
+        }
+
+        if (IntakeConstants.PID.ROLLERS.KD.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setD(IntakeConstants.PID.ROLLERS.KD.get());
+        }
     }
 }

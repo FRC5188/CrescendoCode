@@ -7,8 +7,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
+import frc.robot.util.Tunable;
 
-public class RealShooterIO implements ShooterIO {
+public class RealShooterIO implements ShooterIO, Tunable {
     private static final double GEAR_RATIO = 1.0;
 
     private CANSparkFlex _angleMotor;
@@ -21,7 +22,12 @@ public class RealShooterIO implements ShooterIO {
         configFlywheelMotors();
         configEncoder();
 
-        configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
+        configFlywheelPIDs(
+            ShooterConstants.PID.FLYHWEELS.KP.get(), 
+            ShooterConstants.PID.FLYHWEELS.KI.get(), 
+            ShooterConstants.PID.FLYHWEELS.KD.get(), 
+            ShooterConstants.PID.FLYHWEELS.KF.get()
+            );
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
@@ -54,6 +60,8 @@ public class RealShooterIO implements ShooterIO {
                 - HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
 
+        // Update the Tunable Inputs
+        this.updateTunables();
     }
 
     /***
@@ -133,5 +141,28 @@ public class RealShooterIO implements ShooterIO {
         _rightFlywheelMotor.getPIDController().setI(i);
         _rightFlywheelMotor.getPIDController().setD(d);
         _rightFlywheelMotor.getPIDController().setFF(f, 0);
+    }
+
+    @Override
+    public void updateTunables() {
+        if (ShooterConstants.PID.FLYHWEELS.KP.hasChanged(hashCode())) {
+            _leftFlywheelMotor.getPIDController().setP(ShooterConstants.PID.FLYHWEELS.KP.get());
+            _rightFlywheelMotor.getPIDController().setP(ShooterConstants.PID.FLYHWEELS.KP.get());
+        }
+
+        if (ShooterConstants.PID.FLYHWEELS.KI.hasChanged(hashCode())) {
+            _leftFlywheelMotor.getPIDController().setI(ShooterConstants.PID.FLYHWEELS.KI.get());
+            _rightFlywheelMotor.getPIDController().setI(ShooterConstants.PID.FLYHWEELS.KI.get());
+        }
+
+        if (ShooterConstants.PID.FLYHWEELS.KD.hasChanged(hashCode())) {
+            _leftFlywheelMotor.getPIDController().setD(ShooterConstants.PID.FLYHWEELS.KD.get());
+            _rightFlywheelMotor.getPIDController().setD(ShooterConstants.PID.FLYHWEELS.KD.get());
+        }
+
+        if (ShooterConstants.PID.FLYHWEELS.KF.hasChanged(hashCode())) {
+            _leftFlywheelMotor.getPIDController().setFF(ShooterConstants.PID.FLYHWEELS.KF.get(), 0);
+            _rightFlywheelMotor.getPIDController().setFF(ShooterConstants.PID.FLYHWEELS.KF.get(), 0);
+        }
     }
 }

@@ -7,24 +7,26 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged; checkstyle says this is redunant
+import frc.robot.util.LoggedTunableNumber;
+import frc.robot.util.Tunable;
 
 public class Intake extends SubsystemBase {
 
     public enum IntakePosition {
-        SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
-        GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),
-        Stowed(IntakeConstants.POSITION_STOWED),
-        AmpScore(IntakeConstants.POSITION_AMP_SCORE),
-        SpeakerScore(IntakeConstants.POSITION_SPEAKER_SCORE);
+        SourcePickup(IntakeConstants.POSITIONS.SOURCE_PICKUP),
+        GroundPickup(IntakeConstants.POSITIONS.GROUND_PICKUP),
+        Stowed(IntakeConstants.POSITIONS.STOWED),
+        AmpScore(IntakeConstants.POSITIONS.AMP_SCORE),
+        SpeakerScore(IntakeConstants.POSITIONS.SPEAKER_SCORE);
 
-        private final double _angle;
+        private final LoggedTunableNumber _angle;
 
         /**
          * These enum represents a prefedined position of the intake. These are what we pass to
          * commands to set the intake positions
          * @param angle
          */
-        private IntakePosition(double angle) {
+        private IntakePosition(LoggedTunableNumber angle) {
             this._angle = angle;
         }
 
@@ -33,7 +35,7 @@ public class Intake extends SubsystemBase {
          * @return
          */
         public double getAngle() {
-            return this._angle;
+            return this._angle.get();
         }
     }
 
@@ -49,24 +51,22 @@ public class Intake extends SubsystemBase {
     private IntakeVisualizer _intakeVisualizer = new IntakeVisualizer();
 
     public Intake(IntakeIO intakeIO) {
+        // TODO: Make sure this is updated in the periodic().
         this._intakeIO = intakeIO;
         _hasNote = false;
         _intakeHasBeenRunning = false;
         _intakePosition = IntakePosition.Stowed;
-        _pivotPid = new ProfiledPIDController(IntakeConstants.PIVOT_PID_KP, 
-                                            IntakeConstants.PIVOT_PID_KI, 
-                                            IntakeConstants.PIVOT_PID_KD, 
+        _pivotPid = new ProfiledPIDController(IntakeConstants.PID.PIVOT.KP.get(), 
+                                            IntakeConstants.PID.PIVOT.KI.get(), 
+                                            IntakeConstants.PID.PIVOT.KD.get(), 
                                             new Constraints(
-                                                IntakeConstants.PIVOT_PID_MAX_VEL,
-                                                IntakeConstants.PIVOT_PID_MAX_ACCEL));
+                                                IntakeConstants.PID.PIVOT.MAXIMUM_VELOCITY.get(),
+                                                IntakeConstants.PID.PIVOT.MAXIMUM_ACCELERATION.get()));
 
-        _pivotPid.setIntegratorRange(-IntakeConstants.PIVOT_PID_MAX_ISUM, IntakeConstants.PIVOT_PID_MAX_ISUM);                                        
+        _pivotPid.setIntegratorRange(-IntakeConstants.PID.PIVOT.MAXIMUM_INTEGRAL_SUM.get(), IntakeConstants.PID.PIVOT.MAXIMUM_INTEGRAL_SUM.get());                                        
         // might want to call this to make sure inputs are always initialized??
         // this.periodic();
         this.setIntakePosition(IntakePosition.Stowed);
-
-        // REMOVE THESE COMMENTS IF IT DOESN'T WORK :)
-        // setDefaultCommand(_intakeCommandFactory.runPID());
     }
 
     /**
@@ -102,21 +102,21 @@ public class Intake extends SubsystemBase {
      * Sets the roller motor to the acquire speed
      */
     public void setRollerMotorSpeedAcquire() {
-        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.AQUIRE_SPEED.get());
     }
 
     /**
      * Sets the roller motor to the spit speed
      */
     public void setRollerMotorSpeedSpit() {
-        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.SPIT_SPEED.get());
     }
 
     /**
      * Stops the roller motor
      */
     public void stopRollerMotor() {
-        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_STOP_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.STOP_SPEED.get());
     }
 
     /**
@@ -124,7 +124,7 @@ public class Intake extends SubsystemBase {
      * @param angle
      */
     public void setIntakePositionWithAngle(Double angle) {
-        if (angle > IntakeConstants.MAX_INTAKE_ANGLE || angle < IntakeConstants.MIN_INTAKE_ANGLE) {
+        if (angle > IntakeConstants.MECHANICAL.MAX_ANGLE || angle < IntakeConstants.MECHANICAL.MIN_ANGLE) {
             // TODO: log an error, but don't throw exception
             return;
         }
@@ -141,7 +141,7 @@ public class Intake extends SubsystemBase {
         double pivotEncoderPositionDegrees = _intakeInputs._pivotEncoderPositionDegrees;
         double targetPositionDegrees = _intakePosition.getAngle();
         System.out.printf("angle offset: %f %f\n", pivotEncoderPositionDegrees, targetPositionDegrees);
-        return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.INTAKE_PIVOT_DEADBAND;
+        return Math.abs(pivotEncoderPositionDegrees - targetPositionDegrees) <= IntakeConstants.SOFTWARE.PIVOT_DEADBAND;
     }
 
     /**
@@ -150,7 +150,7 @@ public class Intake extends SubsystemBase {
      */
     public boolean hasNote() {
         if (!_hasNote) {
-            _hasNote = (_intakeInputs._rollerMotorCurrent > IntakeConstants.INTAKE_CURRENT_CUTOFF) && _intakeHasBeenRunning;
+            _hasNote = (_intakeInputs._rollerMotorCurrent > IntakeConstants.SOFTWARE.ROLLER_CURRENT_LIMIT) && _intakeHasBeenRunning;
         }
 
         return _hasNote;
@@ -223,6 +223,60 @@ public class Intake extends SubsystemBase {
         // VISUALIZATION
         double angle = _intakeInputs._pivotEncoderPositionDegrees;
         _intakeVisualizer.update(angle);
+
+        // TUNABLES FOR PIVOT PID
+
+        if (IntakeConstants.PID.PIVOT.KP.hasChanged(hashCode())) {
+            _pivotPid.setP(IntakeConstants.PID.PIVOT.KP.get());
+        }
+
+        if (IntakeConstants.PID.PIVOT.KI.hasChanged(hashCode())) {
+            _pivotPid.setI(IntakeConstants.PID.PIVOT.KI.get());
+        }
+
+        if (IntakeConstants.PID.PIVOT.KD.hasChanged(hashCode())) {
+            _pivotPid.setD(IntakeConstants.PID.PIVOT.KD.get());
+        }
+
+        if (IntakeConstants.PID.PIVOT.MAXIMUM_VELOCITY.hasChanged(hashCode())) {
+            _pivotPid.setConstraints(new Constraints(
+                IntakeConstants.PID.PIVOT.MAXIMUM_VELOCITY.get(),
+                IntakeConstants.PID.PIVOT.MAXIMUM_ACCELERATION.get()));
+        }
+
+        if (IntakeConstants.PID.PIVOT.MAXIMUM_ACCELERATION.hasChanged(hashCode())) {
+            _pivotPid.setConstraints(new Constraints(
+                IntakeConstants.PID.PIVOT.MAXIMUM_VELOCITY.get(),
+                IntakeConstants.PID.PIVOT.MAXIMUM_ACCELERATION.get()));
+        }
+
+        if (IntakeConstants.PID.PIVOT.MAXIMUM_INTEGRAL_SUM.hasChanged(hashCode())) {
+            _pivotPid.setIntegratorRange(-IntakeConstants.PID.PIVOT.MAXIMUM_INTEGRAL_SUM.get(), IntakeConstants.PID.PIVOT.MAXIMUM_INTEGRAL_SUM.get());
+        }
+
+        // TUNABLES FOR ROLLERS
+
+        if (IntakeConstants.ROLLERS.AQUIRE_SPEED.hasChanged(hashCode())) {
+            _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.AQUIRE_SPEED.get());
+        }
+
+        if (IntakeConstants.ROLLERS.SPIT_SPEED.hasChanged(hashCode())) {
+            _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.SPIT_SPEED.get());
+        }
+
+        if (IntakeConstants.ROLLERS.SPIT_TIME.hasChanged(hashCode())) {
+            _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.SPIT_SPEED.get());
+        }
+
+        if (IntakeConstants.ROLLERS.CURRENT_CUTOFF.hasChanged(hashCode())) {
+            _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.STOP_SPEED.get());
+        }
+
+        if (IntakeConstants.ROLLERS.STOP_SPEED.hasChanged(hashCode())) {
+            _intakeIO.setRollerMotorSpeed(IntakeConstants.ROLLERS.STOP_SPEED.get());
+        }
+
+
 
         // LOGGING
         Logger.recordOutput("Intake/PID Speed", _pivotPid.calculate(_intakeInputs._pivotEncoderPositionDegrees));

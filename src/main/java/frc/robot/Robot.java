@@ -164,6 +164,7 @@ public class Robot extends LoggedRobot {
     }
 
     _robotContainer.getAdjustShooterAutomaticallyCommand();
+    _robotContainer.getFeederInitialStateCommand();
   }
 
   /** This function is called periodically during autonomous. */
@@ -183,6 +184,7 @@ public class Robot extends LoggedRobot {
 
     if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
       _robotContainer.getAdjustShooterAutomaticallyCommand();
+      _robotContainer.getFeederInitialStateCommand();
     }
   }
 

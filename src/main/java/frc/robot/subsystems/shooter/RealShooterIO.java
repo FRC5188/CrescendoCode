@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -14,11 +15,13 @@ public class RealShooterIO implements ShooterIO {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _leftFlywheelMotor;
     private CANSparkFlex _rightFlywheelMotor;
+    private CANSparkMax _feederMotor;
     private SparkAbsoluteEncoder _angleEncoder;
 
     public RealShooterIO() {
         configAngleMotor();
         configFlywheelMotors();
+        configFeederMotor();
         configEncoder();
         configAnglePID(0.025, 0, 0.00);
         configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
@@ -82,6 +85,10 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor.set(speed);
     }
 
+    public void setFeederMotorSpeed(double speed) {
+        _feederMotor.set(speed);
+    }
+
     private void configAngleMotor() {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
 
@@ -93,6 +100,17 @@ public class RealShooterIO implements ShooterIO {
 
         _angleMotor.setSmartCurrentLimit(40);
         _angleMotor.setSecondaryCurrentLimit(40);
+    }
+
+    private void configFeederMotor() {
+        _feederMotor = new CANSparkMax(HardwareConstants.CanIds.FEEDER_MOTOR_ID, MotorType.kBrushless);
+
+        _feederMotor.enableVoltageCompensation(12.0);
+        _feederMotor.setInverted(false);
+        _feederMotor.setCANTimeout(100);
+
+        _feederMotor.setSmartCurrentLimit(40);
+        _feederMotor.setSecondaryCurrentLimit(40);
     }
 
     private void configFlywheelMotors() {

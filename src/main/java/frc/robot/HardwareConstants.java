@@ -32,6 +32,7 @@ public class HardwareConstants {
         public static int ANGLE_MOTOR_ID = 30;
         public static int LEFT_FLYWHEEL_MOTOR_ID = 31;
         public static int RIGHT_FLYWHEEL_MOTOR_ID = 32;
+        public static int FEEDER_MOTOR_ID = 33;
 
         //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
         public static int LEFT_CLIMBER_MOTOR = 40;

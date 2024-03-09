@@ -109,6 +109,8 @@ public class Shooter extends SubsystemBase {
     public void adjustShooterAngle(double amountInDegrees) {
         _zoneDataMappings.get(_currentShooterZone)._shooterAngle = _zoneDataMappings.get(_currentShooterZone).getShooterAngle() + amountInDegrees;
         setTargetPositionAsAngle(_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
+        String key = "shooter/zone/" + _currentShooterZone + "/angle";
+        Logger.recordOutput(key,_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
     }
 
     public void setTargetPositionAsAngle(double angle) {
@@ -167,6 +169,14 @@ public class Shooter extends SubsystemBase {
         return _currentShooterZone;
     }
 
+    public void setFeederMotorShootSpeed() {
+        _shooterIO.setFeederMotorSpeed(ShooterConstants.FEEDER_SHOOT_SPEED);
+    }
+
+    public void setFeederMotorPickupSpeed() {
+        _shooterIO.setFeederMotorSpeed(ShooterConstants.FEEDER_PICKUP_SPEED);
+    }
+
     // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
     private boolean areFlywheelsAtTargetSpeed() {
         return _targetFlywheelSpeed
@@ -187,7 +197,7 @@ public class Shooter extends SubsystemBase {
 
     /**
      * Figure out what zone matches a given radius from the speaker.
-     * Returns the unkown zone if no zone matches.
+     * Returns the unknown zone if no zone matches.
      * 
      * @param radius
      * @return the zone used for that radius

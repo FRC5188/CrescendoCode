@@ -29,12 +29,19 @@ public abstract class ShooterConstants {
     public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
     public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 40;
 
-    // unkown
+    // unknown
     public static final double ZONE_UNKNOWN_FLYWHEEL_SPEED = 200;
     public static final double ZONE_UNKNOWN_LOW_BOUND = -1;
     public static final double ZONE_UNKNOWN_UPPER_BOUND = -1;
     public static final double ZONE_UNKNOWN_SHOOTER_ANGLE = 35;
 
+    /**************
+     * 
+     * SHOOTER FEEDER CONSTANTS
+     *
+     **************/
+    public static final double FEEDER_SHOOT_SPEED = 0.5;
+    public static final double FEEDER_PICKUP_SPEED = 0.075;
 
     /**************
      * 

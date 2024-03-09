@@ -48,6 +48,7 @@ import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
+import frc.robot.subsystems.multisubsystemcommands.CmdShoot;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -298,8 +299,8 @@ public class RobotContainer {
         // Reset hasNote in case the robot thinks that it has a note when it doesn't
         _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
 
-        // Spit the note out
-        _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
+        // Spit the note out and run the feeder wheels
+        _op2ButtonEight.onTrue(new CmdShoot(_shooter, _intake, IntakeConstants.INTAKE_SPIT_TIME));
 
         _op2ButtonNine.onTrue(new InstantCommand(
             () -> Logger.recordOutput(":(", true)));
@@ -347,5 +348,9 @@ public class RobotContainer {
 
     public Command getAdjustShooterAutomaticallyCommand() {
         return this._adjustShooterAutomaticallyCommand;
+    }
+
+    public Command getFeederInitialStateCommand() {
+        return Commands.runOnce(() -> _shooter.setFeederMotorPickupSpeed());
     }
 }

@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.climber.Climber;
@@ -42,6 +44,7 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
+import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
@@ -196,17 +199,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("Subwoofer Shoot",
                 new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
         NamedCommands.registerCommand("Podium Shoot", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
-        NamedCommands.registerCommand("set has note", new Command() {
-            @Override
-            public void initialize() {
-                _intake.setHasNote();
-            }
-
-            @Override
-            public boolean isFinished() {
-                return true;
-            }
-        });
 
         _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -237,6 +229,11 @@ public class RobotContainer {
                         () -> -_driveController.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
         // _driveController.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+
+        // face the speaker while we hold this button
+        _driveController.rightBumper().whileTrue(new CmdDriveAutoAim(_drive,
+                () -> _driveController.getLeftY(),
+                () -> _driveController.getLeftX()));
 
         _driveController.a().whileTrue(new CmdDriveGoToNote(_drive));
 
@@ -303,6 +300,12 @@ public class RobotContainer {
 
         // Spit the note out
         _op2ButtonEight.onTrue(this._intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
+
+        _op2ButtonNine.onTrue(new InstantCommand(
+            () -> Logger.recordOutput(":(", true)));
+
+        _op2ButtonNine.onFalse(new InstantCommand(
+            () -> Logger.recordOutput(":(", false)));  
 
         /***
          * 

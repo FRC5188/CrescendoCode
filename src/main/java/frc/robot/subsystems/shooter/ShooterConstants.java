@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.LoggedTunableNumber;
 
 public abstract class ShooterConstants {
 
@@ -17,17 +18,17 @@ public abstract class ShooterConstants {
      *********************/
 
 
-    // podium
-    public static final double ZONE_PODIUM_FLYWHEEL_SPEED = 1750;
-    public static final double ZONE_PODIUM_LOW_BOUND = 4;
-    public static final double ZONE_PODIUM_UPPER_BOUND = 2.5;
-    public static final double ZONE_PODIUM_SHOOTER_ANGLE = 22;
+    // PODIUM
+    public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("Podium Flywheel Speed", 1750);
+    public static final LoggedTunableNumber ZONE_PODIUM_LOW_BOUND = new LoggedTunableNumber("Podium Low Bound", 4);
+    public static final LoggedTunableNumber ZONE_PODIUM_UPPER_BOUND = new LoggedTunableNumber("Podium Upper Bound", 2.5);
+    public static final LoggedTunableNumber ZONE_PODIUM_SHOOTER_ANGLE = new LoggedTunableNumber("Podium Shooter Angle", 22);
 
-    // subwoofer
-    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1300;
-    public static final double ZONE_SUBWOOFER_LOW_BOUND = 0.0;
-    public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
-    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 40;
+    // SUBWOOFER
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("Subwoofer Flywheel Speed", 1300);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_LOW_BOUND = new LoggedTunableNumber("Subwoofer Low Bound", 0.0);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_UPPER_BOUND = new LoggedTunableNumber("Subwoofer Upper Bound", 2.5);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("Subwoofer Shooter Angle", 40);
 
     // unkown
     public static final double ZONE_UNKOWN_FLYWHEEL_SPEED = 200;

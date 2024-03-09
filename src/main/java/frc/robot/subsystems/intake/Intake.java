@@ -4,7 +4,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged; checkstyle says this is redunant
@@ -57,7 +56,7 @@ public class Intake extends SubsystemBase {
         this.setIntakePosition(IntakePosition.Stowed);
 
         // REMOVE THESE COMMENTS IF IT DOESN'T WORK :)
-        setDefaultCommand(_intakeCommandFactory.runPID());
+        // setDefaultCommand(_intakeCommandFactory.runPID());
     }
 
     /**
@@ -152,6 +151,15 @@ public class Intake extends SubsystemBase {
      */
     public void resetHasNote() {
         _hasNote = false;
+    }
+
+    /**
+     * Set has note to true. Needed as a work around for autos for the time being.
+     * 
+     * Using this to tell the robot it has a note so it can do auto shoot
+     */
+    public void setHasNote() {
+        _hasNote = true;
     }
 
     /**

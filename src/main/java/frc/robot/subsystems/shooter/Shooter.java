@@ -160,14 +160,12 @@ public class Shooter extends SubsystemBase {
         return _currentShooterZone;
     }
 
-    // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
-    private boolean areFlywheelsAtTargetSpeed() {
-        return _targetFlywheelSpeed
-                - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
-                &&
-                _rightTargetFlywheelSpeed
-                        - _shooterInputs._rightFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
-    }
+  // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
+  private boolean areFlywheelsAtTargetSpeed() {
+    return _targetFlywheelSpeed - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND
+        &&
+            _rightTargetFlywheelSpeed - _shooterInputs._rightFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+  }
 
     /**
      * Set the shooter position for a given zone and also set the flywheel speed for
@@ -215,12 +213,11 @@ public class Shooter extends SubsystemBase {
         setTargetPositionAsAngle(targetZone.getShooterAngle());
     }
 
-    private boolean shooterInPosition() {
-        // System.out.printf("target shooter angle: %f, current shooter angle: %f\n",
-        // _targetShooterPositionAngle, getCurrentPositionInDegrees());
-        return Math.abs(_targetShooterPositionAngle
-                - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
-    }
+  private boolean shooterInPosition() {
+    //System.out.printf("target shooter angle: %f, current shooter angle: %f\n", _targetShooterPositionAngle, getCurrentPositionInDegrees());
+    return Math.abs(_targetShooterPositionAngle
+        - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+  }
 
     /**
      * Set the fly wheel speed to zero.
@@ -234,14 +231,11 @@ public class Shooter extends SubsystemBase {
         _shooterIO.setFlywheelSpeedRPM(speedInRPM);
     }
 
-    public boolean isReady() {
-        // System.out.printf("Shooter in Position: %b,\n speed: %f, target speed: %f \n
-        // current shooter zone: ", shooterInPosition(),
-        // _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin,
-        // _targetFlywheelSpeed);
-        System.out.println(_currentShooterZone);
-        return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
-    }
+  public boolean isReady() {
+    //System.out.printf("Shooter in Position: %b,\n speed: %f, target speed: %f \n current shooter zone: ", shooterInPosition(), _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin, _targetFlywheelSpeed);
+    System.out.println(_currentShooterZone);
+    return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
+  }
 
     @Override
     public void periodic() {

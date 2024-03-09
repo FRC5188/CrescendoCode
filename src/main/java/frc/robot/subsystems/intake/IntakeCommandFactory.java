@@ -2,11 +2,10 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeWaitForNote;
-import frc.robot.subsystems.intake.commands.CmdAquireNoteFor;
+import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
 
 public class IntakeCommandFactory {
     private Intake _intake;
@@ -16,7 +15,7 @@ public class IntakeCommandFactory {
     }
 
     /** Turns ON the ROLLERS in the direction toward the robot. Doesn't automatically turn off. */
-    public Command aquire() {
+    public Command acquire() {
         return new InstantCommand(
             this._intake::setRollerMotorSpeedAcquire,
             this._intake);
@@ -35,19 +34,32 @@ public class IntakeCommandFactory {
          this._intake).withTimeout(timeSeconds);
     }
 
-    /** Should be called every cycle. This should be the default command on Intake. */
+    /***
+     * Returns a new Command object where the execute calls _intake.runPivotPID()
+     * and the isFinished is always false. This command does not require the subsystem.
+     * 
+     * @return a new Command
+     */
     public Command runPID() {
-        return new RunCommand(
-            this._intake::runPivotPID, this._intake);
+        return new Command() {
+            @Override
+            public void execute() {
+                _intake.runPivotPID();
+            }
+            @Override
+            public boolean isFinished() {
+                return false;
+            }
+        };
     }
 
     /** Sets the positions of the PID for the Intake. */
-    public Command setPosition(Intake.IntakePosition position) {
+    public Command setPosition(IntakePosition position) {
         return new InstantCommand(
             () -> {
                 this._intake.setIntakePosition(position);
                 // We'll turn OFF the ROLLERS if we're stowing.
-                if (position == Intake.IntakePosition.Stowed) {
+                if (position == IntakePosition.Stowed) {
                     this._intake.stopRollerMotor();
                 }
             }, this._intake);
@@ -64,23 +76,23 @@ public class IntakeCommandFactory {
      * @param position
      * @return
      */
-    public Command pickUpNoteFrom(Intake.IntakePosition position) {
+    public Command pickUpNoteFrom(IntakePosition position) {
         return this.setPosition(position)
-            .andThen(this.aquire())
+            .andThen(this.acquire())
             .andThen(new CmdIntakeWaitForNote(0, this._intake))
-            .andThen(new CmdAquireNoteFor(150, _intake))
+            .andThen(new CmdAcquireNoteFor(150, _intake))
             .andThen(this.setPosition(IntakePosition.Stowed));
     }
 
     public Command pickUpFromGround() {
-        return this.pickUpNoteFrom(Intake.IntakePosition.GroundPickup);
+        return this.pickUpNoteFrom(IntakePosition.GroundPickup);
     }
 
     public Command pickUpFromSource() {
-        return this.pickUpNoteFrom(Intake.IntakePosition.SourcePickup);
+        return this.pickUpNoteFrom(IntakePosition.SourcePickup);
     }
 
-    public Command aquire(int timeMS) {
-        return new CmdAquireNoteFor(timeMS, this._intake);
+    public Command acquire(int timeMS) {
+        return new CmdAcquireNoteFor(timeMS, this._intake);
     }
 }

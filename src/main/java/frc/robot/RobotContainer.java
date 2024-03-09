@@ -17,7 +17,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -38,6 +37,7 @@ import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
+import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
@@ -50,6 +50,8 @@ import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.visiondrive.RealVisionDriveIO;
+import frc.robot.subsystems.visiondrive.VisionDriveIO;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -130,6 +132,7 @@ public class RobotContainer {
                 _drive = new Drive(
                         new GyroIONavX2(),
                         new RealVisionIO(),
+                        new RealVisionDriveIO(),
                         new ModuleIOSparkFlex(0),
                         new ModuleIOSparkFlex(1),
                         new ModuleIOSparkFlex(2),
@@ -141,10 +144,9 @@ public class RobotContainer {
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
+                        new GyroIO() {},
+                        new VisionIO() {},
+                        new VisionDriveIO() {},
                         new ModuleIOSim(),
                         new ModuleIOSim(),
                         new ModuleIOSim(),
@@ -157,16 +159,12 @@ public class RobotContainer {
             default:
                 // Replayed robot, disable IO implementations
                 _drive = new Drive(
-                        new GyroIO() {
-                        },
-                        new VisionIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
-                        new ModuleIO() {
-                        },
+                        new GyroIO() {},
+                        new VisionIO() {},
+                        new VisionDriveIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
+                        new ModuleIO() {},
                         new ModuleIO() {
                         });
                 _intake = new Intake(new IntakeIO() {
@@ -219,10 +217,13 @@ public class RobotContainer {
                         () -> -_controller.getRightX()));
         // create an x shaped pattern with the wheels to make it harder to push us
         _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+
         // face the speaker while we hold this button
         _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
                 () -> -_controller.getLeftY(),
                 () -> -_controller.getLeftX()));
+
+        _controller.a().whileTrue(new CmdDriveGoToNote(_drive));
 
         // reset the orientation of the robot. changes which way it thinks is forward
         _controller.y().onTrue(
@@ -259,13 +260,12 @@ public class RobotContainer {
         //_op2ButtonFour.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Podium));
         //_op2ButtonThree.whileTrue(new CmdShooterRunFlywheelsForZone(_shooter, ShooterZone.Subwoofer));
 
-
         // FROM MAIN
         _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
         _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround());
         _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
 
-        _opButtonNine.onTrue(this._intake.buildCommand().aquire());
+        _opButtonNine.onTrue(this._intake.buildCommand().acquire());
         _opButtonNine.onFalse(this._intake.buildCommand().stop());
 
         _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));

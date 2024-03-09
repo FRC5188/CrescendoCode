@@ -3,6 +3,7 @@ package frc.robot.subsystems.leds;
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.LarsonAnimation;
+import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 
@@ -20,7 +21,9 @@ public class LEDs {
         ReadyToShoot(new LEDColor(0, 255, 0), null, 3),
         PickedUpNote(null, new StrobeAnimation(255, 128, 0, 0, 0.5, _numLEDs), 3),
         ClimberAscending(new LEDColor(255, 215, 0), new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3),
-        AmpReady(null, new StrobeAnimation(204, 0, 255, 0, 0.5, _numLEDs), 3);
+        AmpReady(null, new StrobeAnimation(204, 0, 255, 0, 0.5, _numLEDs), 3),
+        //Change time on RobotDisabled
+        RobotDisabled(null, new RainbowAnimation(100, 0.5, _numLEDs), 3);
         LEDColor _color;
         Animation _animation;
         int _secondsToRun;

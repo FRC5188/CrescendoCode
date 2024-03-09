@@ -1,7 +1,7 @@
 package frc.robot.subsystems.leds.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.LEDs;
@@ -46,6 +46,9 @@ public class CmdLEDsRunLEDs extends Command {
       // Runs when human player should activate Amp
       _leds.runAnimation(LEDAnimation.AmpReady);
       _leds.setAmpReady(false);
+    } else if (DriverStation.isDisabled()) {
+      // Rainbows while robot is disabled
+      _leds.runAnimation(LEDAnimation.RobotDisabled);
     }
 
     // Increment the timer for another loop

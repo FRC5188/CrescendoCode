@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
-      "y": 5.54
+      "x": 0.64,
+      "y": 4.39
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -14,61 +14,49 @@
         {
           "type": "named",
           "data": {
-            "name": "intake GroundPos"
+            "name": "SubwooferShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "(R1) Shoot first note, move to second note pickup"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "intake Stow"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
+            "name": "PickUpNoteWithLimelight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "intake GroundPos"
+            "name": "AutoShootWithAutoAlign"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "(R2) After shooting, move to third note pickup"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "intake Stow"
+            "name": "PickUpNoteWithLimelight"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "(R3) Move back, shoot third note"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "AutoShootWithAutoAlign"
           }
         }
       ]

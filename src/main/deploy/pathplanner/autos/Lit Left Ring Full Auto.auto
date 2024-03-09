@@ -1,0 +1,67 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.67,
+      "y": 6.64
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L1) Shoot first note, move to second note pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PickUpNoteWithLimelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootWithAutoAlign"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L2) After shooting, move to third note pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PickUpNoteWithLimelight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L3) Move back, shoot third note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootWithAutoAlign"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

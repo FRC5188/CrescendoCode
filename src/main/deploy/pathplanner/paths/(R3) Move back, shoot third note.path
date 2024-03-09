@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.015136861627644,
-        "y": 7.000326399702681
+        "x": 8.679551945998478,
+        "y": 2.4323841240275086
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.839641213724234,
-        "y": 6.317843324522754
+        "x": 6.024978887564613,
+        "y": 1.5787108497293916
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.781142664423097,
-        "y": 6.142347676619344
+        "x": 2.5518150181599504,
+        "y": 2.9352327650524255
       },
       "prevControl": {
-        "x": 2.9956373451939315,
-        "y": 6.8833293011004075
+        "x": 5.288247157690896,
+        "y": 0.6899551121039572
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 10.84030545433071,
+    "rotation": 128.95590783775887,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Lit Left Ring Auto Paths",
+  "folder": "Rad Right Ring Auto Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

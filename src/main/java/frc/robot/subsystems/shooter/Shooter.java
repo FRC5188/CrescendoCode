@@ -101,7 +101,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setTargetPosition(ShooterZone zone) {
-        setTargetPositionAsAngle(zone.getShooterAngle());
+        setTargetPositionAsAngle(zone.getShooterAngle()+ShooterOffsets.get(zone));
     }
 
     public void setTargetPositionAsAngle(double angle) {

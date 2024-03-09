@@ -70,10 +70,10 @@ public class DriveHID {
         // Reset the robot's pose to be on the subwoofer.
         xbox.a().onTrue(_drive.buildCommand().resetRobotPoseSpeaker());
 
-        _drive.buildCommand().drive(
+        _drive.setDefaultCommand(_drive.buildCommand().drive(
             () -> -xbox.getLeftY(), 
             () -> -xbox.getLeftX(), 
-            () -> -xbox.getRightX()
+            () -> -xbox.getRightX())
         );
 
         return xbox;
@@ -123,10 +123,10 @@ public class DriveHID {
             }
         );  
 
-        _drive.buildCommand().drive(
+        _drive.setDefaultCommand(_drive.buildCommand().drive(
             () -> flightStick.getY(), 
             () -> flightStick.getX(), 
-            () -> flightStick.getTwist()
+            () -> flightStick.getTwist())
         );
         
         return flightStick;

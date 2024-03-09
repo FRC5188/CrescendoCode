@@ -218,68 +218,6 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        if (USE_FLIGHT_STICK) {
-            DriveCommands.driveJoystick(
-                _drive, 
-                () -> -_driveJoystick.getJoystick().getY(), 
-                () -> -_driveJoystick.getJoystick().getX(), 
-                () -> -_driveJoystick.getJoystick().getTwist());
-
-            this._driveJoystick.getJoystickButtons()[0].onTrue(
-                Commands.runOnce(
-                        () -> _drive.setPose(
-                                new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
-                        _drive).ignoringDisable(true)
-            );      
-
-            this._driveJoystick.getJoystickButtons()[1].onTrue(
-
-            )
-
-            this._driveJoystick.getJoystickButtons()[2].onTrue(
-
-            )
-
-            this._driveJoystick.getJoystickButtons()[3].onTrue(
-
-            )
-        }
-
-
-
-
-        _drive.setDefaultCommand(
-
-
-
-                DriveCommands.driveJoystick(
-                        _drive,
-                        () -> - driveJoystick.getY(),
-                        () -> - driveJoystick.getX(),
-                        () -> - driveJoystick.getTwist()));
-        // create an x shaped pattern with the wheels to make it harder to push us
-        _driverOperatorButton3.onTrue(Commands.runOnce(_drive::stopWithX, _drive));
-        
-        // Keep for later. Reenable Later
-        // face the speaker while we hold this button
-        _driverOperatorButton4.whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                 () -> -driveJoystick.getY(),
-                 () -> -driveJoystick.getX()));
-
-        // reset the orientation of the robot. changes which way it thinks is forward
-        _driverOperatorButton5.onTrue(
-                Commands.runOnce(
-                        () -> _drive.setPose(
-                                new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
-                        _drive).ignoringDisable(true));
-
-        double inchesFromSubwoofer = 39.0;
-        double robotWidth = 13.0 + 1.5;
-        Pose2d robotOnSubwoofer = new Pose2d(
-                DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
-                DriveConstants.RED_SPEAKER.getY(),
-                new Rotation2d(Math.PI));
-        _driverOperatorButton6
         // Move the shooter to the podium or subwoofer positions
         /*
          * ---------------- START MANUAL ROBOT CONTROL BUTTON

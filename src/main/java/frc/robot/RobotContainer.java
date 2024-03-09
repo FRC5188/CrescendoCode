@@ -40,6 +40,7 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveRotateAboutSpeaker;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.multisubsystemcommands.CmdAutoUpdateZones;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -67,6 +68,7 @@ public class RobotContainer {
     private ShooterZone _zone;
     private Command _runShooterPIDCommand;
     private Command _runIntakePIDCommand;
+    private Command _runAutoUpdateZonesCommand;
 
     // logged dashboard inputs
     private final LoggedDashboardChooser<Command> _autoChooser;
@@ -178,6 +180,7 @@ public class RobotContainer {
         // setup commands for PID
         this._runShooterPIDCommand = new CmdShooterRunPids(_shooter);
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
+        this._runAutoUpdateZonesCommand = new CmdAutoUpdateZones(_drive, _shooter);
 
         NamedCommands.registerCommand("intake GroundPos", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
         NamedCommands.registerCommand("intake Stow", new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
@@ -329,5 +332,9 @@ public class RobotContainer {
 
     public Command getRunIntakePIDCommand() {
         return this._runIntakePIDCommand;
+    }
+
+    public Command getRunAutoUpdateZonesCommand() {
+        return this._runAutoUpdateZonesCommand;
     }
 }

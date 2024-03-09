@@ -170,6 +170,11 @@ public class Robot extends LoggedRobot {
       _robotContainer.getRunShooterPIDCommand().schedule();
     }
 
+    if(!CommandScheduler.getInstance().isScheduled(
+          _robotContainer.getRunAutoUpdateZonesCommand())){
+          _robotContainer.getRunAutoUpdateZonesCommand().schedule();
+          }
+
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
@@ -215,6 +220,11 @@ public class Robot extends LoggedRobot {
     )){
       _robotContainer.getRunShooterPIDCommand().schedule();
     }
+
+    if(!CommandScheduler.getInstance().isScheduled(
+          _robotContainer.getRunAutoUpdateZonesCommand())){
+          _robotContainer.getRunAutoUpdateZonesCommand().schedule();
+          }
   }
 
   /** This function is called periodically during operator control. */

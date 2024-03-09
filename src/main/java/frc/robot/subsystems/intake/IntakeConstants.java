@@ -1,6 +1,9 @@
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.Logger;
+
 public class IntakeConstants {
+
     /************************
      * 
      * INTAKE PID CONSTANTS

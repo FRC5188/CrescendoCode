@@ -39,6 +39,7 @@ public class CmdShootOnTheMove extends Command {
   private boolean _isFinished;
 
   private Translation2d _currentRobotTranslation;
+  private double _currentAngleRadians;
 
   private Translation2d _futureRobotTranslation;
   private Rotation2d _futureAngleToSpeaker;
@@ -90,7 +91,7 @@ public class CmdShootOnTheMove extends Command {
 
     _shotTimer = new Timer();
     _hasRunOnce = false;
-    _triggerThreshold = 0.01;
+    _triggerThreshold = 0.1;
 
     addRequirements(drivetrainSubsystem);
   }
@@ -114,9 +115,6 @@ public class CmdShootOnTheMove extends Command {
     // Get *translation only* of the robot
     _currentRobotTranslation = _drive.getPose().getTranslation();
 
-    // _currentAngleToSpeaker =
-    // _drive.getRotation2dToSpeaker(_currentRobotTranslation);
-
     _speeds = _drive.getFieldRelativeChassisSpeeds();
 
     _timeUntilShot = ShooterConstants.TIME_TO_SHOOT - _shotTimer.get();
@@ -125,28 +123,29 @@ public class CmdShootOnTheMove extends Command {
       _timeUntilShot = 0.0;
     }
 
-    _moveDelta = new Translation2d(_timeUntilShot * (_speeds.vxMetersPerSecond),
-        _timeUntilShot * (_speeds.vyMetersPerSecond));
-
-    _futureRobotTranslation = _currentRobotTranslation.plus(_moveDelta);
-
-    _futureAngleToSpeaker = _drive.getRotation2dToSpeaker(_futureRobotTranslation);
-
     // Calculate change in x and y distances due to time and velocity.
     _moveDelta = new Translation2d(_timeUntilShot * (_speeds.vxMetersPerSecond),
         _timeUntilShot * (_speeds.vyMetersPerSecond));
 
     // Add current position + change in position due to velocity to get future
-    // position.
-    // This is where the robot will be at _timeUntilShot.
+    // position. This is where the robot will be at _timeUntilShot.
     _futureRobotTranslation = _currentRobotTranslation.plus(_moveDelta);
 
-    // Angle to the speaker from the future position.
+    // we add 180 because the intake is the front of the robot and we want the
+    // shooter to face the speaker not the intake.
+    _currentAngleRadians = _drive.getRotation().getRadians() + Math.PI;
+
+    // Angle to the speaker from the future position as a Rotation2d.
     _futureAngleToSpeaker = _drive.getRotation2dToSpeaker(_futureRobotTranslation);
 
-    // Angle to the speaker to aim for the future.
-    _correctedRotation = -_rotationPID.calculate(
-        (MathUtil.inputModulus(_futureAngleToSpeaker.getDegrees(), -180, 180)));
+    // All PID calculations are done in radians, so convert our setpoint from a
+    // Rotation2d to radians.
+    _rotationPID.setSetpoint(_futureAngleToSpeaker.getRadians());
+
+    // Angle in radians (omegaRadiansPerSecond) to pass to the drivetrain later in a
+    // ChassisSpeeds object
+    _correctedRotation = _rotationPID.calculate(
+        (MathUtil.inputModulus(_currentAngleRadians, -1 * Math.PI, Math.PI)));
 
     // Get a Pose2d based on the newly-calculated future translation and angle.
     _futureRobotPose2d = new Pose2d(_futureRobotTranslation, _futureAngleToSpeaker);
@@ -178,7 +177,7 @@ public class CmdShootOnTheMove extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this._drive.runVelocity(
+    _drive.runVelocity(
         ChassisSpeeds.fromFieldRelativeSpeeds(
             _translationXSupplier.getAsDouble(),
             _translationYSupplier.getAsDouble(),

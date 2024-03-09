@@ -49,6 +49,8 @@ public class Drive extends SubsystemBase {
   private final Module[] _modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine _sysId;
 
+  private final DriveCommandFactory _commandFactory = new DriveCommandFactory(this);
+
   private final VisionIO _visionIO;
   private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
 
@@ -218,6 +220,10 @@ public class Drive extends SubsystemBase {
   /** Stops the drive. */
   public void stop() {
     runVelocity(new ChassisSpeeds());
+  }
+
+  public DriveCommandFactory buildCommand() {
+    return this._commandFactory;
   }
 
   /**

@@ -55,6 +55,7 @@ import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.control.Controller;
+import frc.robot.util.control.driving.DriveHID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -85,9 +86,9 @@ public class RobotContainer {
     private final LoggedDashboardChooser<Command> _autoChooser;
 
     // FLIGHT STICK CONFIGURATION IF ENABLDED, CHOOSES THE TYPE OF CONTROLLER WE USE.
-    private final Controller _driveJoystick = (USE_FLIGHT_STICK) ? 
-        new Controller(Controller.TYPE.JOYSTICK, DRIVER_CONTROLLER_PORT) : 
-        new Controller(Controller.TYPE.XBOX, DRIVER_CONTROLLER_PORT);
+    private final DriveHID _driveJoystick = (USE_FLIGHT_STICK) ? 
+        new DriveHID(DriveHID.DEVICE_TYPE.FLIGHT_JOYSTICK, DRIVER_CONTROLLER_PORT, this._drive) : 
+        new DriveHID(DriveHID.DEVICE_TYPE.XBOX, DRIVER_CONTROLLER_PORT, this._drive);
     
     // Button box
     // Top half of buttons

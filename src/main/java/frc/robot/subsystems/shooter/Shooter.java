@@ -61,7 +61,7 @@ public class Shooter extends SubsystemBase {
         }
     }
 
-    private HashMap<ShooterZone,Double> ShooterOffsets = new HashMap<ShooterZone,Double>();
+    private HashMap<ShooterZone,Double> _ShooterOffsets = new HashMap<ShooterZone,Double>();
     private static boolean _autoShootEnabled = true;
     private final ShooterIO _shooterIO;
     private final ShooterIOInputsAutoLogged _shooterInputs = new ShooterIOInputsAutoLogged();
@@ -76,20 +76,20 @@ public class Shooter extends SubsystemBase {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
         _anglePid = new PIDController(0.025, 0, 0.00);
-        ShooterOffsets.put(ShooterZone.Podium,0.0);
-        ShooterOffsets.put(ShooterZone.Subwoofer,0.0);
-        ShooterOffsets.put(ShooterZone.Unknown,0.0);
+        _ShooterOffsets.put(ShooterZone.Podium,0.0);
+        _ShooterOffsets.put(ShooterZone.Subwoofer,0.0);
+        _ShooterOffsets.put(ShooterZone.Unknown,0.0);
 
 
         setTargetPositionAsAngle(_currentShooterZone.getShooterAngle());
     }
 
     public Double getShooterOffset(ShooterZone zone){
-        return ShooterOffsets.get(zone);
+        return _ShooterOffsets.get(zone);
     }
 
     public void setShooterOffset(ShooterZone zone, Double offset){
-        ShooterOffsets.put(zone,offset);
+        _ShooterOffsets.put(zone,offset);
     }
 
     public void setCurrentZone(ShooterZone zone) {
@@ -101,7 +101,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setTargetPosition(ShooterZone zone) {
-        setTargetPositionAsAngle(zone.getShooterAngle()+ShooterOffsets.get(zone));
+        setTargetPositionAsAngle(zone.getShooterAngle()+_ShooterOffsets.get(zone));
     }
 
     public void setTargetPositionAsAngle(double angle) {

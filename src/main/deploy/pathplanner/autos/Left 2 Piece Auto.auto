@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.72,
+      "y": 6.82
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L3A) Shoot 1st note, 2nd note transit"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PickUpNoteWithLimelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootWithAutoAlign"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L3B) After shooting, move to third note pickup"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Lit Left Autos",
+  "choreoAuto": false
+}

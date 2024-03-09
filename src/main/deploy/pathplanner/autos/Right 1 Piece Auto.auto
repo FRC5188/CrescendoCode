@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.76,
+      "y": 4.24
+    },
+    "rotation": -60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(R1) Shoot first note, exit wing"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Rad Right Autos",
+  "choreoAuto": false
+}

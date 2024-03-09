@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36,
-      "y": 5.56
+      "x": 0.64,
+      "y": 4.39
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M1) Shoot first note, move to second note pickup"
+            "pathName": "(R3A) Shoot first note, move to second note pickup"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M2) After shooting, move to third note pickup"
+            "pathName": "(R3B) After shooting, move to third note pickup"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M3) Move back, shoot third note"
+            "pathName": "(R3C) Move back, shoot third note"
           }
         },
         {
@@ -62,6 +62,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Rad Right Autos",
   "choreoAuto": false
 }

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.679551945998478,
-        "y": 2.4323841240275086
+        "x": 8.621081173786278,
+        "y": 5.788606449007769
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.024978887564613,
-        "y": 1.5787108497293916
+        "x": 6.235473667528531,
+        "y": 6.583808951093687
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5518150181599504,
-        "y": 2.9352327650524255
+        "x": 4.259161566756181,
+        "y": 5.788606449007769
       },
       "prevControl": {
-        "x": 5.288247157690896,
-        "y": 0.6899551121039572
+        "x": 5.849566570928014,
+        "y": 6.876162812154685
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 128.95590783775887,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Rad Right Ring Auto Paths",
+  "folder": "Middle Ring Autos",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

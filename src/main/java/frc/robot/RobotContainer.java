@@ -182,7 +182,8 @@ public class RobotContainer {
         this._runIntakePIDCommand = _intake.buildCommand().runPID();
 
         NamedCommands.registerCommand("DeployIntake", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
-        NamedCommands.registerCommand("SubwooferShoot", new PrintCommand(null));
+        NamedCommands.registerCommand("SubwooferShoot", new ShooterCommandFactory(_shooter).RunForZone(ShooterZone Subwoofer)
+        );
         NamedCommands.registerCommand("AutoShootWithAutoAlign", new PrintCommand(null));
         NamedCommands.registerCommand("AutoShootWithoutAutoAlign", new PrintCommand(null));
         NamedCommands.registerCommand("PickUpNoteWithLimelight", new PrintCommand(null));

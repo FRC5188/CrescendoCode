@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6361958567147553,
-        "y": 4.387391197585246
+        "x": 8.656163637113599,
+        "y": 7.449176379834242
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3381784483283943,
-        "y": 4.221645307898693
+        "x": 6.937122934074928,
+        "y": 7.098351746561043
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9914122488577533,
-        "y": 4.085148692862707
+        "x": 3.826477852385904,
+        "y": 6.4902557155541665
       },
       "prevControl": {
-        "x": 1.4759528094554764,
-        "y": 4.186507290393498
+        "x": 5.639071790964095,
+        "y": 6.864468657712245
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,18 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "DeployIntake",
-      "waypointRelativePos": 0.05,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.0,
@@ -50,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -165.25643716352937,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Rad Right Ring Auto Paths",
+  "folder": "Left Ring Autos",
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

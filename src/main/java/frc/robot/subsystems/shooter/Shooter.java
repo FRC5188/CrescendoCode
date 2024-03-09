@@ -7,6 +7,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.subsystems.shooter.ShooterIOInputsAutoLogged;
+import frc.robot.util.LoggedTunableNumber;
 
 public class Shooter extends SubsystemBase {
   public enum ShooterZone {
@@ -20,20 +21,23 @@ public class Shooter extends SubsystemBase {
               ShooterConstants.ZONE_PODIUM_SHOOTER_ANGLE,
               ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED,
               ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED),
-    Unknown(ShooterConstants.ZONE_UNKOWN_LOW_BOUND, 
-              ShooterConstants.ZONE_UNKOWN_UPPER_BOUND,
-              ShooterConstants.ZONE_UNKOWN_SHOOTER_ANGLE,
-              ShooterConstants.ZONE_UNKOWN_FLYWHEEL_SPEED,
-              ShooterConstants.ZONE_UNKOWN_FLYWHEEL_SPEED);
+    Unknown(ShooterConstants.ZONE_UNKNOWN_LOW_BOUND, 
+              ShooterConstants.ZONE_UNKNOWN_UPPER_BOUND,
+              ShooterConstants.ZONE_UNKNOWN_SHOOTER_ANGLE,
+              ShooterConstants.ZONE_UNKNOWN_FLYWHEEL_SPEED,
+              ShooterConstants.ZONE_UNKNOWN_FLYWHEEL_SPEED);
 
-    private final double _lowBound;
-    private final double _highBound;
-    private final double _shooterAngle;
-    private final double _leftFlywheelSpeed;
-    private final double _rightFlywheelSpeed;
+    private final LoggedTunableNumber _lowBound;
+    private final LoggedTunableNumber _highBound;
+    private final LoggedTunableNumber _shooterAngle;
+    private final LoggedTunableNumber _leftFlywheelSpeed;
+    private final LoggedTunableNumber _rightFlywheelSpeed;
 
-    ShooterZone(double lowBound, double highBound, double shooterAngle, double leftFlywheelSpeed,
-        double rightFlywheelSpeed) {
+    ShooterZone(LoggedTunableNumber lowBound, 
+                LoggedTunableNumber highBound, 
+                LoggedTunableNumber shooterAngle, 
+                LoggedTunableNumber leftFlywheelSpeed,
+                LoggedTunableNumber rightFlywheelSpeed) {
       this._lowBound = lowBound;
       this._highBound = highBound;
       this._shooterAngle = shooterAngle;
@@ -43,19 +47,19 @@ public class Shooter extends SubsystemBase {
 
     // These functions can be called on an enum value to get various bits of data
     public boolean radiusInZone(double radius) {
-      return (radius >= _lowBound) && (radius < _highBound);
+      return (radius >= _lowBound.get()) && (radius < _highBound.get());
     }
 
     public double getShooterAngle() {
-      return this._shooterAngle;
+      return this._shooterAngle.get();
     }
 
     public double getLeftFlywheelSpeed() {
-      return this._leftFlywheelSpeed;
+      return this._leftFlywheelSpeed.get();
     }
 
     public double getRightFlywheelSpeed() {
-      return this._rightFlywheelSpeed;
+      return this._rightFlywheelSpeed.get();
     }
   }
 
@@ -155,7 +159,7 @@ public class Shooter extends SubsystemBase {
    */
   public void runShooterForZone(ShooterZone zone) {
     setShooterPositionWithZone(zone);
-    setFlywheelSpeed(zone._leftFlywheelSpeed);
+    setFlywheelSpeed(zone._leftFlywheelSpeed.get());
   }
 
   /**

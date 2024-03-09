@@ -30,12 +30,11 @@ public abstract class ShooterConstants {
     public static final LoggedTunableNumber ZONE_SUBWOOFER_UPPER_BOUND = new LoggedTunableNumber("Subwoofer Upper Bound", 2.5);
     public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("Subwoofer Shooter Angle", 40);
 
-    // unkown
-    public static final double ZONE_UNKOWN_FLYWHEEL_SPEED = 200;
-    public static final double ZONE_UNKOWN_LOW_BOUND = -1;
-    public static final double ZONE_UNKOWN_UPPER_BOUND = -1;
-    public static final double ZONE_UNKOWN_SHOOTER_ANGLE = 35;
-
+    // UNKNOWN
+    public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("Unknown Flywheel Speed", 200);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_LOW_BOUND = new LoggedTunableNumber("Unknown Low Bound", -1);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_UPPER_BOUND = new LoggedTunableNumber("Unknown Upper Bound", -1);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_SHOOTER_ANGLE = new LoggedTunableNumber("Unknown Shooter Angle", 35);
 
     /**************
      * 

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -15,10 +16,12 @@ public class RealIntakeIO implements IntakeIO {
     private SparkAbsoluteEncoder _pivotMotorEncoder;
     private DigitalInput _leftLimitSwitch;
     private DigitalInput _rightLimitSwitch;
+    private CANSparkMax _feederMotor;
 
     public RealIntakeIO() {
         configPivotMotor();
         configRollerMotor();
+        configFeederMotor();
         configEncoder();
         configPivotPID(IntakeConstants.PIVOT_PID_KP,
                         IntakeConstants.PIVOT_PID_KI,
@@ -41,6 +44,9 @@ public class RealIntakeIO implements IntakeIO {
 
         inputs._leftLimitSwitchIsPushed = !_leftLimitSwitch.get();
         inputs._rightLimitSwitchIsPushed = !_rightLimitSwitch.get();
+
+        inputs._feederVoltage = _feederMotor.getAppliedOutput() * _feederMotor.getBusVoltage();
+        inputs._feederSpeed = _feederMotor.get();
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
@@ -53,6 +59,10 @@ public class RealIntakeIO implements IntakeIO {
 
     public void setPivotMotorSpeed(double speed) {
         _pivotMotor.set(speed);
+    }
+
+    public void setFeederMotorSpeed(double speed) {
+        _feederMotor.set(speed);
     }
 
     private void configPivotPID(double p, double i, double d) {
@@ -86,6 +96,17 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor.setSecondaryCurrentLimit(IntakeConstants.INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT);
 
         _rollerMotor.enableVoltageCompensation(12.0);
+    }
+
+    private void configFeederMotor() {
+        _feederMotor = new CANSparkMax(HardwareConstants.CanIds.FEEDER_MOTOR_ID, MotorType.kBrushless);
+
+        _feederMotor.enableVoltageCompensation(12.0);
+        _feederMotor.setInverted(false);
+        _feederMotor.setCANTimeout(100);
+
+        // _feederMotor.setSmartCurrentLimit(40);
+        // _feederMotor.setSecondaryCurrentLimit(40);
     }
 
     private void configEncoder() {

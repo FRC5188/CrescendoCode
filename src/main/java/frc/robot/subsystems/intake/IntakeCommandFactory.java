@@ -38,9 +38,13 @@ public class IntakeCommandFactory {
      */
     public Command spit(double timeSeconds) {
         return new StartEndCommand(
-         this._intake::setRollerMotorSpeedSpit,
+         () -> {
+            this._intake.setRollerMotorSpeedSpit();
+            this._intake.setFeederMotorShootSpeed();
+         },
          () -> {
                 this._intake.stopRollerMotor();
+                this._intake.setFeederMotorPickupSpeed();
                 this._intake.resetHasNote();
 
          }, 
@@ -79,7 +83,7 @@ public class IntakeCommandFactory {
         return this.setPosition(position)
             .andThen(this.acquire())
             .andThen(new CmdIntakeWaitForNote(0, this._intake))
-            .andThen(new CmdAcquireNoteFor(200, _intake))
+            .andThen(new CmdAcquireNoteFor(100, _intake, 0.25))
             .andThen(this.setPosition(IntakePosition.Stowed));
         // return new InstantCommand(this.setPosition(position)).andThen(
         //     new RunCommand(
@@ -104,6 +108,6 @@ public class IntakeCommandFactory {
      * @return
      */
     public Command acquire(int timeMS) {
-        return new CmdAcquireNoteFor(timeMS, this._intake);
+        return new CmdAcquireNoteFor(timeMS, this._intake, IntakeConstants.INTAKE_ACQUIRE_SPEED);
     }
 }

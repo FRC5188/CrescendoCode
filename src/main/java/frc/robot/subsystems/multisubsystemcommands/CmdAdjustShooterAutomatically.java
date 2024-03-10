@@ -40,7 +40,7 @@ public class CmdAdjustShooterAutomatically extends Command {
                     _shooterSubsystem.runShooterForZone(ShooterZone.Unknown);
                 }
             }
-        }
+        } 
     }
 
     @Override

@@ -169,14 +169,6 @@ public class Shooter extends SubsystemBase {
         return _currentShooterZone;
     }
 
-    public void setFeederMotorShootSpeed() {
-        _shooterIO.setFeederMotorSpeed(ShooterConstants.FEEDER_SHOOT_SPEED);
-    }
-
-    public void setFeederMotorPickupSpeed() {
-        _shooterIO.setFeederMotorSpeed(ShooterConstants.FEEDER_PICKUP_SPEED);
-    }
-
     // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
     private boolean areFlywheelsAtTargetSpeed() {
         return _targetFlywheelSpeed

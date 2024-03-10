@@ -68,7 +68,7 @@ public class HardwareConstants {
     
         private static final double CAMERA_ONE_ROLL = 0;
         private static final double CAMERA_ONE_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_ONE_YAW = 0;
+        private static final double CAMERA_ONE_YAW = Math.toRadians(180.0);
 
         private static Transform3d _cameraOnePosition = new Transform3d(
         new Translation3d(CAMERA_ONE_X_FROM_ROBOT_CENTER, CAMERA_ONE_Y_FROM_ROBOT_CENTER, CAMERA_ONE_Z_FROM_ROBOT_CENTER),
@@ -80,7 +80,7 @@ public class HardwareConstants {
 
         private static final double CAMERA_TWO_ROLL = 0;
         private static final double CAMERA_TWO_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_TWO_YAW = Math.toRadians(180.0);
+        private static final double CAMERA_TWO_YAW = Math.toRadians(0.0);
 
         private static Transform3d _cameraTwoPosition = new Transform3d(
         new Translation3d(CAMERA_TWO_X_FROM_ROBOT_CENTER, CAMERA_TWO_Y_FROM_ROBOT_CENTER, CAMERA_TWO_Z_FROM_ROBOT_CENTER),

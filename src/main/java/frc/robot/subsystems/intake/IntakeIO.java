@@ -28,6 +28,9 @@ public interface IntakeIO {
 
         public boolean _leftLimitSwitchIsPushed = false;
         public boolean _rightLimitSwitchIsPushed = false;
+
+        public double _feederVoltage = 0.0;
+        public double _feederSpeed = 0.0;
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}
@@ -40,4 +43,6 @@ public interface IntakeIO {
     public default void setRollerMotorSpeed(double speed) {}
 
     public default void setPivotMotorSpeed(double speed) {}
+
+    public default void setFeederMotorSpeed(double feederShootSpeed) {}
 }

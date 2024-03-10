@@ -51,7 +51,7 @@ public class IntakeConstants {
     public static final double INTAKE_CURRENT_CUTOFF = 40;
     // this constant allows us to make the rollers slowly spin to
     // keep hold of a game piece if we want to. Right now we dont want to
-    public static final double INTAKE_STOP_SPEED = 0; 
+    public static final double INTAKE_STOP_SPEED = 0.00; 
 
     /*********************
      * 

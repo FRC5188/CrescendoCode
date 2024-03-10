@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged; checkstyle says this is redunant
+import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class Intake extends SubsystemBase {
 
@@ -94,6 +95,13 @@ public class Intake extends SubsystemBase {
     }
 
     /**
+     * Sets the roller motor to the acquire speed
+     */
+    public void setRollerMotorSpeed(double speed) {
+        _intakeIO.setRollerMotorSpeed(speed);
+    }
+
+    /**
      * Sets the roller motor to the spit speed
      */
     public void setRollerMotorSpeedSpit() {
@@ -105,6 +113,14 @@ public class Intake extends SubsystemBase {
      */
     public void stopRollerMotor() {
         _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_STOP_SPEED);
+    }
+
+        public void setFeederMotorShootSpeed() {
+        _intakeIO.setFeederMotorSpeed(ShooterConstants.FEEDER_SHOOT_SPEED);
+    }
+
+    public void setFeederMotorPickupSpeed() {
+        _intakeIO.setFeederMotorSpeed(ShooterConstants.FEEDER_PICKUP_SPEED);
     }
 
     /**

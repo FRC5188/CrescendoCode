@@ -369,6 +369,22 @@ public class Drive extends SubsystemBase {
   }
 
   public double calcAngleToSpeaker() {
+    if (getAlliance() == Alliance.Blue) {
+      return calcAngleToSpeakerForBlue();
+    } else {
+      return calcAngleToSpeakerForRed();
+    }
+  }
+
+  private double calcAngleToSpeakerForBlue() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d speakerPos = getSpeakerPos();
+    double xDiff = robotPose.getX() - speakerPos.getX();
+    double yDiff = speakerPos.getY() - robotPose.getY();
+    return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
+  private double calcAngleToSpeakerForRed() {
     Pose2d robotPose = _poseEstimator.getEstimatedPosition();
     Pose2d speakerPos = getSpeakerPos();
     double xDiff = speakerPos.getX() - robotPose.getX();

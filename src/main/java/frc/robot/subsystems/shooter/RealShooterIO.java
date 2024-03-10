@@ -16,17 +16,15 @@ public class RealShooterIO implements ShooterIO {
     private CANSparkFlex _angleMotor;
     private CANSparkFlex _leftFlywheelMotor;
     private CANSparkFlex _rightFlywheelMotor;
-    private CANSparkMax _feederMotor;
     private SparkAbsoluteEncoder _angleEncoder;
 
     public RealShooterIO() {
         configAngleMotor();
         configFlywheelMotors();
-        configFeederMotor();
         configEncoder();
         // p: 0.025
-        configAnglePID(0.0000, 0, 0.00);
-        configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
+        configAnglePID(0.017, 0.00008, 0.25);
+        configFlywheelPIDs(0.000, 0.0000, 0.0000, 0.00022);
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
@@ -80,22 +78,18 @@ public class RealShooterIO implements ShooterIO {
      * Set the shooter angle postion
      */
     public void setTargetPositionAsDegrees(double degrees) {
-        _angleMotor.getPIDController().setReference(Units.degreesToRotations(degrees), ControlType.kPosition);
+        _angleMotor.getPIDController().setReference(degrees, ControlType.kPosition);
     }
 
     public void setAngleMotorSpeed(double speed) {
         _angleMotor.set(speed);
     }
 
-    public void setFeederMotorSpeed(double speed) {
-        _feederMotor.set(speed);
-    }
-
     private void configAngleMotor() {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
 
         _angleMotor.enableVoltageCompensation(12.0);
-        _angleMotor.setInverted(true);
+        _angleMotor.setInverted(false);
         _angleMotor.setCANTimeout(100);
         _angleMotor.setIdleMode(IdleMode.kBrake);
 
@@ -105,23 +99,12 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor.setSecondaryCurrentLimit(40);
     }
 
-    private void configFeederMotor() {
-        _feederMotor = new CANSparkMax(HardwareConstants.CanIds.FEEDER_MOTOR_ID, MotorType.kBrushless);
-
-        _feederMotor.enableVoltageCompensation(12.0);
-        _feederMotor.setInverted(false);
-        _feederMotor.setCANTimeout(100);
-
-        _feederMotor.setSmartCurrentLimit(40);
-        _feederMotor.setSecondaryCurrentLimit(40);
-    }
-
     private void configFlywheelMotors() {
         _leftFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.LEFT_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
         _rightFlywheelMotor = new CANSparkFlex(HardwareConstants.CanIds.RIGHT_FLYWHEEL_MOTOR_ID, MotorType.kBrushless);
 
         _leftFlywheelMotor.enableVoltageCompensation(12.0);
-        _leftFlywheelMotor.setInverted(false);
+        _leftFlywheelMotor.setInverted(true);
         _leftFlywheelMotor.setCANTimeout(100);
 
         MotorFrameConfigurator.configNoSensor(_leftFlywheelMotor);
@@ -151,6 +134,8 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor.getPIDController().setP(p);
         _angleMotor.getPIDController().setI(i);
         _angleMotor.getPIDController().setD(d);
+
+        _angleMotor.getPIDController().setIZone(0.4);
     }
 
     private void configFlywheelPIDs(double p, double i, double d, double f) {

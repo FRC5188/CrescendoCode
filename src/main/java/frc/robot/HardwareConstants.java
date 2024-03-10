@@ -32,6 +32,7 @@ public class HardwareConstants {
         public static int ANGLE_MOTOR_ID = 30;
         public static int LEFT_FLYWHEEL_MOTOR_ID = 31;
         public static int RIGHT_FLYWHEEL_MOTOR_ID = 32;
+        public static int FEEDER_MOTOR_ID = 33;
 
         //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
         public static int LEFT_CLIMBER_MOTOR = 40;
@@ -43,6 +44,8 @@ public class HardwareConstants {
     }
 
     public class DIOPorts {
+        public static int LEFT_LIMIT_SWITCH_PORT = 0;
+        public static int RIGHT_LIMIT_SWITCH_PORT = 1; 
         public static int SHOOTER_ANGLE_ENCODER_PORT = 7; // These must be configured when robot is wired. 
         public static int INTAKE_PIVOT_ENCODER_PORT = 8;
     }
@@ -65,7 +68,7 @@ public class HardwareConstants {
     
         private static final double CAMERA_ONE_ROLL = 0;
         private static final double CAMERA_ONE_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_ONE_YAW = 0;
+        private static final double CAMERA_ONE_YAW = Math.toRadians(180.0);
 
         private static Transform3d _cameraOnePosition = new Transform3d(
         new Translation3d(CAMERA_ONE_X_FROM_ROBOT_CENTER, CAMERA_ONE_Y_FROM_ROBOT_CENTER, CAMERA_ONE_Z_FROM_ROBOT_CENTER),
@@ -77,7 +80,7 @@ public class HardwareConstants {
 
         private static final double CAMERA_TWO_ROLL = 0;
         private static final double CAMERA_TWO_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_TWO_YAW = Math.toRadians(180.0);
+        private static final double CAMERA_TWO_YAW = Math.toRadians(0.0);
 
         private static Transform3d _cameraTwoPosition = new Transform3d(
         new Translation3d(CAMERA_TWO_X_FROM_ROBOT_CENTER, CAMERA_TWO_Y_FROM_ROBOT_CENTER, CAMERA_TWO_Z_FROM_ROBOT_CENTER),
@@ -90,7 +93,7 @@ public class HardwareConstants {
     }
 
     public class AbsEncoderOffsets {
-        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 51.98;
-        public static final double SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES = 228.64;
+        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 333.5;
+        public static final double SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES = 82.45;
     }
 }

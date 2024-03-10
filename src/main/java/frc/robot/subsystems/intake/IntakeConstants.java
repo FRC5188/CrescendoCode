@@ -8,19 +8,11 @@ public class IntakeConstants {
      *************************/
     // intake pivot
     // RETUNE THESE PID NUMBERS
-    public static final double PIVOT_PID_KP = 0.005;
-    public static final double PIVOT_PID_KI = 0.00001;
-    public static final double PIVOT_PID_KD = 0.000045;
-    public static final double PIVOT_PID_MAX_VEL = 30;
-    public static final double PIVOT_PID_MAX_ACCEL = 60;
-    public static final double PIVOT_PID_MAX_ISUM = 0.1;
+    public static final double PIVOT_PID_KP = 0.0038; //0.005;
+    public static final double PIVOT_PID_KI = 0.000000;//0.000005;
+    public static final double PIVOT_PID_KD = 0.000085;//0.000005;
 
     // 2/26/24-- P:0.005, I:0.00001, D:0.000045; MAX_VEL:30, MAX_ACCEL: 60, MAX_ISUM:0.1
-
-    // intake rollers
-    public static final double ROLLERS_PID_KP = 0.0;
-    public static final double ROLLERS_PID_KI = 0.0;
-    public static final double ROLLERS_PID_KD = 0.0;
 
     /***********************
      * 
@@ -31,7 +23,7 @@ public class IntakeConstants {
      * 
      **********************/
     public static final double POSITION_SOURCE_PICKUP = 50;
-    public static final double POSITION_GROUND_PICKUP = 167;
+    public static final double POSITION_GROUND_PICKUP = 175;
     public static final double POSITION_STOWED = 12;
     public static final double POSITION_AMP_SCORE = 60;
     public static final double POSITION_SPEAKER_SCORE = 115;
@@ -59,7 +51,7 @@ public class IntakeConstants {
     public static final double INTAKE_CURRENT_CUTOFF = 40;
     // this constant allows us to make the rollers slowly spin to
     // keep hold of a game piece if we want to. Right now we dont want to
-    public static final double INTAKE_STOP_SPEED = 0; 
+    public static final double INTAKE_STOP_SPEED = 0.00; 
 
     /*********************
      * 

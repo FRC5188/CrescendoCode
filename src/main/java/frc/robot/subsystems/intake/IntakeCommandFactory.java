@@ -37,32 +37,17 @@ public class IntakeCommandFactory {
      */
     public Command spit(double timeSeconds) {
         return new StartEndCommand(
-         this._intake::setRollerMotorSpeedSpit,
+         () -> {
+            this._intake.setRollerMotorSpeedSpit();
+            this._intake.setFeederMotorShootSpeed();
+         },
          () -> {
                 this._intake.stopRollerMotor();
+                this._intake.setFeederMotorPickupSpeed();
                 this._intake.resetHasNote();
 
          }, 
          this._intake).withTimeout(timeSeconds);
-    }
-
-    /***
-     * Returns a new Command object where the execute calls _intake.runPivotPID()
-     * and the isFinished is always false. This command does not require the subsystem.
-     * 
-     * @return a new Command
-     */
-    public Command runPID() {
-        return new Command() {
-            @Override
-            public void execute() {
-                _intake.runPivotPID();
-            }
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
-        };
     }
 
     /**
@@ -97,8 +82,11 @@ public class IntakeCommandFactory {
         return this.setPosition(position)
             .andThen(this.acquire())
             .andThen(new CmdIntakeWaitForNote(0, this._intake))
-            .andThen(new CmdAcquireNoteFor(200, _intake))
+            .andThen(new CmdAcquireNoteFor(100, _intake, 0.25))
             .andThen(this.setPosition(IntakePosition.Stowed));
+        // return new InstantCommand(this.setPosition(position)).andThen(
+        //     new RunCommand(
+        //     this._intake.r, null))
     }
 
     /**
@@ -119,6 +107,6 @@ public class IntakeCommandFactory {
      * @return
      */
     public Command acquire(int timeMS) {
-        return new CmdAcquireNoteFor(timeMS, this._intake);
+        return new CmdAcquireNoteFor(timeMS, this._intake, IntakeConstants.INTAKE_ACQUIRE_SPEED);
     }
 }

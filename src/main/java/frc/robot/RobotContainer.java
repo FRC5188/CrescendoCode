@@ -54,6 +54,8 @@ import frc.robot.subsystems.shooter.commands.CmdShooterRunPids;
 import frc.robot.subsystems.shooter.commands.CmdShooterSetPositionByZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.util.control.Controller;
+import frc.robot.util.control.driving.DriveHID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -65,6 +67,13 @@ import frc.robot.subsystems.vision.VisionIO;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    // CONFIGURATION FOR DRIVE STATION
+    private static final boolean USE_FLIGHT_STICK = true;
+
+    private static final int DRIVER_CONTROLLER_PORT = 0;
+    private static final int OPERATOR_CONTROLLER_PORT = 1;
+    private static final int OPERATOR_CONTROLLER_PORT_2 = 2;
+
     // Subsystems
     private final Drive _drive;
     private final Intake _intake;
@@ -76,8 +85,10 @@ public class RobotContainer {
     // logged dashboard inputs
     private final LoggedDashboardChooser<Command> _autoChooser;
 
-    // Controller
-    private final Joystick driveJoystick = new Joystick(0); 
+    // FLIGHT STICK CONFIGURATION IF ENABLDED, CHOOSES THE TYPE OF CONTROLLER WE USE.
+    private final DriveHID _driveJoystick = (USE_FLIGHT_STICK) ? 
+        new DriveHID(DriveHID.DEVICE_TYPE.FLIGHT_JOYSTICK, DRIVER_CONTROLLER_PORT, this._drive) : 
+        new DriveHID(DriveHID.DEVICE_TYPE.XBOX, DRIVER_CONTROLLER_PORT, this._drive);
     
     // Button box
     // Top half of buttons
@@ -123,12 +134,6 @@ public class RobotContainer {
 
     // Bottom right button (Frowny face)
     private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
-
-    // Joystick buttons
-    private JoystickButton _driverOperatorButton5 = new JoystickButton(driveJoystick, 5);
-    private JoystickButton _driverOperatorButton3 = new JoystickButton(driveJoystick, 3);
-    private JoystickButton _driverOperatorButton4 = new JoystickButton(driveJoystick, 4);
-    private JoystickButton _driverOperatorButton6 = new JoystickButton(driveJoystick, 6);
     
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -212,14 +217,6 @@ public class RobotContainer {
         configureButtonBindings();
     }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-     * it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
     private void configureButtonBindings() {
         _drive.setDefaultCommand(
                 DriveCommands.driveJoystick(
@@ -263,6 +260,7 @@ public class RobotContainer {
         _driverOperatorButton6.onTrue(
                 Commands.runOnce(
                         () -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
+
 
         // Move the shooter to the podium or subwoofer positions
         /*

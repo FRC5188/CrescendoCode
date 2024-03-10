@@ -63,6 +63,10 @@ import frc.robot.subsystems.visiondrive.VisionDriveIO;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private static final boolean USES_JOYSTICK = true;
+
+    private static final short DRIVE_STATION_PORT = 0;
+
     // Subsystems
     private final Drive _drive;
     private final Intake _intake;
@@ -75,7 +79,46 @@ public class RobotContainer {
     private final LoggedDashboardChooser<Command> _autoChooser;
 
     // Controller
-    private final CommandXboxController _controller = new CommandXboxController(0);
+    private static Joystick _joystick = null;
+    // If we use the flight joystick then we'll also need to make the buttons for it.
+    private static JoystickButton _driveButtonOne = null;
+    private static JoystickButton _driveButtonTwo = null;
+    private static JoystickButton _driveButtonThree = null;
+    private static JoystickButton _driveButtonFour = null;
+    private static JoystickButton _driveButtonFive = null;
+    private static JoystickButton _driveButtonSix = null;
+    private static JoystickButton _driveButtonSeven = null;
+    private static JoystickButton _driveButtonEight = null;
+    private static JoystickButton _driveButtonNine = null;
+    private static JoystickButton _driveButtonTen = null;
+    private static JoystickButton _driveButtonEleven = null;
+    private static JoystickButton _driveButtonTwelve = null;
+    // We'll make then null for now so we don't waste space with random object and if the joystick is used then we'll give them them the value.
+
+    private static CommandXboxController _controller = null;
+
+    static {
+        if (USES_JOYSTICK) {
+            _joystick = new Joystick(DRIVE_STATION_PORT);
+
+            // Now we'll make an object. 
+            _driveButtonOne = new JoystickButton(_joystick, 1);
+            _driveButtonTwo = new JoystickButton(_joystick, 2);
+            _driveButtonThree = new JoystickButton(_joystick, 3);
+            _driveButtonFour = new JoystickButton(_joystick, 4);
+            _driveButtonFive = new JoystickButton(_joystick, 5);
+            _driveButtonSix = new JoystickButton(_joystick, 6);
+            _driveButtonSeven = new JoystickButton(_joystick, 7);
+            _driveButtonEight = new JoystickButton(_joystick, 8);
+            _driveButtonNine = new JoystickButton(_joystick, 9);
+            _driveButtonTen = new JoystickButton(_joystick, 10);
+            _driveButtonEleven = new JoystickButton(_joystick, 11);
+            _driveButtonTwelve = new JoystickButton(_joystick, 12);
+        }
+        else {
+            _controller = new CommandXboxController(DRIVE_STATION_PORT);
+        }
+    }
 
     // Button box
     // Top half of buttons

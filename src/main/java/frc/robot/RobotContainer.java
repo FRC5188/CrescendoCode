@@ -252,39 +252,74 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        _drive.setDefaultCommand(
-                DriveCommands.joystickDrive(
-                        _drive,
-                        () -> -_controller.getLeftY(),
-                        () -> -_controller.getLeftX(),
-                        () -> -_controller.getRightX()));
-        // create an x shaped pattern with the wheels to make it harder to push us
-        _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
+        if (USES_JOYSTICK) {
+            // Use Flight Joystick Inputs
+            _drive.setDefaultCommand(
+                    DriveCommands.joystickDrive(
+                            _drive,
+                            () -> -_joystick.getY(),
+                            () -> -_joystick.getX(),
+                            () -> -_joystick.getZ()));
+            // Assign the button to the commands.
+            // X-Shaped Pattern for Button One
+            _driveButtonOne.onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
-        // face the speaker while we hold this button
-        _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
-                () -> -_controller.getLeftY(),
-                () -> -_controller.getLeftX()));
+            // Face the Speaker for Button Two
+            _driveButtonTwo.whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
+                    () -> -_joystick.getY(),
+                    () -> -_joystick.getX()));
+            
+            // Go to Note for Button Three
+            _driveButtonThree.onTrue(new CmdDriveGoToNote(_drive));
 
-        _controller.a().whileTrue(new CmdDriveGoToNote(_drive));
+            // Reset Orientation for Button Four
+            _driveButtonFour.onTrue(Commands.runOnce(() -> _drive.setPose(
+                    new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))), _drive).ignoringDisable(true));
 
-        // reset the orientation of the robot. changes which way it thinks is forward
-        _controller.y().onTrue(
-                Commands.runOnce(
-                        () -> _drive.setPose(
-                                new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
-                        _drive).ignoringDisable(true));
+            // Move to Subwoofer for Button Five
+            double inchesFromSubwoofer = 39.0;
+            double robotWidth = 13.0 + 1.5;
+            Pose2d robotOnSubwoofer = new Pose2d(
+                    DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
+                    DriveConstants.RED_SPEAKER.getY(),
+                    new Rotation2d(Math.PI));
+            _driveButtonFive.onTrue(Commands.runOnce(() -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
+        }
+        else {
+            // Repeat what we did above but with the xbox controller.
+            // Use Xbox Controller Inputs
+            _drive.setDefaultCommand(
+                    DriveCommands.joystickDrive(
+                            _drive,
+                            () -> -_controller.getLeftY(),
+                            () -> -_controller.getLeftX(),
+                            () -> -_controller.getRightX()));
+            // Assign the button to the commands.
+            // X-Shaped Pattern for Button One
+            _controller.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
-        double inchesFromSubwoofer = 39.0;
-        double robotWidth = 13.0 + 1.5;
-        Pose2d robotOnSubwoofer = new Pose2d(
-                DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
-                DriveConstants.RED_SPEAKER.getY(),
-                new Rotation2d(Math.PI));
-        _controller.b().onTrue(
-                Commands.runOnce(
-                        () -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
+            // Face the Speaker for Button Two
+            _controller.b().whileTrue(new CmdDriveRotateAboutSpeaker(_drive,
+                    () -> -_controller.getLeftY(),
+                    () -> -_controller.getLeftX()));
 
+            // Go to Note for Button Three
+            _controller.a().onTrue(new CmdDriveGoToNote(_drive));
+
+            // Reset Orientation for Button Four
+            _controller.y().onTrue(Commands.runOnce(() -> _drive.setPose(
+                    new Pose2d(_drive.getPose().getTranslation(), new Rotation2d(Math.PI))), _drive).ignoringDisable(true));
+            
+            // Move to Subwoofer for Button Five
+            double inchesFromSubwoofer = 39.0;
+            double robotWidth = 13.0 + 1.5;
+            Pose2d robotOnSubwoofer = new Pose2d(
+                    DriveConstants.RED_SPEAKER.getX() - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
+                    DriveConstants.RED_SPEAKER.getY(),
+                    new Rotation2d(Math.PI));
+            _controller.b().onTrue(Commands.runOnce(() -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
+
+        }
         // Move the shooter to the podium or subwoofer positions
         /*
          * ---------------- START MANUAL ROBOT CONTROL BUTTON

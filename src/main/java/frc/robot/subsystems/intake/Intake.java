@@ -123,7 +123,7 @@ public class Intake extends SubsystemBase {
      */
     public boolean hasNote() {
         if (!_hasNote) {
-            _hasNote = _intakeInputs._leftLimitSwitchIsPushed && _intakeInputs._rightLimitSwitchIsPushed;
+            _hasNote = _intakeInputs._leftLimitSwitchIsPushed || _intakeInputs._rightLimitSwitchIsPushed;
         }
 
         return _hasNote;

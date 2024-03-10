@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.util.Units;
 import frc.robot.HardwareConstants;
@@ -24,7 +25,7 @@ public class RealShooterIO implements ShooterIO {
         configFeederMotor();
         configEncoder();
         // p: 0.025
-        configAnglePID(0.0, 0, 0.00);
+        configAnglePID(0.0000, 0, 0.00);
         configFlywheelPIDs(0.0001, 0.0000, 0.0000, 0.00022);
     }
 
@@ -96,6 +97,7 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor.enableVoltageCompensation(12.0);
         _angleMotor.setInverted(true);
         _angleMotor.setCANTimeout(100);
+        _angleMotor.setIdleMode(IdleMode.kBrake);
 
         MotorFrameConfigurator.configDutyCycleSensor(_angleMotor);
 
@@ -140,6 +142,7 @@ public class RealShooterIO implements ShooterIO {
     private void configEncoder() {
         _angleEncoder = _angleMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         _angleEncoder.setPositionConversionFactor(360);
+        _angleEncoder.setInverted(true);
         _angleEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES);
     }
 

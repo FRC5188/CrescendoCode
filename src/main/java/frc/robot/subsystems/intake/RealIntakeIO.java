@@ -39,8 +39,8 @@ public class RealIntakeIO implements IntakeIO {
         inputs._rollerMotorVoltage = _rollerMotor.getAppliedOutput() * _rollerMotor.getBusVoltage();
         inputs._rollerMotorCurrent = _rollerMotor.getOutputCurrent();
 
-        inputs._leftLimitSwitchIsPushed = _leftLimitSwitch.get();
-        inputs._rightLimitSwitchIsPushed = _rightLimitSwitch.get();
+        inputs._leftLimitSwitchIsPushed = !_leftLimitSwitch.get();
+        inputs._rightLimitSwitchIsPushed = !_rightLimitSwitch.get();
     }
 
     public void setTargetPositionAsDegrees(double degrees) {

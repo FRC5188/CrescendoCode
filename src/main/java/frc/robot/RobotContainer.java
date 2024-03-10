@@ -224,9 +224,20 @@ public class RobotContainer {
         _drive.setDefaultCommand(
                 DriveCommands.driveJoystick(
                         _drive,
-                        () -> - driveJoystick.getY(),
-                        () -> - driveJoystick.getX(),
-                        () -> - driveJoystick.getTwist()));
+                        () -> {
+                            
+                            System.out.println(driveJoystick.getX());
+                            return - deadband(driveJoystick.getX(), 0.3);
+                        },
+                        () -> {
+                            System.out.println(driveJoystick.getY());
+                            return - deadband(driveJoystick.getY(), 0.3);
+                        },
+                        () -> {
+                            System.out.println(driveJoystick.getTwist());
+                            return - deadband(driveJoystick.getTwist(), 0.3);
+                        }
+                        ));
         // create an x shaped pattern with the wheels to make it harder to push us
         _driverOperatorButton3.onTrue(Commands.runOnce(_drive::stopWithX, _drive));
         
@@ -343,5 +354,17 @@ public class RobotContainer {
 
     public Command getRunIntakePIDCommand() {
         return this._runIntakePIDCommand;
+    }
+
+    private static double deadband(double value, double deadband) {
+        if (Math.abs(value) > deadband) {
+                if (value > 0.0) {
+                        return (value - deadband) / (1.0 - deadband);
+                } else {
+                        return (value + deadband) / (1.0 - deadband);
+                }
+        } else {
+                return 0.0;
+        }
     }
 }

@@ -38,7 +38,7 @@ public class ShooterCommandFactory {
      */
     public Command adjustAngle(double angle) {
         return new InstantCommand(
-                () -> this._shooter.setTargetPositionAsAngle(_shooter.getCurrentZone().getShooterAngle() + angle),
+                () -> this._shooter.adjustShooterAngle(angle),
                 this._shooter);
     }
 
@@ -52,27 +52,10 @@ public class ShooterCommandFactory {
         // 
         return new StartEndCommand(
                 // starts flywheels at beginning of command
-                () -> this._shooter.setFlywheelSpeed(zone.getLeftFlywheelSpeed()),
+                () -> this._shooter.setFlywheelSpeedWithZone(zone),
                 // stops flywheels at end of command
                 () -> this._shooter.stopFlywheels(),
                 this._shooter);
-    }
-
-    /**
-     * Command to run the angle PID of the shooter. This command will never finish
-     * @return command to run the shooter angle PID
-     */
-    public Command runAnglePID() {
-        return new Command() {
-            @Override
-            public void execute() {
-                _shooter.runAnglePid();
-            }
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
-        };
     }
 
     /**

@@ -32,6 +32,7 @@ public class HardwareConstants {
         public static int ANGLE_MOTOR_ID = 30;
         public static int LEFT_FLYWHEEL_MOTOR_ID = 31;
         public static int RIGHT_FLYWHEEL_MOTOR_ID = 32;
+        public static int FEEDER_MOTOR_ID = 33;
 
         //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
         public static int LEFT_CLIMBER_MOTOR = 40;
@@ -43,6 +44,8 @@ public class HardwareConstants {
     }
 
     public class DIOPorts {
+        public static int LEFT_LIMIT_SWITCH_PORT = 0;
+        public static int RIGHT_LIMIT_SWITCH_PORT = 1; 
         public static int SHOOTER_ANGLE_ENCODER_PORT = 7; // These must be configured when robot is wired. 
         public static int INTAKE_PIVOT_ENCODER_PORT = 8;
     }
@@ -90,7 +93,7 @@ public class HardwareConstants {
     }
 
     public class AbsEncoderOffsets {
-        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 51.98;
-        public static final double SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES = 228.64;
+        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 333.5;
+        public static final double SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES = 82.45;
     }
 }

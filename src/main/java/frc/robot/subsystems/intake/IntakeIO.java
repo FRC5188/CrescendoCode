@@ -25,6 +25,9 @@ public interface IntakeIO {
         // |================= START ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
         public double _pivotEncoderPositionDegrees = 0.0;
         // |================= END ANGLE DUTY CYCLE ENCODER MOTOR LOGGING =================|
+
+        public boolean _leftLimitSwitchIsPushed = false;
+        public boolean _rightLimitSwitchIsPushed = false;
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}

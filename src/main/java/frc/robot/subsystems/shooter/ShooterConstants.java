@@ -1,7 +1,6 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.util.LoggedTunableNumber;
 
 public abstract class ShooterConstants {
 

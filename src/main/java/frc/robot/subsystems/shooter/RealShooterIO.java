@@ -1,12 +1,10 @@
 package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.math.util.Units;
 import frc.robot.HardwareConstants;
 import frc.robot.util.MotorFrameConfigurator;
 

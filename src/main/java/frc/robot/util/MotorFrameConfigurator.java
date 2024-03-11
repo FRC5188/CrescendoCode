@@ -3,6 +3,9 @@ package frc.robot.util;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+/**
+ * This class is used to configure the periodic frame period of the CANSparkFlex motor controllers in efforts of reducing CAN bus traffic.
+ */
 public abstract class MotorFrameConfigurator {
     public static void configNoSensor(CANSparkFlex motor) {
         motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100); // Applied output and faults. 

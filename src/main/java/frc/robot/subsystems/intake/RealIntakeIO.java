@@ -6,6 +6,8 @@ import com.revrobotics.SparkAbsoluteEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.HardwareConstants;
+import frc.robot.util.configurations.IntakeConfiguration;
+
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -50,19 +52,27 @@ public class RealIntakeIO implements IntakeIO {
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
-        _pivotMotor.getPIDController().setReference(degrees, ControlType.kPosition);
+        // We'll ensure that we're supposed to be running the PID. If not then we don't
+        if (!IntakeConfiguration.IS_USING_INTAKE_PIVOT) {
+            this._pivotMotor.getPIDController().setReference(degrees, ControlType.kPosition);
+        }
+        else {
+            // If we're not supposed to be using it then we'll just set it to zero.
+            this.setPivotMotorSpeed(0.0);
+        }
     }
       
     public void setRollerMotorSpeed(double speed) {
-        _rollerMotor.set(speed);
+        _rollerMotor.set((IntakeConfiguration.IS_USING_INTAKE_ROLLERS) ? speed : 0.0);
     }
 
     public void setPivotMotorSpeed(double speed) {
-        _pivotMotor.set(speed);
+        // Though this is redundant, in case this method is directly called if the pivot isn't supposed to run then we'll set speed to zero.
+        _pivotMotor.set((IntakeConfiguration.IS_USING_INTAKE_PIVOT) ? speed : 0.0);
     }
 
     public void setFeederMotorSpeed(double speed) {
-        _feederMotor.set(speed);
+        _feederMotor.set((IntakeConfiguration.IS_USING_INTAKE_FEEDER) ? speed : 0.0);
     }
 
     private void configPivotPID(double p, double i, double d) {

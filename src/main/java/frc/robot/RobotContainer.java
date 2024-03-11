@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -68,7 +69,7 @@ public class RobotContainer {
         private final Drive _drive;
         private final Intake _intake;
         private final Shooter _shooter;
-        // private final Climber _climber;
+        private final Climber _climber;
 
         private Command _adjustShooterAutomaticallyCommand;
 
@@ -123,67 +124,10 @@ public class RobotContainer {
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
-                switch (Constants.CURRENT_MODE) {
-                        case REAL:
-                                // Real robot, instantiate hardware IO implementations
-                                _drive = new Drive(
-                                                new GyroIONavX2(),
-                                                new RealVisionIO(),
-                                                new RealVisionDriveIO(),
-                                                new ModuleIOSparkFlex(0),
-                                                new ModuleIOSparkFlex(1),
-                                                new ModuleIOSparkFlex(2),
-                                                new ModuleIOSparkFlex(3));
-                                _intake = new Intake(new RealIntakeIO());
-                                _shooter = new Shooter(new RealShooterIO());
-                                // _climber = new Climber(new RealClimberIO());
-                                break;
-
-                        case SIM:
-                                // Sim robot, instantiate physics sim IO implementations
-                                _drive = new Drive(
-                                                new GyroIO() {
-                                                },
-                                                new VisionIO() {
-                                                },
-                                                new VisionDriveIO() {
-                                                },
-                                                new ModuleIOSim(),
-                                                new ModuleIOSim(),
-                                                new ModuleIOSim(),
-                                                new ModuleIOSim());
-                                _intake = new Intake(new IntakeIO() {
-                                });
-                                _shooter = new Shooter(new ShooterIO() {
-                                });
-                                // _climber = new Climber(new ClimberIO() {
-                                // });
-                                break;
-                        default:
-                                // Replayed robot, disable IO implementations
-                                _drive = new Drive(
-                                                new GyroIO() {
-                                                },
-                                                new VisionIO() {
-                                                },
-                                                new VisionDriveIO() {
-                                                },
-                                                new ModuleIO() {
-                                                },
-                                                new ModuleIO() {
-                                                },
-                                                new ModuleIO() {
-                                                },
-                                                new ModuleIO() {
-                                                });
-                                _intake = new Intake(new IntakeIO() {
-                                });
-                                _shooter = new Shooter(new ShooterIO() {
-                                });
-                                // _climber = new Climber(new ClimberIO() {
-                                // });
-                                break;
-                }
+                this._intake = RobotConfiguration.configureIntake();
+                this._shooter = RobotConfiguration.configureShooter();
+                this._drive = RobotConfiguration.configureDrive();
+                this._climber = RobotConfiguration.configureClimber();
 
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);

@@ -66,7 +66,7 @@ public abstract class ShooterConstants {
     public static final double SHOOTER_HEIGHT_FROM_BASE = Units.inchesToMeters(20);
     public static final double SHOOTER_LENGTH = 0.3;
     public static final double SHOOTER_OFFSET_DEGREES = 0;
-    public static final double TIME_TO_SHOOT = 0.3; // In seconds // TODO: TUNE!!!
+    public static final double TIME_TO_SHOOT = 0.2; // In seconds
 
     /****************** 
      * SHOOTER SOFTWARE CONSTANTS

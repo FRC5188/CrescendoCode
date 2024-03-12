@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SubwooferShoot"
+            "name": "Shooting_From_Subwoofer"
           }
         },
         {
@@ -62,6 +62,6 @@
       ]
     }
   },
-  "folder": "Macho Middle Autos",
+  "folder": null,
   "choreoAuto": false
 }

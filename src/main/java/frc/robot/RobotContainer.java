@@ -26,12 +26,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeCommandFactory;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
@@ -46,7 +46,6 @@ import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
 import frc.robot.subsystems.multisubsystemcommands.CmdShootOnTheMove;
-import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -191,21 +190,16 @@ public class RobotContainer {
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
 
-                NamedCommands.registerCommand("intake GroundPos",
-                                new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
-                NamedCommands.registerCommand("intake Stow",
-                                new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
-                NamedCommands.registerCommand("Subwoofer Shoot",
-                                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                NamedCommands.registerCommand("Podium Shoot",
-                                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
-        NamedCommands.registerCommand("DeployIntake", new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
-        NamedCommands.registerCommand("SubwooferShoot", new ShooterCommandFactory(_shooter).RunForZone(ShooterZone Subwoofer)
-        );
-        NamedCommands.registerCommand("AutoShootWithAutoAlign", new PrintCommand(null));
-        NamedCommands.registerCommand("AutoShootWithoutAutoAlign", new PrintCommand(null));
-        NamedCommands.registerCommand("PickUpNoteWithLimelight", new PrintCommand(null));
+                NamedCommands.registerCommand("Pickup_Note_Witout_Limelight", _intake.buildCommand().pickUpFromGround());
+                NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));
+                NamedCommands.registerCommand("Shooting_From_Subwoofer", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                NamedCommands.registerCommand("Shooting_From_Podium", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
+                NamedCommands.registerCommand("Automated_Shooting_With_Automatic_Alignment", 
+                        new SequentialCommandGroup(
+                                _shooter.buildCommand().setAutoShootEnabled(true),
+                                new CmdAdjustShooterAutomatically(_drive, _shooter, _intake))
+                        );
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
                 // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 

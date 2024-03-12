@@ -93,7 +93,7 @@ public class HardwareConstants {
     }
 
     public class AbsEncoderOffsets {
-        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 333.5;
+        public static final double INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES = 146.71;
         public static final double SHOOTER_ANGLE_ENCODER_OFFSET_IN_DEGREES = 82.45;
     }
 }

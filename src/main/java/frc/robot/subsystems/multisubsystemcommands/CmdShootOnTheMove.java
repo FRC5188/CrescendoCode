@@ -54,6 +54,7 @@ public class CmdShootOnTheMove extends Command {
   private DoubleSupplier _trigger;
   private Timer _shotTimer;
   private Boolean _hasRunOnce;
+  private double _correctedRadius;
   private ShooterZone _correctedZone;
   private Pose2d _futureRobotPose2d;
   private double _triggerThreshold;
@@ -163,7 +164,8 @@ public class CmdShootOnTheMove extends Command {
     // Get a Pose2d based on the newly-calculated future translation and angle.
     _futureRobotPose2d = new Pose2d(_futureRobotTranslation, _futureAngleToSpeaker);
 
-    _correctedZone = _shooter.getZoneFromRadius(_drive.getRadiusToSpeakerInMeters(_futureRobotPose2d));
+    // _correctedZone = _shooter.getZoneFromRadius(_drive.getRadiusToSpeakerInMeters(_futureRobotPose2d));
+    _correctedRadius = _drive.getRadiusToSpeakerInMeters(_futureRobotPose2d);
 
     _drive.runVelocity(
         ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -174,10 +176,11 @@ public class CmdShootOnTheMove extends Command {
 
     if (_shooter.isAutoShootEnabled()) {
       if (_intake.hasNote()) {
-        if (_correctedZone != _shooter.getCurrentZone()) {
-          // We want to shoot!
-          _shooter.runShooterForZone(_correctedZone);
-        }
+        // if (_correctedZone != _shooter.getCurrentZone()) {
+        //   // We want to shoot!
+        //   _shooter.runShooterForZone(_correctedZone);
+        // }
+        _shooter.runShooterForRadius(_correctedRadius);
 
       } else {
         if (_shooter.getCurrentZone() != ShooterZone.Unknown) {

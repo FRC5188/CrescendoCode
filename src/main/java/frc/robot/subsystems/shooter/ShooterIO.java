@@ -50,4 +50,6 @@ public interface ShooterIO {
     public default void setTargetPositionAsDegrees(double degrees){}
 
     public default void setAngleMotorSpeed(double speed){}
+
+    public default void setFeederMotorSpeed(double speed){}
 }

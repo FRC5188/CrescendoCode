@@ -17,24 +17,33 @@ public abstract class ShooterConstants {
      *********************/
 
 
-    // podium
+    // PODIUM
+    //public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/PODIUM_FLYWHEEL_SPEED", 1750);
     public static final double ZONE_PODIUM_FLYWHEEL_SPEED = 1750;
     public static final double ZONE_PODIUM_LOW_BOUND = 4;
     public static final double ZONE_PODIUM_UPPER_BOUND = 2.5;
     public static final double ZONE_PODIUM_SHOOTER_ANGLE = 22;
 
-    // subwoofer
+    // SUBWOOFER
+    //public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 1300);
     public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1300;
     public static final double ZONE_SUBWOOFER_LOW_BOUND = 0.0;
     public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
-    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 40;
+    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 44.0;
 
-    // unkown
-    public static final double ZONE_UNKOWN_FLYWHEEL_SPEED = 200;
-    public static final double ZONE_UNKOWN_LOW_BOUND = -1;
-    public static final double ZONE_UNKOWN_UPPER_BOUND = -1;
-    public static final double ZONE_UNKOWN_SHOOTER_ANGLE = 35;
+    // unknown
+    public static final double ZONE_UNKNOWN_FLYWHEEL_SPEED = 200;
+    public static final double ZONE_UNKNOWN_LOW_BOUND = -1;
+    public static final double ZONE_UNKNOWN_UPPER_BOUND = -1;
+    public static final double ZONE_UNKNOWN_SHOOTER_ANGLE = 35;
 
+    /**************
+     * 
+     * SHOOTER FEEDER CONSTANTS
+     *
+     **************/
+    public static final double FEEDER_SHOOT_SPEED = 0.7;
+    public static final double FEEDER_PICKUP_SPEED = 0.08;
 
     /**************
      * 
@@ -43,9 +52,8 @@ public abstract class ShooterConstants {
      **************/
 
     public static final double MAXIMUM_ANGLE_ENCODER_ANGLE = 90;
-    public static final double MINIMUM_ANGLE_ENCODER_ANGLE = 5; // These might need changed later depending on how everything is implemented. 
+    public static final double MINIMUM_ANGLE_ENCODER_ANGLE = 10; // These might need changed later depending on how everything is implemented. 
     public static final double ANGLE_ENCODER_DEADBAND_DEGREES = 1; // This will be used when we've determining whether we can shoot or not. 
-
     
     /***************
      * 
@@ -58,6 +66,7 @@ public abstract class ShooterConstants {
     public static final double SHOOTER_HEIGHT_FROM_BASE = Units.inchesToMeters(20);
     public static final double SHOOTER_LENGTH = 0.3;
     public static final double SHOOTER_OFFSET_DEGREES = 0;
+    public static final double TIME_TO_SHOOT = 0.2; // In seconds
 
     /****************** 
      * SHOOTER SOFTWARE CONSTANTS

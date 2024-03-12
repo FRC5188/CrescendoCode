@@ -13,7 +13,6 @@ public class CmdIntakeWaitForNote extends Command {
   private int _timeoutInMS;
   private boolean _commandTimesOut;
   private Intake _intakeSubsystem;
-  private int _intakeTimer;
 
   /**
    * Waits for the intake to acquire a note or for the timeout to be reached.
@@ -37,19 +36,12 @@ public class CmdIntakeWaitForNote extends Command {
   public void initialize() {
     // Current state of the countdown in cycles. 20 ms per robot cycle.
     _countdownInCycles = (int) Math.ceil(_timeoutInMS / 20.0);
-    _intakeTimer = 0;
-    _intakeSubsystem.setIntakeHasBeenRunning(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this._intakeSubsystem.runPivotPID();
-    if (_intakeTimer >= 10) {
-      _intakeSubsystem.setIntakeHasBeenRunning(true);
-    }
     _countdownInCycles--;
-    _intakeTimer++;
   }
 
   // Called once the command ends or is interrupted.

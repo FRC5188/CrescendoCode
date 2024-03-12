@@ -16,8 +16,6 @@ public class CmdDriveGoToNote extends Command {
 
     this._drive = drivetrainSubsystem;
 
-    _chassisSpeeds = _drive._visionDriveIO.getChassisSpeedsForDriveToNote();
-
     addRequirements(drivetrainSubsystem);
   }
 

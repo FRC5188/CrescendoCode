@@ -13,6 +13,8 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 
 public class SingleJointedArmFeedfoward {
   private static final boolean USES_ESTIMATED_VALUES = true;
@@ -27,13 +29,13 @@ public class SingleJointedArmFeedfoward {
   private static final double ARM_MOMENT_OF_INERTIA = 0.0;
   private static final double ARM_GEARING = 0.0;
   private static final int NUMBER_OF_MOTORS = 1;
-  private static final double MAXIMUM_ARM_SPEED_RADIAN = 0.0;
-  private static final double MAXIMUM_ARM_ACCELERATION = 0.0;
-  private static final double ESTIMATED_MODEL_ACCURACY_RADIANS = 0.0;
-  private static final double ESTIMATED_MODEL_ACCURACY_RADIANS_PER_SECOND = 0.0;
-  private static final double ESTIMATED_ENCODER_ACCURACY = 0.0;
-  private static final double ERROR_TOLERANCE_POSITION_RADIANS = 0.0;
-  private static final double ERROR_TOLERANCE_VELOCITY_RADIANS_PER_SECOND = 0.0;
+  private static final double MAXIMUM_ARM_SPEED_RADIAN = Units.degreesToRadians(45.0);
+  private static final double MAXIMUM_ARM_ACCELERATION = Units.degreesToRadians(90.0);
+  private static final double ESTIMATED_MODEL_ACCURACY_RADIANS = 0.015;
+  private static final double ESTIMATED_MODEL_ACCURACY_RADIANS_PER_SECOND = 0.17;
+  private static final double ESTIMATED_ENCODER_ACCURACY = 0.01;
+  private static final double ERROR_TOLERANCE_POSITION_RADIANS = Units.degreesToRadians(1.0);
+  private static final double ERROR_TOLERANCE_VELOCITY_RADIANS_PER_SECOND = Units.degreesToRadians(10.0);
 
   // PHYSICAL CONSTANTS 
   private static final double ROBOT_VOLTAGE = 12.0;

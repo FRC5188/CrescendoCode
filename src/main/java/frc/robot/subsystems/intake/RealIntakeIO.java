@@ -1,8 +1,10 @@
 package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkAbsoluteEncoder;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.HardwareConstants;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -11,15 +13,21 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class RealIntakeIO implements IntakeIO {
     private CANSparkFlex _pivotMotor;
     private CANSparkFlex _rollerMotor;
-    private DutyCycleEncoder _pivotMotorEncoder;
+    private SparkAbsoluteEncoder _pivotMotorEncoder;
+    private DigitalInput _leftLimitSwitch;
+    private DigitalInput _rightLimitSwitch;
+    private CANSparkMax _feederMotor;
 
     public RealIntakeIO() {
         configPivotMotor();
         configRollerMotor();
+        configFeederMotor();
         configEncoder();
-        configPivotPID(IntakeConstants.ROLLERS_PID_KD,
-                        IntakeConstants.ROLLERS_PID_KI,
-                        IntakeConstants.ROLLERS_PID_KD);
+        configPivotPID(IntakeConstants.PIVOT_PID_KP,
+                        IntakeConstants.PIVOT_PID_KI,
+                        IntakeConstants.PIVOT_PID_KD);
+        _leftLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.LEFT_LIMIT_SWITCH_PORT);
+        _rightLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.RIGHT_LIMIT_SWITCH_PORT);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
@@ -27,13 +35,18 @@ public class RealIntakeIO implements IntakeIO {
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
         inputs._pivotMotorCurrent = _pivotMotor.getOutputCurrent();
-        inputs._pivotEncoderPositionDegrees = (_pivotMotorEncoder.getAbsolutePosition() * 360) - 
-                                HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES;
+        inputs._pivotEncoderPositionDegrees = _pivotMotorEncoder.getPosition();
 
         inputs._rollerMotorTemperature = _rollerMotor.getMotorTemperature();
         inputs._rollerMotorVelocityRotationsPerMin = _rollerMotor.getEncoder().getVelocity();
         inputs._rollerMotorVoltage = _rollerMotor.getAppliedOutput() * _rollerMotor.getBusVoltage();
         inputs._rollerMotorCurrent = _rollerMotor.getOutputCurrent();
+
+        inputs._leftLimitSwitchIsPushed = !_leftLimitSwitch.get();
+        inputs._rightLimitSwitchIsPushed = !_rightLimitSwitch.get();
+
+        inputs._feederVoltage = _feederMotor.getAppliedOutput() * _feederMotor.getBusVoltage();
+        inputs._feederSpeed = _feederMotor.get();
     }
 
     public void setTargetPositionAsDegrees(double degrees) {
@@ -48,11 +61,15 @@ public class RealIntakeIO implements IntakeIO {
         _pivotMotor.set(speed);
     }
 
+    public void setFeederMotorSpeed(double speed) {
+        _feederMotor.set(speed);
+    }
+
     private void configPivotPID(double p, double i, double d) {
-        // _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
-        // _pivotMotor.getPIDController().setP(p);
-        // _pivotMotor.getPIDController().setI(i);
-        // _pivotMotor.getPIDController().setD(d);
+        _pivotMotor.getPIDController().setFeedbackDevice(_pivotMotorEncoder);
+        _pivotMotor.getPIDController().setP(p);
+        _pivotMotor.getPIDController().setI(i);
+        _pivotMotor.getPIDController().setD(d);
     }
 
     private void configPivotMotor() {
@@ -81,10 +98,20 @@ public class RealIntakeIO implements IntakeIO {
         _rollerMotor.enableVoltageCompensation(12.0);
     }
 
+    private void configFeederMotor() {
+        _feederMotor = new CANSparkMax(HardwareConstants.CanIds.FEEDER_MOTOR_ID, MotorType.kBrushless);
+
+        _feederMotor.enableVoltageCompensation(12.0);
+        _feederMotor.setInverted(false);
+        _feederMotor.setCANTimeout(100);
+
+        // _feederMotor.setSmartCurrentLimit(40);
+        // _feederMotor.setSecondaryCurrentLimit(40);
+    }
+
     private void configEncoder() {
-        // _pivotMotorEncoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        // _pivotMotorEncoder.setPositionConversionFactor(360);
-        // _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
-        _pivotMotorEncoder = new DutyCycleEncoder(HardwareConstants.DIOPorts.INTAKE_PIVOT_ENCODER_PORT);
+        _pivotMotorEncoder = _pivotMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        _pivotMotorEncoder.setPositionConversionFactor(360);
+        _pivotMotorEncoder.setZeroOffset(HardwareConstants.AbsEncoderOffsets.INTAKE_PIVOT_ENCODER_OFFSET_IN_DEGREES);
     }
 }

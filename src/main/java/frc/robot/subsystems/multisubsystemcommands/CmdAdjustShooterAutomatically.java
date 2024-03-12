@@ -1,5 +1,7 @@
 package frc.robot.subsystems.multisubsystemcommands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
@@ -28,17 +30,12 @@ public class CmdAdjustShooterAutomatically extends Command {
             if (_intakeSubsystem.hasNote()) {
                 // TODO: Maybe add in a tolerance for when we straddle zones so we don't go back
                 // and forth
-                ShooterZone zone = _shooterSubsystem.getZoneFromRadius(_drive.getRadiusToSpeakerInMeters());
-                if (zone != _shooterSubsystem.getCurrentZone()) {
-
-                    // We actually want to shoot
-                    _shooterSubsystem.runShooterForZone(zone);
-                }
+                double radius = _drive.getRadiusToSpeakerInMeters();
+                // We actually want to shoot
+                Logger.recordOutput("Shooter/RadiusSpeaker", radius);
+                _shooterSubsystem.runShooterForRadius(radius);
             } else {
-                if (_shooterSubsystem.getCurrentZone() != ShooterZone.Unknown) {
-                    // We don't have a note, so enter our safe mode, which is kept in Unknown
                     _shooterSubsystem.runShooterForZone(ShooterZone.Unknown);
-                }
             }
         } 
     }

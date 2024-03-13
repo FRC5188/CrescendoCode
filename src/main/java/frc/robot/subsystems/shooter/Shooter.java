@@ -227,14 +227,38 @@ public class Shooter extends SubsystemBase {
         setTargetPositionAsAngle(_zoneDataMappings.get(zone).getShooterAngle());
     }
 
+
+    /**
+     * Gives an estimated angle for the {@link Shooter} to make it into the speaker based on the input radius. The angle is based on an 
+     * experimentially found logarithmic regression equation.
+     * @param radius Radius from Speaker in meters. 
+     */
     public void setShooterPositionWithRadius(double radius) {
-        double angle;
-        if (radius <= 4.25) {
-            angle = -21.02 * Math.log(0.1106 * radius);
-            Logger.recordOutput("Shooter/RegressionEstimatedAngle", angle);
-            setTargetPositionAsAngle(angle);
+        final double maxRadiusTestedMeters = 4.25;
+
+        // We'll test our edge cases where the radius is less than 0 or greater than our max tested radius.
+        if (radius < 0 || radius > maxRadiusTestedMeters) {
+            System.err.println("Invalid Radius: Parameter 'radius' must be >= 0 and <= 'maxRadiusTestedMeters'.");
+            return;
         }
 
+        // Logritmic Regression Equation found through testing. 
+        final double angle = -21.02 * Math.log(0.1106 * radius);
+
+        // If we're within the tested range of radius and our calculated angle is within our bounds then we'll set the shooter angle.
+        if (angle >= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE && angle <= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE) {
+            setTargetPositionAsAngle(angle);
+        }
+        else {
+            System.err.println("Invalid Angle: Calculated angle is out of bounds.");
+            // We'll set the value in which it's closest to the bounds. For instance if the angle is less than the minimum angle then we'll set it to the minimum angle.
+            if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
+                setTargetPositionAsAngle(ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE);
+            }
+            else {
+                setTargetPositionAsAngle(ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE);
+            }
+        }
     }
 
     private boolean shooterInPosition() {

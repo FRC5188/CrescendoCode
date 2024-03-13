@@ -51,6 +51,7 @@ import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterWaitUntilReady;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.visiondrive.RealVisionDriveIO;
@@ -190,7 +191,7 @@ public class RobotContainer {
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
 
-                NamedCommands.registerCommand("Pickup_Note_Witout_Limelight", _intake.buildCommand().pickUpFromGround());
+                NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround());
                 NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));
                 NamedCommands.registerCommand("Shooting_From_Subwoofer", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
                 NamedCommands.registerCommand("Shooting_From_Podium", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
@@ -198,8 +199,9 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Automated_Shooting_With_Automatic_Alignment", 
                         new SequentialCommandGroup(
                                 _shooter.buildCommand().setAutoShootEnabled(true),
-                                new CmdAdjustShooterAutomatically(_drive, _shooter, _intake))
-                        );
+                                new CmdShooterWaitUntilReady(_shooter),
+                                _intake.buildCommand().spit(2)
+                        ));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
                 // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 

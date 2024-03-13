@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.040161039942034,
+        "x": 2.784236337703446,
         "y": 5.557362183607978
       },
       "prevControl": {
-        "x": 1.7184190187857824,
+        "x": 2.462494316547194,
         "y": 5.557362183607978
       },
       "nextControl": null,
@@ -33,11 +33,18 @@
   "eventMarkers": [
     {
       "name": "DeployIntake",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Pickup_Note_Without_Limelight"
+              }
+            }
+          ]
         }
       }
     }
@@ -54,7 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle Ring Autos",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

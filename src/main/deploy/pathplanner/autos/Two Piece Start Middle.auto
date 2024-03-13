@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.51,
-      "y": 5.56
+      "x": 1.2437546130441752,
+      "y": 5.410406484151056
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M1) Shoot first note, exit wing"
+            "pathName": "(M3A) Shoot first note, move to second note pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Automated_Shooting_With_Automatic_Alignment"
           }
         }
       ]

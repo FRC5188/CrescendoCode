@@ -286,5 +286,8 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/AngleDesiredDegrees", _zoneDataMappings.get(_currentShooterZone).getShooterAngle());
         Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);
         Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
+        Logger.recordOutput("Shooter/isReady", this.isReady());
+        Logger.recordOutput("Shooter/inPosition", this.shooterInPosition());
+        Logger.recordOutput("Shooter/areFlywheelsAtTargetSpeed", this.areFlywheelsAtTargetSpeed());
     }
 }

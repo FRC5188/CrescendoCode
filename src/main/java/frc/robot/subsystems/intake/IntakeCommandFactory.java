@@ -83,12 +83,16 @@ public class IntakeCommandFactory {
             .andThen(this.acquire())
             .andThen(new CmdIntakeWaitForNote(0, this._intake))
             .andThen(new CmdAcquireNoteFor(100, _intake, 0.25))
-            .andThen(this.setPosition(IntakePosition.Stowed));
+            .andThen(this.setPosition(IntakePosition.Stowed))
+            .andThen(this.setIntakeRollerSpeed(500, IntakeConstants.INTAKE_ACQUIRE_SPEED * 0.5));
         // return new InstantCommand(this.setPosition(position)).andThen(
         //     new RunCommand(
         //     this._intake.r, null))
     }
 
+    public Command setIntakeRollerSpeed(int timeoutMS, double speed){
+        return new CmdAcquireNoteFor(timeoutMS, this._intake, speed);
+    }
     /**
      * Puts the intake to {@link Intake.IntakePosition.GroundPickup}, runs the rollers, picks up note,
      * turns off rollers, and puts the intake to {@link Intake.IntakePosition.Stowed}.

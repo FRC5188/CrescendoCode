@@ -1,0 +1,125 @@
+{
+  "version": "3.0.2",
+  "layout": [
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/Shooter/_angleEncoderPositionDegrees",
+              "color": "#2b66a2",
+              "show": true
+            },
+            {
+              "key": "/RealOutputs/Shooter/AngleDesiredDegrees",
+              "color": "#e5b31b",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Angle"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/RealOutputs/Shooter/FlywheelSetpoint",
+              "color": "#2b66a2",
+              "show": true
+            },
+            {
+              "key": "/Shooter/_leftFlywheelMotorVelocityRotationsPerMin",
+              "color": "#e5b31b",
+              "show": true
+            },
+            {
+              "key": "/Shooter/_rightFlywheelMotorVelocityRotationsPerMin",
+              "color": "#af2437",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Flywheel Speed"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/Shooter/_leftFlywheelMotorCurrent",
+              "color": "#2b66a2",
+              "show": true
+            },
+            {
+              "key": "/Shooter/_rightFlywheelMotorCurrent",
+              "color": "#e5b31b",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Flywheel Current"
+    },
+    {
+      "type": 2,
+      "fields": [
+        "/RealOutputs/Shooter/Zone"
+      ],
+      "title": "Zone"
+    }
+  ]
+}

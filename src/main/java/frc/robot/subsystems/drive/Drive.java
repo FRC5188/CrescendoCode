@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
@@ -37,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.autonomous.AutonomousPathGenerator;
 
@@ -257,6 +259,17 @@ public class Drive extends SubsystemBase {
     _kinematics.resetHeadings(headings);
     stop();
   }
+
+  public Optional<Rotation2d> getRotationTargetOverride(){
+    // Some condition that should decide if we want to override rotation
+    if(Shooter.isAutoShootEnabled()) {
+        // Return an optional containing the rotation override (this should be a field relative rotation)
+        return Optional.of(this.getRotation2dToSpeaker(this.getPose().getTranslation()));
+    } else {
+        // return an empty optional when we don't want to override the path's rotation
+        return Optional.empty();
+    }
+}
 
   /** Returns a command to run a quasistatic test in the specified direction. */
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {

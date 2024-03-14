@@ -269,7 +269,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isReady() {
-        return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
+        return shooterInPosition() && areFlywheelsAtTargetSpeed();
     }
 
     @Override

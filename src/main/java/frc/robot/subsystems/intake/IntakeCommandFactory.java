@@ -82,7 +82,7 @@ public class IntakeCommandFactory {
         return this.setPosition(position)
             .andThen(this.acquire())
             .andThen(new CmdIntakeWaitForNote(0, this._intake))
-            .andThen(new CmdAcquireNoteFor(100, _intake, 0.25))
+            .andThen(new CmdAcquireNoteFor(1000, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED))
             .andThen(this.setPosition(IntakePosition.Stowed));
         // return new InstantCommand(this.setPosition(position)).andThen(
         //     new RunCommand(

@@ -359,6 +359,14 @@ public class RobotContainer {
                 return this._adjustShooterAutomaticallyCommand;
         }
 
+        public Command getRunAnglePIDCommand() {
+                return _shooter.buildCommand().runAnglePID();
+        }
+
+        public Command getSetInitalShooterPosition() {
+                return _shooter.buildCommand().setPositionByZone(ShooterZone.Unknown);
+        }
+
         public Command getFeederInitialStateCommand() {
                 return Commands.runOnce(() -> _intake.setFeederMotorPickupSpeed());
         }

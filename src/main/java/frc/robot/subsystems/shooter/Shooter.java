@@ -248,14 +248,12 @@ public class Shooter extends SubsystemBase {
         // If we're within the tested range of radius and our calculated angle is within our bounds then we'll set the shooter angle.
         if (angle >= ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE && angle <= ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE) {
             setTargetPositionAsAngle(angle);
-        }
-        else {
+        } else {
             System.err.println("Invalid Angle: Calculated angle is out of bounds.");
             // We'll set the value in which it's closest to the bounds. For instance if the angle is less than the minimum angle then we'll set it to the minimum angle.
             if (angle < ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE) {
                 setTargetPositionAsAngle(ShooterConstants.MINIMUM_ANGLE_ENCODER_ANGLE);
-            }
-            else {
+            } else {
                 setTargetPositionAsAngle(ShooterConstants.MAXIMUM_ANGLE_ENCODER_ANGLE);
             }
         }

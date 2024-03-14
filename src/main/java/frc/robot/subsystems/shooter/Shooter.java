@@ -114,10 +114,11 @@ public class Shooter extends SubsystemBase {
      * @param amountInDegrees the amount to change the current angle by
      */
     public void adjustShooterAngle(double amountInDegrees) {
-        _zoneDataMappings.get(_currentShooterZone)._shooterAngle = _zoneDataMappings.get(_currentShooterZone).getShooterAngle() + amountInDegrees;
-        setTargetPositionAsAngle(_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
-        String key = "shooter/zone/" + _currentShooterZone + "/angle";
-        Logger.recordOutput(key,_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
+        // _zoneDataMappings.get(_currentShooterZone)._shooterAngle = _zoneDataMappings.get(_currentShooterZone).getShooterAngle() + amountInDegrees;
+        // setTargetPositionAsAngle(_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
+        // String key = "shooter/zone/" + _currentShooterZone + "/angle";
+        // Logger.recordOutput(key,_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
+        setTargetPositionAsAngle(_targetShooterAngle + amountInDegrees);
     }
 
     public void setTargetPositionAsAngle(double angle) {
@@ -196,6 +197,11 @@ public class Shooter extends SubsystemBase {
         setFlywheelSpeed(_zoneDataMappings.get(zone).getFlywheelSpeed());
     }
 
+    public void runShooterForRadius(double radius){
+        setFlywheelSpeedWithRadius(radius);
+        setShooterPositionWithRadius(radius);
+    }
+
     /**
      * Figure out what zone matches a given radius from the speaker.
      * Returns the unknown zone if no zone matches.
@@ -230,6 +236,16 @@ public class Shooter extends SubsystemBase {
         setTargetPositionAsAngle(_zoneDataMappings.get(zone).getShooterAngle());
     }
 
+    public void setShooterPositionWithRadius(double radius) {
+        double angle;
+        if (radius <= 4.25) {
+            angle = -21.02 * Math.log(0.1106 * radius);
+            Logger.recordOutput("Shooter/RegressionEstimatedAngle", angle);
+            setTargetPositionAsAngle(angle);
+        }
+
+    }
+
     private boolean shooterInPosition() {
         return Math.abs(_targetShooterAngle
                 - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
@@ -244,6 +260,16 @@ public class Shooter extends SubsystemBase {
 
     public void setFlywheelSpeedWithZone(ShooterZone zone) {
         setFlywheelSpeed(_zoneDataMappings.get(zone).getFlywheelSpeed());
+    }
+
+    public void setFlywheelSpeedWithRadius(double radiusInMeters) {
+        double speed = 3000;
+        if (radiusInMeters <= 4 && radiusInMeters > 2) {
+            speed = 1800;
+        } else if (radiusInMeters <= 2) {
+            speed = 1500;
+        }
+        setFlywheelSpeed(speed);
     }
 
     public void setFlywheelSpeed(double speedInRPM) {

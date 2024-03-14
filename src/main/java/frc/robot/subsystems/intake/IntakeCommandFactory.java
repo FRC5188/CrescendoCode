@@ -79,15 +79,12 @@ public class IntakeCommandFactory {
      * @return
      */
     public Command pickUpNoteFrom(IntakePosition position) {
-        return this.setPosition(position)
+        return 
+            this.setPosition(position)
             .andThen(this.acquire())
             .andThen(new CmdIntakeWaitForNote(0, this._intake))
-            .andThen(new CmdAcquireNoteFor(100, _intake, 0.25))
-            .andThen(this.setPosition(IntakePosition.Stowed))
-            .andThen(new CmdAcquireNoteFor(1, _intake, 0.35));
-        // return new InstantCommand(this.setPosition(position)).andThen(
-        //     new RunCommand(
-        //     this._intake.r, null))
+            .andThen(new CmdAcquireNoteFor(1000, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED))
+            .andThen(this.setPosition(IntakePosition.Stowed));
     }
 
     /**

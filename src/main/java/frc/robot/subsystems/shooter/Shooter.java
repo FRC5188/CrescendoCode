@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
@@ -75,10 +79,15 @@ public class Shooter extends SubsystemBase {
     private ShooterZone _currentShooterZone;
     private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
     private final ShooterCommandFactory _shooterCommandFactory = new ShooterCommandFactory(this);
+    private ProfiledPIDController _anglePID;
 
     public Shooter(ShooterIO shooterIO) {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
+        // 0.017, 0.00008, 0.25
+        
+        _anglePID = new ProfiledPIDController(0.0055, 0.001, 0.0015, new Constraints(40, 70));
+        _anglePID.setIZone(5);
 
         // Set up the zone mappings
         // This is a funky hack that lets us modify zone data during a match, like angle, 
@@ -87,8 +96,6 @@ public class Shooter extends SubsystemBase {
         _zoneDataMappings.put(ShooterZone.Subwoofer, SubwooferData);
         _zoneDataMappings.put(ShooterZone.Podium, PodiumData);
         _zoneDataMappings.put(ShooterZone.Unknown, UnknownData);
-
-        setTargetPositionAsAngle(_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
     }
 
     public ShooterCommandFactory buildCommand() {
@@ -123,7 +130,9 @@ public class Shooter extends SubsystemBase {
             System.err.println("Invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE.");
             return;
         } else {
-            _shooterIO.setTargetPositionAsDegrees(angle);
+            _anglePID.reset(_shooterInputs._angleEncoderPositionDegrees);
+            _anglePID.setGoal(angle);
+            // _shooterIO.setTargetPositionAsDegrees(angle);
             _targetShooterAngle = angle;
         }
     }
@@ -272,6 +281,23 @@ public class Shooter extends SubsystemBase {
         return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
     }
 
+    public void runAnglePID() {
+        double output = calcAnglePID();
+
+        _shooterIO.setAngleMotorSpeed(output);
+    }
+
+    private double calcAnglePID() {
+        return _anglePID.calculate(_shooterInputs._angleEncoderPositionDegrees) 
+            + calcFeedforward();
+    }
+
+    private double calcFeedforward() {
+       return (ShooterConstants.SHOOTER_FEEDFORWARD_CONSTANT * Math.cos(
+                Units.degreesToRadians(_shooterInputs._angleEncoderPositionDegrees 
+                + ShooterConstants.ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES)));
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
@@ -289,5 +315,7 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/isReady", this.isReady());
         Logger.recordOutput("Shooter/inPosition", this.shooterInPosition());
         Logger.recordOutput("Shooter/areFlywheelsAtTargetSpeed", this.areFlywheelsAtTargetSpeed());
+        Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint().position);
+        Logger.recordOutput("Shooter/AnglePIDSpeed", calcAnglePID());
     }
 }

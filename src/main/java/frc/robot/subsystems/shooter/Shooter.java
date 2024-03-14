@@ -266,13 +266,13 @@ public class Shooter extends SubsystemBase {
 
     private double calcAnglePID() {
         return _anglePID.calculate(_shooterInputs._angleEncoderPositionDegrees) 
-            + (calcFeedforward());
+            + calcFeedforward();
     }
 
     private double calcFeedforward() {
-       double ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES = 14.52;
-        return (0.34768 * Math.cos(
-                Units.degreesToRadians(_shooterInputs._angleEncoderPositionDegrees + ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES))) / 12;
+       return (ShooterConstants.SHOOTER_FEEDFORWARD_CONSTANT * Math.cos(
+                Units.degreesToRadians(_shooterInputs._angleEncoderPositionDegrees 
+                + ShooterConstants.ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES)));
     }
 
     @Override

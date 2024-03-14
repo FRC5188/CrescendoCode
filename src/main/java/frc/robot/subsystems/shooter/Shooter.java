@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
@@ -314,5 +315,10 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
         Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint().position);
         Logger.recordOutput("Shooter/AnglePIDSpeed", calcAnglePID());
+
+        // SHUFFLEBOARD
+        SmartDashboard.putBoolean("Auto Shoot Is Enabled", _autoShootEnabled);
+        SmartDashboard.putBoolean("Shooter is Ready", isReady());
+        //SmartDashboard.putNumber("Shooter Angle", getShooterAngle());
     }
 }

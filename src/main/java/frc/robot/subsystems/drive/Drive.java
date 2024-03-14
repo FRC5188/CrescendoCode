@@ -15,9 +15,13 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -176,6 +180,39 @@ public class Drive extends SubsystemBase {
     // SmartDashboard.putData("Field", _field);
     // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
     // SmartDashboard.putNumberArray("CoR", cor);
+  }
+
+  public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate) {
+          // Apply deadband
+          double linearMagnitude =
+              MathUtil.applyDeadband(
+                  Math.hypot(x, y), DriveConstants.JOYSTICK_DEADBAND);
+          Rotation2d linearDirection =
+              new Rotation2d(x, y);
+          double omega = MathUtil.applyDeadband(rotate, DriveConstants.JOYSTICK_DEADBAND);
+
+          // Square values
+          linearMagnitude = linearMagnitude * linearMagnitude;
+          omega = Math.copySign(omega * omega, omega);
+
+          // Calcaulate new linear velocity
+          Translation2d linearVelocity =
+              new Pose2d(new Translation2d(), linearDirection)
+                  .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+                  .getTranslation();
+
+          // Convert to field relative speeds & send command
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
+          return
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  linearVelocity.getX() * getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * getMaxLinearSpeedMetersPerSec(),
+                  omega * getMaxAngularSpeedRadPerSec(),
+                  isFlipped
+                      ? getRotation().plus(new Rotation2d(Math.PI))
+                      : getRotation());
   }
 
   /**

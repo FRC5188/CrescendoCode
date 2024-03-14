@@ -15,7 +15,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
-public class SingleJointedArmFeedfoward {
+public class SingleJointedArmFeedforward {
   private static final boolean USES_ESTIMATED_VALUES = true;
 
   // EXPERIMENTIAL CONSTANTS (From SYSID Testing.)
@@ -25,11 +25,12 @@ public class SingleJointedArmFeedfoward {
   private static final double kA = 0.0;
 
   // THEORETICAL CONSTANTS
-  private static final double ARM_MOMENT_OF_INERTIA = 0.0;
-  private static final double ARM_GEARING = 0.0;
+  private static final double ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES = -14.52;
+  private static final double ARM_MOMENT_OF_INERTIA = 0.1258;
+  private static final double ARM_GEARING = 60;
   private static final int NUMBER_OF_MOTORS = 1;
-  private static final double MAXIMUM_ARM_SPEED_RADIAN = Units.degreesToRadians(45.0);
-  private static final double MAXIMUM_ARM_ACCELERATION = Units.degreesToRadians(90.0);
+  private static final double MAXIMUM_ARM_SPEED_RADIAN = Units.degreesToRadians(15.0);
+  private static final double MAXIMUM_ARM_ACCELERATION = Units.degreesToRadians(30.0);
   private static final double ESTIMATED_MODEL_ACCURACY_RADIANS = 0.015;
   private static final double ESTIMATED_MODEL_ACCURACY_RADIANS_PER_SECOND = 0.17;
   private static final double ESTIMATED_ENCODER_ACCURACY = 0.01;
@@ -90,7 +91,7 @@ public class SingleJointedArmFeedfoward {
   /**
    * Should be used whenever we want a feedfoward based on the values from SYSID. 
    */
-  public SingleJointedArmFeedfoward() {
+  public SingleJointedArmFeedforward() {
     if (USES_ESTIMATED_VALUES) throw new IllegalStateException("This constructor should not be used when not using SYSID.");
   }
 
@@ -98,13 +99,13 @@ public class SingleJointedArmFeedfoward {
    * Should be used whenever we want an an estimation of the feedfoward when not using SYSID. 
    * @param encoder
    */
-  public SingleJointedArmFeedfoward(SparkAbsoluteEncoder encoder) {
+  public SingleJointedArmFeedforward(double initialPosDegrees) {
     if (!USES_ESTIMATED_VALUES) throw new IllegalStateException("This constructor should not be used when using SYSID.");
     // Since the output of our encoder is in rotations we'll convert it into radians. 
-    final double POSITION_RADIANS = encoder.getPosition() * (2 * Math.PI);
-    final double VELOCITY_RADIANS_PER_SECOND = encoder.getVelocity() * (2 * Math.PI);
+    final double POSITION_RADIANS = (initialPosDegrees + ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES) * (2 * Math.PI);
+    final double VELOCITY_RADIANS_PER_SECOND = 0;
 
-    this._state = new TrapezoidProfile.State(POSITION_RADIANS, VELOCITY_RADIANS_PER_SECOND);
+    //this._state = new TrapezoidProfile.State(POSITION_RADIANS, VELOCITY_RADIANS_PER_SECOND);
   }
 
   /**
@@ -113,9 +114,9 @@ public class SingleJointedArmFeedfoward {
    * @param angleRadians Desired Position in Radians.
    * @return Voltage that should be applied to arm.
    */
-  public double calculate(SparkAbsoluteEncoder encoder, double angleRadians) {
-    if (USES_ESTIMATED_VALUES) return calculateSYSID(angleRadians);
-    return calculateEstimated(encoder, angleRadians);
+  public double calculate(double currentPosDegrees, double targetPosDegrees) {
+    if (!USES_ESTIMATED_VALUES) return calculateSYSID(targetPosDegrees);
+    return calculateEstimated(currentPosDegrees, targetPosDegrees);
   }
 
 
@@ -134,10 +135,10 @@ public class SingleJointedArmFeedfoward {
    * @param angleRadians Desired Position of Arm in Radians.
    * @return Estimated Voltage that Should be Applied.
    */
-  private double calculateEstimated(SparkAbsoluteEncoder encoder, double angleRadians) {
+  private double calculateEstimated(double currentPosDegrees, double targetPosDegrees) {
 
-    final TrapezoidProfile.State target = new TrapezoidProfile.State(angleRadians, 0.0);
-    final double position = encoder.getPosition() * (2 * Math.PI);
+    final TrapezoidProfile.State target = new TrapezoidProfile.State(Units.degreesToRadians(targetPosDegrees + ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES), 0.0);
+    final double position = Units.degreesToRadians(currentPosDegrees + ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES);
 
     this._state = PROFILE.calculate(
         ROBOT_CYCLE_TIME_SECONDS, 

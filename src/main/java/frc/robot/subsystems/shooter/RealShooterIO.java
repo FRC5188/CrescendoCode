@@ -76,7 +76,7 @@ public class RealShooterIO implements ShooterIO {
      * Set the shooter angle postion
      */
     public void setTargetPositionAsDegrees(double degrees) {
-        _angleMotor.getPIDController().setReference(degrees, ControlType.kPosition);
+        // _angleMotor.getPIDController().setReference(degrees, ControlType.kPosition);
     }
 
     public void setAngleMotorSpeed(double speed) {

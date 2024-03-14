@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -29,6 +30,10 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.RealClimberIO;
+import frc.robot.subsystems.climber.commands.CmdClimberMove;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -71,7 +76,7 @@ public class RobotContainer {
         private final Drive _drive;
         private final Intake _intake;
         private final Shooter _shooter;
-        // private final Climber _climber;
+        private final Climber _climber;
 
         private Command _adjustShooterAutomaticallyCommand;
 
@@ -139,7 +144,7 @@ public class RobotContainer {
                                                 new ModuleIOSparkFlex(3));
                                 _intake = new Intake(new RealIntakeIO());
                                 _shooter = new Shooter(new RealShooterIO());
-                                // _climber = new Climber(new RealClimberIO());
+                                _climber = new Climber(new RealClimberIO());
                                 break;
 
                         case SIM:
@@ -159,8 +164,8 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                // _climber = new Climber(new ClimberIO() {
-                                // });
+                                _climber = new Climber(new ClimberIO() {
+                                });
                                 break;
                         default:
                                 // Replayed robot, disable IO implementations
@@ -183,8 +188,8 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                // _climber = new Climber(new ClimberIO() {
-                                // });
+                                _climber = new Climber(new ClimberIO() {
+                                });
                                 break;
                 }
 
@@ -273,13 +278,13 @@ public class RobotContainer {
                  * Climber Controller
                  * ================================
                  */
-                // _climberController.rightBumper().onTrue(Commands.runOnce(() ->
-                // _climber.setCanMove(true)))
-                // .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+                _climberController.rightBumper().onTrue(Commands.runOnce(() ->
+                _climber.setCanMove(true)))
+                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
-                // _climber.setDefaultCommand(new CmdClimberMove(_climber,
-                // () -> -_climberController.getLeftY(),
-                // () -> -_climberController.getRightY()));
+                _climber.setDefaultCommand(new CmdClimberMove(_climber,
+                () -> -_climberController.getLeftY(),
+                () -> -_climberController.getRightY()));
 
                 /*
                  * ================================

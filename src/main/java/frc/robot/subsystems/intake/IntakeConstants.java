@@ -23,7 +23,7 @@ public class IntakeConstants {
      * 
      **********************/
     public static final double POSITION_SOURCE_PICKUP = 50;
-    public static final double POSITION_GROUND_PICKUP = 180;
+    public static final double POSITION_GROUND_PICKUP = 188;
     public static final double POSITION_STOWED = 12;
     public static final double POSITION_AMP_SCORE = 60;
     public static final double POSITION_SPEAKER_SCORE = 115;
@@ -38,14 +38,14 @@ public class IntakeConstants {
     public static final double INTAKE_LENGTH = 0.3;
     public static final double INTAKE_OFFSET_DEGREES = 136;// 57.2 degrees
     public static final double MIN_INTAKE_ANGLE = -2.0;
-    public static final double MAX_INTAKE_ANGLE = 185.0;
+    public static final double MAX_INTAKE_ANGLE = 189.0;
 
     /***************************
      * 
      * INTAKE ROLLER SETTINGS
      * 
      **************************/
-    public static final double INTAKE_ACQUIRE_SPEED = 0.7;
+    public static final double INTAKE_ACQUIRE_SPEED = 0.8;
     public static final double INTAKE_SPIT_SPEED = -0.7;
     public static final double INTAKE_SPIT_TIME = 1.0;
     public static final double INTAKE_CURRENT_CUTOFF = 40;

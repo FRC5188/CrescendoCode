@@ -15,9 +15,13 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -128,6 +132,7 @@ public class Drive extends SubsystemBase {
       // Log empty setpoint states when disabled
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+      Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
     }
 
     // Read wheel positions and deltas from each module
@@ -176,6 +181,52 @@ public class Drive extends SubsystemBase {
     // SmartDashboard.putData("Field", _field);
     // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
     // SmartDashboard.putNumberArray("CoR", cor);
+  }
+  /**
+   * Take the values from the joystick, apply math, and then provide them to the robot to drive. If
+   * you set the bypassomegamath flag then the value supplied in rotate will be directly supplied to
+   * the drivetrain.
+   * 
+   * @param x value from joystick
+   * @param y value from joystick
+   * @param rotate value from joystick or PID controller
+   * @param bypassomegamath
+   * @return
+   */
+  public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate, boolean bypassomegamath) {
+          // Apply deadband
+          double linearMagnitude =
+              MathUtil.applyDeadband(
+                  Math.hypot(x, y), DriveConstants.JOYSTICK_DEADBAND);
+          Rotation2d linearDirection =
+              new Rotation2d(x, y);
+          double omega = MathUtil.applyDeadband(rotate, DriveConstants.JOYSTICK_DEADBAND);
+
+          // Square values
+          linearMagnitude = linearMagnitude * linearMagnitude;
+          omega = Math.copySign(omega * omega, omega);
+
+          // Calcaulate new linear velocity
+          Translation2d linearVelocity =
+              new Pose2d(new Translation2d(), linearDirection)
+                  .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+                  .getTranslation();
+
+          // Convert to field relative speeds & send command
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
+          
+          // if bypassomegamath is true, use the raw rotate value, else use the omega with its math
+          omega = bypassomegamath ? rotate : omega;
+          return
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  linearVelocity.getX() * getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * getMaxLinearSpeedMetersPerSec(),
+                  omega * getMaxAngularSpeedRadPerSec(),
+                  isFlipped
+                      ? getRotation().plus(new Rotation2d(Math.PI))
+                      : getRotation());
   }
 
   /**

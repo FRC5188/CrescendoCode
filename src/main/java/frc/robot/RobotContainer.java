@@ -22,15 +22,21 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.RealClimberIO;
+import frc.robot.subsystems.climber.commands.CmdClimberMove;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeCommandFactory;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
@@ -50,6 +56,7 @@ import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
+import frc.robot.subsystems.shooter.commands.CmdShooterWaitUntilReady;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.visiondrive.RealVisionDriveIO;
@@ -69,7 +76,7 @@ public class RobotContainer {
         private final Drive _drive;
         private final Intake _intake;
         private final Shooter _shooter;
-        // private final Climber _climber;
+        private final Climber _climber;
 
         private Command _adjustShooterAutomaticallyCommand;
 
@@ -137,7 +144,7 @@ public class RobotContainer {
                                                 new ModuleIOSparkFlex(3));
                                 _intake = new Intake(new RealIntakeIO());
                                 _shooter = new Shooter(new RealShooterIO());
-                                // _climber = new Climber(new RealClimberIO());
+                                _climber = new Climber(new RealClimberIO());
                                 break;
 
                         case SIM:
@@ -157,8 +164,8 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                // _climber = new Climber(new ClimberIO() {
-                                // });
+                                _climber = new Climber(new ClimberIO() {
+                                });
                                 break;
                         default:
                                 // Replayed robot, disable IO implementations
@@ -181,23 +188,25 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                // _climber = new Climber(new ClimberIO() {
-                                // });
+                                _climber = new Climber(new ClimberIO() {
+                                });
                                 break;
                 }
 
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
 
-                NamedCommands.registerCommand("intake GroundPos",
-                                new IntakeCommandFactory(_intake).setPosition(IntakePosition.GroundPickup));
-                NamedCommands.registerCommand("intake Stow",
-                                new IntakeCommandFactory(_intake).setPosition(IntakePosition.Stowed));
-                NamedCommands.registerCommand("Subwoofer Shoot",
-                                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                NamedCommands.registerCommand("Podium Shoot",
-                                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround());
+                NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));
+                NamedCommands.registerCommand("Shooting_From_Subwoofer", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                NamedCommands.registerCommand("Shooting_From_Podium", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
+                NamedCommands.registerCommand("Auto_Shoot_With_Auto_Align", 
+                        new SequentialCommandGroup(
+                                _shooter.buildCommand().setAutoShootEnabled(true),
+                                new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
+                                _intake.buildCommand().spit(2)
+                        ));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
                 // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
@@ -235,8 +244,7 @@ public class RobotContainer {
                 _intake,
                 () -> _driveController.getRightTriggerAxis(),
                 () -> _driveController.getLeftX(),
-                () -> _driveController.getRightX(),
-                this.getAdjustShooterAutomaticallyCommand()));
+                () -> _driveController.getRightX()));
                 
                 _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
                                 () -> _driveController.getLeftY(),

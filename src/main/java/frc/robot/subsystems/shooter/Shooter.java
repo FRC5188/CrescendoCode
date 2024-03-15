@@ -130,7 +130,10 @@ public class Shooter extends SubsystemBase {
             System.err.println("Invalid angle: Parameter 'angle' must <= MAX_SHOOTER_ANGLE.");
             return;
         } else {
-            _anglePID.reset(_shooterInputs._angleEncoderPositionDegrees);
+            // if we make a big change in the requested angle, reset the PID controller
+            // before moving
+            if(Math.abs(_targetShooterAngle - angle) > 5)
+                _anglePID.reset(_shooterInputs._angleEncoderPositionDegrees);
             _anglePID.setGoal(angle);
             // _shooterIO.setTargetPositionAsDegrees(angle);
             _targetShooterAngle = angle;
@@ -240,6 +243,7 @@ public class Shooter extends SubsystemBase {
         double angle;
         if (radius <= 4.25) {
             angle = -21.02 * Math.log(0.1106 * radius);
+            angle -= 1;
             Logger.recordOutput("Shooter/RegressionEstimatedAngle", angle);
             setTargetPositionAsAngle(angle);
         }
@@ -278,7 +282,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isReady() {
-        return shooterInPosition() && areFlywheelsAtTargetSpeed() && _currentShooterZone != ShooterZone.Unknown;
+        return shooterInPosition() && areFlywheelsAtTargetSpeed();
     }
 
     public void runAnglePID() {
@@ -308,11 +312,13 @@ public class Shooter extends SubsystemBase {
         _shooterVisualizer.update(_shooterInputs._angleEncoderPositionDegrees);
 
         // LOGGING
-        Logger.recordOutput("Shooter/Zone", _currentShooterZone.toString());
-        Logger.recordOutput("Shooter/AngleDesiredDegrees", _zoneDataMappings.get(_currentShooterZone).getShooterAngle());
         Logger.recordOutput("Shooter/FlywheelSetpoint", this._targetFlywheelSpeed);
         Logger.recordOutput("Mechanism2D/Shooter", _shooterVisualizer.getMechanism());
+        Logger.recordOutput("Shooter/isReady", this.isReady());
+        Logger.recordOutput("Shooter/inPosition", this.shooterInPosition());
+        Logger.recordOutput("Shooter/areFlywheelsAtTargetSpeed", this.areFlywheelsAtTargetSpeed());
         Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint().position);
-        Logger.recordOutput("Shooter/AnglePIDSpeed", calcAnglePID());
+        Logger.recordOutput("Shooter/TargetShooterAngle", _targetShooterAngle);
+        Logger.recordOutput("Shooter/AnglePIDCalculatedOutput", calcAnglePID());
     }
 }

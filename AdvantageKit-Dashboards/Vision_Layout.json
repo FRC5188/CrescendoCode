@@ -1,0 +1,81 @@
+{
+  "hubs": [
+    {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720,
+      "state": {
+        "sidebar": {
+          "width": 371,
+          "expanded": [
+            "/RealOutputs/Shooter",
+            "/AdvantageKit/RealOutputs",
+            "/AdvantageKit",
+            "/AdvantageKit/Shooter",
+            "/RealOutputs",
+            "/RealOutputs/Intake",
+            "/RealOutputs/NTClients",
+            "/RealOutputs/NTClients/Addresses",
+            "/DriverStation",
+            "/PowerDistribution",
+            "/SystemStats",
+            "/SystemStats/CANBus",
+            "/Intake",
+            "/RealOutputs/Odometry",
+            "/RealOutputs/Odometry/Robot",
+            "/RealOutputs/SwerveStates",
+            "/Drive",
+            "/Drive/Vision"
+          ]
+        },
+        "tabs": {
+          "selected": 2,
+          "tabs": [
+            {
+              "type": 0,
+              "path": "../docs/INDEX.md"
+            },
+            {
+              "type": 5,
+              "uuid": "c6ll0n32lo4im7v55x0gk9hueshcwswb",
+              "fields": [],
+              "listFields": [
+                [
+                  {
+                    "type": "Ghost",
+                    "key": "/Drive/Vision/_poses",
+                    "sourceTypeIndex": 2,
+                    "sourceType": "Pose2d[]"
+                  }
+                ]
+              ],
+              "options": {
+                "game": "2024 Field",
+                "unitDistance": "meters",
+                "unitRotation": "radians",
+                "origin": "right",
+                "size": 0.75,
+                "allianceBumpers": "auto",
+                "allianceOrigin": "auto",
+                "orientation": "blue left, red right"
+              },
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Odometry"
+            },
+            {
+              "type": 2,
+              "fields": [
+                "/Drive/Vision/_hasPose"
+              ],
+              "title": "Table"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "3.2.1"
+}

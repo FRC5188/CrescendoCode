@@ -160,19 +160,19 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     _autonomousCommand = _robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (_autonomousCommand != null) {
-      _autonomousCommand.schedule();
-    }
-
-
+    
+    
     if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
       _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
       _robotContainer.getFeederInitialStateCommand().schedule();
     }
-
-    _robotContainer.getRunAnglePIDCommand().schedule();
+    
+    // _robotContainer.getRunAnglePIDCommand().schedule();
     _robotContainer.getSetInitalShooterPosition().schedule();
+    // schedule the autonomous command (example)
+    if (_autonomousCommand != null) {
+      _autonomousCommand.schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */

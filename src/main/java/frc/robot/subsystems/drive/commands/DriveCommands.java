@@ -41,7 +41,7 @@ public final class DriveCommands {
     return Commands.run(
         () -> {
           drive.runVelocity(drive.transformJoystickInputsToChassisSpeeds(
-            xSupplier.getAsDouble(), ySupplier.getAsDouble(), omegaSupplier.getAsDouble()));
+            xSupplier.getAsDouble(), ySupplier.getAsDouble(), omegaSupplier.getAsDouble(), false));
         },
         drive);
   }

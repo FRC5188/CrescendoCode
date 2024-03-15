@@ -54,7 +54,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Right Ring Autos",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

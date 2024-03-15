@@ -244,8 +244,7 @@ public class RobotContainer {
                 _intake,
                 () -> _driveController.getRightTriggerAxis(),
                 () -> _driveController.getLeftX(),
-                () -> _driveController.getRightX(),
-                this.getAdjustShooterAutomaticallyCommand()));
+                () -> _driveController.getRightX()));
                 
                 _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
                                 () -> _driveController.getLeftY(),

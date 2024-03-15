@@ -182,8 +182,18 @@ public class Drive extends SubsystemBase {
     // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
     // SmartDashboard.putNumberArray("CoR", cor);
   }
-
-  public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate) {
+  /**
+   * Take the values from the joystick, apply math, and then provide them to the robot to drive. If
+   * you set the bypassomegamath flag then the value supplied in rotate will be directly supplied to
+   * the drivetrain.
+   * 
+   * @param x value from joystick
+   * @param y value from joystick
+   * @param rotate value from joystick or PID controller
+   * @param bypassomegamath
+   * @return
+   */
+  public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate, boolean bypassomegamath) {
           // Apply deadband
           double linearMagnitude =
               MathUtil.applyDeadband(
@@ -206,6 +216,9 @@ public class Drive extends SubsystemBase {
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
+          
+          // if bypassomegamath is true, use the raw rotate value, else use the omega with its math
+          omega = bypassomegamath ? rotate : omega;
           return
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   linearVelocity.getX() * getMaxLinearSpeedMetersPerSec(),

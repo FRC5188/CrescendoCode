@@ -201,10 +201,10 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Shooting_From_Subwoofer", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
                 NamedCommands.registerCommand("Shooting_From_Podium", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
-                NamedCommands.registerCommand("Automated_Shooting_With_Automatic_Alignment", 
+                NamedCommands.registerCommand("Auto_Shoot_With_Auto_Align", 
                         new SequentialCommandGroup(
                                 _shooter.buildCommand().setAutoShootEnabled(true),
-                                new CmdShooterWaitUntilReady(_shooter),
+                                new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
                                 _intake.buildCommand().spit(2)
                         ));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -278,13 +278,13 @@ public class RobotContainer {
                  * Climber Controller
                  * ================================
                  */
-                _climberController.rightBumper().onTrue(Commands.runOnce(() ->
-                _climber.setCanMove(true)))
-                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+                // _climberController.rightBumper().onTrue(Commands.runOnce(() ->
+                // _climber.setCanMove(true)))
+                // .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
-                _climber.setDefaultCommand(new CmdClimberMove(_climber,
-                () -> -_climberController.getLeftY(),
-                () -> -_climberController.getRightY()));
+                // _climber.setDefaultCommand(new CmdClimberMove(_climber,
+                // () -> -_climberController.getLeftY(),
+                // () -> -_climberController.getRightY()));
 
                 /*
                  * ================================

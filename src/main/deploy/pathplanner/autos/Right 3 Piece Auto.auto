@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SubwooferShoot"
+            "name": "Shooting_From_Subwoofer"
           }
         },
         {
@@ -26,13 +26,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PickUpNoteWithLimelight"
+            "name": "Pickup_Note_With_Limelight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoShootWithAutoAlign"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PickUpNoteWithLimelight"
+            "name": "Pickup_Note_With_Limelight"
           }
         },
         {
@@ -56,12 +56,12 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoShootWithAutoAlign"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]
     }
   },
-  "folder": "Rad Right Autos",
+  "folder": null,
   "choreoAuto": false
 }

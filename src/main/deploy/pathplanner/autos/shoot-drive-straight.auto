@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2437546130441752,
-      "y": 5.410406484151056
+      "x": 1.5136740962318043,
+      "y": 5.557362183607978
     },
     "rotation": 0
   },
@@ -12,21 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Pickup_Note_Without_Limelight"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "(M3A) Shoot first note, move to second note pickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]

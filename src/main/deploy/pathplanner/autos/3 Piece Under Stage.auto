@@ -26,13 +26,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PickUpNoteWithLimelight"
+            "name": "Pickup_Note_With_Limelight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoShootWithAutoAlign"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PickUpNoteWithLimelight"
+            "name": "Pickup_Note_With_Limelight"
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoShootWithAutoAlign"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]

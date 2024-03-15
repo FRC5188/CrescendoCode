@@ -35,7 +35,7 @@ public class HardwareConstants {
         public static int FEEDER_MOTOR_ID = 33;
 
         //|====================== CLIMBER SUBSYSTEM CAN IDs ======================|
-        public static int LEFT_CLIMBER_MOTOR = 40;
+        public static int LEFT_CLIMBER_MOTOR = 42;
         public static int RIGHT_CLIMBER_MOTOR = 41;
 
         //|====================== LED SUBSYSTEM CAN IDS ==========================|

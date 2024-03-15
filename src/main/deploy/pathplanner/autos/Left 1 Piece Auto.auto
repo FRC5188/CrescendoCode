@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SubwooferShoot"
+            "name": "Shooting_From_Subwoofer"
           }
         },
         {
@@ -26,6 +26,6 @@
       ]
     }
   },
-  "folder": "Lit Left Autos",
+  "folder": null,
   "choreoAuto": false
 }

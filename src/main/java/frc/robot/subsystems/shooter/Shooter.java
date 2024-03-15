@@ -319,6 +319,7 @@ public class Shooter extends SubsystemBase {
         // SHUFFLEBOARD
         SmartDashboard.putBoolean("Auto Shoot Is Enabled", _autoShootEnabled);
         SmartDashboard.putBoolean("Shooter is Ready", isReady());
-        //SmartDashboard.putNumber("Shooter Angle", getShooterAngle());
+        SmartDashboard.putNumber("Target Shooter Angle", _targetShooterAngle);
     }
+    
 }

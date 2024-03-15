@@ -1,0 +1,77 @@
+{
+  "hubs": [
+    {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720,
+      "state": {
+        "sidebar": {
+          "width": 371,
+          "expanded": [
+            "/RealOutputs/Shooter",
+            "/AdvantageKit/RealOutputs",
+            "/AdvantageKit",
+            "/AdvantageKit/Shooter",
+            "/RealOutputs",
+            "/RealOutputs/Intake",
+            "/RealOutputs/NTClients",
+            "/RealOutputs/NTClients/Addresses",
+            "/DriverStation",
+            "/PowerDistribution",
+            "/SystemStats",
+            "/SystemStats/CANBus",
+            "/Intake",
+            "/RealOutputs/Odometry",
+            "/RealOutputs/Odometry/Robot",
+            "/RealOutputs/SwerveStates"
+          ]
+        },
+        "tabs": {
+          "selected": 1,
+          "tabs": [
+            {
+              "type": 0,
+              "path": "../docs/INDEX.md"
+            },
+            {
+              "type": 9,
+              "uuid": "ynkbo4fzw6p7hhfo16j5topv69gpo6l5",
+              "fields": [
+                {
+                  "key": "/RealOutputs/SwerveStates/Measured",
+                  "sourceTypeIndex": 1,
+                  "sourceType": "SwerveModuleState[]"
+                },
+                {
+                  "key": "/RealOutputs/SwerveStates/Setpoints",
+                  "sourceTypeIndex": 1,
+                  "sourceType": "SwerveModuleState[]"
+                },
+                {
+                  "key": "/RealOutputs/Odometry/Robot/rotation",
+                  "sourceTypeIndex": 1,
+                  "sourceType": "Rotation2d"
+                }
+              ],
+              "listFields": [],
+              "options": {
+                "maxSpeed": 4.5,
+                "rotationUnits": "radians",
+                "arrangement": "0,1,2,3",
+                "sizeLeftRight": 0.65,
+                "sizeFrontBack": 0.65,
+                "forwardDirection": "up"
+              },
+              "configHidden": false,
+              "visualizer": null,
+              "title": "Swerve"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "3.2.1"
+}

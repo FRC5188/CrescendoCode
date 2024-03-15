@@ -55,7 +55,6 @@ public class CmdShootOnTheMove extends Command {
   private Timer _shotTimer;
   private Boolean _hasRunOnce;
   private double _correctedRadius;
-  private ShooterZone _correctedZone;
   private Pose2d _futureRobotPose2d;
   private double _triggerThreshold;
 

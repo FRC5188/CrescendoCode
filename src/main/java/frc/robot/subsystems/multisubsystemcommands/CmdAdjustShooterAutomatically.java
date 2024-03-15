@@ -52,6 +52,7 @@ public class CmdAdjustShooterAutomatically extends Command {
                 _prevAutoshootState = false;
             }
         }
+        _shooterSubsystem.runAnglePID();
     }
 
     @Override

@@ -44,7 +44,7 @@ public abstract class ShooterConstants {
      *
      **************/
     public static final double FEEDER_SHOOT_SPEED = 0.7;
-    public static final double FEEDER_PICKUP_SPEED = 0.08;
+    public static final double FEEDER_PICKUP_SPEED = 0.00;
 
     /**************
      * 

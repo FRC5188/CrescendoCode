@@ -196,7 +196,7 @@ public class Robot extends LoggedRobot {
     }
 
     _robotContainer.getSetInitalShooterPosition().schedule();
-    _robotContainer.getRunAnglePIDCommand().schedule();
+    //_robotContainer.getRunAnglePIDCommand().schedule();
   }
 
   /** This function is called periodically during operator control. */

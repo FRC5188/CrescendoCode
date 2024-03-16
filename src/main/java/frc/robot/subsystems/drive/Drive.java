@@ -109,6 +109,7 @@ public class Drive extends SubsystemBase {
                 this));
     _centerOfRotation = new Translation2d();
     _field = new Field2d();
+    _alliance = Alliance.Blue;
   }
   // =============== END CONFIGURATION FOR SYSID ===============
 
@@ -133,6 +134,7 @@ public class Drive extends SubsystemBase {
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
       Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
+      Logger.recordOutput("Drive/Alliance", getAlliance());
     }
 
     // Read wheel positions and deltas from each module
@@ -182,6 +184,14 @@ public class Drive extends SubsystemBase {
     // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
     // SmartDashboard.putNumberArray("CoR", cor);
   }
+
+  public Alliance getAlliance() {
+    if (DriverStation.getAlliance().isPresent())
+      _alliance = DriverStation.getAlliance().get();
+
+    return _alliance;
+  }
+
   /**
    * Take the values from the joystick, apply math, and then provide them to the robot to drive. If
    * you set the bypassomegamath flag then the value supplied in rotate will be directly supplied to
@@ -213,9 +223,7 @@ public class Drive extends SubsystemBase {
                   .getTranslation();
 
           // Convert to field relative speeds & send command
-          boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
+          boolean isFlipped = getAlliance() == Alliance.Red;
           
           // if bypassomegamath is true, use the raw rotate value, else use the omega with its math
           omega = bypassomegamath ? rotate : omega;
@@ -346,23 +354,9 @@ public class Drive extends SubsystemBase {
     _poseEstimator.addVisionMeasurement(visionPose, timestamp);
   }
 
-  private Alliance getAlliance() {
-    if (_alliance == null) {
-      if (DriverStation.getAlliance().isPresent()) {
-        _alliance = DriverStation.getAlliance().get();
-      }
-    }
-
-    return _alliance;
-  }
-
   private Pose2d getSpeakerPos() {
-    if (_speakerPosition == null) {
-      if (getAlliance() != null) {
         _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER
             : DriveConstants.RED_SPEAKER;
-      }
-    }
 
     return _speakerPosition;
   }

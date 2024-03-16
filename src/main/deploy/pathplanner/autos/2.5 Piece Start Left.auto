@@ -47,6 +47,12 @@
           "data": {
             "name": "Shooting_From_Subwoofer"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L2C) Move outside wing"
+          }
         }
       ]
     }

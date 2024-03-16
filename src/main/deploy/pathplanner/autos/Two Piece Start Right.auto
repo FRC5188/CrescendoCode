@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7626093884666401,
-      "y": 6.525338178881486
+      "x": 0.7753211512129142,
+      "y": 4.567226252854788
     },
-    "rotation": 61.957133087163385
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L3A) Shoot 1st note, 2nd note transit"
+                  "pathName": "(R3A) Shoot first note, move to second note pickup"
                 }
               },
               {
@@ -39,18 +39,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L2B) Move from note to shoot"
+            "pathName": "(R2B) Move from note to shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]
     }
   },
-  "folder": "Left Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

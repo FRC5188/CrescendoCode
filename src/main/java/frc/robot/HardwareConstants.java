@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class HardwareConstants {
-    public static final int NUMBER_OF_CAMERAS = 2;
+    public static final int NUMBER_OF_CAMERAS = 1;
     public class CanIds {
         // |====================== SWERVE MODULE CAN IDs ======================|
         public static int FL_DRIVE = 1;
@@ -81,14 +81,14 @@ public class HardwareConstants {
 
         private static final double CAMERA_TWO_ROLL = 0;
         private static final double CAMERA_TWO_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_TWO_YAW = Math.toRadians(0.0);
+        private static final double CAMERA_TWO_YAW = Math.toRadians(180.0);
 
         private static Transform3d _cameraTwoPosition = new Transform3d(
         new Translation3d(CAMERA_TWO_X_FROM_ROBOT_CENTER, CAMERA_TWO_Y_FROM_ROBOT_CENTER, CAMERA_TWO_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_TWO_ROLL, CAMERA_TWO_PITCH, CAMERA_TWO_YAW));
 
         // TODO: Swapped camera position. Rename after competition.
-        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraTwoPosition, _cameraOnePosition};
+        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraTwoPosition, _cameraTwoPosition};
     
     // |====================== END VISION SUBSYSTEM TRANSFORMATIONS ======================|
     

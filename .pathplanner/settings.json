@@ -8,7 +8,10 @@
     "Rad Right Ring Auto Paths"
   ],
   "autoFolders": [
-    "Untested"
+    "Left Autos",
+    "Middle Autos",
+    "Right Autos",
+    "New New Folder"
   ],
   "defaultMaxVel": 2.0,
   "defaultMaxAccel": 1.0,

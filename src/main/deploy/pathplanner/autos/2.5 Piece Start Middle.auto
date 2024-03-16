@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.51,
-      "y": 5.56
+      "x": 1.2303755661642377,
+      "y": 5.379311043522371
     },
     "rotation": 0
   },
@@ -18,15 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(M3A) Shoot first note, move to second note pickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pickup_Note_With_Limelight"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M3A) Shoot first note, move to second note pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup_Note_Without_Limelight"
+                }
+              }
+            ]
           }
         },
         {
@@ -38,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M) Going under stage"
+            "pathName": "(M2C) Move outside wing"
           }
         }
       ]

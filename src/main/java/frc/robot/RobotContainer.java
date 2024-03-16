@@ -272,7 +272,7 @@ public class RobotContainer {
 
                 double inchesFromSubwoofer = 39.0;
                 double robotWidth = 13.0 + 1.5;
-                Pose2d robotOnSubwoofer = new Pose2d(
+                Pose2d robotOnSubwooferRed = new Pose2d(
                                 DriveConstants.RED_SPEAKER.getX()
                                                 - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
                                 DriveConstants.RED_SPEAKER.getY(),
@@ -280,20 +280,20 @@ public class RobotContainer {
                 // Change the robot pose to think it is in front of the red speaker
                 _driveController.b().onTrue(
                                 Commands.runOnce(
-                                                () -> _drive.setPose(robotOnSubwoofer), _drive).ignoringDisable(true));
+                                                () -> _drive.setPose(robotOnSubwooferRed), _drive).ignoringDisable(true));
 
                 /*
                  * ================================
                  * Climber Controller
                  * ================================
                  */
-                // _climberController.rightBumper().onTrue(Commands.runOnce(() ->
-                // _climber.setCanMove(true)))
-                // .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+                _climberController.rightBumper().onTrue(Commands.runOnce(() ->
+                _climber.setCanMove(true)))
+                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
-                // _climber.setDefaultCommand(new CmdClimberMove(_climber,
-                // () -> -_climberController.getLeftY(),
-                // () -> -_climberController.getRightY()));
+                _climber.setDefaultCommand(new CmdClimberMove(_climber,
+                () -> -_climberController.getLeftY(),
+                () -> -_climberController.getRightY()));
 
                 /*
                  * ================================

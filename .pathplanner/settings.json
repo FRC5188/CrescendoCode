@@ -7,7 +7,9 @@
     "Macho Middle Ring Auto Paths",
     "Rad Right Ring Auto Paths"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Untested"
+  ],
   "defaultMaxVel": 2.0,
   "defaultMaxAccel": 1.0,
   "defaultMaxAngVel": 540.0,

@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -201,9 +203,17 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Shooting_From_Subwoofer", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
                 NamedCommands.registerCommand("Shooting_From_Podium", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
+                DoubleSupplier zeroSupplier = new DoubleSupplier() {
+                                        @Override
+                                        public double getAsDouble() {
+                                            return 0;
+                                        }
+                                };
+
                 NamedCommands.registerCommand("Auto_Shoot_With_Auto_Align", 
                         new SequentialCommandGroup(
                                 _shooter.buildCommand().setAutoShootEnabled(true),
+                                new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier),
                                 new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
                                 _intake.buildCommand().spit(2)
                         ));

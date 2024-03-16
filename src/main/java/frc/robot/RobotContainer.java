@@ -100,16 +100,16 @@ public class RobotContainer {
         private JoystickButton _opButtonThree = new JoystickButton(_operatorController1, 3);
 
         // Middle column, top to bottom
-        // private JoystickButton _opButtonFour = new
-        // JoystickButton(_operatorController1, 4);
+        private JoystickButton _opButtonFour = new
+        JoystickButton(_operatorController1, 4);
         private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
         private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
 
         // Right column, top to bottom
-        // private JoystickButton _opButtonSeven = new
-        // JoystickButton(_operatorController1, 7);
-        // private JoystickButton _opButtonEight = new
-        // JoystickButton(_operatorController1, 8);
+        private JoystickButton _opButtonSeven = new
+        JoystickButton(_operatorController1, 7);
+        private JoystickButton _opButtonEight = new
+        JoystickButton(_operatorController1, 8);
         private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
 
         // Side Toggle Switch
@@ -196,7 +196,7 @@ public class RobotContainer {
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
 
-                NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround());
+                NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround(4000));
                 NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));
                 NamedCommands.registerCommand("Shooting_From_Subwoofer", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
                 NamedCommands.registerCommand("Shooting_From_Podium", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
@@ -301,29 +301,34 @@ public class RobotContainer {
                 _opButtonTwo.onTrue(this._shooter.buildCommand().adjustAngle(-1));
 
                 // Move intake to different positions
-                _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
+                // _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
+                _opButtonThree.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
+                _opButtonFour.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
+
                 _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
-                _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround());
+                _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround(0));
+                _opButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                _opButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
                 // Run intake rollers, stop when we let go of button
                 _opButtonNine.onTrue(this._intake.buildCommand().acquire())
                                 .onFalse(this._intake.buildCommand().stop());
 
                 // Move to shooter positions manually
-                _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                // _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
-                // Reset hasNote in case the robot thinks that it has a note when it doesn't
-                _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
+                // // Reset hasNote in case the robot thinks that it has a note when it doesn't
+                // _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
 
-                // Spit the note out and run the feeder wheels
-                _op2ButtonEight.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
+                // // Spit the note out and run the feeder wheels
+                // _op2ButtonEight.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
 
-                _op2ButtonNine.onTrue(new InstantCommand(
-                                () -> Logger.recordOutput(":(", true)));
+                // _op2ButtonNine.onTrue(new InstantCommand(
+                //                 () -> Logger.recordOutput(":(", true)));
 
-                _op2ButtonNine.onFalse(new InstantCommand(
-                                () -> Logger.recordOutput(":(", false)));
+                // _op2ButtonNine.onFalse(new InstantCommand(
+                //                 () -> Logger.recordOutput(":(", false)));
 
                 /***
                  * 

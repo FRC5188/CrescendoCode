@@ -28,6 +28,7 @@ public interface IntakeIO {
 
         public boolean _leftLimitSwitchIsPushed = false;
         public boolean _rightLimitSwitchIsPushed = false;
+        public boolean _isDistanceSensorTriggered = false;
 
         public double _feederVoltage = 0.0;
         public double _feederSpeed = 0.0;

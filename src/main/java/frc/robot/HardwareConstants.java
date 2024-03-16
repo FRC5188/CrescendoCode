@@ -87,7 +87,8 @@ public class HardwareConstants {
         new Translation3d(CAMERA_TWO_X_FROM_ROBOT_CENTER, CAMERA_TWO_Y_FROM_ROBOT_CENTER, CAMERA_TWO_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_TWO_ROLL, CAMERA_TWO_PITCH, CAMERA_TWO_YAW));
 
-        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraOnePosition, _cameraTwoPosition};
+        // TODO: Swapped camera position. Rename after competition.
+        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraTwoPosition, _cameraOnePosition};
     
     // |====================== END VISION SUBSYSTEM TRANSFORMATIONS ======================|
     

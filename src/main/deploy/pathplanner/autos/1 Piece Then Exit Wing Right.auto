@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.72,
-      "y": 6.82
+      "y": 4.38
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -20,12 +20,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L1) Shoot first note, exit wing"
+            "pathName": "(R2C) Move outside wing"
           }
         }
       ]
     }
   },
-  "folder": "Untested",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

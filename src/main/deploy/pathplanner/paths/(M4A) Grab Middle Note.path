@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7753211512129142,
-        "y": 4.567226252854788
+        "x": 1.343662687325376,
+        "y": 5.574822688106915
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9159453703522806,
-        "y": 4.223051523026124
+        "x": 2.182352826244115,
+        "y": 5.574822688106915
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.399425568081907,
-        "y": 4.09478126648561
+        "x": 2.517828881811611,
+        "y": 5.555088802485298
       },
       "prevControl": {
-        "x": 2.1626189406224983,
-        "y": 4.134249037728845
+        "x": 2.271155311541394,
+        "y": 5.564955745296107
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Middle 4 Piece Auto Paths",
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

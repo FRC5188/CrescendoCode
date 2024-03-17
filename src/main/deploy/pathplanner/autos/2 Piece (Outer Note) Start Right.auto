@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7753211512129142,
-      "y": 4.567226252854788
+      "x": 0.72,
+      "y": 4.38
     },
     "rotation": -60.0
   },
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R3A) Shoot first note, move to second note pickup"
+                  "pathName": "(R2[O]A) Exit Wing, Grab Note"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R2B) Move from note to shoot"
+            "pathName": "(R2[O]B) Back into wing, Shoot Second Note"
           }
         },
         {

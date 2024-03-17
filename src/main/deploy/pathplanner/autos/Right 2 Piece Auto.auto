@@ -38,12 +38,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R3B) After shooting, move to third note pickup"
+            "pathName": null
           }
         }
       ]
     }
   },
-  "folder": "Middle Autos",
+  "folder": "Untested",
   "choreoAuto": false
 }

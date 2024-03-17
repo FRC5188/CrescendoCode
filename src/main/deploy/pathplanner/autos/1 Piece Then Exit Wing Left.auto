@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72,
-      "y": 6.82
+      "x": 0.79,
+      "y": 6.64
     },
     "rotation": 60.0
   },
@@ -20,12 +20,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L1) Shoot first note, exit wing"
+            "pathName": "(L2C) Move outside wing"
           }
         }
       ]
     }
   },
-  "folder": "Untested",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

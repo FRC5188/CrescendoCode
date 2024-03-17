@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7626093884666401,
-      "y": 6.525338178881486
+      "x": 0.7023114046228107,
+      "y": 6.719388054160724
     },
     "rotation": 60.0
   },
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L3A) Shoot 1st note, 2nd note transit"
+                  "pathName": "(L2[O]A) Exit Wing, Grab Note"
                 }
               },
               {
@@ -39,19 +39,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L2B) Move from note to shoot"
+            "pathName": "(L2[O]B) Back into Wing, Shoot Second Note"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(L2C) Move outside wing"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]

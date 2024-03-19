@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2303755661642377,
-      "y": 5.379311043522371
+      "x": 0.7626093884666401,
+      "y": 6.525338178881486
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,27 +24,39 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(M3A) Shoot first note, move to second note pickup"
+                  "pathName": "(L3A) Shoot 1st note, 2nd note transit"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Pickup_Note_With_Limelight"
                 }
               }
             ]
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "(L2B) Move from note to shoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "name": "Shooting_From_Subwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L2C) Move outside wing"
           }
         }
       ]
     }
   },
-  "folder": "Middle Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

@@ -80,7 +80,7 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setAngleMotorSpeed(double speed) {
-        _angleMotor.set(speed);
+         _angleMotor.set(speed);
     }
 
     private void configAngleMotor() {

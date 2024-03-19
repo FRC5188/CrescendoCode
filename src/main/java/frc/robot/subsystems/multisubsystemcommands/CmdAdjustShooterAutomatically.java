@@ -1,7 +1,5 @@
 package frc.robot.subsystems.multisubsystemcommands;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;

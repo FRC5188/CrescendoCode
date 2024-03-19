@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72,
-      "y": 6.82
+      "x": 0.7050561319382253,
+      "y": 4.414985377759629
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -20,25 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L3A) Shoot 1st note, 2nd note transit"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pickup_Note_With_Limelight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "pathName": "Move after shooting"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(L3B) After shooting, move to third note pickup"
+            "pathName": "Ram all of the notes"
           }
         }
       ]

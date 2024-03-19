@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.51,
-      "y": 5.56
+      "x": 0.79,
+      "y": 6.64
     },
-    "rotation": 0.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -20,12 +20,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M1) Shoot first note, exit wing"
+            "pathName": "(L2C) Move outside wing"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Left Autos",
   "choreoAuto": false
 }

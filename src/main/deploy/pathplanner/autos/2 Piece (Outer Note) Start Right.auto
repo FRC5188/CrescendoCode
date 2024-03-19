@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.76,
-      "y": 4.24
+      "x": 0.72,
+      "y": 4.38
     },
     "rotation": -60.0
   },
@@ -18,15 +18,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(R3A) Shoot first note, move to second note pickup"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R2[O]A) Exit Wing, Grab Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup_Note_Without_Limelight"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Pickup_Note_With_Limelight"
+            "pathName": "(R2[O]B) Back into wing, Shoot Second Note"
           }
         },
         {
@@ -34,16 +47,10 @@
           "data": {
             "name": "Auto_Shoot_With_Auto_Align"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(R3B) After shooting, move to third note pickup"
-          }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Right Autos",
   "choreoAuto": false
 }

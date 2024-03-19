@@ -14,9 +14,6 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
-
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -187,9 +184,9 @@ public class Drive extends SubsystemBase {
   }
 
   public Alliance getAlliance() {
-    if (DriverStation.getAlliance().isPresent())
+    if (DriverStation.getAlliance().isPresent()){
       _alliance = DriverStation.getAlliance().get();
-
+    }
     return _alliance;
   }
 

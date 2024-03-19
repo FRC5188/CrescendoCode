@@ -390,8 +390,8 @@ public class Drive extends SubsystemBase {
     return ChassisSpeeds.fromRobotRelativeSpeeds(this.getRobotChassisSpeeds(), this.getRotation());
   }
 
-  public Drive getObject() {
-    return this;
+  public Module[] getModules() {
+    return this._modules;
   }
 
   // this setup lets us test the math, but when we actually run the code we don't

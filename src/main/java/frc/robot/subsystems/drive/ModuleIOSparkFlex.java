@@ -132,6 +132,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
         Units.rotationsPerMinuteToRadiansPerSecond(_driveEncoder.getVelocity()) / DRIVE_GEAR_RATIO;
     inputs._driveAppliedVolts = _driveSparkFlex.getAppliedOutput() * _driveSparkFlex.getBusVoltage();
     inputs._driveCurrentAmps = new double[] {_driveSparkFlex.getOutputCurrent()};
+    inputs._driveRampRate = _driveSparkFlex.getClosedLoopRampRate();
 
     inputs._turnAbsolutePosition =
         Rotation2d.fromRotations(_turnAbsolutePosition.getValueAsDouble())
@@ -144,6 +145,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
             / TURN_GEAR_RATIO;
     inputs._turnAppliedVolts = _turnSparkFlex.getAppliedOutput() * _turnSparkFlex.getBusVoltage();
     inputs._turnCurrentAmps = new double[] {_turnSparkFlex.getOutputCurrent()};
+    inputs._turnRampRate = _turnSparkFlex.getClosedLoopRampRate();
   }
 
   @Override
@@ -164,5 +166,11 @@ public class ModuleIOSparkFlex implements ModuleIO {
   @Override
   public void setTurnBrakeMode(boolean enable) {
     _turnSparkFlex.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
+  }
+
+  @Override
+  public void setClosedLoopRampRate(double rampRate) {
+    _driveSparkFlex.setClosedLoopRampRate(rampRate);
+    _turnSparkFlex.setClosedLoopRampRate(rampRate);
   }
 }

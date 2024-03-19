@@ -182,4 +182,16 @@ public class Module {
   public double getCharacterizationVelocity() {
     return _inputs._driveVelocityRadPerSec;
   }
+
+  public void setClosedLoopRampRate(double rampRate) {
+    _io.setClosedLoopRampRate(rampRate);
+  }
+
+  public double getDriveClosedLoopRampRate() {
+    return _inputs._driveRampRate;
+  }
+
+  public double getTurnClosedLoopRampRate() {
+    return _inputs._turnRampRate;
+  }
 }

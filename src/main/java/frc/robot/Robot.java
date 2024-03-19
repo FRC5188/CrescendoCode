@@ -17,6 +17,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.power.RobotPowerDistribution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -196,7 +197,9 @@ public class Robot extends LoggedRobot {
     }
 
     _robotContainer.getSetInitalShooterPosition().schedule();
-    //_robotContainer.getRunAnglePIDCommand().schedule();
+
+    // Automatically manages the battery and the power distribution of robot through changing motor acceleration.
+    _robotContainer.updateBatteryStatusCommand().schedule(); 
   }
 
   /** This function is called periodically during operator control. */

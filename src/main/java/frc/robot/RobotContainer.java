@@ -63,6 +63,8 @@ import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.visiondrive.RealVisionDriveIO;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
+import frc.robot.util.power.RobotPowerDistribution;
+import frc.robot.util.power.battery.BatteryStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -287,13 +289,31 @@ public class RobotContainer {
                  * Climber Controller
                  * ================================
                  */
-                _climberController.rightBumper().onTrue(Commands.runOnce(() ->
-                _climber.setCanMove(true)))
-                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+                // _climberController.rightBumper().onTrue(Commands.runOnce(() ->
+                // _climber.setCanMove(true)))
+                // .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
                 _climber.setDefaultCommand(new CmdClimberMove(_climber,
                 () -> -_climberController.getLeftY(),
                 () -> -_climberController.getRightY()));
+
+                _climberController.b().onTrue(
+                        // We'll set the battery status to full charge.
+                        RobotPowerDistribution.setBatteryStatusCommand(BatteryStatus.FULL_CHARGE));
+                // For a() we'll make it half charged.
+                _climberController.a().onTrue(
+                        RobotPowerDistribution.setBatteryStatusCommand(BatteryStatus.HALF_CHARGE));
+                // For x() we'll make it low charge.
+                _climberController.x().onTrue(
+                        RobotPowerDistribution.setBatteryStatusCommand(BatteryStatus.LOW_CHARGE));
+                // For y() we'll make it critically low charge.
+                _climberController.y().onTrue(
+                        RobotPowerDistribution.setBatteryStatusCommand(BatteryStatus.CRITICAL_CHARGE));
+
+                _climberController.leftBumper().onTrue(Commands.runOnce(() -> RobotPowerDistribution.enableComputerManagement()));
+                _climberController.rightBumper().onTrue(Commands.runOnce(() -> RobotPowerDistribution.disableComputerManagement()));
+                
+
 
                 /*
                  * ================================
@@ -392,5 +412,9 @@ public class RobotContainer {
 
         public Command getFeederInitialStateCommand() {
                 return Commands.runOnce(() -> _intake.setFeederMotorPickupSpeed());
+        }
+
+        public Command updateBatteryStatusCommand() {
+                return RobotPowerDistribution.runCommand(this._drive);
         }
 }

@@ -23,12 +23,14 @@ public interface ModuleIO {
     public double _driveVelocityRadPerSec = 0.0;
     public double _driveAppliedVolts = 0.0;
     public double[] _driveCurrentAmps = new double[] {};
+    public double _driveRampRate = 0.0;
 
     public Rotation2d _turnAbsolutePosition = new Rotation2d();
     public Rotation2d _turnPosition = new Rotation2d();
     public double _turnVelocityRadPerSec = 0.0;
     public double _turnAppliedVolts = 0.0;
     public double[] _turnCurrentAmps = new double[] {};
+    public double _turnRampRate = 0.0;
   }
 
   /** Updates the set of loggable inputs. */
@@ -45,4 +47,6 @@ public interface ModuleIO {
 
   /** Enable or disable brake mode on the turn motor. */
   public default void setTurnBrakeMode(boolean enable) {}
+
+  public default void setClosedLoopRampRate(double rampRate) {}
 }

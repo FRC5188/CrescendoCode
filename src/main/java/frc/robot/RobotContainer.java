@@ -15,7 +15,6 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -79,6 +78,8 @@ public class RobotContainer {
         private final Intake _intake;
         private final Shooter _shooter;
         private final Climber _climber;
+
+        private double _driveMultiplier = 1.0;
 
         private Command _adjustShooterAutomaticallyCommand;
 
@@ -241,26 +242,39 @@ public class RobotContainer {
                 _drive.setDefaultCommand(
                                 DriveCommands.joystickDrive(
                                                 _drive,
-                                                () -> -_driveController.getLeftY(),
-                                                () -> -_driveController.getLeftX(),
-                                                () -> -_driveController.getRightX()));
+                                                () -> -_driveController.getLeftY()*_driveMultiplier,
+                                                () -> -_driveController.getLeftX()*_driveMultiplier,
+                                                () -> -_driveController.getRightX()*_driveMultiplier));
                 // create an x shaped pattern with the wheels to make it harder to push us
                 // _driveController.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
                 // face the speaker while we hold this button
-                _driveController.leftBumper().whileTrue(new CmdShootOnTheMove(
-                _drive,
-                _shooter,
-                _intake,
-                () -> _driveController.getRightTriggerAxis(),
-                () -> _driveController.getLeftX(),
-                () -> _driveController.getRightX()));
-                
+                // _driveController.leftBumper().whileTrue(new CmdShootOnTheMove(
+                // _drive,
+                // _shooter,
+                // _intake,
+                // () -> _driveController.getRightTriggerAxis(),
+                // () -> _driveController.getLeftX(),
+                // () -> _driveController.getRightX()));
                 _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
-                                () -> _driveController.getLeftY(),
-                                () -> _driveController.getLeftX()));
+                        () -> -_driveController.getLeftY()*_driveMultiplier,
+                                                () -> -_driveController.getLeftX()*_driveMultiplier));      
+                
 
-                _driveController.a().whileTrue(new CmdDriveGoToNote(_drive));
+                _driveController.a().whileTrue(
+                        new InstantCommand(
+                                () -> this._driveMultiplier = 0.6
+                        )
+                );
+
+                _driveController.a().whileFalse(
+                        new InstantCommand(
+                                () -> this._driveMultiplier = 1.0
+                        )
+                );
+
+                _driveController.rightBumper().whileTrue(new CmdDriveGoToNote(_drive));
+
 
                 // reset the orientation of the robot. changes which way it thinks is forward
                 _driveController.y().onTrue(
@@ -287,13 +301,14 @@ public class RobotContainer {
                  * Climber Controller
                  * ================================
                  */
-                _climberController.rightBumper().onTrue(Commands.runOnce(() ->
-                _climber.setCanMove(true)))
-                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+                // _climberController.rightBumper().onTrue(Commands.runOnce(() ->
+                // _climber.setCanMove(true)))
+                // .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
-                _climber.setDefaultCommand(new CmdClimberMove(_climber,
-                () -> -_climberController.getLeftY(),
-                () -> -_climberController.getRightY()));
+                // _climber.setDefaultCommand(new CmdClimberMove(_climber,
+                // () -> -_climberController.getLeftY(),
+                // () -> -_climberController.getRightY()));
+                _climberController.a().onTrue(Commands.runOnce(() -> _intake.setHasNote()));
 
                 /*
                  * ================================

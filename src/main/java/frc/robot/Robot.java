@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -35,8 +36,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -46,10 +47,10 @@ import com.pathplanner.lib.path.PathPlannerPath;
  */
 public class Robot extends LoggedRobot {
   private Command _autonomousCommand;
-  private Command _lastAutonomousCommand;
+  private Command _previousAutonomousCommand;
   private RobotContainer _robotContainer;
-  private List<Pose2d> _autoPathToShow;
-  private Field2d _autoPathField2D;
+  private Field2d _autonomousTrajectory = new Field2d();
+  private List<Pose2d> _shownPaths = new ArrayList<>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -131,8 +132,8 @@ public class Robot extends LoggedRobot {
             });
 
     _robotContainer = new RobotContainer();
-    _autoPathField2D = new Field2d();
-    _autoPathToShow = new ArrayList<Pose2d>();
+
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   /** This function is called periodically during all modes. */
@@ -160,31 +161,28 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     _robotContainer.getRunAnglePIDCommand().cancel();
+    SmartDashboard.putData("Autonomous Selection Preview", this._autonomousTrajectory);
   }
 
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
-    // Get currently selected command
-        _autonomousCommand = _robotContainer.getAutonomousCommand();
-        // Check if is the same as the last one
-        if (_autonomousCommand != _lastAutonomousCommand) {
-            // Check if its contained in the list of our autos
-            if (AutoBuilder.getAllAutoNames().contains(_autonomousCommand.getName())) {
-                // Clear the current path
-                _autoPathToShow.clear();
-                // Grabs all paths from the auto
-                for (PathPlannerPath path : PathPlannerAuto.getPathGroupFromAutoFile(_autonomousCommand.getName())) {
-                    // Adds all poses to master list
-                    _autoPathToShow.addAll(path.getPathPoses());
+    // The currently selected command.
+    this._autonomousCommand = _robotContainer.getAutonomousCommand();
+    if (this._autonomousCommand != this._previousAutonomousCommand) {
+      if (AutoBuilder.getAllAutoNames().contains(_autonomousCommand.getName())) {
+        this._shownPaths.clear();
+        PathPlannerAuto.getPathGroupFromAutoFile(this._autonomousCommand.getName()).stream()
+            .forEach(
+                path -> {
+                  this._shownPaths.addAll(path.getPathPoses());
                 }
-                // Displays all poses on Field2d widget
-                _autoPathField2D.getObject("traj").setPoses(_autoPathToShow);
-            }
-        }
-        _lastAutonomousCommand = _autonomousCommand;
+            );
+          this._autonomousTrajectory.getObject("Trajectory").setPoses(this._shownPaths);
+      }
     }
-  
+    this._previousAutonomousCommand = this._autonomousCommand;
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

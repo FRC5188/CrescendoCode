@@ -50,6 +50,7 @@ import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.leds.commands.CmdLEDsRunLEDs;
+import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -75,14 +76,13 @@ public class RobotContainer {
         private final Drive _drive;
         private final Intake _intake;
         private final Shooter _shooter;
-    private final Climber _climber;
-    private final LEDs _leds;
         private final Climber _climber;
+         private final LEDs _leds;
 
         private double _driveMultiplier = 1.0;
 
         private Command _adjustShooterAutomaticallyCommand;
-    private Command _runLEDsCommand;
+        private Command _runLEDsCommand;
 
         // logged dashboard inputs
         private final LoggedDashboardChooser<Command> _autoChooser;
@@ -150,7 +150,6 @@ public class RobotContainer {
                                 _shooter = new Shooter(new RealShooterIO());
                                 _climber = new Climber(new RealClimberIO());
                                 _leds = new LEDs();
-                _climber = new Climber(new RealClimberIO());
                 break;
 
                         case SIM:
@@ -172,9 +171,7 @@ public class RobotContainer {
                                 });
                                 _climber = new Climber(new ClimberIO() {
                                 });
-                _leds = new LEDs();
-                _climber = new Climber(new ClimberIO() {
-                    });
+                                _leds = new LEDs();
                                 break;
                         default:
                                 // Replayed robot, disable IO implementations
@@ -199,9 +196,7 @@ public class RobotContainer {
                                 });
                                 _climber = new Climber(new ClimberIO() {
                                 });
-                _leds = new LEDs();
-                _climber = new Climber(new ClimberIO() {
-                    });
+                                _leds = new LEDs();
                                 break;
                 }
 
@@ -352,19 +347,19 @@ public class RobotContainer {
                 // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
                 // _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
-        _op2ButtonFour.onTrue(new Command() {
+                _op2ButtonFour.onTrue(new Command() {
 
-            @Override
-            public void initialize(){
-                _leds.setAmpReady(true);
-            }
+                @Override
+                public void initialize(){
+                        _leds.setAmpReady(true);
+                }
 
-            @Override
-            public boolean isFinished(){
-                return true;
-            }
-        }
-        );
+                @Override
+                public boolean isFinished(){
+                        return true;
+                }
+                }
+                );
 
                 // // Reset hasNote in case the robot thinks that it has a note when it doesn't
                 // _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
@@ -431,7 +426,7 @@ public class RobotContainer {
         public Command getFeederInitialStateCommand() {
                 return Commands.runOnce(() -> _intake.setFeederMotorPickupSpeed());
         }
-    public Command getRunLEDs() {
-        return this._runLEDsCommand;
-    }
+        public Command getRunLEDs() {
+                return this._runLEDsCommand;
+        }
 }

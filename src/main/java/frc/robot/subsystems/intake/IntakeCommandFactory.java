@@ -64,6 +64,8 @@ public class IntakeCommandFactory {
                 // We'll turn OFF the ROLLERS if we're stowing.
                 if (position == IntakePosition.Stowed) {
                     this._intake.stopRollerMotor();
+                } else if (position == IntakePosition.GroundSpit) {
+                    _intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME);
                 }
             }, this._intake);
     }

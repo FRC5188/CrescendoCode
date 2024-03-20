@@ -12,8 +12,10 @@ public class Intake extends SubsystemBase {
     public enum IntakePosition {
         SourcePickup(IntakeConstants.POSITION_SOURCE_PICKUP),
         GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),
+        GroundSpit(IntakeConstants.POSITION_GROUND_SPIT),
         Stowed(IntakeConstants.POSITION_STOWED),
         AmpScore(IntakeConstants.POSITION_AMP_SCORE),
+        
         SpeakerScore(IntakeConstants.POSITION_SPEAKER_SCORE);
 
         private final double _angle;

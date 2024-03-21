@@ -14,6 +14,9 @@ public class CmdClimberMove extends Command {
         _climberSubsystem = climberSubsystem;
         _leftSpeed = leftSpeed;
         _rightSpeed = rightSpeed;
+
+        addRequirements(_climberSubsystem
+        );
     }
 
     @Override

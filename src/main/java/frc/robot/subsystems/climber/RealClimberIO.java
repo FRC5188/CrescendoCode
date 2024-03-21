@@ -54,7 +54,7 @@ public class RealClimberIO implements ClimberIO {
     }
 
     private void configureRightClimberMotor() {
-        _rightClimberMotor = new CANSparkMax(HardwareConstants.CanIds.LEFT_CLIMBER_MOTOR, MotorType.kBrushless);
+        _rightClimberMotor = new CANSparkMax(HardwareConstants.CanIds.RIGHT_CLIMBER_MOTOR, MotorType.kBrushless);
         
         _rightClimberMotor.setCANTimeout(100);
         _rightClimberMotor.setSmartCurrentLimit(40);

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.shooter.Shooter.ShooterZone;
@@ -89,5 +90,11 @@ public class ShooterCommandFactory {
     public Command setPositionByZone(ShooterZone zone) {
         return new InstantCommand(() -> this._shooter.setShooterPositionWithZone(zone),
                 this._shooter);
+    }
+
+    public Command runAnglePID() {
+        return Commands.run(
+            () -> _shooter.runAnglePID()
+        );
     }
 }

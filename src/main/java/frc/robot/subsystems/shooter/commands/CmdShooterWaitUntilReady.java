@@ -12,8 +12,7 @@ public class CmdShooterWaitUntilReady extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        
-
+        // Logger.recordOutput("Autotest/waituntilready", "true");
     }
 
     @Override

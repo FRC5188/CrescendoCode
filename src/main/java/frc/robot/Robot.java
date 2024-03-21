@@ -13,8 +13,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -32,6 +35,10 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -40,7 +47,10 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command _autonomousCommand;
+  private Command _previousAutonomousCommand;
   private RobotContainer _robotContainer;
+  private Field2d _autonomousTrajectory = new Field2d();
+  private List<Pose2d> _shownPaths = new ArrayList<>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -122,6 +132,8 @@ public class Robot extends LoggedRobot {
             });
 
     _robotContainer = new RobotContainer();
+
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   /** This function is called periodically during all modes. */
@@ -147,36 +159,49 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    _robotContainer.getRunAnglePIDCommand().cancel();
+    SmartDashboard.putData("Autonomous Selection Preview", this._autonomousTrajectory);
+  }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    // The currently selected command.
+    this._autonomousCommand = _robotContainer.getAutonomousCommand();
+    if (this._autonomousCommand != this._previousAutonomousCommand) {
+      if (AutoBuilder.getAllAutoNames().contains(_autonomousCommand.getName())) {
+        this._shownPaths.clear();
+        PathPlannerAuto.getPathGroupFromAutoFile(this._autonomousCommand.getName()).stream()
+            .forEach(
+                path -> {
+                  this._shownPaths.addAll(path.getPathPoses());
+                }
+            );
+          this._autonomousTrajectory.getObject("Trajectory").setPoses(this._shownPaths);
+      }
+    }
+    this._previousAutonomousCommand = this._autonomousCommand;
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     _autonomousCommand = _robotContainer.getAutonomousCommand();
 
-    // if the intakePID command is NOT scheduled, then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-          _robotContainer.getRunIntakePIDCommand())){
-          _robotContainer.getRunIntakePIDCommand().schedule();
-          }
-    // if the shooterPID command is NOT scheduled then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-      _robotContainer.getRunShooterPIDCommand()
-    )){
-      _robotContainer.getRunShooterPIDCommand().schedule();
+    
+    
+    if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
     }
-
+    
+    // _robotContainer.getRunAnglePIDCommand().schedule();
+    _robotContainer.getSetInitalShooterPosition().schedule();
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
     }
-
-    _robotContainer.getRunShooterPIDCommand().schedule();
-    
   }
 
   /** This function is called periodically during autonomous. */
@@ -194,32 +219,19 @@ public class Robot extends LoggedRobot {
       _autonomousCommand.cancel();
     }
 
-    // MITCHELL READ THIS: I decided to run the PID from telopinit for now. I dont think this
-    // is the best way or what we should do forever. But I'm also suspicious about
-    // what we were doin with the grpSetupCommand. Looking at this commit: https://github.com/FRC5188/CrescendoCode/blob/main/src/main/java/frc/robot/RobotContainer.java
-    // we were scheduling a new instance of the grpSetupCommand command and auto and telop but never canceling the auto one.
-    // I wanted to be super specific and explicit about what commands and functions we were running as we try to detangle our
-    // code and get it working
-    // _robotContainer.getRunShooterPIDCommand().schedule();
-    // _robotContainer.getRunIntakePIDCommand().schedule(); // MITCHELL WAS HERE :) REMOVE THIS IF IM NOT
-
-
-    // if the intakePID command is NOT scheduled, then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-          _robotContainer.getRunIntakePIDCommand())){
-          _robotContainer.getRunIntakePIDCommand().schedule();
-          }
-    // if the shooterPID command is NOT scheduled then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-      _robotContainer.getRunShooterPIDCommand()
-    )){
-      _robotContainer.getRunShooterPIDCommand().schedule();
+    if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
     }
+
+    _robotContainer.getSetInitalShooterPosition().schedule();
+    //_robotContainer.getRunAnglePIDCommand().schedule();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override

@@ -147,7 +147,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    _robotContainer.getRunAnglePIDCommand().cancel();
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -158,30 +160,25 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     _autonomousCommand = _robotContainer.getAutonomousCommand();
 
-    // if the intakePID command is NOT scheduled, then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-          _robotContainer.getRunIntakePIDCommand())){
-          _robotContainer.getRunIntakePIDCommand().schedule();
-          }
-    // if the shooterPID command is NOT scheduled then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-      _robotContainer.getRunShooterPIDCommand()
-    )){
-      _robotContainer.getRunShooterPIDCommand().schedule();
+    
+    
+    if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
     }
     // if the runLED command is NOT scheduled then schedule it
     if(!CommandScheduler.getInstance().isScheduled(
-          _robotContainer.getRunLEDs())){ 
-          _robotContainer.getRunLEDs().schedule();
-          }
+      _robotContainer.getRunLEDs())){ 
+      _robotContainer.getRunLEDs().schedule();
+    }
 
+    
+    // _robotContainer.getRunAnglePIDCommand().schedule();
+    _robotContainer.getSetInitalShooterPosition().schedule();
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
     }
-
-    _robotContainer.getRunShooterPIDCommand().schedule();
-    
   }
 
   /** This function is called periodically during autonomous. */
@@ -199,37 +196,24 @@ public class Robot extends LoggedRobot {
       _autonomousCommand.cancel();
     }
 
-    // MITCHELL READ THIS: I decided to run the PID from telopinit for now. I dont think this
-    // is the best way or what we should do forever. But I'm also suspicious about
-    // what we were doin with the grpSetupCommand. Looking at this commit: https://github.com/FRC5188/CrescendoCode/blob/main/src/main/java/frc/robot/RobotContainer.java
-    // we were scheduling a new instance of the grpSetupCommand command and auto and telop but never canceling the auto one.
-    // I wanted to be super specific and explicit about what commands and functions we were running as we try to detangle our
-    // code and get it working
-    // _robotContainer.getRunShooterPIDCommand().schedule();
-    // _robotContainer.getRunIntakePIDCommand().schedule(); // MITCHELL WAS HERE :) REMOVE THIS IF IM NOT
-
-
-    // if the intakePID command is NOT scheduled, then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-          _robotContainer.getRunIntakePIDCommand())){
-          _robotContainer.getRunIntakePIDCommand().schedule();
-          }
-    // if the shooterPID command is NOT scheduled then schedule it
-    if(!CommandScheduler.getInstance().isScheduled(
-      _robotContainer.getRunShooterPIDCommand()
-    )){
-      _robotContainer.getRunShooterPIDCommand().schedule();
+    if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
     }
     //if the runLED command is NOT scheduled then schedule it
     if(!CommandScheduler.getInstance().isScheduled(
           _robotContainer.getRunLEDs())){ 
           _robotContainer.getRunLEDs().schedule();
           }
+
+    _robotContainer.getSetInitalShooterPosition().schedule();
+    //_robotContainer.getRunAnglePIDCommand().schedule();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override

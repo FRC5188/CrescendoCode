@@ -15,14 +15,13 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -39,7 +38,8 @@ import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
 import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.util.LocalADStarAK;
+import frc.robot.util.autonomous.AutonomousPathGenerator;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -59,13 +59,13 @@ public class Drive extends SubsystemBase {
   private Rotation2d _rawGyroRotation = new Rotation2d();
   private SwerveModulePosition[] _lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition()
+          new SwerveModulePosition(),
+          new SwerveModulePosition(),
+          new SwerveModulePosition(),
+          new SwerveModulePosition()
       };
-  private SwerveDrivePoseEstimator _poseEstimator =
-      new SwerveDrivePoseEstimator(_kinematics, _rawGyroRotation, _lastModulePositions, new Pose2d());
+  private SwerveDrivePoseEstimator _poseEstimator = new SwerveDrivePoseEstimator(_kinematics, _rawGyroRotation,
+      _lastModulePositions, new Pose2d());
 
   private Alliance _alliance;
   private Pose2d _speakerPosition;
@@ -89,30 +89,9 @@ public class Drive extends SubsystemBase {
     _modules[2] = new Module(blModuleIO, 2);
     _modules[3] = new Module(brModuleIO, 3);
 
-    // Configure AutoBuilder for PathPlanner
-    AutoBuilder.configureHolonomic(
-        this::getPose,
-        this::setPose,
-        () -> _kinematics.toChassisSpeeds(getModuleStates()),
-        this::runVelocity,
-        new HolonomicPathFollowerConfig(
-            DriveConstants.MAX_LINEAR_SPEED, DriveConstants.DRIVE_BASE_RADIUS, new ReplanningConfig()),
-        () ->
-            DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red,
-        this);
-    Pathfinding.setPathfinder(new LocalADStarAK());
-    PathPlannerLogging.setLogActivePathCallback(
-        (activePath) -> {
-          Logger.recordOutput(
-              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-        });
-    PathPlannerLogging.setLogTargetPoseCallback(
-        (targetPose) -> {
-          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-        });
+    AutonomousPathGenerator.configure(this, _kinematics, getModuleStates());
 
-    // Configure SysId
+    // =============== START CONFIGURATION FOR SYSID ===============
     _sysId =
         new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -131,6 +110,7 @@ public class Drive extends SubsystemBase {
     _centerOfRotation = new Translation2d();
     _field = new Field2d();
   }
+  // =============== END CONFIGURATION FOR SYSID ===============
 
   public void periodic() {
     _gyroIO.updateInputs(_gyroInputs);
@@ -138,7 +118,7 @@ public class Drive extends SubsystemBase {
 
     _visionIO.updateInputs(_visionInputs);
     Logger.processInputs("Drive/Vision", _visionInputs);
-        
+
     for (var module : _modules) {
       module.periodic();
     }
@@ -152,17 +132,17 @@ public class Drive extends SubsystemBase {
       // Log empty setpoint states when disabled
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+      Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
     }
 
     // Read wheel positions and deltas from each module
     SwerveModulePosition[] modulePositions = getModulePositions();
     SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
     for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
-      moduleDeltas[moduleIndex] =
-          new SwerveModulePosition(
-              modulePositions[moduleIndex].distanceMeters
-                  - _lastModulePositions[moduleIndex].distanceMeters,
-              modulePositions[moduleIndex].angle);
+      moduleDeltas[moduleIndex] = new SwerveModulePosition(
+          modulePositions[moduleIndex].distanceMeters
+              - _lastModulePositions[moduleIndex].distanceMeters,
+          modulePositions[moduleIndex].angle);
       _lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
     }
 
@@ -183,19 +163,70 @@ public class Drive extends SubsystemBase {
     }
     _poseEstimator.update(_rawGyroRotation, modulePositions);
 
-    // MITCHELL READ THIS COMMENT. I'm still getting the loop overrun issue from the driver station
-    // so this did not solve the issue. but i wanted to bring it to your attention. 
-    // as of the commit which added this block of comments, the only errors I'm getting from the driver
-    // station is about photon vision cameras and the loop over run from drive periodic. i am a little 
-    // worried that this drive periodic overrun issue might come back to bite us so I don't want to 
-    // leave it not addressed for too long. But, first, lets get the rest of the robot back up and going
-  
+    // MITCHELL READ THIS COMMENT. I'm still getting the loop overrun issue from the
+    // driver station
+    // so this did not solve the issue. but i wanted to bring it to your attention.
+    // as of the commit which added this block of comments, the only errors I'm
+    // getting from the driver
+    // station is about photon vision cameras and the loop over run from drive
+    // periodic. i am a little
+    // worried that this drive periodic overrun issue might come back to bite us so
+    // I don't want to
+    // leave it not addressed for too long. But, first, lets get the rest of the
+    // robot back up and going
+
     // commenting this out to see if it helps with loop overrun time gh - 2/25/24
     // driver.periodic is sometimes running at 20-40ms on its own
     // _field.setRobotPose(_poseEstimator.getEstimatedPosition());
     // SmartDashboard.putData("Field", _field);
     // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
     // SmartDashboard.putNumberArray("CoR", cor);
+  }
+  /**
+   * Take the values from the joystick, apply math, and then provide them to the robot to drive. If
+   * you set the bypassomegamath flag then the value supplied in rotate will be directly supplied to
+   * the drivetrain.
+   * 
+   * @param x value from joystick
+   * @param y value from joystick
+   * @param rotate value from joystick or PID controller
+   * @param bypassomegamath
+   * @return
+   */
+  public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate, boolean bypassomegamath) {
+          // Apply deadband
+          double linearMagnitude =
+              MathUtil.applyDeadband(
+                  Math.hypot(x, y), DriveConstants.JOYSTICK_DEADBAND);
+          Rotation2d linearDirection =
+              new Rotation2d(x, y);
+          double omega = MathUtil.applyDeadband(rotate, DriveConstants.JOYSTICK_DEADBAND);
+
+          // Square values
+          linearMagnitude = linearMagnitude * linearMagnitude;
+          omega = Math.copySign(omega * omega, omega);
+
+          // Calcaulate new linear velocity
+          Translation2d linearVelocity =
+              new Pose2d(new Translation2d(), linearDirection)
+                  .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+                  .getTranslation();
+
+          // Convert to field relative speeds & send command
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
+          
+          // if bypassomegamath is true, use the raw rotate value, else use the omega with its math
+          omega = bypassomegamath ? rotate : omega;
+          return
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  linearVelocity.getX() * getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * getMaxLinearSpeedMetersPerSec(),
+                  omega * getMaxAngularSpeedRadPerSec(),
+                  isFlipped
+                      ? getRotation().plus(new Rotation2d(Math.PI))
+                      : getRotation());
   }
 
   /**
@@ -227,8 +258,10 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Stops the drive and turns the modules to an X arrangement to resist movement. The modules will
-   * return to their normal orientations the next time a nonzero velocity is requested.
+   * Stops the drive and turns the modules to an X arrangement to resist movement.
+   * The modules will
+   * return to their normal orientations the next time a nonzero velocity is
+   * requested.
    */
   public void stopWithX() {
     Rotation2d[] headings = new Rotation2d[4];
@@ -249,7 +282,10 @@ public class Drive extends SubsystemBase {
     return _sysId.dynamic(direction);
   }
 
-  /** Returns the module states (turn angles and drive velocities) for all of the modules. */
+  /**
+   * Returns the module states (turn angles and drive velocities) for all of the
+   * modules.
+   */
   @AutoLogOutput(key = "SwerveStates/Measured")
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -259,9 +295,13 @@ public class Drive extends SubsystemBase {
     return states;
   }
 
-  /** Returns the module positions (turn angles and drive velocities) for all of the modules. */
+  /**
+   * Returns the module positions (turn angles and drive velocities) for all of
+   * the modules.
+   */
   // TODO: Garrett 2/27/24
-  // should this return _module[i].getModueState() instead? Advantagekit cannot show a SwerveModulePosition. 
+  // should this return _module[i].getModueState() instead? Advantagekit cannot
+  // show a SwerveModulePosition.
   // only a swerve module state.
   @AutoLogOutput(key = "SwerveStates/MeasuredPosition")
   private SwerveModulePosition[] getModulePositions() {
@@ -283,6 +323,10 @@ public class Drive extends SubsystemBase {
     return getPose().getRotation();
   }
 
+  public void resetPose(Pose2d pose) {
+    _poseEstimator.resetPosition(_rawGyroRotation, getModulePositions(), pose);
+  }
+
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
     _poseEstimator.resetPosition(_rawGyroRotation, getModulePositions(), pose);
@@ -296,7 +340,7 @@ public class Drive extends SubsystemBase {
    * Adds a vision measurement to the pose estimator.
    *
    * @param visionPose The pose of the robot as measured by the vision camera.
-   * @param timestamp The timestamp of the vision measurement in seconds.
+   * @param timestamp  The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
     _poseEstimator.addVisionMeasurement(visionPose, timestamp);
@@ -315,28 +359,49 @@ public class Drive extends SubsystemBase {
   private Pose2d getSpeakerPos() {
     if (_speakerPosition == null) {
       if (getAlliance() != null) {
-        _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER : DriveConstants.RED_SPEAKER;
+        _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER
+            : DriveConstants.RED_SPEAKER;
       }
     }
 
     return _speakerPosition;
   }
 
-  /** Returns the distance from the center of the robot to the alliance's speaker */
+  /**
+   * Returns the distance from the center of the robot to the alliance's speaker
+   */
   public double getRadiusToSpeakerInMeters() {
-    
+
     return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
+  }
+  
+  /**
+   * Returns the distance from the center of the robot to the alliance's speaker.
+   * NOTE: Use THIS constructor for GrpShootOnTheMove only.
+   */
+  public double getRadiusToSpeakerInMeters(Pose2d robotPose) {
+
+    return getRadiusToSpeakerInMeters(robotPose, getSpeakerPos());
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator() {
     return _poseEstimator;
   }
 
+  public ChassisSpeeds getRobotChassisSpeeds() {
+    return _kinematics.toChassisSpeeds(this.getModuleStates());
+  }
+
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(this.getRobotChassisSpeeds(), this.getRotation());
+  }
+
   public Drive getObject() {
     return this;
   }
 
-  // this setup lets us test the math, but when we actually run the code we don't have to give a pose estimator
+  // this setup lets us test the math, but when we actually run the code we don't
+  // have to give a pose estimator
   public static double getRadiusToSpeakerInMeters(Pose2d robotPose, Pose2d speakerPos) {
     double xDiff = robotPose.getX() - speakerPos.getX();
     double yDiff = robotPose.getY() - speakerPos.getY();
@@ -378,6 +443,18 @@ public class Drive extends SubsystemBase {
     return Math.toDegrees(Math.atan(yDiff / xDiff));
   }
 
+  /**
+   * Thank you to Team 3467 - Windham Windup!
+   * Adopted from 3467's getAngleToSpeaker:
+   * https://github.com/WHS-FRC-3467/Skip-5.14-Nocturne/blob/PostGSDCleanup/src/main/java/frc/robot/Util/FieldCentricAiming.java
+   * NOTE: Only used for GrpShootDriveOnTheMove; otherwise, use
+   * calcAngleToSpeaker.
+   */
+
+  public Rotation2d getRotation2dToSpeaker(Translation2d futurePose) {
+    return getSpeakerPos().getTranslation().minus(futurePose).getAngle();
+  }
+
   public static Translation2d calcSpeakerCoRForBlue(Pose2d robotPose, Pose2d speakerPos) {
     double xDiff = robotPose.getX() - speakerPos.getX();
     double yDiff = speakerPos.getY() - robotPose.getY();
@@ -411,10 +488,10 @@ public class Drive extends SubsystemBase {
   /** Returns an array of module translations. */
   public static Translation2d[] getModuleTranslations() {
     return new Translation2d[] {
-      new Translation2d(DriveConstants.TRACK_WIDTH_X / 2.0, DriveConstants.TRACK_WIDTH_Y / 2.0),
-      new Translation2d(DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0),
-      new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, DriveConstants.TRACK_WIDTH_Y / 2.0),
-      new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0)
+        new Translation2d(DriveConstants.TRACK_WIDTH_X / 2.0, DriveConstants.TRACK_WIDTH_Y / 2.0),
+        new Translation2d(DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0),
+        new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, DriveConstants.TRACK_WIDTH_Y / 2.0),
+        new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0)
     };
   }
 }

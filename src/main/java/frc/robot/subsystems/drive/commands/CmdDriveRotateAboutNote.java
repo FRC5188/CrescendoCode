@@ -7,16 +7,19 @@ package frc.robot.subsystems.drive.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.visiondrive.VisionDrive;
 
 public class CmdDriveRotateAboutNote extends Command {
   private final Drive _drive;
+  private final VisionDrive _visionDrive;
   private ChassisSpeeds _chassisSpeeds;
 
-  public CmdDriveRotateAboutNote(Drive drivetrainSubsystem) {
+  public CmdDriveRotateAboutNote(Drive drivetrainSubsystem, VisionDrive visionDriveSubsystem) {
 
     this._drive = drivetrainSubsystem;
+    this._visionDrive = visionDriveSubsystem;
 
-    _chassisSpeeds = _drive._visionDriveIO.getChassisSpeedsForRotateAboutNote();
+    _chassisSpeeds = _visionDrive.getChassisSpeedsForRotateAboutNote();
 
     addRequirements(drivetrainSubsystem);
   }
@@ -28,7 +31,7 @@ public class CmdDriveRotateAboutNote extends Command {
   @Override
   public void execute() {
     // Update values.
-    _chassisSpeeds = _drive._visionDriveIO.getChassisSpeedsForRotateAboutNote();
+    _chassisSpeeds = _visionDrive.getChassisSpeedsForRotateAboutNote();
     this._drive.runVelocity(_chassisSpeeds);
   }
 

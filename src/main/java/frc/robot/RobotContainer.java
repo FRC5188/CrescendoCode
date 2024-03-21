@@ -53,6 +53,7 @@ import frc.robot.subsystems.shooter.Shooter.ShooterZone;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.visiondrive.RealVisionDriveIO;
+import frc.robot.subsystems.visiondrive.VisionDrive;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
 
 /**
@@ -70,6 +71,7 @@ public class RobotContainer {
         private final Intake _intake;
         private final Shooter _shooter;
         // private final Climber _climber;
+        private final VisionDrive _visionDrive;
 
         private Command _adjustShooterAutomaticallyCommand;
 
@@ -130,7 +132,6 @@ public class RobotContainer {
                                 _drive = new Drive(
                                                 new GyroIONavX2(),
                                                 new RealVisionIO(),
-                                                new RealVisionDriveIO(),
                                                 new ModuleIOSparkFlex(0),
                                                 new ModuleIOSparkFlex(1),
                                                 new ModuleIOSparkFlex(2),
@@ -138,6 +139,7 @@ public class RobotContainer {
                                 _intake = new Intake(new RealIntakeIO());
                                 _shooter = new Shooter(new RealShooterIO());
                                 // _climber = new Climber(new RealClimberIO());
+                                _visionDrive = new VisionDrive(new RealVisionDriveIO());
                                 break;
 
                         case SIM:
@@ -146,8 +148,6 @@ public class RobotContainer {
                                                 new GyroIO() {
                                                 },
                                                 new VisionIO() {
-                                                },
-                                                new VisionDriveIO() {
                                                 },
                                                 new ModuleIOSim(),
                                                 new ModuleIOSim(),
@@ -159,6 +159,8 @@ public class RobotContainer {
                                 });
                                 // _climber = new Climber(new ClimberIO() {
                                 // });
+                                _visionDrive = new VisionDrive(new VisionDriveIO() {
+                                });
                                 break;
                         default:
                                 // Replayed robot, disable IO implementations
@@ -166,8 +168,6 @@ public class RobotContainer {
                                                 new GyroIO() {
                                                 },
                                                 new VisionIO() {
-                                                },
-                                                new VisionDriveIO() {
                                                 },
                                                 new ModuleIO() {
                                                 },
@@ -183,6 +183,8 @@ public class RobotContainer {
                                 });
                                 // _climber = new Climber(new ClimberIO() {
                                 // });
+                                _visionDrive = new VisionDrive(new VisionDriveIO() {
+                                });
                                 break;
                 }
 
@@ -242,7 +244,7 @@ public class RobotContainer {
                                 () -> _driveController.getLeftY(),
                                 () -> _driveController.getLeftX()));
 
-                _driveController.a().whileTrue(new CmdDriveGoToNote(_drive));
+                _driveController.a().whileTrue(new CmdDriveGoToNote(_drive, _visionDrive));
 
                 // reset the orientation of the robot. changes which way it thinks is forward
                 _driveController.y().onTrue(

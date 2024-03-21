@@ -1,8 +1,10 @@
 package frc.robot.subsystems.intake;
+import org.littletonrobotics.junction.Logger;
 
 import frc.robot.util.LoggedTunableNumber;
 
 public class IntakeConstants {
+
     /************************
      * 
      * INTAKE PID CONSTANTS
@@ -66,4 +68,23 @@ public class IntakeConstants {
     public static final double INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT = 55;
     public static final int INTAKE_ROLLER_SMART_CURRENT_LIMIT = 50;
     public static final double INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT = 60;
+
+    // Logs all of the IntakeConstants into Advantage Kit.
+    
+    static {
+        Logger.recordOutput("Constants/Intake/INTAKE_WIDTH", INTAKE_WIDTH);
+        Logger.recordOutput("Constants/Intake/INTAKE_HEIGHT", INTAKE_HEIGHT);
+        Logger.recordOutput("Constants/Intake/INTAKE_LENGTH", INTAKE_LENGTH);
+        Logger.recordOutput("Constants/Intake/INTAKE_OFFSET_DEGREES", INTAKE_OFFSET_DEGREES);
+        Logger.recordOutput("Constants/Intake/MIN_INTAKE_ANGLE", MIN_INTAKE_ANGLE);
+        Logger.recordOutput("Constants/Intake/MAX_INTAKE_ANGLE", MAX_INTAKE_ANGLE);
+
+        Logger.recordOutput("Constants/Intake/INTAKE_STOP_SPEED", INTAKE_STOP_SPEED);
+     
+        Logger.recordOutput("Constants/Intake/INTAKE_PIVOT_DEADBAND", INTAKE_PIVOT_DEADBAND);
+        Logger.recordOutput("Constants/Intake/INTAKE_PIVOT_SMART_CURRENT_LIMIT", INTAKE_PIVOT_SMART_CURRENT_LIMIT);
+        Logger.recordOutput("Constants/Intake/INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT", INTAKE_PIVOT_SECONDARY_CURRENT_LIMIT);
+        Logger.recordOutput("Constants/Intake/INTAKE_ROLLER_SMART_CURRENT_LIMIT", INTAKE_ROLLER_SMART_CURRENT_LIMIT);
+        Logger.recordOutput("Constants/Intake/INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT", INTAKE_ROLLER_SECONDARY_CURRENT_LIMIT);
+    }
 }

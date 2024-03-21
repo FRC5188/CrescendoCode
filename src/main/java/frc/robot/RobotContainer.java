@@ -43,11 +43,11 @@ import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
-import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
+import frc.robot.subsystems.multisubsystemcommands.CmdGoToNote;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -270,7 +270,7 @@ public class RobotContainer {
                         )
                 );
 
-                _driveController.rightBumper().whileTrue(new CmdDriveGoToNote(_drive, _visionDrive));
+                _driveController.rightBumper().whileTrue(new CmdGoToNote(_drive, _visionDrive));
 
 
                 // reset the orientation of the robot. changes which way it thinks is forward

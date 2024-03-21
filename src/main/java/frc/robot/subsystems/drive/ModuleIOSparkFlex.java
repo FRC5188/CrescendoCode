@@ -23,6 +23,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.HardwareConstants;
+import frc.robot.util.MotorFrameConfigurator;
 
 /**
  * Module IO implementation for SparkMax drive motor controller, SparkMax turn motor controller (NEO
@@ -39,6 +41,7 @@ import edu.wpi.first.math.util.Units;
 public class ModuleIOSparkFlex implements ModuleIO {
   // Gear ratios for SDS MK4i L2, adjust as necessary
   private static final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+
   private static final double TURN_GEAR_RATIO = 150.0 / 7.0;
 
   private final CANSparkFlex _driveSparkFlex;
@@ -54,29 +57,29 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
   public ModuleIOSparkFlex(int index) {
     switch (index) {
-      case 0:
-        _driveSparkFlex = new CANSparkFlex(1, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(2, MotorType.kBrushless);
-        _cancoder = new CANcoder(3);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.058630167643229); // MUST BE CALIBRATED
+      case 0: //Front Left
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FL_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FL_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.FL_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.FL_OFFSET); // MUST BE CALIBRATED
         break;
-      case 1:
-        _driveSparkFlex = new CANSparkFlex(4, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(5, MotorType.kBrushless);
-        _cancoder = new CANcoder(6);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.23297861735026); // MUST BE CALIBRATED
+      case 1: //Front Right
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FR_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.FR_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.FR_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.FR_OFFSET); // MUST BE CALIBRATED
         break;
-      case 2:
-        _driveSparkFlex = new CANSparkFlex(7, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(8, MotorType.kBrushless);
-        _cancoder = new CANcoder(9);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(0.370921122233073); // MUST BE CALIBRATED
+      case 2: //Back Left
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BL_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BL_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.BL_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.BL_OFFSET); // MUST BE CALIBRATED
         break;
-      case 3:
-        _driveSparkFlex = new CANSparkFlex(10, MotorType.kBrushless);
-        _turnSparkFlex = new CANSparkFlex(11, MotorType.kBrushless);
-        _cancoder = new CANcoder(12);
-        _absoluteEncoderOffset = Rotation2d.fromRotations(-0.360928141276042); // MUST BE CALIBRATED
+      case 3: //Back Right
+        _driveSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BR_DRIVE, MotorType.kBrushless);
+        _turnSparkFlex = new CANSparkFlex(HardwareConstants.CanIds.BR_TURN, MotorType.kBrushless);
+        _cancoder = new CANcoder(HardwareConstants.CanIds.BR_CANCODER);
+        _absoluteEncoderOffset = Rotation2d.fromRotations(DriveConstants.BR_OFFSET); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -99,6 +102,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
     _turnSparkFlex.setSmartCurrentLimit(30);
     _driveSparkFlex.enableVoltageCompensation(12.0);
     _turnSparkFlex.enableVoltageCompensation(12.0);
+    _driveSparkFlex.setClosedLoopRampRate(0.25);
+    _turnSparkFlex.setClosedLoopRampRate(0.25);
 
     _driveEncoder.setPosition(0.0);
     _driveEncoder.setMeasurementPeriod(10);
@@ -108,30 +113,14 @@ public class ModuleIOSparkFlex implements ModuleIO {
     _turnRelativeEncoder.setMeasurementPeriod(10);
     _turnRelativeEncoder.setAverageDepth(2);
 
+    MotorFrameConfigurator.configNoSensor(_driveSparkFlex);
+    MotorFrameConfigurator.configNoSensor(_turnSparkFlex);
+    
+    _driveSparkFlex.setPeriodicFramePeriod(
+        CANSparkLowLevel.PeriodicFrame.kStatus2, 10); // Motor position. 
+
     _driveSparkFlex.setCANTimeout(0);
     _turnSparkFlex.setCANTimeout(0);
-
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus3, 65520); // Analog Sensor Info
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus4, 65522); // Alternate Encoder Info
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus5, 65524); // Duty Cycle Encoder Position
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus6, 65526); // Duty Cycle Encoder Velocity
-    _driveSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus7, 65528); // Iaccum for PID
-
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus3, 65520); // Analog Sensor Info
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus4, 65522); // Alternate Encoder Info
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus5, 65524); // Duty Cycle Encoder Position
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus6, 65526); // Duty Cycle Encoder Velocity
-    _turnSparkFlex.setPeriodicFramePeriod(
-        CANSparkLowLevel.PeriodicFrame.kStatus7, 65528); // Iaccum for PID
 
     _driveSparkFlex.burnFlash();
     _turnSparkFlex.burnFlash();
@@ -150,7 +139,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
         Rotation2d.fromRotations(_turnAbsolutePosition.getValueAsDouble())
             .minus(_absoluteEncoderOffset);
     inputs._turnPosition =
-        Rotation2d.fromRotations(_turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
+      Rotation2d.fromRotations(_cancoder.getAbsolutePosition().getValueAsDouble() - _absoluteEncoderOffset.getRotations());
+        //Rotation2d.fromRotations(_turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
     inputs._turnVelocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(_turnRelativeEncoder.getVelocity())
             / TURN_GEAR_RATIO;

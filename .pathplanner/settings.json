@@ -1,0 +1,22 @@
+{
+  "robotWidth": 0.66,
+  "robotLength": 0.66,
+  "holonomicMode": true,
+  "pathFolders": [
+    "Lit Left Ring Auto Paths",
+    "Macho Middle Ring Auto Paths",
+    "Middle 4 Piece Auto Paths",
+    "Playoff Path",
+    "Rad Right Ring Auto Paths"
+  ],
+  "autoFolders": [
+    "Left Autos",
+    "Middle Autos",
+    "Right Autos"
+  ],
+  "defaultMaxVel": 2.0,
+  "defaultMaxAccel": 1.0,
+  "defaultMaxAngVel": 540.0,
+  "defaultMaxAngAccel": 720.0,
+  "maxModuleSpeed": 4.5
+}

@@ -1,0 +1,13 @@
+{
+  "NTProvider": {
+    "types": {
+      "/AdvantageKit/RealOutputs/Mechanism2D/Intake": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Mechanism2D/Shooter": "Mechanism2d",
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Choices": "String Chooser"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

@@ -13,14 +13,31 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -30,7 +47,10 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command _autonomousCommand;
+  private Command _previousAutonomousCommand;
   private RobotContainer _robotContainer;
+  private Field2d _autonomousTrajectory = new Field2d();
+  private List<Pose2d> _shownPaths = new ArrayList<>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -77,16 +97,43 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
-
-    // See http://bit.ly/3YIzFZ6 for more information on timestamps in AdvantageKit.
-    // Logger.disableDeterministicTimestamps()
-
     // Start AdvantageKit logger
     Logger.start();
-
+    // log the pdh with a can ID of 13
+    LoggedPowerDistribution.getInstance(13, ModuleType.kRev);
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
+
+    // Log active commands
+    Map<String, Integer> commandCounts = new HashMap<>();
+    BiConsumer<Command, Boolean> logCommandFunction =
+        (Command command, Boolean active) -> {
+          String name = command.getName();
+          int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
+          commandCounts.put(name, count);
+          Logger.recordOutput(
+                  "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
+          Logger.recordOutput("CommandsAll/" + name, count > 0);
+        };
+    CommandScheduler.getInstance()
+        .onCommandInitialize(
+            (Command command) -> {
+              logCommandFunction.accept(command, true);
+            });
+    CommandScheduler.getInstance()
+        .onCommandFinish(
+            (Command command) -> {
+              logCommandFunction.accept(command, false);
+            });
+    CommandScheduler.getInstance()
+        .onCommandInterrupt(
+            (Command command) -> {
+              logCommandFunction.accept(command, false);
+            });
+
     _robotContainer = new RobotContainer();
+
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   /** This function is called periodically during all modes. */
@@ -98,21 +145,59 @@ public class Robot extends LoggedRobot {
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    List<String> clientNames = new ArrayList<>();
+    List<String> clientAddresses = new ArrayList<>();
+    for (var client : NetworkTableInstance.getDefault().getConnections()) {
+      clientNames.add(client.remote_id);
+      clientAddresses.add(client.remote_ip);
+    }
+    Logger.recordOutput("NTClients/Names", clientNames.toArray(new String[clientNames.size()]));
+    Logger.recordOutput("NTClients/Addresses", clientAddresses.toArray(new String[clientAddresses.size()]));
+
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    _robotContainer.getRunAnglePIDCommand().cancel();
+    SmartDashboard.putData("Autonomous Selection Preview", this._autonomousTrajectory);
+  }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    // The currently selected command.
+    this._autonomousCommand = _robotContainer.getAutonomousCommand();
+    if (this._autonomousCommand != this._previousAutonomousCommand) {
+      if (AutoBuilder.getAllAutoNames().contains(_autonomousCommand.getName())) {
+        this._shownPaths.clear();
+        PathPlannerAuto.getPathGroupFromAutoFile(this._autonomousCommand.getName()).stream()
+            .forEach(
+                path -> {
+                  this._shownPaths.addAll(path.getPathPoses());
+                }
+            );
+          this._autonomousTrajectory.getObject("Trajectory").setPoses(this._shownPaths);
+      }
+    }
+    this._previousAutonomousCommand = this._autonomousCommand;
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     _autonomousCommand = _robotContainer.getAutonomousCommand();
 
+    
+    
+    if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
+    }
+    
+    // _robotContainer.getRunAnglePIDCommand().schedule();
+    _robotContainer.getSetInitalShooterPosition().schedule();
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
@@ -133,11 +218,20 @@ public class Robot extends LoggedRobot {
     if (_autonomousCommand != null) {
       _autonomousCommand.cancel();
     }
+
+    if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
+      _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
+      _robotContainer.getFeederInitialStateCommand().schedule();
+    }
+
+    _robotContainer.getSetInitalShooterPosition().schedule();
+    //_robotContainer.getRunAnglePIDCommand().schedule();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override

@@ -1,0 +1,213 @@
+{
+  "hubs": [
+    {
+      "x": 54,
+      "y": -8,
+      "width": 1858,
+      "height": 1080,
+      "state": {
+        "sidebar": {
+          "width": 371,
+          "expanded": [
+            "/RealOutputs/Shooter",
+            "/RealOutputs/Mechanism2D",
+            "/AdvantageKit/RealOutputs",
+            "/AdvantageKit",
+            "/AdvantageKit/Shooter"
+          ]
+        },
+        "tabs": {
+          "selected": 4,
+          "tabs": [
+            {
+              "type": 0,
+              "path": "../docs/INDEX.md"
+            },
+            {
+              "type": 1,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": [
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_leftFlywheelMotorVelocityRotationsPerMin",
+                      "color": "#2b66a2",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_rightFlywheelMotorVelocityRotationsPerMin",
+                      "color": "#e5b31b",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/RealOutputs/Shooter/FlywheelSetpoint",
+                      "color": "#af2437",
+                      "show": true
+                    }
+                  ]
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                }
+              },
+              "title": "Flywheel PID"
+            },
+            {
+              "type": 1,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": [
+                    {
+                      "key": "NT:/AdvantageKit/RealOutputs/Shooter/FlywheelPIDPComponent",
+                      "color": "#2b66a2",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/RealOutputs/Shooter/FlywheelPIDIComponent",
+                      "color": "#e5b31b",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/RealOutputs/Shooter/FlywheelPIDDComponent",
+                      "color": "#af2437",
+                      "show": true
+                    }
+                  ]
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                }
+              },
+              "title": "Flywheel PID components"
+            },
+            {
+              "type": 1,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": [
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_flywheelPIDKP",
+                      "color": "#2b66a2",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_flywheelPIDKI",
+                      "color": "#e5b31b",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_flywheelPIDKD",
+                      "color": "#af2437",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_flywheelPIDKF",
+                      "color": "#80588e",
+                      "show": true
+                    }
+                  ]
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": []
+                }
+              },
+              "title": "Flywheel PID Constants"
+            },
+            {
+              "type": 1,
+              "legends": {
+                "left": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": [
+                    {
+                      "key": "NT:/AdvantageKit/PowerDistribution/Voltage",
+                      "color": "#2b66a2",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_rightFlywheelMotorVoltage",
+                      "color": "#e5b31b",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_leftFlywheelMotorVoltage",
+                      "color": "#af2437",
+                      "show": true
+                    }
+                  ]
+                },
+                "discrete": {
+                  "fields": []
+                },
+                "right": {
+                  "lockedRange": null,
+                  "unitConversion": {
+                    "type": null,
+                    "factor": 1
+                  },
+                  "fields": [
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_leftFlywheelMotorTemperature",
+                      "color": "#80588e",
+                      "show": true
+                    },
+                    {
+                      "key": "NT:/AdvantageKit/Shooter/_rightFlywheelMotorTemperature",
+                      "color": "#e48b32",
+                      "show": true
+                    }
+                  ]
+                }
+              },
+              "title": "Flywheel voltages"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "3.1.0"
+}

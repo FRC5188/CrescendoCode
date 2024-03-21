@@ -16,6 +16,7 @@ public class RealIntakeIO implements IntakeIO {
     private SparkAbsoluteEncoder _pivotMotorEncoder;
     private DigitalInput _leftLimitSwitch;
     private DigitalInput _rightLimitSwitch;
+    private DigitalInput _distanceSensor;
     private CANSparkMax _feederMotor;
 
     public RealIntakeIO() {
@@ -28,6 +29,7 @@ public class RealIntakeIO implements IntakeIO {
                         IntakeConstants.PIVOT_PID_KD);
         _leftLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.LEFT_LIMIT_SWITCH_PORT);
         _rightLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.RIGHT_LIMIT_SWITCH_PORT);
+        _distanceSensor = new DigitalInput(HardwareConstants.DIOPorts.INTAKE_DISTANCE_SENSOR_PORT);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
@@ -44,6 +46,8 @@ public class RealIntakeIO implements IntakeIO {
 
         inputs._leftLimitSwitchIsPushed = !_leftLimitSwitch.get();
         inputs._rightLimitSwitchIsPushed = !_rightLimitSwitch.get();
+        // Check if this boolean is true or false when triggered
+        inputs._isDistanceSensorTriggered = _distanceSensor.get();
 
         inputs._feederVoltage = _feederMotor.getAppliedOutput() * _feederMotor.getBusVoltage();
         inputs._feederSpeed = _feederMotor.get();

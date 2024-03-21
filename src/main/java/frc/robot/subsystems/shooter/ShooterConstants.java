@@ -27,10 +27,10 @@ public abstract class ShooterConstants {
     // SUBWOOFER
     // public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new
     // LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 1300);
-    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1300;
+    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1000;
     public static final double ZONE_SUBWOOFER_LOW_BOUND = 0.0;
     public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
-    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 44.0;
+    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 42.0;
 
     // unknown
     public static final double ZONE_UNKNOWN_FLYWHEEL_SPEED = 200;
@@ -53,7 +53,7 @@ public abstract class ShooterConstants {
      **************/
     public static final double MAXIMUM_ANGLE_ENCODER_ANGLE = 90; // These might need changed later depending on how everything is implemented. 
     public static final double MINIMUM_ANGLE_ENCODER_ANGLE = 10; // These might need changed later depending on how everything is implemented. 
-    public static final double ANGLE_ENCODER_DEADBAND_DEGREES = 3; // This will be used when we've determining whether we can shoot or not. 
+    public static final double ANGLE_ENCODER_DEADBAND_DEGREES = 0.8; // This will be used when we've determining whether we can shoot or not. 
     
     /***************
      * 

@@ -84,9 +84,9 @@ public class IntakeCommandFactory {
             this.setPosition(position)
             .andThen(this.acquire())
             .andThen(new CmdIntakeWaitForNote(timeoutMs, this._intake))
-            .andThen(new CmdAcquireNoteFor(250, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED))
+            .andThen(new CmdAcquireNoteFor(250, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED.get()))
             .andThen(this.setPosition(IntakePosition.Stowed))
-            .andThen(new CmdAcquireNoteFor(350, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED))
+            .andThen(new CmdAcquireNoteFor(350, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED.get()))
             .andThen(new CmdIntakeWaitForIntake(_intake));
 
     }

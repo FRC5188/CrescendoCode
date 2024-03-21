@@ -27,12 +27,12 @@ public abstract class ShooterConstants {
 
     // SUBWOOFER
     // public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new
-    // LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 1300);
-    public static final double ZONE_SUBWOOFER_FLYWHEEL_SPEED = 1000;
-    public static final double ZONE_SUBWOOFER_LOW_BOUND = 0.0;
-    public static final double ZONE_SUBWOOFER_UPPER_BOUND = 2.5;
-    public static final double ZONE_SUBWOOFER_SHOOTER_ANGLE = 42.0;
-
+    // LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 1300);  
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 100);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_LOW_BOUND = new LoggedTunableNumber("SHOOTER/SUBWOOFER_LOW_BOUND", 0.0);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_UPPER_BOUND = new LoggedTunableNumber("SHOOTER/SUBWOOFER_UPPER_BOUND", 2.5);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("SHOOTER/SUBWOOFER_SHOOTER_ANGLE", 42.0);
+    
     // unknown
     public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/UNKNOWN_FLYWHEEL_SPEED", 200);
     public static final LoggedTunableNumber ZONE_UNKNOWN_LOW_BOUND = new LoggedTunableNumber("SHOOTER/UNKNOWN_LOW_BOUND", -1);

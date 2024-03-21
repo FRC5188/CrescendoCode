@@ -126,6 +126,8 @@ public class RobotContainer {
         // Bottom right button (Frowny face)
         private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 8);
         private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
+        
+        private JoystickButton _op2ButtonTen = new JoystickButton(_operatorController2, 10);
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -335,6 +337,8 @@ public class RobotContainer {
                 // Run intake rollers, stop when we let go of button
                 _opButtonNine.onTrue(this._intake.buildCommand().acquire())
                                 .onFalse(this._intake.buildCommand().stop());
+
+                _opButtonTen.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Amp));
 
                 // Move to shooter positions manually
                 // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));

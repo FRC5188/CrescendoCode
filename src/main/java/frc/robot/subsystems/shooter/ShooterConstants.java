@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.LoggedTunableNumber;
 
@@ -102,5 +104,22 @@ public abstract class ShooterConstants {
      *****************/
     public static final double FLYWHEEL_SPEED_DEADBAND = 50;
     public static final double TIME_TO_SHOOT = 0.2; // In seconds 
+
+    // Logs all of the ShooterConstants into Advantage Kit.
+    static {
+
+        Logger.recordOutput("Constants/Shooter/MAXIMUM_ANGLE_ENCODER_ANGLE", MAXIMUM_ANGLE_ENCODER_ANGLE);
+        Logger.recordOutput("Constants/Shooter/MINIMUM_ANGLE_ENCODER_ANGLE", MINIMUM_ANGLE_ENCODER_ANGLE);
+        Logger.recordOutput("Constants/Shooter/ANGLE_ENCODER_ANGLE_DEADBAND_DEGREES", ANGLE_ENCODER_DEADBAND_DEGREES);
+
+        Logger.recordOutput("Constants/Shooter/FLYWHEEL_GEAR_RATIO", FLYWHEEL_GEAR_RATIO);
+        Logger.recordOutput("Constants/Shooter/SHOOTER_CANVAS_WIDTH", SHOOTER_CANVAS_WIDTH);
+        Logger.recordOutput("Constants/Shooter/SHOOTER_CANVAS_HEIGHT", SHOOTER_CANVAS_HEIGHT);
+        Logger.recordOutput("Constants/Shooter/SHOOTER_HEIGHT_FROM_BASE", SHOOTER_HEIGHT_FROM_BASE);
+        Logger.recordOutput("Constants/Shooter/SHOOTER_LENGTH", SHOOTER_LENGTH);
+        Logger.recordOutput("Constants/Shooter/SHOOTER_OFFSET_DEGREES", SHOOTER_OFFSET_DEGREES);
+
+        Logger.recordOutput("Constants/Shooter/FLYWHEEL_SPEED_DEADBAND", FLYWHEEL_SPEED_DEADBAND);
+    }
 
 }

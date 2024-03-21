@@ -41,6 +41,7 @@ import frc.robot.util.MotorFrameConfigurator;
 public class ModuleIOSparkFlex implements ModuleIO {
   // Gear ratios for SDS MK4i L2, adjust as necessary
   private static final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+
   private static final double TURN_GEAR_RATIO = 150.0 / 7.0;
 
   private final CANSparkFlex _driveSparkFlex;
@@ -101,6 +102,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
     _turnSparkFlex.setSmartCurrentLimit(30);
     _driveSparkFlex.enableVoltageCompensation(12.0);
     _turnSparkFlex.enableVoltageCompensation(12.0);
+    _driveSparkFlex.setClosedLoopRampRate(0.25);
+    _turnSparkFlex.setClosedLoopRampRate(0.25);
 
     _driveEncoder.setPosition(0.0);
     _driveEncoder.setMeasurementPeriod(10);

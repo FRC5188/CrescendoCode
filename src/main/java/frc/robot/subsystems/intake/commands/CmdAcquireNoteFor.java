@@ -11,6 +11,7 @@ public class CmdAcquireNoteFor extends Command {
   private int _cyclesLeft;
   private int _timeToRunMS;
   private Intake _intake;
+  private double _speed;
 
   /**
    * Runs the intake rollers for a certain amount of certain. Turns off the rollers after this amount of time
@@ -18,9 +19,10 @@ public class CmdAcquireNoteFor extends Command {
    * @param timeToRunMS
    * @param intake
    */
-  public CmdAcquireNoteFor(int timeToRunMS, Intake intake) {
+  public CmdAcquireNoteFor(int timeToRunMS, Intake intake, double speed) {
     this._intake = intake;
     this._timeToRunMS = timeToRunMS;
+    this._speed = speed;
 
     this.addRequirements(this._intake);
   }
@@ -29,7 +31,7 @@ public class CmdAcquireNoteFor extends Command {
   public void initialize() {
     // Sets the amount of cycles that you want to run the command for based on the time given.
     this._cyclesLeft = (int) Math.ceil(this._timeToRunMS / 20.0);
-    this._intake.setRollerMotorSpeedAcquire();
+    this._intake.setRollerMotorSpeed(_speed);
   }
 
   @Override

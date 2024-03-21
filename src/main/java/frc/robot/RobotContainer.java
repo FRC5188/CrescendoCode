@@ -338,7 +338,7 @@ public class RobotContainer {
                 _opButtonNine.onTrue(this._intake.buildCommand().acquire())
                                 .onFalse(this._intake.buildCommand().stop());
 
-                _opButtonTen.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Amp));
+                _op2ButtonTen.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Amp));
 
                 // Move to shooter positions manually
                 // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));

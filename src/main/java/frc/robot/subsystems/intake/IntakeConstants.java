@@ -72,7 +72,6 @@ public class IntakeConstants {
     // Logs all of the IntakeConstants into Advantage Kit.
     
     static {
-
         Logger.recordOutput("Constants/Intake/INTAKE_WIDTH", INTAKE_WIDTH);
         Logger.recordOutput("Constants/Intake/INTAKE_HEIGHT", INTAKE_HEIGHT);
         Logger.recordOutput("Constants/Intake/INTAKE_LENGTH", INTAKE_LENGTH);

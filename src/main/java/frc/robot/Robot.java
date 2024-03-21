@@ -15,6 +15,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,6 +52,14 @@ public class Robot extends LoggedRobot {
   private RobotContainer _robotContainer;
   private Field2d _autonomousTrajectory = new Field2d();
   private List<Pose2d> _shownPaths = new ArrayList<>();
+
+  // Shuffleboard Boolean that shows whether battery voltage is above 12.8V.
+  public boolean isBatteryVoltageAbove() {
+    return RobotController.getBatteryVoltage() >=12.8;
+  }
+
+  // Shuffleboard Boolean that shows whether an auto is chosen in autonomous
+  public boolean _isAutoChosen;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -155,6 +164,10 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("NTClients/Names", clientNames.toArray(new String[clientNames.size()]));
     Logger.recordOutput("NTClients/Addresses", clientAddresses.toArray(new String[clientAddresses.size()]));
 
+    // SHUFFLEBOARD
+    // This shows whether the battery is above 12.8V. 
+    SmartDashboard.putBoolean("Is Battery Above 12.8V?", isBatteryVoltageAbove());
+
   }
 
   /** This function is called once when the robot is disabled. */
@@ -201,7 +214,14 @@ public class Robot extends LoggedRobot {
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
+      _isAutoChosen = true;
+    } else {
+      _isAutoChosen = false;
     }
+
+    // SHUFFLEBOARD
+    // This shows whether an auto is chosen. 
+    SmartDashboard.putBoolean("Is An Auto Selected?", _isAutoChosen);
   }
 
   /** This function is called periodically during autonomous. */

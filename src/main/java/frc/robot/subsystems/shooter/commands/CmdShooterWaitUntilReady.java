@@ -1,7 +1,5 @@
 package frc.robot.subsystems.shooter.commands;
 
-import com.ctre.phoenix.Logger;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
 

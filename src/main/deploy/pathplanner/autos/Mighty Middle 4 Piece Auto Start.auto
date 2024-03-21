@@ -24,7 +24,11 @@
               {
                 "type": "path",
                 "data": {
+<<<<<<< HEAD
                   "pathName": "(M4A) Grab Middle Note"
+=======
+                  "pathName": "(M3A) Shoot first note, move to second note pickup"
+>>>>>>> origin/main
                 }
               },
               {

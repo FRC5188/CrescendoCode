@@ -15,7 +15,6 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -24,7 +23,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,7 +33,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.RealClimberIO;
-import frc.robot.subsystems.climber.commands.CmdClimberMove;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -52,7 +49,6 @@ import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
-import frc.robot.subsystems.multisubsystemcommands.CmdShootOnTheMove;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -79,6 +75,8 @@ public class RobotContainer {
         private final Intake _intake;
         private final Shooter _shooter;
         private final Climber _climber;
+
+        private double _driveMultiplier = 1.0;
 
         private Command _adjustShooterAutomaticallyCommand;
 
@@ -241,26 +239,39 @@ public class RobotContainer {
                 _drive.setDefaultCommand(
                                 DriveCommands.joystickDrive(
                                                 _drive,
-                                                () -> -_driveController.getLeftY(),
-                                                () -> -_driveController.getLeftX(),
-                                                () -> -_driveController.getRightX()));
+                                                () -> -_driveController.getLeftY()*_driveMultiplier,
+                                                () -> -_driveController.getLeftX()*_driveMultiplier,
+                                                () -> -_driveController.getRightX()*_driveMultiplier));
                 // create an x shaped pattern with the wheels to make it harder to push us
                 // _driveController.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
                 // face the speaker while we hold this button
-                _driveController.leftBumper().whileTrue(new CmdShootOnTheMove(
-                _drive,
-                _shooter,
-                _intake,
-                () -> _driveController.getRightTriggerAxis(),
-                () -> _driveController.getLeftX(),
-                () -> _driveController.getRightX()));
-                
+                // _driveController.leftBumper().whileTrue(new CmdShootOnTheMove(
+                // _drive,
+                // _shooter,
+                // _intake,
+                // () -> _driveController.getRightTriggerAxis(),
+                // () -> _driveController.getLeftX(),
+                // () -> _driveController.getRightX()));
                 _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
-                                () -> _driveController.getLeftY(),
-                                () -> _driveController.getLeftX()));
+                        () -> -_driveController.getLeftY()*_driveMultiplier,
+                                                () -> -_driveController.getLeftX()*_driveMultiplier));      
+                
 
-                _driveController.a().whileTrue(new CmdDriveGoToNote(_drive));
+                _driveController.a().whileTrue(
+                        new InstantCommand(
+                                () -> this._driveMultiplier = 0.6
+                        )
+                );
+
+                _driveController.a().whileFalse(
+                        new InstantCommand(
+                                () -> this._driveMultiplier = 1.0
+                        )
+                );
+
+                _driveController.rightBumper().whileTrue(new CmdDriveGoToNote(_drive));
+
 
                 // reset the orientation of the robot. changes which way it thinks is forward
                 _driveController.y().onTrue(
@@ -291,9 +302,10 @@ public class RobotContainer {
                 _climber.setCanMove(true)))
                 .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
-                _climber.setDefaultCommand(new CmdClimberMove(_climber,
-                () -> -_climberController.getLeftY(),
-                () -> -_climberController.getRightY()));
+                // _climber.setDefaultCommand(new CmdClimberMove(_climber,
+                // () -> -_climberController.getLeftY(),
+                // () -> -_climberController.getRightY()));
+                _climberController.a().onTrue(Commands.runOnce(() -> _intake.setHasNote()));
 
                 /*
                  * ================================
@@ -312,7 +324,7 @@ public class RobotContainer {
 
                 // Move intake to different positions
                 // _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
-                _opButtonThree.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()));
+                _opButtonThree.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
                 _opButtonFour.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
 
                 _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));

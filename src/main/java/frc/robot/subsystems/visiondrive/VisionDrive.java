@@ -35,6 +35,7 @@ public class VisionDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    _visionDriveIO.updateInputs(_visionDriveInputs);
   }
 
   public boolean hasTarget() {

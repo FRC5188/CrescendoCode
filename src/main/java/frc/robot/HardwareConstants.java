@@ -60,7 +60,7 @@ public class HardwareConstants {
         * positive X, and where the left side of the robot is the negative Y.
         */
         // How far foward/backward the camera is from robot center.
-        private static final double CAMERA_ONE_X_FROM_ROBOT_CENTER = 0.1586; //Ch
+        private static final double CAMERA_ONE_X_FROM_ROBOT_CENTER = 0.1586 + 0.003175; // Mechanical offset + 1/8" offset
         // How far left/right the camera is from robot center.
         private static final double CAMERA_ONE_Y_FROM_ROBOT_CENTER = 0.2794;
         // How far up/down the camera is from center if we look at robot from side in 3D
@@ -75,7 +75,7 @@ public class HardwareConstants {
         new Translation3d(CAMERA_ONE_X_FROM_ROBOT_CENTER, CAMERA_ONE_Y_FROM_ROBOT_CENTER, CAMERA_ONE_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_ONE_ROLL, CAMERA_ONE_PITCH, CAMERA_ONE_YAW));
 
-        private static final double CAMERA_TWO_X_FROM_ROBOT_CENTER = 0.0334;
+        private static final double CAMERA_TWO_X_FROM_ROBOT_CENTER = 0.0334 - 0.003175; // Mechanical offset - 1/8" offset
         private static final double CAMERA_TWO_Y_FROM_ROBOT_CENTER = -0.2794;
         private static final double CAMERA_TWO_Z_FROM_ROBOT_CENTER = 0.1752;
 

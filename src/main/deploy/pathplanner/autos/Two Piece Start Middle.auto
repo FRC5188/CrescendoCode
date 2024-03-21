@@ -1,0 +1,50 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2303755661642377,
+      "y": 5.379311043522371
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M3A) Shoot first note, move to second note pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup_Note_Without_Limelight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Shoot_With_Auto_Align"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Middle Autos",
+  "choreoAuto": false
+}

@@ -92,6 +92,8 @@ public class DriveConstants {
     public static final double SHOOT_ON_THE_MOVE_D = 0.00075;
     public static final double SHOOT_ON_THE_MOVE_TOLERANCE = 3.0;
 
+    public static final double JOYSTICK_DEADBAND = 0.1;
+
     // Logs all of the IntakeConstants into Advantage Kit.
     static {
         Logger.recordOutput("Constants/Drive/MAX_LINEAR_SPEED", MAX_LINEAR_SPEED);
@@ -123,5 +125,17 @@ public class DriveConstants {
         Logger.recordOutput("Constants/Drive/MODULE_TURNPID_KP", MODULE_TURNPID_KP);
         Logger.recordOutput("Constants/Drive/MODULE_TURNPID_KI", MODULE_TURNPID_KI);
         Logger.recordOutput("Constants/Drive/MODULE_TURNPID_KD", MODULE_TURNPID_KD);
+
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_P", AUTO_ROTATE_P);
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_I", AUTO_ROTATE_I);
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_D", AUTO_ROTATE_D);
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_TOLERANCE", AUTO_ROTATE_TOLERANCE);
+
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_P", SHOOT_ON_THE_MOVE_P);
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_I", SHOOT_ON_THE_MOVE_I);
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_D", SHOOT_ON_THE_MOVE_D);
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_TOLERANCE", SHOOT_ON_THE_MOVE_TOLERANCE);
+
+        Logger.recordOutput("Constants/Drive/JOYSTICK_DEADBAND", JOYSTICK_DEADBAND);
     }
 }

@@ -72,13 +72,6 @@ public class IntakeConstants {
         Logger.recordOutput("Constants/Intake/PIVOT_PID_KP", PIVOT_PID_KP);
         Logger.recordOutput("Constants/Intake/PIVOT_PID_KI", PIVOT_PID_KI);
         Logger.recordOutput("Constants/Intake/PIVOT_PID_KD", PIVOT_PID_KD);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_MAX_VEL", PIVOT_PID_MAX_VEL);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_MAX_ACCEL", PIVOT_PID_MAX_ACCEL);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_MAX_ISUM", PIVOT_PID_MAX_ISUM);
-
-        Logger.recordOutput("Constants/Intake/ROLLERS_PID_KP", ROLLERS_PID_KP);
-        Logger.recordOutput("Constants/Intake/ROLLERS_PID_KI", ROLLERS_PID_KI);
-        Logger.recordOutput("Constants/Intake/ROLLERS_PID_KD", ROLLERS_PID_KD);
 
         Logger.recordOutput("Constants/Intake/POSITION_SOURCE_PICKUP", POSITION_SOURCE_PICKUP);
         Logger.recordOutput("Constants/Intake/POSITION_GROUND_PICKUP", POSITION_GROUND_PICKUP);

@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -33,13 +34,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.RealClimberIO;
-import frc.robot.subsystems.climber.commands.CmdClimberMove;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
+import frc.robot.subsystems.leds.LEDs;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -49,10 +50,7 @@ import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
-import frc.robot.subsystems.leds.LEDs;
-import frc.robot.subsystems.leds.commands.CmdLEDsRunLEDs;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
-import frc.robot.subsystems.multisubsystemcommands.CmdShootOnTheMove;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -82,9 +80,6 @@ public class RobotContainer {
         private final LEDs _leds;
 
         private double _driveMultiplier = 1.0;
-        private Command _runShooterPIDCommand;
-        private Command _runIntakePIDCommand;
-        private Command _runLEDsCommand;
 
         private Command _adjustShooterAutomaticallyCommand;
         private Command _runLEDsCommand;
@@ -177,7 +172,6 @@ public class RobotContainer {
                                 _climber = new Climber(new ClimberIO() {
                                 });
                                 _leds = new LEDs();
-                                _leds = new LEDs();
                                 break;
                         default:
                                 // Replayed robot, disable IO implementations
@@ -202,7 +196,6 @@ public class RobotContainer {
                                 });
                                 _climber = new Climber(new ClimberIO() {
                                 });
-                                _leds = new LEDs();
                                 _leds = new LEDs();
                                 break;
                 }
@@ -307,21 +300,6 @@ public class RobotContainer {
                                 Commands.runOnce(
                                                 () -> _drive.setPose(robotOnSubwooferRed), _drive).ignoringDisable(true));
 
-        _op2ButtonFour.onTrue(new Command() {
-
-            @Override
-            public void initialize(){
-                _leds.setAmpReady(true);
-            }
-
-            @Override
-            public boolean isFinished(){
-                return true;
-            }
-        }
-        );
-
-        // _op2ButtonSix.onTrue(new Command() {
                 /*
                  * ================================
                  * Climber Controller
@@ -364,24 +342,24 @@ public class RobotContainer {
                 // Run intake rollers, stop when we let go of button
                 _opButtonNine.onTrue(this._intake.buildCommand().acquire())
                                 .onFalse(this._intake.buildCommand().stop());
+        
+                // _op2ButtonFour.onTrue(new Command() {
+
+                //         @Override
+                //         public void initialize(){
+                //                 _leds.setAmpReady(true);
+                //         }
+                
+                //         @Override
+                //         public boolean isFinished(){
+                //                 return true;
+                //         }
+                // }
+                // );
 
                 // Move to shooter positions manually
                 // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
                 // _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
-
-                _op2ButtonFour.onTrue(new Command() {
-
-                @Override
-                public void initialize(){
-                        _leds.setAmpReady(true);
-                }
-
-                @Override
-                public boolean isFinished(){
-                        return true;
-                }
-                }
-                );
 
                 // // Reset hasNote in case the robot thinks that it has a note when it doesn't
                 // _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
@@ -441,17 +419,15 @@ public class RobotContainer {
                 return _shooter.buildCommand().runAnglePID();
         }
 
-    public Command getRunIntakePIDCommand() {
-        return this._runIntakePIDCommand;
-    }
-    public Command getRunLEDs() {
-        return this._runLEDsCommand;
-    }
         public Command getSetInitalShooterPosition() {
                 return _shooter.buildCommand().setPositionByZone(ShooterZone.Unknown);
         }
 
         public Command getFeederInitialStateCommand() {
                 return Commands.runOnce(() -> _intake.setFeederMotorPickupSpeed());
+        }
+
+        public Command getRunLEDs() {
+                return this._runLEDsCommand;
         }
 }

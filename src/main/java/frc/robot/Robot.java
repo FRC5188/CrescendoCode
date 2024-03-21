@@ -166,13 +166,12 @@ public class Robot extends LoggedRobot {
       _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
       _robotContainer.getFeederInitialStateCommand().schedule();
     }
-    // if the runLED command is NOT scheduled then schedule it
+    
     if(!CommandScheduler.getInstance().isScheduled(
       _robotContainer.getRunLEDs())){ 
       _robotContainer.getRunLEDs().schedule();
     }
 
-    
     // _robotContainer.getRunAnglePIDCommand().schedule();
     _robotContainer.getSetInitalShooterPosition().schedule();
     // schedule the autonomous command (example)
@@ -200,7 +199,7 @@ public class Robot extends LoggedRobot {
       _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
       _robotContainer.getFeederInitialStateCommand().schedule();
     }
-    //if the runLED command is NOT scheduled then schedule it
+    
     if(!CommandScheduler.getInstance().isScheduled(
       _robotContainer.getRunLEDs())){ 
       _robotContainer.getRunLEDs().schedule();

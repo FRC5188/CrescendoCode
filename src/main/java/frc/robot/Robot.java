@@ -202,9 +202,9 @@ public class Robot extends LoggedRobot {
     }
     //if the runLED command is NOT scheduled then schedule it
     if(!CommandScheduler.getInstance().isScheduled(
-          _robotContainer.getRunLEDs())){ 
-          _robotContainer.getRunLEDs().schedule();
-          }
+      _robotContainer.getRunLEDs())){ 
+      _robotContainer.getRunLEDs().schedule();
+    }
 
     _robotContainer.getSetInitalShooterPosition().schedule();
     //_robotContainer.getRunAnglePIDCommand().schedule();

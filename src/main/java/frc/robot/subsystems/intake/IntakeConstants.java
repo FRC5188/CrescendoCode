@@ -72,23 +72,6 @@ public class IntakeConstants {
     // Logs all of the IntakeConstants into Advantage Kit.
     
     static {
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_KP", PIVOT_PID_KP);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_KI", PIVOT_PID_KI);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_KD", PIVOT_PID_KD);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_MAX_VEL", PIVOT_PID_MAX_VEL);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_MAX_ACCEL", PIVOT_PID_MAX_ACCEL);
-        Logger.recordOutput("Constants/Intake/PIVOT_PID_MAX_ISUM", PIVOT_PID_MAX_ISUM);
-
-        Logger.recordOutput("Constants/Intake/ROLLERS_PID_KP", ROLLERS_PID_KP);
-        Logger.recordOutput("Constants/Intake/ROLLERS_PID_KI", ROLLERS_PID_KI);
-        Logger.recordOutput("Constants/Intake/ROLLERS_PID_KD", ROLLERS_PID_KD);
-
-        Logger.recordOutput("Constants/Intake/POSITION_SOURCE_PICKUP", POSITION_SOURCE_PICKUP);
-        Logger.recordOutput("Constants/Intake/POSITION_GROUND_PICKUP", POSITION_GROUND_PICKUP);
-        Logger.recordOutput("Constants/Intake/POSITION_STOWED", POSITION_STOWED);
-        Logger.recordOutput("Constants/Intake/POSITION_AMP_SCORE", POSITION_AMP_SCORE);
-        Logger.recordOutput("Constants/Intake/POSITION_SPEAKER_SCORE", POSITION_SPEAKER_SCORE);
-
         Logger.recordOutput("Constants/Intake/INTAKE_WIDTH", INTAKE_WIDTH);
         Logger.recordOutput("Constants/Intake/INTAKE_HEIGHT", INTAKE_HEIGHT);
         Logger.recordOutput("Constants/Intake/INTAKE_LENGTH", INTAKE_LENGTH);
@@ -96,10 +79,6 @@ public class IntakeConstants {
         Logger.recordOutput("Constants/Intake/MIN_INTAKE_ANGLE", MIN_INTAKE_ANGLE);
         Logger.recordOutput("Constants/Intake/MAX_INTAKE_ANGLE", MAX_INTAKE_ANGLE);
 
-        Logger.recordOutput("Constants/Intake/INTAKE_ACQUIRE_SPEED", INTAKE_ACQUIRE_SPEED);
-        Logger.recordOutput("Constants/Intake/INTAKE_SPIT_SPEED", INTAKE_SPIT_SPEED);
-        Logger.recordOutput("Constants/Intake/INTAKE_SPIT_TIME", INTAKE_SPIT_TIME);
-        Logger.recordOutput("Constants/Intake/INTAKE_CURRENT_CUTOFF", INTAKE_CURRENT_CUTOFF);
         Logger.recordOutput("Constants/Intake/INTAKE_STOP_SPEED", INTAKE_STOP_SPEED);
      
         Logger.recordOutput("Constants/Intake/INTAKE_PIVOT_DEADBAND", INTAKE_PIVOT_DEADBAND);

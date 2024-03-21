@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged; checkstyle says this is redunant
 import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.util.LoggedTunableNumber;
 
 public class Intake extends SubsystemBase {
 
@@ -16,14 +17,14 @@ public class Intake extends SubsystemBase {
         AmpScore(IntakeConstants.POSITION_AMP_SCORE),
         SpeakerScore(IntakeConstants.POSITION_SPEAKER_SCORE);
 
-        private final double _angle;
+        private final LoggedTunableNumber _angle;
 
         /**
          * These enum represents a prefedined position of the intake. These are what we pass to
          * commands to set the intake positions
          * @param angle
          */
-        private IntakePosition(double angle) {
+        private IntakePosition(LoggedTunableNumber angle) {
             this._angle = angle;
         }
 
@@ -32,7 +33,7 @@ public class Intake extends SubsystemBase {
          * @return
          */
         public double getAngle() {
-            return this._angle;
+            return this._angle.get();
         }
     }
 
@@ -91,7 +92,7 @@ public class Intake extends SubsystemBase {
      * Sets the roller motor to the acquire speed
      */
     public void setRollerMotorSpeedAcquire() {
-        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_ACQUIRE_SPEED.get());
     }
 
     /**
@@ -105,7 +106,7 @@ public class Intake extends SubsystemBase {
      * Sets the roller motor to the spit speed
      */
     public void setRollerMotorSpeedSpit() {
-        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED);
+        _intakeIO.setRollerMotorSpeed(IntakeConstants.INTAKE_SPIT_SPEED.get());
     }
 
     /**
@@ -116,11 +117,11 @@ public class Intake extends SubsystemBase {
     }
 
         public void setFeederMotorShootSpeed() {
-        _intakeIO.setFeederMotorSpeed(ShooterConstants.FEEDER_SHOOT_SPEED);
+        _intakeIO.setFeederMotorSpeed(ShooterConstants.FEEDER_SHOOT_SPEED.get());
     }
 
     public void setFeederMotorPickupSpeed() {
-        _intakeIO.setFeederMotorSpeed(ShooterConstants.FEEDER_PICKUP_SPEED);
+        _intakeIO.setFeederMotorSpeed(ShooterConstants.FEEDER_PICKUP_SPEED.get());
     }
 
     /**

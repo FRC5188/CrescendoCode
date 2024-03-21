@@ -107,20 +107,6 @@ public abstract class ShooterConstants {
 
     // Logs all of the ShooterConstants into Advantage Kit.
     static {
-        Logger.recordOutput("Constants/Shooter/ZONE_PODIUM_FLYWHEEL_SPEED", ZONE_PODIUM_FLYWHEEL_SPEED);
-        Logger.recordOutput("Constants/Shooter/ZONE_PODIUM_LOW_BOUND", ZONE_PODIUM_LOW_BOUND);
-        Logger.recordOutput("Constants/Shooter/ZONE_PODIUM_UPPER_BOUND", ZONE_PODIUM_UPPER_BOUND);
-        Logger.recordOutput("Constants/Shooter/ZONE_PODIUM_SHOOTER_ANGLE", ZONE_PODIUM_SHOOTER_ANGLE);
-
-        Logger.recordOutput("Constants/Shooter/ZONE_SUBWOOFER_FLYWHEEL_SPEED", ZONE_SUBWOOFER_FLYWHEEL_SPEED);
-        Logger.recordOutput("Constants/Shooter/ZONE_SUBWOOFER_LOW_BOUND", ZONE_SUBWOOFER_LOW_BOUND);
-        Logger.recordOutput("Constants/Shooter/ZONE_SUBWOOFER_UPPER_BOUND", ZONE_SUBWOOFER_UPPER_BOUND);
-        Logger.recordOutput("Constants/Shooter/ZONE_SUBWOOFER_SHOOTER_ANGLE", ZONE_SUBWOOFER_SHOOTER_ANGLE);
-
-        Logger.recordOutput("Constants/Shooter/ZONE_UNKOWN_FLYWHEEL_SPEED", ZONE_UNKNOWN_FLYWHEEL_SPEED);
-        Logger.recordOutput("Constants/Shooter/ZONE_UNKOWN_LOW_BOUND", ZONE_UNKNOWN_LOW_BOUND);
-        Logger.recordOutput("Constants/Shooter/ZONE_UNKOWN_UPPER_BOUND", ZONE_UNKNOWN_UPPER_BOUND);
-        Logger.recordOutput("Constants/Shooter/ZONE_UNKOWN_SHOOTER_ANGLE", ZONE_UNKNOWN_SHOOTER_ANGLE);
 
         Logger.recordOutput("Constants/Shooter/MAXIMUM_ANGLE_ENCODER_ANGLE", MAXIMUM_ANGLE_ENCODER_ANGLE);
         Logger.recordOutput("Constants/Shooter/MINIMUM_ANGLE_ENCODER_ANGLE", MINIMUM_ANGLE_ENCODER_ANGLE);

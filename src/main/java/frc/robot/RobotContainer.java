@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.RealClimberIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -44,11 +43,11 @@ import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
-import frc.robot.subsystems.drive.commands.CmdDriveGoToNote;
 import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
+import frc.robot.subsystems.multisubsystemcommands.CmdGoToNote;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -58,7 +57,7 @@ import frc.robot.subsystems.shooter.commands.CmdShooterWaitUntilReady;
 import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.visiondrive.RealVisionDriveIO;
-import frc.robot.subsystems.visiondrive.VisionDriveIO;
+import frc.robot.subsystems.visiondrive.VisionDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -75,6 +74,7 @@ public class RobotContainer {
         private final Intake _intake;
         private final Shooter _shooter;
         private final Climber _climber;
+        private final VisionDrive _visionDrive;
 
         private double _driveMultiplier = 1.0;
 
@@ -139,7 +139,6 @@ public class RobotContainer {
                                 _drive = new Drive(
                                                 new GyroIONavX2(),
                                                 new RealVisionIO(),
-                                                new RealVisionDriveIO(),
                                                 new ModuleIOSparkFlex(0),
                                                 new ModuleIOSparkFlex(1),
                                                 new ModuleIOSparkFlex(2),
@@ -147,6 +146,7 @@ public class RobotContainer {
                                 _intake = new Intake(new RealIntakeIO());
                                 _shooter = new Shooter(new RealShooterIO());
                                 _climber = new Climber(new RealClimberIO());
+                                _visionDrive = new VisionDrive(new RealVisionDriveIO());
                                 break;
 
                         case SIM:
@@ -156,8 +156,6 @@ public class RobotContainer {
                                                 },
                                                 new VisionIO() {
                                                 },
-                                                new VisionDriveIO() {
-                                                },
                                                 new ModuleIOSim(),
                                                 new ModuleIOSim(),
                                                 new ModuleIOSim(),
@@ -166,7 +164,9 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                _climber = new Climber(new ClimberIO() {
+                                _climber = new Climber(new RealClimberIO() {
+                                });
+                                _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
                                 break;
                         default:
@@ -175,8 +175,6 @@ public class RobotContainer {
                                                 new GyroIO() {
                                                 },
                                                 new VisionIO() {
-                                                },
-                                                new VisionDriveIO() {
                                                 },
                                                 new ModuleIO() {
                                                 },
@@ -190,7 +188,9 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                _climber = new Climber(new ClimberIO() {
+                                _climber = new Climber(new RealClimberIO() {
+                                });
+                                _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
                                 break;
                 }
@@ -272,7 +272,7 @@ public class RobotContainer {
                         )
                 );
 
-                _driveController.rightBumper().whileTrue(new CmdDriveGoToNote(_drive));
+                _driveController.rightBumper().whileTrue(new CmdGoToNote(_drive, _visionDrive));
 
 
                 // reset the orientation of the robot. changes which way it thinks is forward
@@ -300,9 +300,9 @@ public class RobotContainer {
                  * Climber Controller
                  * ================================
                  */
-                // _climberController.rightBumper().onTrue(Commands.runOnce(() ->
-                // _climber.setCanMove(true)))
-                // .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
+                _climberController.rightBumper().onTrue(Commands.runOnce(() ->
+                _climber.setCanMove(true)))
+                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
 
                 // _climber.setDefaultCommand(new CmdClimberMove(_climber,
                 // () -> -_climberController.getLeftY(),
@@ -326,7 +326,7 @@ public class RobotContainer {
 
                 // Move intake to different positions
                 // _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
-                _opButtonThree.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
+                _opButtonThree.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()));
                 _opButtonFour.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
 
                 _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));

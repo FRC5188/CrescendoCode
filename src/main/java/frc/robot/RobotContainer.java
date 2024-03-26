@@ -15,6 +15,7 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -30,8 +31,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.RealClimberIO;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -73,7 +72,7 @@ public class RobotContainer {
         private final Drive _drive;
         private final Intake _intake;
         private final Shooter _shooter;
-        private final Climber _climber;
+        // private final Climber _climber;
         private final VisionDrive _visionDrive;
 
         private double _driveMultiplier = 1.0;
@@ -85,45 +84,43 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
-        private final CommandXboxController _climberController = new CommandXboxController(1);
 
         // Button box
         // Top half of buttons
-        private final GenericHID _operatorController1 = new GenericHID(2);
-
+        private final GenericHID _operatorController1 = new GenericHID(1);
         // Bottom half of buttons
-        private final GenericHID _operatorController2 = new GenericHID(3);
+        private final GenericHID _operatorController2 = new GenericHID(2);
 
-        // Left column, top to bottom
+        // Top row, left to right
         private JoystickButton _opButtonOne = new JoystickButton(_operatorController1, 1);
         private JoystickButton _opButtonTwo = new JoystickButton(_operatorController1, 2);
         private JoystickButton _opButtonThree = new JoystickButton(_operatorController1, 3);
 
-        // Middle column, top to bottom
-        private JoystickButton _opButtonFour = new
-        JoystickButton(_operatorController1, 4);
+        // second row from top. left to right
+        private JoystickButton _opButtonFour = new JoystickButton(_operatorController1, 4);
         private JoystickButton _opButtonFive = new JoystickButton(_operatorController1, 5);
         private JoystickButton _opButtonSix = new JoystickButton(_operatorController1, 6);
 
-        // Right column, top to bottom
-        private JoystickButton _opButtonSeven = new
-        JoystickButton(_operatorController1, 7);
-        private JoystickButton _opButtonEight = new
-        JoystickButton(_operatorController1, 8);
+        // Third row from top. left to right
+        private JoystickButton _opButtonSeven = new JoystickButton(_operatorController1, 7);
+        private JoystickButton _opButtonEight = new JoystickButton(_operatorController1, 8);
         private JoystickButton _opButtonNine = new JoystickButton(_operatorController1, 9);
 
-        // Side Toggle Switch
+        // Top left toggle switch
         private JoystickButton _autoShootToggle = new JoystickButton(_operatorController1, 10);
 
-        // Bottom rows, left to right (not top then bottom!)
+        // fourth from top row. left to right
         private JoystickButton _op2ButtonOne = new JoystickButton(_operatorController2, 1);
         private JoystickButton _op2ButtonTwo = new JoystickButton(_operatorController2, 2);
         private JoystickButton _op2ButtonThree = new JoystickButton(_operatorController2, 3);
+
+        // second from the bottom row. left to right
         private JoystickButton _op2ButtonFour = new JoystickButton(_operatorController2, 4);
         private JoystickButton _op2ButtonFive = new JoystickButton(_operatorController2, 5);
         private JoystickButton _op2ButtonSix = new JoystickButton(_operatorController2, 6);
 
-        // Bottom right button (Frowny face)
+        // bottom row. left to right
+        private JoystickButton _op2ButtonSeven = new JoystickButton(_operatorController2, 7);
         private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 8);
         private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
 
@@ -143,7 +140,7 @@ public class RobotContainer {
                                                 new ModuleIOSparkFlex(3));
                                 _intake = new Intake(new RealIntakeIO());
                                 _shooter = new Shooter(new RealShooterIO());
-                                _climber = new Climber(new RealClimberIO());
+                                // _climber = new Climber(new RealClimberIO());
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO());
                                 break;
 
@@ -162,8 +159,8 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                _climber = new Climber(new RealClimberIO() {
-                                });
+                                // _climber = new Climber(new RealClimberIO() {
+                                // });
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
                                 break;
@@ -186,8 +183,8 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                _climber = new Climber(new RealClimberIO() {
-                                });
+                                // _climber = new Climber(new RealClimberIO() {
+                                // });
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
                                 break;
@@ -291,22 +288,9 @@ public class RobotContainer {
                 // Change the robot pose to think it is in front of the red speaker
                 _driveController.b().onTrue(
                                 Commands.runOnce(
-                                                () -> _drive.setPose(robotOnSubwooferRed), _drive).ignoringDisable(true));
+                                () -> _drive.setPose(robotOnSubwooferRed), _drive).ignoringDisable(true));
 
-                /*
-                 * ================================
-                 * Climber Controller
-                 * ================================
-                 */
-                _climberController.rightBumper().onTrue(Commands.runOnce(() ->
-                _climber.setCanMove(true)))
-                .onFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
-
-                // _climber.setDefaultCommand(new CmdClimberMove(_climber,
-                // () -> -_climberController.getLeftY(),
-                // () -> -_climberController.getRightY()));
-                _climberController.a().onTrue(Commands.runOnce(() -> _intake.setHasNote()));
-
+                
                 /*
                  * ================================
                  * Button Box
@@ -320,37 +304,31 @@ public class RobotContainer {
 
                 // Adjust shooter angle from current position
                 _opButtonOne.onTrue(this._shooter.buildCommand().adjustAngle(1));
-                _opButtonTwo.onTrue(this._shooter.buildCommand().adjustAngle(-1));
+                _opButtonFour.onTrue(this._shooter.buildCommand().adjustAngle(-1));
 
                 // Move intake to different positions
-                // _opButtonThree.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
-                _opButtonThree.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()));
-                _opButtonFour.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
-
+                _opButtonTwo.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
+                _opButtonNine.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()));
+                _op2ButtonNine.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
+                _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.setHasNote()));
                 _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
-                _opButtonSix.onTrue(this._intake.buildCommand().pickUpFromGround(0));
-                _opButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                _opButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
-
+                _opButtonEight.onTrue(this._intake.buildCommand().pickUpFromGround(0));
+                
                 // Run intake rollers, stop when we let go of button
-                _opButtonNine.onTrue(this._intake.buildCommand().acquire())
-                                .onFalse(this._intake.buildCommand().stop());
+                _opButtonSeven.onTrue(this._intake.buildCommand().acquire())
+                        .onFalse(this._intake.buildCommand().stop());
 
-                // Move to shooter positions manually
-                // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                // _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                // manually set the shooter
+                _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
-                // // Reset hasNote in case the robot thinks that it has a note when it doesn't
-                // _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
+               
+                // sad face button
+                _op2ButtonThree.onTrue(new InstantCommand(
+                                () -> Logger.recordOutput(":(", true)));
 
-                // // Spit the note out and run the feeder wheels
-                // _op2ButtonEight.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME));
-
-                // _op2ButtonNine.onTrue(new InstantCommand(
-                //                 () -> Logger.recordOutput(":(", true)));
-
-                // _op2ButtonNine.onFalse(new InstantCommand(
-                //                 () -> Logger.recordOutput(":(", false)));
+                _op2ButtonThree.onFalse(new InstantCommand(
+                                () -> Logger.recordOutput(":(", false)));
 
                 /***
                  * 

@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class HardwareConstants {
-    public static final int NUMBER_OF_CAMERAS = 2;
+    public static final int NUMBER_OF_CAMERAS = 1;
     public class CanIds {
         // |====================== SWERVE MODULE CAN IDs ======================|
         public static int FL_DRIVE = 1;

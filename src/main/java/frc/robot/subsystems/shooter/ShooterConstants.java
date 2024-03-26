@@ -20,12 +20,10 @@ public abstract class ShooterConstants {
      *********************/
 
     // PODIUM
-    // public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new
-    // LoggedTunableNumber("SHOOTER/PODIUM_FLYWHEEL_SPEED", 1750);
-    public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/PODIUM_FLYWHEEL_SPEED", 1750);
-    public static final LoggedTunableNumber ZONE_PODIUM_LOW_BOUND = new LoggedTunableNumber("SHOOTER/PODIUM_LOW_BOUND", 4);
-    public static final LoggedTunableNumber ZONE_PODIUM_UPPER_BOUND = new LoggedTunableNumber("SHOOTER/PODIUM_UPPER_BOUND", 2.5);
-    public static final LoggedTunableNumber ZONE_PODIUM_SHOOTER_ANGLE = new LoggedTunableNumber("SHOOTER/PODIUM_SHOOTER_ANGLE", 22);
+    public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/PODIUM_FLYWHEEL_SPEED", 1750);
+    public static final LoggedTunableNumber ZONE_PODIUM_LOW_BOUND = new LoggedTunableNumber("Shooter/PODIUM_LOW_BOUND", 4);
+    public static final LoggedTunableNumber ZONE_PODIUM_UPPER_BOUND = new LoggedTunableNumber("Shooter/PODIUM_UPPER_BOUND", 2.5);
+    public static final LoggedTunableNumber ZONE_PODIUM_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/PODIUM_SHOOTER_ANGLE", 22);
 
     // AMP
     // public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new
@@ -37,35 +35,33 @@ public abstract class ShooterConstants {
     public static final double ZONE_AMP_SHOOTER_ANGLE = 42.0;
 
     // SUBWOOFER
-    // public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new
-    // LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 1300);  
-    public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/SUBWOOFER_FLYWHEEL_SPEED", 100);
-    public static final LoggedTunableNumber ZONE_SUBWOOFER_LOW_BOUND = new LoggedTunableNumber("SHOOTER/SUBWOOFER_LOW_BOUND", 0.0);
-    public static final LoggedTunableNumber ZONE_SUBWOOFER_UPPER_BOUND = new LoggedTunableNumber("SHOOTER/SUBWOOFER_UPPER_BOUND", 2.5);
-    public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("SHOOTER/SUBWOOFER_SHOOTER_ANGLE", 42.0);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/SUBWOOFER_FLYWHEEL_SPEED", 1200);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_LOW_BOUND = new LoggedTunableNumber("Shooter/SUBWOOFER_LOW_BOUND", 0.0);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_UPPER_BOUND = new LoggedTunableNumber("Shooter/SUBWOOFER_UPPER_BOUND", 2.5);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/SUBWOOFER_SHOOTER_ANGLE", 42.0);
     
     // unknown
-    public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("SHOOTER/UNKNOWN_FLYWHEEL_SPEED", 200);
-    public static final LoggedTunableNumber ZONE_UNKNOWN_LOW_BOUND = new LoggedTunableNumber("SHOOTER/UNKNOWN_LOW_BOUND", -1);
-    public static final LoggedTunableNumber ZONE_UNKNOWN_UPPER_BOUND = new LoggedTunableNumber("SHOOTER/UNKNOWN_UPPER_BOUND", -1);
-    public static final LoggedTunableNumber ZONE_UNKNOWN_SHOOTER_ANGLE = new LoggedTunableNumber("SHOOTER/UNKNOWN_SHOOTER_ANGLE", 35);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/UNKNOWN_FLYWHEEL_SPEED", 200);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_LOW_BOUND = new LoggedTunableNumber("Shooter/UNKNOWN_LOW_BOUND", -1);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_UPPER_BOUND = new LoggedTunableNumber("Shooter/UNKNOWN_UPPER_BOUND", -1);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/UNKNOWN_SHOOTER_ANGLE", 35);
 
-    public static final LoggedTunableNumber SHOOTER_ANGLE_PID_KP = new LoggedTunableNumber("SHOOTER/ANGLE_PID/kP", 0.017);
-    public static final LoggedTunableNumber SHOOTER_ANGLE_PID_KI = new LoggedTunableNumber("SHOOTER/ANGLE_PID/kI", 0.00008);
-    public static final LoggedTunableNumber SHOOTER_ANGLE_PID_KD = new LoggedTunableNumber("SHOOTER/ANGLE_PID/kD", 0.25);
+    public static final LoggedTunableNumber SHOOTER_ANGLE_PID_KP = new LoggedTunableNumber("Shooter/ANGLE_PID/kP", 0.017);
+    public static final LoggedTunableNumber SHOOTER_ANGLE_PID_KI = new LoggedTunableNumber("Shooter/ANGLE_PID/kI", 0.00008);
+    public static final LoggedTunableNumber SHOOTER_ANGLE_PID_KD = new LoggedTunableNumber("Shooter/ANGLE_PID/kD", 0.25);
 
-    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_KP = new LoggedTunableNumber("SHOOTER/FLYWHEEL_PID/kP", 0.000);
-    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_KI = new LoggedTunableNumber("SHOOTER/FLYWHEEL_PID/kI", 0.0000);
-    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_KD = new LoggedTunableNumber("SHOOTER/FLYWHEEL_PID/kD", 0.0000);
-    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_FF = new LoggedTunableNumber("SHOOTER/FLYWHEEL_PID/kFF", 0.00022);
+    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_KP = new LoggedTunableNumber("Shooter/FLYWHEEL_PID/kP", 0.000);
+    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_KI = new LoggedTunableNumber("Shooter/FLYWHEEL_PID/kI", 0.0000);
+    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_KD = new LoggedTunableNumber("Shooter/FLYWHEEL_PID/kD", 0.0000);
+    public static final LoggedTunableNumber SHOOTER_FLYWHEEL_PID_FF = new LoggedTunableNumber("Shooter/FLYWHEEL_PID/kFF", 0.00022);
 
     /**************
      * 
      * SHOOTER FEEDER CONSTANTS
      *
      **************/
-    public static final LoggedTunableNumber FEEDER_SHOOT_SPEED = new LoggedTunableNumber("SHOOTER/FEEDER_SHOOT_SPEED", 0.7);
-    public static final LoggedTunableNumber FEEDER_PICKUP_SPEED = new LoggedTunableNumber("SHOOTER/FEEDER_PICKUP_SPEED", 0.00);
+    public static final LoggedTunableNumber FEEDER_SHOOT_SPEED = new LoggedTunableNumber("Shooter/FEEDER_SHOOT_SPEED", 0.7);
+    public static final LoggedTunableNumber FEEDER_PICKUP_SPEED = new LoggedTunableNumber("Shooter/FEEDER_PICKUP_SPEED", 0.00);
 
     /**************
      * 

@@ -20,17 +20,13 @@ public abstract class ShooterConstants {
      *********************/
 
     // PODIUM
-    // public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new
-    // LoggedTunableNumber("Shooter/PODIUM_FLYWHEEL_SPEED", 1750);
     public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/PODIUM_FLYWHEEL_SPEED", 1750);
     public static final LoggedTunableNumber ZONE_PODIUM_LOW_BOUND = new LoggedTunableNumber("Shooter/PODIUM_LOW_BOUND", 4);
     public static final LoggedTunableNumber ZONE_PODIUM_UPPER_BOUND = new LoggedTunableNumber("Shooter/PODIUM_UPPER_BOUND", 2.5);
     public static final LoggedTunableNumber ZONE_PODIUM_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/PODIUM_SHOOTER_ANGLE", 22);
 
     // SUBWOOFER
-    // public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new
-    // LoggedTunableNumber("Shooter/SUBWOOFER_FLYWHEEL_SPEED", 1300);  
-    public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/SUBWOOFER_FLYWHEEL_SPEED", 100);
+    public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/SUBWOOFER_FLYWHEEL_SPEED", 1200);
     public static final LoggedTunableNumber ZONE_SUBWOOFER_LOW_BOUND = new LoggedTunableNumber("Shooter/SUBWOOFER_LOW_BOUND", 0.0);
     public static final LoggedTunableNumber ZONE_SUBWOOFER_UPPER_BOUND = new LoggedTunableNumber("Shooter/SUBWOOFER_UPPER_BOUND", 2.5);
     public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/SUBWOOFER_SHOOTER_ANGLE", 42.0);

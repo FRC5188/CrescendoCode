@@ -10,6 +10,7 @@
 
 package frc.robot.subsystems.multisubsystemcommands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,8 +37,6 @@ public class CmdShootOnTheMove extends Command {
   private DoubleSupplier _translationXSupplier;
   private DoubleSupplier _translationYSupplier;
 
-  private Command _autoAdjustCommand;
-
   private boolean _isFinished;
 
   private Translation2d _currentRobotTranslation;
@@ -50,13 +49,12 @@ public class CmdShootOnTheMove extends Command {
   private double _correctedRotation;
   private double _timeUntilShot;
   private Translation2d _moveDelta;
-  private DoubleSupplier _trigger;
+  private BooleanSupplier _shootBoolean;
   private Timer _shotTimer;
   private Boolean _hasRunOnce;
   private double _correctedRadius;
   private Pose2d _futureRobotPose2d;
   private double _triggerThreshold;
-
   private PIDController _rotationPID;
 
   /**
@@ -66,24 +64,23 @@ public class CmdShootOnTheMove extends Command {
    * @param drivetrainSubsystem  the drive subsystem
    * @param shooterSubsystem     the shooter subsystem
    * @param intakeSubsystem      the intake subsystem
-   * @param triggerAxis          button binding used
+   * @param shootBooleanSupplier the value of the button used to shoot. should be the value of the spit button.
    * @param translationXSupplier translation x supplied by driver translation
    *                             joystick
    * @param translationYSupplier translation y supplied by driver translation
    *                             joystick
-[]\
    **/
   public CmdShootOnTheMove(Drive drivetrainSubsystem,
       Shooter shooterSubsystem,
       Intake intakeSubsystem,
-      DoubleSupplier triggerAxis,
+      BooleanSupplier shootBooleanSupplier,
       DoubleSupplier translationXSupplier,
       DoubleSupplier translationYSupplier) {
 
     _drive = drivetrainSubsystem;
     _shooter = shooterSubsystem;
     _intake = intakeSubsystem;
-    _trigger = triggerAxis;
+    _shootBoolean = shootBooleanSupplier;
     _translationXSupplier = translationXSupplier;
     _translationYSupplier = translationYSupplier;
 
@@ -97,7 +94,6 @@ public class CmdShootOnTheMove extends Command {
 
     _shotTimer = new Timer();
     _hasRunOnce = false;
-    _triggerThreshold = 0.1;
 
     addRequirements(drivetrainSubsystem);
   }
@@ -113,7 +109,7 @@ public class CmdShootOnTheMove extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (_trigger.getAsDouble() > _triggerThreshold) {
+    if (_shootBoolean.getAsBoolean()) {
       if (!_hasRunOnce) {
         _shotTimer.start();
         _hasRunOnce = true;
@@ -169,12 +165,7 @@ public class CmdShootOnTheMove extends Command {
 
     if (_shooter.isAutoShootEnabled()) {
       if (_intake.hasNote()) {
-        // if (_correctedZone != _shooter.getCurrentZone()) {
-        //   // We want to shoot!
-        //   _shooter.runShooterForZone(_correctedZone);
-        // }
         _shooter.runShooterForRadius(_correctedRadius);
-
       } else {
         if (_shooter.getCurrentZone() != ShooterZone.Unknown) {
           _shooter.runShooterForZone(ShooterZone.Unknown);

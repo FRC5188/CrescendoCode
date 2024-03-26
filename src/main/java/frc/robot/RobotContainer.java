@@ -48,6 +48,7 @@ import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
 import frc.robot.subsystems.multisubsystemcommands.CmdGoToNote;
+import frc.robot.subsystems.multisubsystemcommands.CmdShootOnTheMove;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -245,17 +246,16 @@ public class RobotContainer {
                 // create an x shaped pattern with the wheels to make it harder to push us
                 // _driveController.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
-                // face the speaker while we hold this button
-                // _driveController.leftBumper().whileTrue(new CmdShootOnTheMove(
-                // _drive,
-                // _shooter,
-                // _intake,
-                // () -> _driveController.getRightTriggerAxis(),
-                // () -> _driveController.getLeftX(),
-                // () -> _driveController.getRightX()));
-                _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
-                        () -> -_driveController.getLeftY()*_driveMultiplier,
-                                                () -> -_driveController.getLeftX()*_driveMultiplier));      
+
+                // _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
+                //         () -> -_driveController.getLeftY()*_driveMultiplier,
+                //                                 () -> -_driveController.getLeftX()*_driveMultiplier));    
+                _driveController.leftBumper().whileTrue(new CmdShootOnTheMove(_drive, 
+                                                                                _shooter, 
+                                                                                _intake, 
+                                                        () -> _opButtonThree.getAsBoolean(), 
+                                                        () -> -_driveController.getLeftY()*_driveMultiplier,
+                                                        () -> -_driveController.getLeftX()*_driveMultiplier));
                 
 
                 _driveController.a().whileTrue(

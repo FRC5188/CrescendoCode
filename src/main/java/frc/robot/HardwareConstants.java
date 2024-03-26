@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class HardwareConstants {
-    public static final int NUMBER_OF_CAMERAS = 2;
+    public static final int NUMBER_OF_CAMERAS = 1;
     public class CanIds {
         // |====================== SWERVE MODULE CAN IDs ======================|
         public static int FL_DRIVE = 1;
@@ -46,7 +46,6 @@ public class HardwareConstants {
     public class DIOPorts {
         public static int LEFT_LIMIT_SWITCH_PORT = 0;
         public static int RIGHT_LIMIT_SWITCH_PORT = 1; 
-        public static int INTAKE_DISTANCE_SENSOR_PORT = 2;
         public static int SHOOTER_ANGLE_ENCODER_PORT = 7; // These must be configured when robot is wired. 
         public static int INTAKE_PIVOT_ENCODER_PORT = 8;
     }

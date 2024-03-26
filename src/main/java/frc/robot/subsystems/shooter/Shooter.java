@@ -320,9 +320,9 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/isReady", this.isReady());
         Logger.recordOutput("Shooter/inPosition", this.shooterInPosition());
         Logger.recordOutput("Shooter/areFlywheelsAtTargetSpeed", this.areFlywheelsAtTargetSpeed());
-        //Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint().position);
         Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint());
         Logger.recordOutput("Shooter/TargetShooterAngle", _targetShooterAngle);
         Logger.recordOutput("Shooter/AnglePIDCalculatedOutput", calcAnglePID());
+        Logger.recordOutput("Shooter/isAutoShootEnabled",this.isAutoShootEnabled());
     }
 }

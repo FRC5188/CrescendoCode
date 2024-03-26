@@ -250,7 +250,7 @@ public class RobotContainer {
                 _driveController.leftBumper().whileTrue(new CmdShootOnTheMove(_drive, 
                                                                                 _shooter, 
                                                                                 _intake, 
-                                                        () -> _opButtonThree.getAsBoolean(), 
+                                                        () -> _opButtonNine.getAsBoolean(), 
                                                         () -> -_driveController.getLeftY()*_driveMultiplier,
                                                         () -> -_driveController.getLeftX()*_driveMultiplier));
                 

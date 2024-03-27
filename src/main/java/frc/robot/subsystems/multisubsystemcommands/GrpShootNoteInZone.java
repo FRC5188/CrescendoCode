@@ -21,10 +21,9 @@ public class GrpShootNoteInZone extends SequentialCommandGroup {
                 shooterSubsystem.buildCommand().setAutoShootEnabled(false),
                 intakeSubsystem.buildCommand().setPosition(IntakePosition.Stowed),
                 shooterSubsystem.buildCommand().runForZone(zone),
-                new CmdShooterWaitUntilReady(shooterSubsystem).withTimeout(4),
+                new CmdShooterWaitUntilReady(shooterSubsystem).withTimeout(2),
                 intakeSubsystem.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()),
                 shooterSubsystem.buildCommand().runForZone(ShooterZone.Unknown),
-        intakeSubsystem.buildCommand().setPosition(IntakePosition.Stowed),
         new InstantCommand(() -> shooterSubsystem.setAutoShootEnabled(_wasAutoShootEnabled)));
     }
 

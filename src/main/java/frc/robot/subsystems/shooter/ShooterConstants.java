@@ -29,19 +29,10 @@ public abstract class ShooterConstants {
     // public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new
     // LoggedTunableNumber("SHOOTER/PODIUM_FLYWHEEL_SPEED", 1750);
     // TODO: Assign real values
-    public static final double ZONE_AMP_FLYWHEEL_SPEED = 1000;
-    public static final double ZONE_AMP_LOW_BOUND = 0.0;
-    public static final double ZONE_AMP_UPPER_BOUND = 2.5;
-    public static final double ZONE_AMP_SHOOTER_ANGLE = 42.0;
-
-    // AMP
-    // public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new
-    // LoggedTunableNumber("SHOOTER/PODIUM_FLYWHEEL_SPEED", 1750);
-    // TODO: Assign real values
-    public static final double ZONE_AMP_FLYWHEEL_SPEED = 1000;
-    public static final double ZONE_AMP_LOW_BOUND = 0.0;
-    public static final double ZONE_AMP_UPPER_BOUND = 2.5;
-    public static final double ZONE_AMP_SHOOTER_ANGLE = 42.0;
+    public static final LoggedTunableNumber ZONE_AMP_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/ZONE_AMP_FLYWHEEL_SPEED",1000);
+    public static final LoggedTunableNumber ZONE_AMP_LOW_BOUND = new LoggedTunableNumber("Shooter/ZONE_AMP_LOW_BOUND",0.0);
+    public static final LoggedTunableNumber ZONE_AMP_UPPER_BOUND = new LoggedTunableNumber("Shooter/ZONE_AMP_UPPER_BOUND" ,2.5);
+    public static final LoggedTunableNumber ZONE_AMP_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/ZONE_AMP_SHOOTER_ANGLE" ,42.0);
 
     // SUBWOOFER
     public static final LoggedTunableNumber ZONE_SUBWOOFER_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/SUBWOOFER_FLYWHEEL_SPEED", 1200);

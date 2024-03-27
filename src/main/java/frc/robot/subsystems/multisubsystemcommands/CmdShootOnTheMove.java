@@ -13,6 +13,8 @@ package frc.robot.subsystems.multisubsystemcommands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -26,6 +28,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 
 public class CmdShootOnTheMove extends Command {
@@ -155,12 +158,16 @@ public class CmdShootOnTheMove extends Command {
     _futureRobotPose2d = new Pose2d(_futureRobotTranslation, _futureAngleToSpeaker);
     _correctedRadius = _drive.getRadiusToSpeakerInMeters(_futureRobotPose2d);
 
+    Logger.recordOutput("Drive/ShootOnTheMove/IdealFuturePose", _futureRobotPose2d);
+    Logger.recordOutput("Drive/ShootOnTheMove/CurrentAngle", Units.radiansToDegrees(_currentAngleRadians));
+    Logger.recordOutput("Drive/ShootOnTheMove/IdealFutureAngle", _futureAngleToSpeaker.getDegrees());
+
     // drive the robot based on the calculations from above
     _drive.runVelocity(
         _drive.transformJoystickInputsToChassisSpeeds(
           _translationXSupplier.getAsDouble(), 
           _translationYSupplier.getAsDouble(),
-           _correctedRotation, false));
+           _correctedRotation, true));
         
 
     if (_shooter.isAutoShootEnabled()) {

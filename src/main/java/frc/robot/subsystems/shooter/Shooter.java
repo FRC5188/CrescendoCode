@@ -19,6 +19,7 @@ public class Shooter extends SubsystemBase {
     public enum ShooterZone {
         Subwoofer,
         Podium,
+        Amp,
         Unknown
     }
 
@@ -64,6 +65,11 @@ public class Shooter extends SubsystemBase {
             ShooterConstants.ZONE_PODIUM_UPPER_BOUND,
             ShooterConstants.ZONE_PODIUM_SHOOTER_ANGLE,
             ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED);
+    final ShooterZoneData AmpData = new ShooterZoneData(
+            ShooterConstants.ZONE_AMP_LOW_BOUND,
+            ShooterConstants.ZONE_AMP_UPPER_BOUND,
+            ShooterConstants.ZONE_AMP_SHOOTER_ANGLE,
+            ShooterConstants.ZONE_AMP_FLYWHEEL_SPEED);
     final ShooterZoneData UnknownData = new ShooterZoneData(
             ShooterConstants.ZONE_UNKNOWN_LOW_BOUND,
             ShooterConstants.ZONE_UNKNOWN_UPPER_BOUND,
@@ -99,6 +105,7 @@ public class Shooter extends SubsystemBase {
         _zoneDataMappings.put(ShooterZone.Subwoofer, SubwooferData);
         _zoneDataMappings.put(ShooterZone.Podium, PodiumData);
         _zoneDataMappings.put(ShooterZone.Unknown, UnknownData);
+        _zoneDataMappings.put(ShooterZone.Amp, AmpData);
     }
 
     public ShooterCommandFactory buildCommand() {
@@ -194,7 +201,10 @@ public class Shooter extends SubsystemBase {
     // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
     private boolean areFlywheelsAtTargetSpeed() {
         return _targetFlywheelSpeed
-                - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+                - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= 
+                 _targetFlywheelSpeed - _targetFlywheelSpeed * ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+                 // the deadband is a percent. so subtract the deadband perctange times the target from the
+                 // target to get the lower bound.
     }
 
     /**
@@ -326,10 +336,10 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/isReady", this.isReady());
         Logger.recordOutput("Shooter/inPosition", this.shooterInPosition());
         Logger.recordOutput("Shooter/areFlywheelsAtTargetSpeed", this.areFlywheelsAtTargetSpeed());
-        //Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint().position);
         Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint());
         Logger.recordOutput("Shooter/TargetShooterAngle", _targetShooterAngle);
         Logger.recordOutput("Shooter/AnglePIDCalculatedOutput", calcAnglePID());
+        Logger.recordOutput("Shooter/isAutoShootEnabled",this.isAutoShootEnabled());
 
         // SHUFFLEBOARD VALUES
         SmartDashboard.putBoolean("Is Shooter Encoder at 0?", isShooterEncoderAtZero());

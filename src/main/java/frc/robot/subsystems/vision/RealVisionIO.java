@@ -5,6 +5,8 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -65,13 +67,14 @@ public class RealVisionIO implements VisionIO {
          * @return Estimated Robot Pose with Ambigious Poses Removed
          */
         private static EstimatedRobotPose getPoseWithAmbiguityCutoff(EstimatedRobotPose pose){
-                pose.targetsUsed.stream().forEach(
-                        target -> {
-                                if (target.getPoseAmbiguity() > AMBIGUITY_CUTOFF){
-                                        pose.targetsUsed.remove(target);
-                                }
+                for (int i = 0; i < pose.targetsUsed.size(); i++) {
+                        PhotonTrackedTarget target = pose.targetsUsed.get(i);
+
+                        if (target.getPoseAmbiguity() > AMBIGUITY_CUTOFF){
+                                pose.targetsUsed.remove(target);
                         }
-                );
+                }
+
                 return pose;
         }
 }

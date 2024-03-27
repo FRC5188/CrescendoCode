@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.23,
-        "y": 5.38
+        "x": 0.76,
+        "y": 4.24
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0836833981375666,
-        "y": 6.008968171786026
+        "x": 1.26,
+        "y": 3.373974596215562
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.395537406460967,
-        "y": 4.025712666813477
+        "x": 6.7492942586835305,
+        "y": 0.7702308991316326
       },
       "prevControl": {
-        "x": 5.359508411326053,
-        "y": 3.867841581840538
+        "x": 5.7492942586835305,
+        "y": 0.7702308991316326
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,18 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "DeployIntake",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.0,
@@ -43,9 +54,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center Auto Paths",
+  "folder": "Source Side Auto Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

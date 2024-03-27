@@ -550,7 +550,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "3,0": {
+          "0,1": {
             "size": [
               1,
               1
@@ -563,7 +563,7 @@
               "_showGlyph": false
             }
           },
-          "0,0": {
+          "9,0": {
             "size": [
               1,
               1
@@ -578,7 +578,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "0,1": {
+          "9,1": {
             "size": [
               1,
               1
@@ -593,7 +593,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "0,2": {
+          "9,2": {
             "size": [
               1,
               1
@@ -608,7 +608,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "1,0": {
+          "0,0": {
             "size": [
               2,
               1
@@ -621,7 +621,7 @@
               "_showGlyph": false
             }
           },
-          "4,0": {
+          "3,0": {
             "size": [
               6,
               4
@@ -637,7 +637,7 @@
               "Visuals/Show Outside Circles": false
             }
           },
-          "1,1": {
+          "0,2": {
             "size": [
               3,
               2
@@ -645,7 +645,7 @@
             "content": {
               "_type": "Field",
               "_source0": "network_table:///SmartDashboard/Autonomous Selection Preview",
-              "_title": "/SmartDashboard/Autonomous Selection Preview",
+              "_title": "SmartDashboard/Autonomous Selection Preview",
               "_glyph": 148,
               "_showGlyph": false,
               "Game/Game": "k2024Crescendo",

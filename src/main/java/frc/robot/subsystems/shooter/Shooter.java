@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 
@@ -104,6 +105,7 @@ public class Shooter extends SubsystemBase {
         _zoneDataMappings.put(ShooterZone.Subwoofer, SubwooferData);
         _zoneDataMappings.put(ShooterZone.Podium, PodiumData);
         _zoneDataMappings.put(ShooterZone.Unknown, UnknownData);
+        _zoneDataMappings.put(ShooterZone.Amp, AmpData);
     }
 
     public ShooterCommandFactory buildCommand() {
@@ -182,6 +184,11 @@ public class Shooter extends SubsystemBase {
         // }
     }
 
+    // checks if shooter encoder is at 0
+    public boolean isShooterEncoderAtZero() {
+        return _shooterInputs._angleEncoderPositionDegrees == 0;
+        }
+
     /**
      * The current zone the shooter thinks it is in.
      * 
@@ -194,7 +201,10 @@ public class Shooter extends SubsystemBase {
     // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
     private boolean areFlywheelsAtTargetSpeed() {
         return _targetFlywheelSpeed
-                - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+                - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= 
+                 _targetFlywheelSpeed - _targetFlywheelSpeed * ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+                 // the deadband is a percent. so subtract the deadband perctange times the target from the
+                 // target to get the lower bound.
     }
 
     /**
@@ -330,5 +340,10 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/TargetShooterAngle", _targetShooterAngle);
         Logger.recordOutput("Shooter/AnglePIDCalculatedOutput", calcAnglePID());
         Logger.recordOutput("Shooter/isAutoShootEnabled",this.isAutoShootEnabled());
+      
+        // SHUFFLEBOARD VALUES
+        SmartDashboard.putBoolean("Is Shooter Encoder at 0?", isShooterEncoderAtZero());
+
+       
     }
 }

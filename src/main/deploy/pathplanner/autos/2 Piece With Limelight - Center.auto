@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2303755661642377,
-      "y": 5.379311043522371
+      "x": 1.43,
+      "y": 5.58
     },
     "rotation": 0
   },
@@ -22,29 +22,35 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "(C, LL) Sub to Center Note"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Pickup_Note_With_Limelight"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "pathName": "(C, LL) Center Note to Sub"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(M2C) Move outside wing"
+            "name": "Shooting_From_Subwoofer"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Test (so exciting!!!!)",
   "choreoAuto": false
 }

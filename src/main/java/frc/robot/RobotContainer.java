@@ -123,6 +123,8 @@ public class RobotContainer {
         private JoystickButton _op2ButtonSeven = new JoystickButton(_operatorController2, 7);
         private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 8);
         private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
+        
+        private JoystickButton _op2ButtonTen = new JoystickButton(_operatorController2, 10);
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.

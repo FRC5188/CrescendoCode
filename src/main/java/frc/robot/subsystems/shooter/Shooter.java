@@ -18,6 +18,7 @@ public class Shooter extends SubsystemBase {
     public enum ShooterZone {
         Subwoofer,
         Podium,
+        Amp,
         Unknown
     }
 
@@ -63,6 +64,11 @@ public class Shooter extends SubsystemBase {
             ShooterConstants.ZONE_PODIUM_UPPER_BOUND,
             ShooterConstants.ZONE_PODIUM_SHOOTER_ANGLE,
             ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED);
+    final ShooterZoneData AmpData = new ShooterZoneData(
+            ShooterConstants.ZONE_AMP_LOW_BOUND,
+            ShooterConstants.ZONE_AMP_UPPER_BOUND,
+            ShooterConstants.ZONE_AMP_SHOOTER_ANGLE,
+            ShooterConstants.ZONE_AMP_FLYWHEEL_SPEED);
     final ShooterZoneData UnknownData = new ShooterZoneData(
             ShooterConstants.ZONE_UNKNOWN_LOW_BOUND,
             ShooterConstants.ZONE_UNKNOWN_UPPER_BOUND,

@@ -253,8 +253,8 @@ public class RobotContainer {
                 // () -> _driveController.getLeftX(),
                 // () -> _driveController.getRightX()));
                 _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
-                        () -> -_driveController.getLeftY()*_driveMultiplier,
-                                                () -> -_driveController.getLeftX()*_driveMultiplier));      
+                        () -> _driveController.getLeftY()*_driveMultiplier,
+                        () -> _driveController.getLeftX()*_driveMultiplier));      
                 
 
                 _driveController.a().whileTrue(

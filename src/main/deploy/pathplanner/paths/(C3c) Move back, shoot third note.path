@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.235473667528531,
-        "y": 6.583808951093687
+        "x": 3.234996863855303,
+        "y": 7.632393649671583
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Center Auto Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 35.90972307917776,
     "velocity": 0
   },
   "useDefaultConstraints": true

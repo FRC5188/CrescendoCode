@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2303755661642377,
-      "y": 5.379311043522371
+      "x": 1.343662687325376,
+      "y": 5.545221859674489
     },
     "rotation": 0
   },
@@ -22,6 +22,12 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "(C) Sub to Center Note And Back - No Limelight"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Pickup_Note_Without_Limelight"
@@ -31,15 +37,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "pathName": "(C) Center Ring Back to Sub"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(M2C) Move outside wing"
+            "name": "Pickup_Note_Without_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]

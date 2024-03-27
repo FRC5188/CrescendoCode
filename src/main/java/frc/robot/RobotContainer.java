@@ -124,6 +124,8 @@ public class RobotContainer {
         private JoystickButton _op2ButtonSeven = new JoystickButton(_operatorController2, 7);
         private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 8);
         private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
+        
+        private JoystickButton _op2ButtonTen = new JoystickButton(_operatorController2, 10);
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -307,7 +309,6 @@ public class RobotContainer {
                 _opButtonFour.onTrue(this._shooter.buildCommand().adjustAngle(-1));
 
                 // Move intake to different positions
-                _opButtonTwo.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
                 _opButtonNine.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()));
                 _op2ButtonNine.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
                 _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.setHasNote()));
@@ -318,9 +319,11 @@ public class RobotContainer {
                 _opButtonSeven.onTrue(this._intake.buildCommand().acquire())
                         .onFalse(this._intake.buildCommand().stop());
 
-                // manually set the shooter
-                _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                _opButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Amp));
+
+                // Move to shooter positions manually
+                // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                // _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
                
                 // sad face button

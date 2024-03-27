@@ -1,0 +1,62 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7626093884666401,
+      "y": 6.525338178881486
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(A) Sub to top note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup_Note_With_Limelight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(A) Top note to sub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(A2c) Move outside wing"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Amp Side Autos",
+  "choreoAuto": false
+}

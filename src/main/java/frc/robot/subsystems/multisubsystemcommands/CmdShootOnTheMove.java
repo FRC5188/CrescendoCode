@@ -163,11 +163,10 @@ public class CmdShootOnTheMove extends Command {
     Logger.recordOutput("Drive/ShootOnTheMove/IdealFutureAngle", _futureAngleToSpeaker.getDegrees());
 
     // drive the robot based on the calculations from above
-    _drive.runVelocity(
-        _drive.transformJoystickInputsToChassisSpeeds(
-          _translationXSupplier.getAsDouble(), 
-          _translationYSupplier.getAsDouble(),
-           _correctedRotation, true));
+    _drive.runVelocity(_drive.transformJoystickInputsToChassisSpeeds(
+    _translationXSupplier.getAsDouble(), 
+    _translationYSupplier.getAsDouble(), 
+    _correctedRotation, true));
         
 
     if (_shooter.isAutoShootEnabled()) {

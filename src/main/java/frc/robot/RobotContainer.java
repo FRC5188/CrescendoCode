@@ -253,8 +253,8 @@ public class RobotContainer {
                                                                                 _shooter, 
                                                                                 _intake, 
                                                         () -> _opButtonNine.getAsBoolean(), 
-                                                        () -> -_driveController.getLeftY()*_driveMultiplier,
-                                                        () -> -_driveController.getLeftX()*_driveMultiplier));
+                                                        () -> _driveController.getLeftY()*_driveMultiplier,
+                                                        () -> _driveController.getLeftX()*_driveMultiplier));
                 
 
                 _driveController.a().whileTrue(

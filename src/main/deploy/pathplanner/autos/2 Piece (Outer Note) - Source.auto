@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2303755661642377,
-      "y": 5.379311043522371
+      "x": 0.72,
+      "y": 4.38
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -22,6 +22,12 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "(S2[O]a) Exit Wing, Grab Note"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Pickup_Note_Without_Limelight"
@@ -31,20 +37,20 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "pathName": "(S2[O]b) Back into wing, Shoot Second Note"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(M2C) Move outside wing"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Source Side Autos",
   "choreoAuto": false
 }

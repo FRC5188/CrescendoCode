@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2303755661642377,
-      "y": 5.379311043522371
+      "x": 0.72,
+      "y": 4.38
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -22,12 +22,24 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "(S) Sub to bottom note"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Pickup_Note_Without_Limelight"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(S2b) Move from note to shoot"
           }
         },
         {
@@ -39,12 +51,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M2C) Move outside wing"
+            "pathName": "(S2.5c) Move outside wing"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Source Side Autos",
   "choreoAuto": false
 }

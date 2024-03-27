@@ -72,8 +72,7 @@ public class CmdDriveAutoAim extends Command {
 
 
         Logger.recordOutput("Drive/autoaim/rotationValue", rotationVal);
-        Logger.recordOutput("Drive/autoaim/angleToSpeaker", desiredAngleDegrees);
-        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", currentAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", desiredAngleDegrees);
         Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", currentAngleDegrees);
 
         // this is what drives the robot
@@ -86,7 +85,7 @@ public class CmdDriveAutoAim extends Command {
         _drive.runVelocity(_drive.transformJoystickInputsToChassisSpeeds(
             _translationXSupplier.getAsDouble(), 
             _translationYSupplier.getAsDouble(), 
-            0, false));
+            rotationVal, true));
     }
     
 

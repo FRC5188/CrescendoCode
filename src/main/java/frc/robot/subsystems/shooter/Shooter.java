@@ -340,9 +340,10 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/TargetShooterAngle", _targetShooterAngle);
         Logger.recordOutput("Shooter/AnglePIDCalculatedOutput", calcAnglePID());
         Logger.recordOutput("Shooter/isAutoShootEnabled",this.isAutoShootEnabled());
-
+      
         // SHUFFLEBOARD VALUES
         SmartDashboard.putBoolean("Is Shooter Encoder at 0?", isShooterEncoderAtZero());
 
+       
     }
 }

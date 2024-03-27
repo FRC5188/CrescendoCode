@@ -53,16 +53,10 @@
           "data": {
             "name": "Auto_Shoot_With_Auto_Align"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(C2.5c) Exit Wing"
-          }
         }
       ]
     }
   },
-  "folder": "Center Autos",
+  "folder": null,
   "choreoAuto": false
 }

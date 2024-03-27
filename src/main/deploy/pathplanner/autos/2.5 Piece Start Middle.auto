@@ -22,12 +22,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "(M3A) Shoot first note, move to second note pickup"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Pickup_Note_Without_Limelight"
@@ -51,6 +45,6 @@
       ]
     }
   },
-  "folder": "Untested",
+  "folder": null,
   "choreoAuto": false
 }

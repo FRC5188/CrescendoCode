@@ -16,7 +16,6 @@ public class RealIntakeIO implements IntakeIO {
     private SparkAbsoluteEncoder _pivotMotorEncoder;
     private DigitalInput _leftLimitSwitch;
     private DigitalInput _rightLimitSwitch;
-    private DigitalInput _distanceSensor;
     private CANSparkMax _feederMotor;
 
     public RealIntakeIO() {
@@ -24,15 +23,16 @@ public class RealIntakeIO implements IntakeIO {
         configRollerMotor();
         configFeederMotor();
         configEncoder();
-        configPivotPID(IntakeConstants.PIVOT_PID_KP,
-                        IntakeConstants.PIVOT_PID_KI,
-                        IntakeConstants.PIVOT_PID_KD);
+        configPivotPID(IntakeConstants.PIVOT_PID_KP.get(),
+                        IntakeConstants.PIVOT_PID_KI.get(),
+                        IntakeConstants.PIVOT_PID_KD.get());
         _leftLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.LEFT_LIMIT_SWITCH_PORT);
         _rightLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.RIGHT_LIMIT_SWITCH_PORT);
-        _distanceSensor = new DigitalInput(HardwareConstants.DIOPorts.INTAKE_DISTANCE_SENSOR_PORT);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
+        updatedLoggableConstants();
+
         inputs._pivotMotorTemperature = _pivotMotor.getMotorTemperature();
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
@@ -46,8 +46,6 @@ public class RealIntakeIO implements IntakeIO {
 
         inputs._leftLimitSwitchIsPushed = !_leftLimitSwitch.get();
         inputs._rightLimitSwitchIsPushed = !_rightLimitSwitch.get();
-        // Check if this boolean is true or false when triggered
-        inputs._isDistanceSensorTriggered = _distanceSensor.get();
 
         inputs._feederVoltage = _feederMotor.getAppliedOutput() * _feederMotor.getBusVoltage();
         inputs._feederSpeed = _feederMotor.get();
@@ -63,6 +61,18 @@ public class RealIntakeIO implements IntakeIO {
 
     public void setPivotMotorSpeed(double speed) {
         _pivotMotor.set(speed);
+    }
+
+    public void updatedLoggableConstants() {
+        if (IntakeConstants.PIVOT_PID_KP.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setP(IntakeConstants.PIVOT_PID_KP.get());
+        }
+        if (IntakeConstants.PIVOT_PID_KI.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setI(IntakeConstants.PIVOT_PID_KI.get());
+        }
+        if (IntakeConstants.PIVOT_PID_KD.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setD(IntakeConstants.PIVOT_PID_KD.get());
+        }
     }
 
     public void setFeederMotorSpeed(double speed) {

@@ -309,7 +309,6 @@ public class RobotContainer {
                 _opButtonFour.onTrue(this._shooter.buildCommand().adjustAngle(-1));
 
                 // Move intake to different positions
-                _opButtonTwo.onTrue(this._intake.buildCommand().setPosition(IntakePosition.AmpScore));
                 _opButtonNine.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()));
                 _op2ButtonNine.onTrue(Commands.runOnce(() -> _intake.resetHasNote()));
                 _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.setHasNote()));

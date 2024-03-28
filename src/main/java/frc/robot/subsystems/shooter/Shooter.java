@@ -254,7 +254,15 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterPositionWithRadius(double radius) {
         double angle;
-        if (radius <= 4.25) {
+        // only shoot inside this radius
+        if (radius <= 4.5) {
+            if(radius < 1){
+                // the subwoofer is about a meter away from the alliance wall
+                // if we think we are less than a meter from the speaker then we
+                // are "inside" the subwoofer which is not possible. so harcode ourselves to one
+                // meter
+                radius = 1;
+            }
             angle = -21.02 * Math.log(0.1106 * radius);
             angle -= 2;
             Logger.recordOutput("Shooter/RegressionEstimatedAngle", angle);
@@ -282,9 +290,9 @@ public class Shooter extends SubsystemBase {
     public void setFlywheelSpeedWithRadius(double radiusInMeters) {
         double speed = 3000;
         if (radiusInMeters <= 4 && radiusInMeters > 2) {
-            speed = 1800;
+            speed = 1600;
         } else if (radiusInMeters <= 2) {
-            speed = 1500;
+            speed = 1200;
         }
         setFlywheelSpeed(speed);
     }

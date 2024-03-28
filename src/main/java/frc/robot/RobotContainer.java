@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -37,6 +38,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
+import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.commands.CmdLEDsRunLEDs;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -72,12 +75,15 @@ public class RobotContainer {
         private final Drive _drive;
         private final Intake _intake;
         private final Shooter _shooter;
+        private final LEDs _leds;
         // private final Climber _climber;
         private final VisionDrive _visionDrive;
 
         private double _driveMultiplier = 1.0;
 
         private Command _adjustShooterAutomaticallyCommand;
+        private Command _runLEDsCommand;
+
 
         // logged dashboard inputs
         private final LoggedDashboardChooser<Command> _autoChooser;
@@ -142,6 +148,7 @@ public class RobotContainer {
                                                 new ModuleIOSparkFlex(3));
                                 _intake = new Intake(new RealIntakeIO());
                                 _shooter = new Shooter(new RealShooterIO());
+                                _leds = new LEDs();
                                 // _climber = new Climber(new RealClimberIO());
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO());
                                 break;
@@ -165,6 +172,7 @@ public class RobotContainer {
                                 // });
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
+                                _leds = new LEDs();
                                 break;
                         default:
                                 // Replayed robot, disable IO implementations
@@ -189,11 +197,13 @@ public class RobotContainer {
                                 // });
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
+                                _leds = new LEDs();
                                 break;
                 }
 
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
+                _runLEDsCommand = new CmdLEDsRunLEDs(_leds, _shooter, _intake).ignoringDisable(true);
 
                 NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround(4000));
                 NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));
@@ -385,5 +395,9 @@ public class RobotContainer {
 
         public Command getFeederInitialStateCommand() {
                 return Commands.runOnce(() -> _intake.setFeederMotorPickupSpeed());
+        }
+
+        public Command getRunLEDs() {
+                return this._runLEDsCommand;
         }
 }

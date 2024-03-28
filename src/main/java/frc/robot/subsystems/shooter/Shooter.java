@@ -271,7 +271,7 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    private boolean shooterInPosition() {
+    public boolean shooterInPosition() {
         return Math.abs(_targetShooterAngle
                 - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
     }
@@ -305,6 +305,7 @@ public class Shooter extends SubsystemBase {
     public boolean isReady() {
         return shooterInPosition() && areFlywheelsAtTargetSpeed();
     }
+    
 
     public void runAnglePID() {
         double output = calcAnglePID();

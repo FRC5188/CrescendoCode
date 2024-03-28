@@ -61,7 +61,7 @@ public class HardwareConstants {
         // How far foward/backward the camera is from robot center.
         private static final double CAMERA_ONE_X_FROM_ROBOT_CENTER = -0.279; // Mechanical offset + 1/8" offset
         // How far left/right the camera is from robot center.
-        private static final double CAMERA_ONE_Y_FROM_ROBOT_CENTER = 0.03;
+        private static final double CAMERA_ONE_Y_FROM_ROBOT_CENTER = 0.03 - 0.127;
         // How far up/down the camera is from center if we look at robot from side in 3D
         // space.
         private static final double CAMERA_ONE_Z_FROM_ROBOT_CENTER = 0.2583;

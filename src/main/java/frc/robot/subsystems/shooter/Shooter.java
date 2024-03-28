@@ -282,9 +282,9 @@ public class Shooter extends SubsystemBase {
     public void setFlywheelSpeedWithRadius(double radiusInMeters) {
         double speed = 3000;
         if (radiusInMeters <= 4 && radiusInMeters > 2) {
-            speed = 1800;
+            speed = 1600;
         } else if (radiusInMeters <= 2) {
-            speed = 1500;
+            speed = 1200;
         }
         setFlywheelSpeed(speed);
     }

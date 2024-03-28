@@ -322,8 +322,8 @@ public class RobotContainer {
                 _opButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Amp));
 
                 // Move to shooter positions manually
-                // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                // _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
 
                
                 // sad face button

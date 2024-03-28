@@ -72,17 +72,22 @@ public class CmdDriveAutoAim extends Command {
 
 
         Logger.recordOutput("Drive/autoaim/rotationValue", rotationVal);
-        Logger.recordOutput("Drive/autoaim/angleToSpeaker", desiredAngleDegrees);
-        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", currentAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", desiredAngleDegrees);
         Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", currentAngleDegrees);
 
         // this is what drives the robot
-        this._drive.runVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        _translationXSupplier.getAsDouble(),
-                        _translationYSupplier.getAsDouble(),
-                        rotationVal,
-                        _drive.getRotation()));          
+        // drive the robot based on the calculations from above
+        // _drive.runVelocity(
+        //         _drive.transformJoystickInputsToChassisSpeeds(
+        //         _translationXSupplier.getAsDouble(), 
+        //         _translationYSupplier.getAsDouble(),
+        //         rotationVal, true));     
+        _drive.runVelocity(_drive.transformJoystickInputsToChassisSpeeds(
+            _translationXSupplier.getAsDouble(), 
+            _translationYSupplier.getAsDouble(), 
+            rotationVal, true));
+        
+        Logger.recordOutput("Drive/autoaim/isReady", _angleController.atSetpoint());
     }
     
 
@@ -90,13 +95,11 @@ public class CmdDriveAutoAim extends Command {
     @Override
     public void end(boolean interrupted) {
         // when we finish set the rotation to 0 but keep driving
-        this._drive.runVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        _translationXSupplier.getAsDouble(),
-                        _translationYSupplier.getAsDouble(),
-                        0,
-                        _drive.getGyroscopeRotation()));
-
+        _drive.runVelocity(_drive.transformJoystickInputsToChassisSpeeds(
+            _translationXSupplier.getAsDouble(), 
+            _translationYSupplier.getAsDouble(),
+            0, false));
+        Logger.recordOutput("Drive/autoaim/isReady", false);
     }
 
     // Returns true when the command should end.

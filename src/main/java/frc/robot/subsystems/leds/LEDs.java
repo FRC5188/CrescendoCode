@@ -11,6 +11,9 @@ import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 
+import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.HardwareConstants;
 
 public class LEDs {
@@ -19,6 +22,9 @@ public class LEDs {
     LEDAnimation _currentAnimation = LEDAnimation.None;
     boolean _prevHasNote;
     boolean _ampReady = false;
+    NetworkTable _adkitNetworkTable;
+    BooleanSubscriber _isAutoAimEnabled;
+    BooleanSubscriber _isAutoAimReady;
 
 
     public enum LEDAnimation {
@@ -26,6 +32,9 @@ public class LEDs {
         // RobotIdle(null, new FireAnimation(1.0, 0.02, _numLEDs, 0.01, 0.0), 0),
         RobotIdle(new LEDColor(255, 128, 0), null, 0),
         ReadyToShoot(new LEDColor(0, 255, 0), null, 3),
+        SolidRed(new LEDColor(255, 0, 0), null, 0),
+        SolidGreen(new LEDColor(0, 255, 0), null, 0),
+        BlinkingRed(null, new StrobeAnimation(255, 0, 0, 0, 0.5, _numLEDs), 3),
         PickedUpNote(null, new StrobeAnimation(255, 128, 0, 0, 0.5, _numLEDs), 3),
         ClimberAscending(new LEDColor(255, 215, 0), new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3),
         AmpReady(null, new StrobeAnimation(204, 0, 255, 0, 0.5, _numLEDs), 3),
@@ -56,11 +65,27 @@ public class LEDs {
 
     public LEDs() {
         _candle = new CANdle(HardwareConstants.CanIds.CANDLE_ID);
+        _adkitNetworkTable = NetworkTableInstance.getDefault().getTable("AdvantageKit");
+        _isAutoAimEnabled = _adkitNetworkTable.getBooleanTopic("RealOutputs/Drive/autoaim/isEnabled")
+                            .subscribe(false);
+        _isAutoAimReady = _adkitNetworkTable.getBooleanTopic("RealOutputs/Drive/autoaim/isReady")
+                            .subscribe(false);
     }
 
     public LEDAnimation getCurrentAnimation() {
         return _currentAnimation;
     }
+
+    public boolean _isAutoAimEnabled(){
+        boolean enabled = _isAutoAimEnabled.get();
+        Logger.recordOutput("LEDS/isAutoAimEnabled", enabled);
+        return enabled;
+    }
+
+    public boolean _isAutoAimReady(){
+        boolean enabled = _isAutoAimReady.get();
+        Logger.recordOutput("LEDS/isAutoAimReady", enabled);
+        return enabled;    }
 
     public void runAnimation(LEDAnimation animation) {
         Logger.recordOutput("LEDS/currentAnimation", _currentAnimation);

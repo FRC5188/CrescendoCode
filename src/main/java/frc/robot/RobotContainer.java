@@ -39,6 +39,7 @@ import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.leds.LEDs;
+import frc.robot.subsystems.leds.commands.CmdLEDsRunLEDs;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -82,6 +83,7 @@ public class RobotContainer {
 
         private Command _adjustShooterAutomaticallyCommand;
         private Command _runLEDsCommand;
+
 
         // logged dashboard inputs
         private final LoggedDashboardChooser<Command> _autoChooser;
@@ -201,6 +203,7 @@ public class RobotContainer {
 
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
+                _runLEDsCommand = new CmdLEDsRunLEDs(_leds, _shooter, _intake);
 
                 NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround(4000));
                 NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));

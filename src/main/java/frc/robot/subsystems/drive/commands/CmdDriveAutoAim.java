@@ -86,6 +86,8 @@ public class CmdDriveAutoAim extends Command {
             _translationXSupplier.getAsDouble(), 
             _translationYSupplier.getAsDouble(), 
             rotationVal, true));
+        
+        Logger.recordOutput("Drive/autoaim/isReady", _angleController.atSetpoint());
     }
     
 
@@ -97,7 +99,7 @@ public class CmdDriveAutoAim extends Command {
             _translationXSupplier.getAsDouble(), 
             _translationYSupplier.getAsDouble(),
             0, false));
-
+        Logger.recordOutput("Drive/autoaim/isReady", false);
     }
 
     // Returns true when the command should end.

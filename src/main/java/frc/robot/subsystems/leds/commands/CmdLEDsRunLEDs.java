@@ -27,22 +27,26 @@ public class CmdLEDsRunLEDs extends Command {
   @Override
   public void execute() {
     // Stop running the current animation if it's run for long enough
-    _leds.stopAnimationIfTimedOut(_timer);
+    boolean wasAnimationStopped = _leds.stopAnimationIfTimedOut(_timer);
+    if(wasAnimationStopped){
+      _timer = 0;
+    }
 
-    // Start a new animation if we meet conditions
-    if (_shooter.isReady()) {
+    // // Start a new animation if we meet conditions
+    if (DriverStation.isDisabled()) {
+      // rainbow when DS is disabled
+      _leds.runAnimation(LEDAnimation.RobotDisabled);
+    } else if (_shooter.isReady()) {
       // Run this animation when the shooter is ready
       _leds.runAnimation(LEDAnimation.ReadyToShoot);
     } else if (_leds.shouldRunHasNoteAnimation(_intake.hasNote())) {
       // Only run this animation one time, right when the intake first picks up a note
+      // blinks orange when we pick up a note
       _leds.runAnimation(LEDAnimation.PickedUpNote);
-    // } else if (_leds.getAmpReady()) {
-    //   // Runs when human player should activate Amp
-    //   _leds.runAnimation(LEDAnimation.AmpReady);
-    //   _leds.setAmpReady(false);
-    } else if (DriverStation.isDisabled()) {
-      // Rainbows while robot is disabled
-      _leds.runAnimation(LEDAnimation.RobotDisabled);
+    }
+    else{
+      // solid orange when we are doing nothing
+      _leds.runAnimation(LEDAnimation.RobotIdle);
     }
 
     // Increment the timer for another loop

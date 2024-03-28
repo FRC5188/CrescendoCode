@@ -203,7 +203,7 @@ public class RobotContainer {
 
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
-                _runLEDsCommand = new CmdLEDsRunLEDs(_leds, _shooter, _intake);
+                _runLEDsCommand = new CmdLEDsRunLEDs(_leds, _shooter, _intake).ignoringDisable(true);
 
                 NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround(4000));
                 NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));

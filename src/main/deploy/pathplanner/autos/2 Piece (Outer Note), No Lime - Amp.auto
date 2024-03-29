@@ -30,11 +30,7 @@
               {
                 "type": "named",
                 "data": {
-<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Two Piece (Outer Note) Start Left.auto
-                  "name": "Pickup_Note_With_Limelight"
-=======
                   "name": "Pickup_Note_Without_Limelight"
->>>>>>> origin/main:src/main/deploy/pathplanner/autos/2 Piece (Outer Note), No Lime - Amp.auto
                 }
               }
             ]

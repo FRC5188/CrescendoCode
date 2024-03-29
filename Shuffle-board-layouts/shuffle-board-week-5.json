@@ -522,6 +522,347 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "10,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/PODIUM_FLYWHEEL_SPEED",
+              "_title": "TunableNumbers/Shooter/PODIUM_FLYWHEEL_SPEED",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/PODIUM_LOW_BOUND",
+              "_title": "TunableNumbers/Shooter/PODIUM_LOW_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/PODIUM_UPPER_BOUND",
+              "_title": "TunableNumbers/Shooter/PODIUM_UPPER_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/PODIUM_SHOOTER_ANGLE",
+              "_title": "TunableNumbers/Shooter/PODIUM_SHOOTER_ANGLE",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/ZONE_AMP_FLYWHEEL_SPEED",
+              "_title": "TunableNumbers/Shooter/ZONE_AMP_FLYWHEEL_SPEED",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/ZONE_AMP_LOW_BOUND",
+              "_title": "TunableNumbers/Shooter/ZONE_AMP_LOW_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/ZONE_AMP_UPPER_BOUND",
+              "_title": "TunableNumbers/Shooter/ZONE_AMP_UPPER_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/ZONE_AMP_SHOOTER_ANGLE",
+              "_title": "TunableNumbers/Shooter/ZONE_AMP_SHOOTER_ANGLE",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/SUBWOOFER_FLYWHEEL_SPEED",
+              "_title": "TunableNumbers/Shooter/SUBWOOFER_FLYWHEEL_SPEED",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/SUBWOOFER_LOW_BOUND",
+              "_title": "TunableNumbers/Shooter/SUBWOOFER_LOW_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/SUBWOOFER_UPPER_BOUND",
+              "_title": "TunableNumbers/Shooter/SUBWOOFER_UPPER_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/SUBWOOFER_SHOOTER_ANGLE",
+              "_title": "TunableNumbers/Shooter/SUBWOOFER_SHOOTER_ANGLE",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/UNKNOWN_FLYWHEEL_SPEED",
+              "_title": "TunableNumbers/Shooter/UNKNOWN_FLYWHEEL_SPEED",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/UNKNOWN_LOW_BOUND",
+              "_title": "TunableNumbers/Shooter/UNKNOWN_LOW_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/UNKNOWN_UPPER_BOUND",
+              "_title": "TunableNumbers/Shooter/UNKNOWN_UPPER_BOUND",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/UNKNOWN_SHOOTER_ANGLE",
+              "_title": "TunableNumbers/Shooter/UNKNOWN_SHOOTER_ANGLE",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/ANGLE_PID/kP",
+              "_title": "TunableNumbers/Shooter/ANGLE_PID/kP",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/ANGLE_PID/kI",
+              "_title": "TunableNumbers/Shooter/ANGLE_PID/kI",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/ANGLE_PID/kD",
+              "_title": "TunableNumbers/Shooter/ANGLE_PID/kD",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/FLYWHEEL_PID/kP",
+              "_title": "TunableNumbers/Shooter/FLYWHEEL_PID/kP",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/FLYWHEEL_PID/kI",
+              "_title": "TunableNumbers/Shooter/FLYWHEEL_PID/kI",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/FLYWHEEL_PID/kD",
+              "_title": "TunableNumbers/Shooter/FLYWHEEL_PID/kD",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/FLYWHEEL_PID/kFF",
+              "_title": "TunableNumbers/Shooter/FLYWHEEL_PID/kFF",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/FEEDER_SHOOT_SPEED",
+              "_title": "TunableNumbers/Shooter/FEEDER_SHOOT_SPEED",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TunableNumbers/Shooter/FEEDER_PICKUP_SPEED",
+              "_title": "TunableNumbers/Shooter/FEEDER_PICKUP_SPEED",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Field",
+              "_source0": "network_table:///SmartDashboard/Autonomous Selection Preview",
+              "_title": "Autonomous Selection Preview",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Game/Game": "k2024Crescendo",
+              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Show Outside Circles": false
+            }
           }
         }
       }
@@ -550,7 +891,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "0,1": {
+          "9,3": {
             "size": [
               1,
               1
@@ -610,7 +951,7 @@
           },
           "0,0": {
             "size": [
-              2,
+              3,
               1
             ],
             "content": {
@@ -650,8 +991,35 @@
               "_showGlyph": false,
               "Game/Game": "k2024Crescendo",
               "Visuals/Robot Icon Size": 50.0,
-              "Visuals/Show Outside Circles": false,
-              "Colors/Trajectory": "#FFFFFFFF"
+              "Visuals/Show Outside Circles": false
+            }
+          },
+          "0,4": {
+            "size": [
+              9,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Drive/autoaim/isReady",
+              "_title": "/AdvantageKit/RealOutputs/Drive/autoaim/isReady",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,1": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/DashboardInputs/Auto Choices",
+              "_title": "/AdvantageKit/DashboardInputs/Auto Choices",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
@@ -659,9 +1027,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.199999809265137,
-    "y": -7.199999809265137,
-    "width": 1550.4000244140625,
-    "height": 830.4000244140625
+    "x": 0.800000011920929,
+    "y": 0.800000011920929,
+    "width": 1534.4000244140625,
+    "height": 814.4000244140625
   }
 }

@@ -24,11 +24,7 @@
               {
                 "type": "path",
                 "data": {
-<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Mighty Middle 4 Piece Auto Start.auto
-                  "pathName": "(M3A) Shoot first note, move to second note pickup"
-=======
                   "pathName": "(C) Sub to Center Note And Back - No Limelight"
->>>>>>> origin/main:src/main/deploy/pathplanner/autos/4 Piece, No Limelight - Center.auto
                 }
               },
               {

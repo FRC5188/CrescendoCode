@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(C, LL) Sub to Center Note"
+                  "pathName": "Sub to center note LL"
                 }
               },
               {
@@ -51,13 +51,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(C, LL) Center Note to Sub"
+            "pathName": "Center note to Shooting With LL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {
@@ -94,13 +94,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(C) Amp Side Note to Sub"
+            "pathName": "(C, LL) Amp Side Note to Shooting"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {
@@ -137,18 +137,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(C) Source Side Note to Sub"
+            "pathName": "(C, LL) Source Side Note to Shooting"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Autos I'd like to use",
   "choreoAuto": false
 }

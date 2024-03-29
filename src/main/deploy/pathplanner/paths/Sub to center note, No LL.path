@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.98,
-        "y": 3.85
+        "x": 1.43,
+        "y": 5.56
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.98,
-        "y": 3.85
+        "x": 2.4299999999999997,
+        "y": 5.56
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.431777333863457,
-        "y": 2.456939070647738
+        "x": 3.0443861362782125,
+        "y": 5.56
       },
       "prevControl": {
-        "x": 6.310555138925006,
-        "y": -0.2242444389876897
+        "x": 2.0443861362782125,
+        "y": 5.56
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Middle 4 No LL Piece Auto Paths",
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false

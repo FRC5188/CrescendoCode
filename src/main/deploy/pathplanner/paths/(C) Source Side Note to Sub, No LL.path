@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0443861362782125,
-        "y": 5.56
+        "x": 2.55,
+        "y": 4.09
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3424035446645726,
-        "y": 5.567111941824834
+        "x": 2.043883913807713,
+        "y": 4.794603321400375
       },
       "isLocked": false,
       "linkedName": null
@@ -20,24 +20,8 @@
         "y": 5.56
       },
       "prevControl": {
-        "x": 2.1571581385443066,
-        "y": 5.567111941824834
-      },
-      "nextControl": {
-        "x": 0.7028418614556933,
-        "y": 5.552888058175165
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.7975420566225764,
-        "y": 4.765733377620602
-      },
-      "prevControl": {
-        "x": 1.2501919590391348,
-        "y": 5.159310717897884
+        "x": 1.861859906055994,
+        "y": 4.981709792479414
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -59,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Middle 4 No LL Piece Auto Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

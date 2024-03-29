@@ -30,16 +30,35 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_With_Limelight"
+                  "name": "Deploy_Pickup"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(C, LL) Center Note to Sub"
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(C, LL) Center Note to Sub"
+                }
+              }
+            ]
           }
         },
         {

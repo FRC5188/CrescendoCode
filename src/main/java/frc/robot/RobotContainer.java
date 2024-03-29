@@ -236,7 +236,7 @@ public class RobotContainer {
                                                 _shooter.buildCommand().setAutoShootEnabled(true),
                                                 new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier),
                                                 new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
-                                                _intake.buildCommand().spit(2)));
+                                                _intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get())));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
                 // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.43,
-      "y": 5.58
+      "x": 0.72,
+      "y": 4.38
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Sub to center note, No LL"
+                  "pathName": "N&I S - Sub to Lower S Side Note"
                 }
               },
               {
@@ -43,19 +43,37 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N&I Lower S Side Note to Shooting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Shoot_With_Auto_Align"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Stow_Pickup"
+                  "pathName": "S - Sub to 2nd S Side Note"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Center note to Shooting With LL"
+                  "name": "Deploy_Pickup"
                 }
               }
             ]
@@ -64,7 +82,25 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S - 2nd S Note to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]

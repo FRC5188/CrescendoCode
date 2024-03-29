@@ -1,0 +1,60 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7023114046228107,
+      "y": 6.719388054160724
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(A2[O]a, No LL) Exit Wing, Grab Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Two Piece (Outer Note) Start Left.auto
+                  "name": "Pickup_Note_With_Limelight"
+=======
+                  "name": "Pickup_Note_Without_Limelight"
+>>>>>>> origin/main:src/main/deploy/pathplanner/autos/2 Piece (Outer Note), No Lime - Amp.auto
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(A2[O]b) Back into Wing, Shoot Second Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Test (so exciting!!!!)",
+  "choreoAuto": false
+}

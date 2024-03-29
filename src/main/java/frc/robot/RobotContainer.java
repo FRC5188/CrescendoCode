@@ -279,7 +279,7 @@ public class RobotContainer {
                         )
                 );
 
-                _driveController.rightBumper().whileTrue(new CmdGoToNote(_drive, _visionDrive));
+                _driveController.rightBumper().whileTrue(new CmdGoToNote(_drive, _visionDrive, _intake));
 
 
                 // reset the orientation of the robot. changes which way it thinks is forward

@@ -18,19 +18,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(A2[O]a, LL) Exit Wing, Grab Note"
+                  "pathName": "(A2[O]a, No LL) Exit Wing, Grab Note"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_With_Limelight"
+                  "name": "Pickup_Note_Without_Limelight"
                 }
               }
             ]
@@ -47,10 +47,41 @@
           "data": {
             "name": "Shooting_From_Subwoofer"
           }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp 3 Piece Third Note Pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup_Note_With_Limelight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp 3 Piece Back to Sub after third"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Autos I'd like to use",
   "choreoAuto": false
 }

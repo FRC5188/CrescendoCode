@@ -30,7 +30,7 @@ public class LEDs {
     public enum LEDAnimation {
         None(null, null, 0),
         // RobotIdle(null, new FireAnimation(1.0, 0.02, _numLEDs, 0.01, 0.0), 0),
-        RobotIdle(new LEDColor(255, 128, 0), null, 0),
+        RobotIdle(new LEDColor(0, 0, 255), null, 0),
         ReadyToShoot(new LEDColor(0, 255, 0), null, 3),
         SolidRed(new LEDColor(255, 0, 0), null, 0),
         SolidGreen(new LEDColor(0, 255, 0), null, 0),

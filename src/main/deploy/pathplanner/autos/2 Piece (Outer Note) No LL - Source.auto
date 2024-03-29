@@ -45,12 +45,12 @@
         {
           "type": "named",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "name": "Shooting_From_Subwoofer"
           }
         }
       ]
     }
   },
-  "folder": "Source Side Autos",
+  "folder": "Autos I'd like to use",
   "choreoAuto": false
 }

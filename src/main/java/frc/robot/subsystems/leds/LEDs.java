@@ -18,7 +18,7 @@ import frc.robot.HardwareConstants;
 
 public class LEDs {
     CANdle _candle;
-    static int _numLEDs = 8;
+    static int _numLEDs = 27;
     LEDAnimation _currentAnimation = LEDAnimation.None;
     boolean _prevHasNote;
     boolean _ampReady = false;
@@ -35,6 +35,7 @@ public class LEDs {
         SolidRed(new LEDColor(255, 0, 0), null, 0),
         SolidGreen(new LEDColor(0, 255, 0), null, 0),
         BlinkingRed(null, new StrobeAnimation(255, 0, 0, 0, 0.5, _numLEDs), 3),
+        SolidYellow(new LEDColor(255, 128, 0), null, 0),
         PickedUpNote(null, new StrobeAnimation(255, 128, 0, 0, 0.5, _numLEDs), 3),
         ClimberAscending(new LEDColor(255, 215, 0), new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3),
         AmpReady(null, new StrobeAnimation(204, 0, 255, 0, 0.5, _numLEDs), 3),
@@ -101,12 +102,12 @@ public class LEDs {
                 LEDColor color = animation.getColor();
                 _candle.clearAnimation(0);
                 _candle.setLEDs(0,0,0);     
-                _candle.setLEDs(color.getR(), color.getB(), color.getG());
+                _candle.setLEDs(color.getR(), color.getG(), color.getB());
             } else {
                 _candle.clearAnimation(0);
                 _candle.animate(animation.getAnimation());
                 LEDColor color = animation.getColor();
-                _candle.setLEDs(color.getR(), color.getB(), color.getG());
+                _candle.setLEDs(color.getR(), color.getG(), color.getB());
             }
             
         }

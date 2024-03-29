@@ -30,10 +30,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_With_Limelight"
+                  "name": "Deploy_Pickup"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
           }
         },
         {
@@ -57,6 +69,6 @@
       ]
     }
   },
-  "folder": "Amp Side Autos",
+  "folder": null,
   "choreoAuto": false
 }

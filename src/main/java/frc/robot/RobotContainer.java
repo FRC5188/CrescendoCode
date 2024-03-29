@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -45,6 +46,8 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
+import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
+import frc.robot.subsystems.intake.commands.CmdIntakeWaitForNote;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
 import frc.robot.subsystems.multisubsystemcommands.CmdGoToNote;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
@@ -123,7 +126,7 @@ public class RobotContainer {
         private JoystickButton _op2ButtonSeven = new JoystickButton(_operatorController2, 7);
         private JoystickButton _op2ButtonEight = new JoystickButton(_operatorController2, 8);
         private JoystickButton _op2ButtonNine = new JoystickButton(_operatorController2, 9);
-        
+
         private JoystickButton _op2ButtonTen = new JoystickButton(_operatorController2, 10);
 
         /**
@@ -195,25 +198,36 @@ public class RobotContainer {
                 // setup hand-scheduled commands
                 _adjustShooterAutomaticallyCommand = new CmdAdjustShooterAutomatically(_drive, _shooter, _intake);
 
-                NamedCommands.registerCommand("Pickup_Note_Without_Limelight", _intake.buildCommand().pickUpFromGround(4000));
-                NamedCommands.registerCommand("Pickup_Note_With_Limelight", new PrintCommand("[ERROR] Not implemented"));
-                NamedCommands.registerCommand("Shooting_From_Subwoofer", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                NamedCommands.registerCommand("Shooting_From_Podium", new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                NamedCommands.registerCommand("Shooting_From_Subwoofer",
+                                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
+                NamedCommands.registerCommand("Shooting_From_Podium",
+                                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                NamedCommands.registerCommand("Deploy_Pickup", _intake.buildCommand()
+                                .setPosition(IntakePosition.GroundPickup).andThen(_intake.buildCommand().acquire()));
+                NamedCommands.registerCommand("Stow_Pickup",
+                                new CmdAcquireNoteFor(250, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED.get())
+                                                .andThen(_intake.buildCommand().setPosition(IntakePosition.Stowed))
+                                                .andThen(new CmdAcquireNoteFor(350, _intake,
+                                                                IntakeConstants.INTAKE_ACQUIRE_SPEED.get()))
+                                                .andThen(_intake.buildCommand().stop()));
+                NamedCommands.registerCommand("Pickup_Note_Without_Limelight",
+                                _intake.buildCommand().pickUpFromGround(4000));
+                NamedCommands.registerCommand("Pickup_Note_With_Limelight",
+                                new CmdGoToNote(_drive, _visionDrive, _intake).withTimeout(3.0));
 
                 DoubleSupplier zeroSupplier = new DoubleSupplier() {
-                                        @Override
-                                        public double getAsDouble() {
-                                            return 0;
-                                        }
-                                };
+                        @Override
+                        public double getAsDouble() {
+                                return 0;
+                        }
+                };
 
-                NamedCommands.registerCommand("Auto_Shoot_With_Auto_Align", 
-                        new SequentialCommandGroup(
-                                _shooter.buildCommand().setAutoShootEnabled(true),
-                                new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier),
-                                new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
-                                _intake.buildCommand().spit(2)
-                        ));
+                NamedCommands.registerCommand("Auto_Shoot_With_Auto_Align",
+                                new SequentialCommandGroup(
+                                                _shooter.buildCommand().setAutoShootEnabled(true),
+                                                new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier),
+                                                new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
+                                                _intake.buildCommand().spit(2)));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
                 // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
@@ -238,9 +252,9 @@ public class RobotContainer {
                 _drive.setDefaultCommand(
                                 DriveCommands.joystickDrive(
                                                 _drive,
-                                                () -> -_driveController.getLeftY()*_driveMultiplier,
-                                                () -> -_driveController.getLeftX()*_driveMultiplier,
-                                                () -> -_driveController.getRightX()*_driveMultiplier));
+                                                () -> -_driveController.getLeftY() * _driveMultiplier,
+                                                () -> -_driveController.getLeftX() * _driveMultiplier,
+                                                () -> -_driveController.getRightX() * _driveMultiplier));
                 // create an x shaped pattern with the wheels to make it harder to push us
                 // _driveController.x().onTrue(Commands.runOnce(_drive::stopWithX, _drive));
 
@@ -253,24 +267,18 @@ public class RobotContainer {
                 // () -> _driveController.getLeftX(),
                 // () -> _driveController.getRightX()));
                 _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
-                        () -> -_driveController.getLeftY()*_driveMultiplier,
-                        () -> -_driveController.getLeftX()*_driveMultiplier));      
-                
+                                () -> -_driveController.getLeftY() * _driveMultiplier,
+                                () -> -_driveController.getLeftX() * _driveMultiplier));
 
                 _driveController.a().whileTrue(
-                        new InstantCommand(
-                                () -> this._driveMultiplier = 0.6
-                        )
-                );
+                                new InstantCommand(
+                                                () -> this._driveMultiplier = 0.6));
 
                 _driveController.a().whileFalse(
-                        new InstantCommand(
-                                () -> this._driveMultiplier = 1.0
-                        )
-                );
+                                new InstantCommand(
+                                                () -> this._driveMultiplier = 1.0));
 
-                _driveController.rightBumper().whileTrue(new CmdGoToNote(_drive, _visionDrive));
-
+                _driveController.rightBumper().whileTrue(new CmdGoToNote(_drive, _visionDrive, _intake));
 
                 // reset the orientation of the robot. changes which way it thinks is forward
                 _driveController.y().onTrue(
@@ -290,9 +298,9 @@ public class RobotContainer {
                 // Change the robot pose to think it is in front of the red speaker
                 _driveController.b().onTrue(
                                 Commands.runOnce(
-                                () -> _drive.setPose(robotOnSubwooferRed), _drive).ignoringDisable(true));
+                                                () -> _drive.setPose(robotOnSubwooferRed), _drive)
+                                                .ignoringDisable(true));
 
-                
                 /*
                  * ================================
                  * Button Box
@@ -314,18 +322,19 @@ public class RobotContainer {
                 _op2ButtonSix.onTrue(Commands.runOnce(() -> _intake.setHasNote()));
                 _opButtonFive.onTrue(this._intake.buildCommand().setPosition(IntakePosition.Stowed));
                 _opButtonEight.onTrue(this._intake.buildCommand().pickUpFromGround(0));
-                
+
                 // Run intake rollers, stop when we let go of button
                 _opButtonSeven.onTrue(this._intake.buildCommand().acquire())
-                        .onFalse(this._intake.buildCommand().stop());
+                                .onFalse(this._intake.buildCommand().stop());
 
                 _opButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Amp));
 
                 // Move to shooter positions manually
-                // _op2ButtonOne.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                // _op2ButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
+                _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
+                ShooterZone.Subwoofer));
+                _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
+                ShooterZone.Podium));
 
-               
                 // sad face button
                 _op2ButtonThree.onTrue(new InstantCommand(
                                 () -> Logger.recordOutput(":(", true)));

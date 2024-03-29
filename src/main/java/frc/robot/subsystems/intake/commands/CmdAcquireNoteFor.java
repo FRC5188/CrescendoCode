@@ -23,8 +23,6 @@ public class CmdAcquireNoteFor extends Command {
     this._intake = intake;
     this._timeToRunMS = timeToRunMS;
     this._speed = speed;
-
-    this.addRequirements(this._intake);
   }
 
   @Override

@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]

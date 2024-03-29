@@ -59,7 +59,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle 4 No LL Piece Auto Paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

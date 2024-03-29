@@ -18,7 +18,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -40,6 +40,37 @@
           "type": "path",
           "data": {
             "pathName": "(A2[O]b) Back into Wing, Shoot Second Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp 3 Piece Third Note Pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup_Note_With_Limelight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp 3 Piece Back to Sub after third"
           }
         },
         {

@@ -10,8 +10,9 @@
     "Rad Right Ring Auto Paths"
   ],
   "autoFolders": [
-    "Center Autos",
     "Amp Autos",
+    "Center Autos",
+    "Autos I'd like to use",
     "Source Autos"
   ],
   "defaultMaxVel": 2.0,

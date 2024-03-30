@@ -82,8 +82,8 @@ public class DriveConstants {
 
     // PID constants for auto aim command
     public static final double AUTO_ROTATE_P = 0.007;
-    public static final double AUTO_ROTATE_I = 0.000;
-    public static final double AUTO_ROTATE_D = 0.0000;
+    public static final double AUTO_ROTATE_I = 0.0001;
+    public static final double AUTO_ROTATE_D = 0.0006;
     public static final double AUTO_ROTATE_TOLERANCE = 3.0;
     // PID constants for CmdShootOnTheMove
     public static final double SHOOT_ON_THE_MOVE_P = 0.13;

@@ -20,10 +20,10 @@ public abstract class ShooterConstants {
      *********************/
 
     // PODIUM
-    public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/PODIUM_FLYWHEEL_SPEED", 1750);
+    public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/PODIUM_FLYWHEEL_SPEED", 1500);
     public static final LoggedTunableNumber ZONE_PODIUM_LOW_BOUND = new LoggedTunableNumber("Shooter/PODIUM_LOW_BOUND", 4);
     public static final LoggedTunableNumber ZONE_PODIUM_UPPER_BOUND = new LoggedTunableNumber("Shooter/PODIUM_UPPER_BOUND", 2.5);
-    public static final LoggedTunableNumber ZONE_PODIUM_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/PODIUM_SHOOTER_ANGLE", 22);
+    public static final LoggedTunableNumber ZONE_PODIUM_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/PODIUM_SHOOTER_ANGLE", 18);
 
     // AMP
     // public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new

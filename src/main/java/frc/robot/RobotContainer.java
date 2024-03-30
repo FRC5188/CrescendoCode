@@ -343,6 +343,8 @@ public class RobotContainer {
                 ShooterZone.Subwoofer));
                 _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
                 ShooterZone.Podium));
+                // _op2ButtonEight.onTrue(_shooter.buildCommand().runForZone(
+                // ShooterZone.Podium));
 
                 // sad face button
                 _op2ButtonThree.onTrue(new InstantCommand(

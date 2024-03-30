@@ -94,7 +94,7 @@ public class Shooter extends SubsystemBase {
         // 0.017, 0.00008, 0.25
         
         //_anglePID = new ProfiledPIDController(0.0055, 0.001, 0.0015, new Constraints(40, 70));
-        _anglePID = new PIDController(0.006, 0.0015, 0.0015);
+        _anglePID = new PIDController(0.0065, 0.0015, 0.0015);
         _anglePID.setIZone(5);
 
         // Set up the zone mappings

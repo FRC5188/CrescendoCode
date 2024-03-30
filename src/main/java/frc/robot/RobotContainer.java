@@ -49,6 +49,7 @@ import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
+import frc.robot.subsystems.intake.commands.CmdIntakeWaitForIntake;
 import frc.robot.subsystems.intake.commands.CmdIntakeWaitForNote;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
 import frc.robot.subsystems.multisubsystemcommands.CmdGoToNote;
@@ -85,7 +86,6 @@ public class RobotContainer {
 
         private Command _adjustShooterAutomaticallyCommand;
         private Command _runLEDsCommand;
-
 
         // logged dashboard inputs
         private final LoggedDashboardChooser<Command> _autoChooser;
@@ -234,7 +234,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Auto_Shoot_With_Auto_Align",
                                 new SequentialCommandGroup(
                                                 _shooter.buildCommand().setAutoShootEnabled(true),
-                                                new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier),
+                                                new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier, true),
                                                 new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
                                                 _intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get())));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -277,7 +277,13 @@ public class RobotContainer {
                 // () -> _driveController.getRightX()));
                 _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
                                 () -> -_driveController.getLeftY() * _driveMultiplier,
-                                () -> -_driveController.getLeftX() * _driveMultiplier));
+                                () -> -_driveController.getLeftX() * _driveMultiplier,
+                                true));
+
+                _driveController.leftTrigger(0.5).whileTrue(new CmdDriveAutoAim(_drive,
+                                () -> -_driveController.getLeftY() * _driveMultiplier,
+                                () -> -_driveController.getLeftX() * _driveMultiplier,
+                                false));
 
                 _driveController.a().whileTrue(
                                 new InstantCommand(
@@ -339,10 +345,14 @@ public class RobotContainer {
                 _opButtonTwo.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Amp));
 
                 // Move to shooter positions manually
+                _op2ButtonFour.onTrue(_intake.buildCommand().setPosition(IntakePosition.Feeder)
+                                .andThen(new CmdIntakeWaitForIntake(_intake))
+                                .andThen(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get())));
                 _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
-                ShooterZone.Subwoofer));
+                                ShooterZone.Subwoofer));
+                _op2ButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Feeder));
                 _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
-                ShooterZone.Podium));
+                                ShooterZone.Podium));
                 // _op2ButtonEight.onTrue(_shooter.buildCommand().runForZone(
                 // ShooterZone.Podium));
 

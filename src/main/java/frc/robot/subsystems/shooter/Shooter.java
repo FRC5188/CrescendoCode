@@ -19,7 +19,8 @@ public class Shooter extends SubsystemBase {
         Subwoofer,
         Podium,
         Amp,
-        Unknown
+        Unknown,
+        Feeder
     }
 
     public class ShooterZoneData {
@@ -64,6 +65,11 @@ public class Shooter extends SubsystemBase {
             ShooterConstants.ZONE_PODIUM_UPPER_BOUND,
             ShooterConstants.ZONE_PODIUM_SHOOTER_ANGLE,
             ShooterConstants.ZONE_PODIUM_FLYWHEEL_SPEED);
+    final ShooterZoneData FeederData = new ShooterZoneData(
+            ShooterConstants.ZONE_FEEDER_LOW_BOUND,
+            ShooterConstants.ZONE_FEEDER_UPPER_BOUND,
+            ShooterConstants.ZONE_FEEDER_SHOOTER_ANGLE,
+            ShooterConstants.ZONE_FEEDER_FLYWHEEL_SPEED);
     final ShooterZoneData AmpData = new ShooterZoneData(
             ShooterConstants.ZONE_AMP_LOW_BOUND,
             ShooterConstants.ZONE_AMP_UPPER_BOUND,
@@ -105,6 +111,7 @@ public class Shooter extends SubsystemBase {
         _zoneDataMappings.put(ShooterZone.Podium, PodiumData);
         _zoneDataMappings.put(ShooterZone.Unknown, UnknownData);
         _zoneDataMappings.put(ShooterZone.Amp, AmpData);
+        _zoneDataMappings.put(ShooterZone.Feeder, FeederData);
     }
 
     public ShooterCommandFactory buildCommand() {

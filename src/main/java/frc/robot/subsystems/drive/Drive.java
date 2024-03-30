@@ -354,6 +354,35 @@ public class Drive extends SubsystemBase {
     return _speakerPosition;
   }
 
+  private Pose2d getAmpPos() {
+    return (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_AMP
+        : DriveConstants.RED_AMP;
+  }
+
+  public double calcAngleToAmp() {
+    if (getAlliance() == Alliance.Blue) {
+      return calcAngleToAmpForBlue();
+    } else {
+      return calcAngleToAmpForRed();
+    }
+  }
+
+  private double calcAngleToAmpForBlue() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d ampPos = getAmpPos();
+    double xDiff = robotPose.getX() - ampPos.getX();
+    double yDiff = ampPos.getY() - robotPose.getY();
+    return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
+  private double calcAngleToAmpForRed() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d ampPos = getAmpPos();
+    double xDiff = ampPos.getX() - robotPose.getX();
+    double yDiff = ampPos.getY() - robotPose.getY();
+    return Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
   /**
    * Returns the distance from the center of the robot to the alliance's speaker
    */

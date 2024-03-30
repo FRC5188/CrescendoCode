@@ -24,6 +24,12 @@ public abstract class ShooterConstants {
     public static final LoggedTunableNumber ZONE_PODIUM_LOW_BOUND = new LoggedTunableNumber("Shooter/PODIUM_LOW_BOUND", 4);
     public static final LoggedTunableNumber ZONE_PODIUM_UPPER_BOUND = new LoggedTunableNumber("Shooter/PODIUM_UPPER_BOUND", 2.5);
     public static final LoggedTunableNumber ZONE_PODIUM_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/PODIUM_SHOOTER_ANGLE", 18);
+    
+    // FEEDER
+    public static final LoggedTunableNumber ZONE_FEEDER_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/FEEDER_FLYWHEEL_SPEED", 1200);
+    public static final LoggedTunableNumber ZONE_FEEDER_LOW_BOUND = new LoggedTunableNumber("Shooter/FEEDER_LOW_BOUND", 4);
+    public static final LoggedTunableNumber ZONE_FEEDER_UPPER_BOUND = new LoggedTunableNumber("Shooter/FEEDER_UPPER_BOUND", 2.5);
+    public static final LoggedTunableNumber ZONE_FEEDER_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/FEEDER_SHOOTER_ANGLE", 40);
 
     // AMP
     // public static final LoggedTunableNumber ZONE_PODIUM_FLYWHEEL_SPEED = new

@@ -30,7 +30,7 @@ public class IntakeConstants {
     public static final LoggedTunableNumber POSITION_GROUND_PICKUP = new LoggedTunableNumber("Intake/Position/Ground Pickup", 188);
     public static final LoggedTunableNumber POSITION_STOWED = new LoggedTunableNumber("Intake/Position/Stowed", 12);
     public static final LoggedTunableNumber POSITION_AMP_SCORE = new LoggedTunableNumber("Intake/Position/Amp Score", 60);
-    public static final LoggedTunableNumber POSITION_SPEAKER_SCORE = new LoggedTunableNumber("Intake/Position/Speaker Score", 115);
+    public static final LoggedTunableNumber POSITION_FEEDER_SCORE = new LoggedTunableNumber("Intake/Position/Speaker Score", 140);
 
     /*************************
      * 

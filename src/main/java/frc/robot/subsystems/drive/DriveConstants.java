@@ -25,6 +25,8 @@ public class DriveConstants {
     // See https://firstfrc.blob.core.windows.net/frc2024/FieldAssets/2024LayoutMarkingDiagram.pdf for diagram
     public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), new Rotation2d(0));
     public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
+    public static final Pose2d BLUE_AMP = new Pose2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323), new Rotation2d(0));
+    public static final Pose2d RED_AMP = new Pose2d(Units.inchesToMeters(578.77), Units.inchesToMeters(323), new Rotation2d(Math.PI));
     
     /**
      * 

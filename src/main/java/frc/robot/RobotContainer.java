@@ -209,8 +209,6 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand("Shooting_From_Subwoofer",
                                 new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Subwoofer));
-                NamedCommands.registerCommand("Shooting_From_Podium",
-                                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium));
                 NamedCommands.registerCommand("Deploy_Pickup", _intake.buildCommand()
                                 .setPosition(IntakePosition.GroundPickup).andThen(_intake.buildCommand().acquire()));
                 NamedCommands.registerCommand("Stow_Pickup",
@@ -237,6 +235,9 @@ public class RobotContainer {
                                                 new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier, true),
                                                 new CmdShooterWaitUntilReady(_shooter).withTimeout(2),
                                                 _intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get())));
+                NamedCommands.registerCommand("Shooting_From_Podium",
+                                new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier, true)
+                                .andThen(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium)));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
                 // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 

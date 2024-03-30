@@ -272,6 +272,9 @@ public class Shooter extends SubsystemBase {
             }
             angle = -21.02 * Math.log(0.1106 * radius);
             angle -= 2;
+            if (radius > 2.5) {
+                angle -= 2;
+            }
             Logger.recordOutput("Shooter/RegressionEstimatedAngle", angle);
             setTargetPositionAsAngle(angle);
         }

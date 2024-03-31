@@ -173,6 +173,10 @@ public class Intake extends SubsystemBase {
         return _intakeInputs._pivotEncoderPositionDegrees;
     }
 
+    public boolean isPivotEncoderAtZero() {
+        return _intakeInputs._pivotEncoderPositionDegrees==0;
+    }
+
     /**
      * Returns the target position
      * @return intakePosition as an angle (double)
@@ -202,6 +206,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake Current Pivot Angle", _intakeInputs._pivotEncoderPositionDegrees);
         SmartDashboard.putNumber("Intake Desired Pivot Angle", _intakePosition.getAngle());
         SmartDashboard.putBoolean("Intake Has Note", _hasNote);
+        SmartDashboard.putBoolean("Is Intake Encoder At Zero", isPivotEncoderAtZero());
 
         // VISUALIZATION
         double angle = _intakeInputs._pivotEncoderPositionDegrees;

@@ -16,8 +16,8 @@ public class HardwareConstants {
         public static int FR_TURN = 5;
         public static int FR_CANCODER = 6;
 
-        public static int BL_DRIVE = 7;
-        public static int BL_TURN = 8;
+        public static int BL_DRIVE = 8;
+        public static int BL_TURN = 7;
         public static int BL_CANCODER = 9;
 
         public static int BR_DRIVE = 10;

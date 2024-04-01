@@ -348,7 +348,8 @@ public class RobotContainer {
                 // Move to shooter positions manually
                 _op2ButtonFour.onTrue(_intake.buildCommand().setPosition(IntakePosition.Feeder)
                                 .andThen(new CmdIntakeWaitForIntake(_intake))
-                                .andThen(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get())));
+                                .andThen(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()))
+                                .andThen(_intake.buildCommand().setPosition(IntakePosition.Stowed)));
                 _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
                                 ShooterZone.Subwoofer));
                 _op2ButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Feeder));

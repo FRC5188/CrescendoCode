@@ -272,9 +272,14 @@ public class Shooter extends SubsystemBase {
             }
             angle = -21.02 * Math.log(0.1106 * radius);
             angle -= 2;
-            if (radius > 2.5) {
-                angle -= 2;
-            }
+            if (radius > 2.0 && radius < 2.75) {
+                angle -= 2.25;
+            } else if (radius >= 2.75 && radius < 3.75) {
+                angle -= 1.25;
+            } 
+            // else if (radius >= 3.75) {
+            //     angle -= 0.;
+            // }
             Logger.recordOutput("Shooter/RegressionEstimatedAngle", angle);
             setTargetPositionAsAngle(angle);
         }
@@ -298,7 +303,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFlywheelSpeedWithRadius(double radiusInMeters) {
-        double speed = 3000;
+        double speed = 2000;
         if (radiusInMeters <= 4 && radiusInMeters > 2) {
             speed = 1600;
         } else if (radiusInMeters <= 2) {

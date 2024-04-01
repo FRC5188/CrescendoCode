@@ -158,18 +158,6 @@ public class Drive extends SubsystemBase {
 
     _poseEstimator.update(_rawGyroRotation, modulePositions);
 
-    // MITCHELL READ THIS COMMENT. I'm still getting the loop overrun issue from the
-    // driver station
-    // so this did not solve the issue. but i wanted to bring it to your attention.
-    // as of the commit which added this block of comments, the only errors I'm
-    // getting from the driver
-    // station is about photon vision cameras and the loop over run from drive
-    // periodic. i am a little
-    // worried that this drive periodic overrun issue might come back to bite us so
-    // I don't want to
-    // leave it not addressed for too long. But, first, lets get the rest of the
-    // robot back up and going
-
     // commenting this out to see if it helps with loop overrun time gh - 2/25/24
     // driver.periodic is sometimes running at 20-40ms on its own
     _field.setRobotPose(_poseEstimator.getEstimatedPosition());

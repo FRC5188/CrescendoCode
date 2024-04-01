@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
         GroundPickup(IntakeConstants.POSITION_GROUND_PICKUP),
         Stowed(IntakeConstants.POSITION_STOWED),
         AmpScore(IntakeConstants.POSITION_AMP_SCORE),
-        SpeakerScore(IntakeConstants.POSITION_SPEAKER_SCORE);
+        Feeder(IntakeConstants.POSITION_FEEDER_SCORE);
 
         private final LoggedTunableNumber _angle;
 

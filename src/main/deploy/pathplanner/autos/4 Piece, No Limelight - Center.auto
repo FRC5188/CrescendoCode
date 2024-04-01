@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {
@@ -64,13 +64,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(C) Amp Side Note to Sub"
+            "pathName": "(C) Amp Side Note to Sub, No LL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {
@@ -95,18 +95,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(C) Source Side Note to Sub"
+            "pathName": "(C) Source Side Note to Sub, No LL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Subwoofer"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]
     }
   },
-  "folder": "Test (so exciting!!!!)",
+  "folder": "Autos I'd like to use",
   "choreoAuto": false
 }

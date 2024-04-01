@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.053183798675292,
-        "y": 0.779488482053888
+        "x": 8.416502913765923,
+        "y": 0.7702308991316326
       },
       "prevControl": {
-        "x": 7.332896973486257,
-        "y": 0.8485570817295487
+        "x": 7.696216088576888,
+        "y": 0.8392994988072933
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side Auto Paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0

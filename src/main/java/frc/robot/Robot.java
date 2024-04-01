@@ -175,6 +175,11 @@ public class Robot extends LoggedRobot {
   public void disabledInit() {
     _robotContainer.getRunAnglePIDCommand().cancel();
     SmartDashboard.putData("Autonomous Selection Preview", this._autonomousTrajectory);
+
+        if(!CommandScheduler.getInstance().isScheduled(_robotContainer.getRunLEDs())){ 
+      _robotContainer.getRunLEDs().schedule();
+    }
+
   }
 
   /** This function is called periodically when disabled. */
@@ -209,6 +214,11 @@ public class Robot extends LoggedRobot {
       _robotContainer.getFeederInitialStateCommand().schedule();
     }
     
+    if(!CommandScheduler.getInstance().isScheduled(
+      _robotContainer.getRunLEDs())){ 
+      _robotContainer.getRunLEDs().schedule();
+    }
+
     // _robotContainer.getRunAnglePIDCommand().schedule();
     _robotContainer.getSetInitalShooterPosition().schedule();
     // schedule the autonomous command (example)
@@ -242,6 +252,11 @@ public class Robot extends LoggedRobot {
     if (!CommandScheduler.getInstance().isScheduled(_robotContainer.getAdjustShooterAutomaticallyCommand())) {
       _robotContainer.getAdjustShooterAutomaticallyCommand().schedule();
       _robotContainer.getFeederInitialStateCommand().schedule();
+    }
+    
+    if(!CommandScheduler.getInstance().isScheduled(
+      _robotContainer.getRunLEDs())){ 
+      _robotContainer.getRunLEDs().schedule();
     }
 
     _robotContainer.getSetInitalShooterPosition().schedule();

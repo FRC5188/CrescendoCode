@@ -5,14 +5,16 @@
   "pathFolders": [
     "Lit Left Ring Auto Paths",
     "Macho Middle Ring Auto Paths",
-    "Middle 4 Piece Auto Paths",
+    "Middle 4 No LL Piece Auto Paths",
+    "Source Side WIP",
     "Playoff Path",
     "Rad Right Ring Auto Paths"
   ],
   "autoFolders": [
-    "Left Autos",
-    "Middle Autos",
-    "Right Autos"
+    "Amp Autos",
+    "Center Autos",
+    "Autos I'd like to use",
+    "Source Autos"
   ],
   "defaultMaxVel": 2.0,
   "defaultMaxAccel": 1.0,

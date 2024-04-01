@@ -16,8 +16,8 @@ public class HardwareConstants {
         public static int FR_TURN = 5;
         public static int FR_CANCODER = 6;
 
-        public static int BL_DRIVE = 7;
-        public static int BL_TURN = 8;
+        public static int BL_DRIVE = 8;
+        public static int BL_TURN = 7;
         public static int BL_CANCODER = 9;
 
         public static int BR_DRIVE = 10;
@@ -59,29 +59,43 @@ public class HardwareConstants {
         * positive X, and where the left side of the robot is the negative Y.
         */
         // How far foward/backward the camera is from robot center.
-        private static final double CAMERA_ONE_X_FROM_ROBOT_CENTER = -0.279; // Mechanical offset + 1/8" offset
+        private static final double CAMERA_ONE_X_FROM_ROBOT_CENTER = -0.032 + 0.279; // Mechanical offset + 1/8" offset
         // How far left/right the camera is from robot center.
-        private static final double CAMERA_ONE_Y_FROM_ROBOT_CENTER = 0.03 - 0.127;
+        private static final double CAMERA_ONE_Y_FROM_ROBOT_CENTER = 0.273;
         // How far up/down the camera is from center if we look at robot from side in 3D
         // space.
         private static final double CAMERA_ONE_Z_FROM_ROBOT_CENTER = 0.2583;
     
         private static final double CAMERA_ONE_ROLL = 0;
         private static final double CAMERA_ONE_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_ONE_YAW = Math.toRadians(180.0);
+        private static final double CAMERA_ONE_YAW = Math.toRadians(0.0);
 
         // Intake Camera
         private static Transform3d _cameraOnePosition = new Transform3d(
         new Translation3d(CAMERA_ONE_X_FROM_ROBOT_CENTER, CAMERA_ONE_Y_FROM_ROBOT_CENTER, CAMERA_ONE_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_ONE_ROLL, CAMERA_ONE_PITCH, CAMERA_ONE_YAW));
 
-        private static final double CAMERA_TWO_X_FROM_ROBOT_CENTER = 0.0279 + 0.121; // Mechanical offset - 1/8" offset
-        private static final double CAMERA_TWO_Y_FROM_ROBOT_CENTER = 0.1586 + 0.1524;
+        private static final double CAMERA_TWO_X_FROM_ROBOT_CENTER = -0.16 - 0.254; // Mechanical offset - 1/8" offset
+        private static final double CAMERA_TWO_Y_FROM_ROBOT_CENTER = -0.273;
         private static final double CAMERA_TWO_Z_FROM_ROBOT_CENTER = 0.2583;
 
         private static final double CAMERA_TWO_ROLL = 0;
         private static final double CAMERA_TWO_PITCH = Math.toRadians(20.0);
-        private static final double CAMERA_TWO_YAW = Math.toRadians(0.0);
+        private static final double CAMERA_TWO_YAW = Math.toRadians(180.0);
+
+        // METERS
+        private static final double CAMERA_THREE_X_FROM_ROBOT = -0.2508;
+        private static final double CAMERA_THREE_Y_FROM_ROBOT = 0.2508;
+        private static final double CAMERA_THREE_Z_FROM_ROBOT = 0.27;
+
+        private static final double CAMERA_THREE_ROLL = 0.0;
+        private static final double CAMERA_THREE_PITCH = Math.toRadians(28.125);
+        private static final double CAMERA_THREE_YAW = Math.toRadians(135.0);
+
+        private static final Transform3d _cameraThreePosition = new Transform3d(
+            new Translation3d(CAMERA_THREE_X_FROM_ROBOT, CAMERA_THREE_Y_FROM_ROBOT, CAMERA_THREE_Z_FROM_ROBOT),
+            new Rotation3d(CAMERA_THREE_ROLL, CAMERA_THREE_PITCH, CAMERA_THREE_YAW)
+        );
 
         // Shooter Camera
         private static Transform3d _cameraTwoPosition = new Transform3d(
@@ -89,7 +103,7 @@ public class HardwareConstants {
         new Rotation3d(CAMERA_TWO_ROLL, CAMERA_TWO_PITCH, CAMERA_TWO_YAW));
 
         // TODO: Swapped camera position. Rename after competition.
-        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraTwoPosition, _cameraOnePosition};
+        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraOnePosition, _cameraTwoPosition, _cameraThreePosition};
     
     // |====================== END VISION SUBSYSTEM TRANSFORMATIONS ======================|
     

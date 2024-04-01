@@ -5,19 +5,23 @@
 package frc.robot.subsystems.multisubsystemcommands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.visiondrive.VisionDrive;
 
 public class CmdGoToNote extends Command {
   private final Drive _drive;
   private final VisionDrive _visionDrive;
+  private final Intake _intake;
   private ChassisSpeeds _chassisSpeeds;
 
-  public CmdGoToNote(Drive drivetrainSubsystem, VisionDrive visionDriveSubsystem) {
+  public CmdGoToNote(Drive drivetrainSubsystem, VisionDrive visionDriveSubsystem, Intake intakeSubsystem) {
 
     this._drive = drivetrainSubsystem;
     this._visionDrive = visionDriveSubsystem;
+    this._intake = intakeSubsystem;
 
     addRequirements(drivetrainSubsystem);
   }
@@ -38,6 +42,6 @@ public class CmdGoToNote extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return DriverStation.isAutonomous() && _intake.hasNote();
   }
 }

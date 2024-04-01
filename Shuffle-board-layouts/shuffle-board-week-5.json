@@ -891,7 +891,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "0,1": {
+          "9,3": {
             "size": [
               1,
               1
@@ -951,7 +951,7 @@
           },
           "0,0": {
             "size": [
-              2,
+              3,
               1
             ],
             "content": {
@@ -1008,15 +1008,28 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "0,1": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/DashboardInputs/Auto Choices",
+              "_title": "/AdvantageKit/DashboardInputs/Auto Choices",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": 55.0,
-    "y": 2.0,
-    "width": 1870.0,
-    "height": 1085.0
+    "x": 0.800000011920929,
+    "y": 0.800000011920929,
+    "width": 1534.4000244140625,
+    "height": 814.4000244140625
   }
 }

@@ -30,7 +30,7 @@ public class IntakeConstants {
     public static final LoggedTunableNumber POSITION_GROUND_PICKUP = new LoggedTunableNumber("Intake/Position/Ground Pickup", 188);
     public static final LoggedTunableNumber POSITION_STOWED = new LoggedTunableNumber("Intake/Position/Stowed", 12);
     public static final LoggedTunableNumber POSITION_AMP_SCORE = new LoggedTunableNumber("Intake/Position/Amp Score", 60);
-    public static final LoggedTunableNumber POSITION_SPEAKER_SCORE = new LoggedTunableNumber("Intake/Position/Speaker Score", 115);
+    public static final LoggedTunableNumber POSITION_FEEDER_SCORE = new LoggedTunableNumber("Intake/Position/Speaker Score", 140);
 
     /*************************
      * 
@@ -51,7 +51,7 @@ public class IntakeConstants {
      **************************/
     public static final LoggedTunableNumber INTAKE_ACQUIRE_SPEED = new LoggedTunableNumber("Intake/Roller/Aquire Speed", 0.8);
     public static final LoggedTunableNumber INTAKE_SPIT_SPEED = new LoggedTunableNumber("Intake/Roller/Spit Speed", -0.7);
-    public static final LoggedTunableNumber INTAKE_SPIT_TIME = new LoggedTunableNumber("Intake/Roller/Spit Time", 1.0);
+    public static final LoggedTunableNumber INTAKE_SPIT_TIME = new LoggedTunableNumber("Intake/Roller/Spit Time", 0.5);
     public static final LoggedTunableNumber INTAKE_CURRENT_CUTOFF = new LoggedTunableNumber("Intake/Roller/Current Cutoff", 40);
 
     // this constant allows us to make the rollers slowly spin to

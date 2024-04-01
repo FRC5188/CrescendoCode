@@ -158,18 +158,6 @@ public class Drive extends SubsystemBase {
 
     _poseEstimator.update(_rawGyroRotation, modulePositions);
 
-    // MITCHELL READ THIS COMMENT. I'm still getting the loop overrun issue from the
-    // driver station
-    // so this did not solve the issue. but i wanted to bring it to your attention.
-    // as of the commit which added this block of comments, the only errors I'm
-    // getting from the driver
-    // station is about photon vision cameras and the loop over run from drive
-    // periodic. i am a little
-    // worried that this drive periodic overrun issue might come back to bite us so
-    // I don't want to
-    // leave it not addressed for too long. But, first, lets get the rest of the
-    // robot back up and going
-
     // commenting this out to see if it helps with loop overrun time gh - 2/25/24
     // driver.periodic is sometimes running at 20-40ms on its own
     _field.setRobotPose(_poseEstimator.getEstimatedPosition());
@@ -352,6 +340,35 @@ public class Drive extends SubsystemBase {
         : DriveConstants.RED_SPEAKER;
 
     return _speakerPosition;
+  }
+
+  private Pose2d getAmpPos() {
+    return (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_AMP
+        : DriveConstants.RED_AMP;
+  }
+
+  public double calcAngleToAmp() {
+    if (getAlliance() == Alliance.Blue) {
+      return calcAngleToAmpForBlue();
+    } else {
+      return calcAngleToAmpForRed();
+    }
+  }
+
+  private double calcAngleToAmpForBlue() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d ampPos = getAmpPos();
+    double xDiff = robotPose.getX() - ampPos.getX();
+    double yDiff = ampPos.getY() - robotPose.getY();
+    return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
+  private double calcAngleToAmpForRed() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d ampPos = getAmpPos();
+    double xDiff = ampPos.getX() - robotPose.getX();
+    double yDiff = ampPos.getY() - robotPose.getY();
+    return Math.toDegrees(Math.atan(yDiff / xDiff));
   }
 
   /**

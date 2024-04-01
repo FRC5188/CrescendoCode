@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 7.45,
-        "y": 0.77
+        "y": 0.83
       },
       "prevControl": {
         "x": 6.661546434731825,
-        "y": 0.9652260634687548
+        "y": 1.0252260634687547
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side Auto Paths",
+  "folder": "Source Side WIP",
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0

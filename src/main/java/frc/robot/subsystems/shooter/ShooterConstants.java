@@ -97,8 +97,8 @@ public abstract class ShooterConstants {
     public static final double FLYWHEEL_GEAR_RATIO = 2;
     public static final double ANGLE_GEAR_RATIO = 60;
     public static final double ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES = 14.52;
-    public static final double SHOOTER_MOMENT_ARM_LENGTH_METERS = 0.1219;
-    public static final double SHOOTER_WEIGHT_KG = 5.222;
+    public static final double SHOOTER_MOMENT_ARM_LENGTH_METERS = 0.1172; //0.1219
+    public static final double SHOOTER_WEIGHT_KG = 5.603; //5.222
     public static final double MAX_VOLTAGE = 12.0;
     public static final double NEO_VORTEX_STALL_CURRENT = 211; // in amps
     public static final double NEO_VORTEX_STALL_TORQUE = 0.3671; // in kg*m

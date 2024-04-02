@@ -2,7 +2,6 @@ package frc.robot.subsystems.drive.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
@@ -18,6 +17,7 @@ public class CmdDriveAutoAim extends Command {
     private final DoubleSupplier _translationXSupplier;
     private final DoubleSupplier _translationYSupplier;
     private PIDController _angleController;
+    private boolean _isSpeaker;
 
     /**
      * Auto Rotate the robot to a specified angle. This command will still allow the
@@ -31,11 +31,13 @@ public class CmdDriveAutoAim extends Command {
      */
     public CmdDriveAutoAim(Drive drivetrainSubsystem,
             DoubleSupplier translationXSupplier,
-            DoubleSupplier translationYSupplier) {
+            DoubleSupplier translationYSupplier,
+            boolean isSpeaker) {
 
         this._drive = drivetrainSubsystem;
         this._translationXSupplier = translationXSupplier;
         this._translationYSupplier = translationYSupplier;
+        _isSpeaker = isSpeaker;
 
         this._angleController = new PIDController(DriveConstants.AUTO_ROTATE_P, DriveConstants.AUTO_ROTATE_I,
                 DriveConstants.AUTO_ROTATE_D);
@@ -64,7 +66,7 @@ public class CmdDriveAutoAim extends Command {
         // we add 180 because the intake is the front of the robot and we want the shooter to
         // face the speaker not the intake.
         double currentAngleDegrees = _drive.getRotation().getDegrees() + 180;
-        double desiredAngleDegrees =  _drive.calcAngleToSpeaker();
+        double desiredAngleDegrees = _isSpeaker ? _drive.calcAngleToSpeaker() : _drive.calcAngleToAmp();
 
         this._angleController.setSetpoint(desiredAngleDegrees);
         double rotationVal = this._angleController.calculate(
@@ -72,17 +74,23 @@ public class CmdDriveAutoAim extends Command {
 
 
         Logger.recordOutput("Drive/autoaim/rotationValue", rotationVal);
-        Logger.recordOutput("Drive/autoaim/angleToSpeaker", desiredAngleDegrees);
-        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", currentAngleDegrees);
+        Logger.recordOutput("Drive/autoaim/autorotatedesiredDegrees", desiredAngleDegrees);
         Logger.recordOutput("Drive/autoaim/autorotatedactualDegrees", currentAngleDegrees);
 
         // this is what drives the robot
-        this._drive.runVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        _translationXSupplier.getAsDouble(),
-                        _translationYSupplier.getAsDouble(),
-                        rotationVal,
-                        _drive.getRotation()));          
+        // drive the robot based on the calculations from above
+        // _drive.runVelocity(
+        //         _drive.transformJoystickInputsToChassisSpeeds(
+        //         _translationXSupplier.getAsDouble(), 
+        //         _translationYSupplier.getAsDouble(),
+        //         rotationVal, true));     
+        _drive.runVelocity(_drive.transformJoystickInputsToChassisSpeeds(
+            _translationXSupplier.getAsDouble(), 
+            _translationYSupplier.getAsDouble(), 
+            rotationVal, true));
+        
+        Logger.recordOutput("Drive/autoaim/isReady", _angleController.atSetpoint());
+        Logger.recordOutput("Drive/autoaim/isEnabled", true);
     }
     
 
@@ -90,13 +98,12 @@ public class CmdDriveAutoAim extends Command {
     @Override
     public void end(boolean interrupted) {
         // when we finish set the rotation to 0 but keep driving
-        this._drive.runVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        _translationXSupplier.getAsDouble(),
-                        _translationYSupplier.getAsDouble(),
-                        0,
-                        _drive.getGyroscopeRotation()));
-
+        _drive.runVelocity(_drive.transformJoystickInputsToChassisSpeeds(
+            _translationXSupplier.getAsDouble(), 
+            _translationYSupplier.getAsDouble(),
+            0, false));
+        Logger.recordOutput("Drive/autoaim/isReady", false);
+        Logger.recordOutput("Drive/autoaim/isEnabled", false);
     }
 
     // Returns true when the command should end.

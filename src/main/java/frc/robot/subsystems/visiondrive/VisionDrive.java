@@ -26,8 +26,8 @@ public class VisionDrive extends SubsystemBase {
     _visionDriveIO = visionDriveIO;
     _chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
-    _translatePID = new PIDController(0.1, 0, 0);
-    _rotatePID = new PIDController(0.05, 0, 0);
+    _translatePID = new PIDController(0.2, 0, 0);
+    _rotatePID = new PIDController(0.075, 0, 0);
   }
 
   @Override

@@ -102,8 +102,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
     _turnSparkFlex.setSmartCurrentLimit(30);
     _driveSparkFlex.enableVoltageCompensation(12.0);
     _turnSparkFlex.enableVoltageCompensation(12.0);
-    _driveSparkFlex.setClosedLoopRampRate(0.25);
-    _turnSparkFlex.setClosedLoopRampRate(0.25);
+    _driveSparkFlex.setClosedLoopRampRate(0.1);
+    _turnSparkFlex.setClosedLoopRampRate(0.1);
 
     _driveEncoder.setPosition(0.0);
     _driveEncoder.setMeasurementPeriod(10);

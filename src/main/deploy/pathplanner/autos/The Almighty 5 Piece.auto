@@ -24,13 +24,82 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(C) Sub to Center Note And Back - No Limelight"
+                  "pathName": "Sub to Amp Note W LL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Deploy_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shooting_From_Podium"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Note to Center Note LL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Deploy_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shooting_From_Podium"
                 }
               }
             ]
@@ -43,59 +112,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(C) Sub to Amp Side Note - No LL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pickup_Note_Without_Limelight"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(C) Amp Side Note to Sub, No LL"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(C) Sub to source side note - No LL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pickup_Note_Without_Limelight"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(C) Source Side Note to Sub, No LL"
+            "name": "Pickup_Note_With_Limelight"
           }
         },
         {

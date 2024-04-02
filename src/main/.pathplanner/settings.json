@@ -3,15 +3,16 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Amp Side Auto Paths",
-    "Center Auto Paths",
-    "Source Side Auto Paths"
+    "5 Piece Paths",
+    "Left Ring Autos",
+    "Middle Ring Autos",
+    "Right Ring Autos"
   ],
   "autoFolders": [
     "Amp Side Autos",
     "Center Autos",
-    "Test (so exciting!!!!)",
-    "Source Side Autos"
+    "Source Side Autos",
+    "ignore for now"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

@@ -332,7 +332,9 @@ public class Drive extends SubsystemBase {
    * @param timestamp  The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
-    _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+    if (VisionIO.shouldUsePoseEstimation(visionPose, this.getPose())){
+      _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+    }
   }
 
   private Pose2d getSpeakerPos() {

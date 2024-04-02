@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.visiondrive;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -77,12 +75,10 @@ public class VisionDrive extends SubsystemBase {
     public ChassisSpeeds getChassisSpeedsForForwardBackwardControlGoToNote(double joystickYSupplier) {
       if (hasTarget()) {
 
-        double _joystickYSupplier = joystickYSupplier;
-
           // Note: x and y on the Limelight screen resemble the coordinate plane, with x increasing to the right and y increasing up.
           // x and y in ChassisSpeeds are different, with negative x representing forward translation and positive y representing right rotation.
           _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_visionDriveInputs._tx, 0);
-          _chassisSpeeds.vxMetersPerSecond = -1.0 * _joystickYSupplier;
+          _chassisSpeeds.vxMetersPerSecond = -1.0 * joystickYSupplier;
 
       } else {
           // Else: stop.

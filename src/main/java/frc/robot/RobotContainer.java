@@ -46,6 +46,7 @@ import frc.robot.subsystems.drive.commands.CmdDriveAutoAim;
 import frc.robot.subsystems.drive.commands.DriveCommands;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.multisubsystemcommands.CmdAdjustShooterAutomatically;
+import frc.robot.subsystems.multisubsystemcommands.CmdForwardBackwardControlGoToNote;
 import frc.robot.subsystems.multisubsystemcommands.CmdGoToNote;
 import frc.robot.subsystems.multisubsystemcommands.GrpShootNoteInZone;
 import frc.robot.subsystems.shooter.RealShooterIO;
@@ -268,6 +269,13 @@ public class RobotContainer {
                 );
 
                 _driveController.rightBumper().whileTrue(new CmdGoToNote(_drive, _visionDrive));
+
+                // NOTE: Commented out for now in case we switch GoToNote for this new command.
+                // // face the speaker while we hold this button
+                _driveController.rightBumper().whileTrue(new CmdForwardBackwardControlGoToNote(
+                _drive,
+                _visionDrive,
+                () -> _driveController.getLeftY() * _driveMultiplier));
 
 
                 // reset the orientation of the robot. changes which way it thinks is forward

@@ -96,7 +96,7 @@ public class Drive extends SubsystemBase {
       ModuleIO brModuleIO) {
     this._gyroIO = gyroIO;
     this._visionIO = visionIO;
-    this._visionDriveIO = visionDriveIO;
+    // this._visionDriveIO = visionDriveIO;
 
     _isCmdShootOnMoveRunning = _adkitNetworkTable.getBooleanTopic("RealOutputs/Drive/shootOnTheMove/isRunning")
     .subscribe(false);

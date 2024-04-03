@@ -89,7 +89,7 @@ public class CmdShootOnTheMove extends Command {
     _trigger = triggerAxis;
     _translationXSupplier = translationXSupplier;
     _translationYSupplier = translationYSupplier;
-    _autoAdjustCommand = autoAdjustCommand;
+    //_autoAdjustCommand = autoAdjustCommand;
     _cmdIsRunning = true;
 
     _rotationPID = new PIDController(

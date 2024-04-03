@@ -3,6 +3,7 @@ package frc.robot.util.autonomous;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -36,6 +37,8 @@ public abstract class AutonomousPathGenerator {
             () -> DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red, 
             drive);
+
+        PPHolonomicDriveController.setRotationTargetOverride(drive::getRotationTargetOverride);
 
         Pathfinding.setPathfinder(new LocalADStar());
 

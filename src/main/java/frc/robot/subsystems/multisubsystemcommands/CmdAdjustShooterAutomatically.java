@@ -38,6 +38,7 @@ public class CmdAdjustShooterAutomatically extends Command {
             if (_intakeSubsystem.hasNote()) {
                 double radius = _drive.getRadiusToSpeakerInMeters();
                 _shooterSubsystem.runShooterForRadius(radius);
+                Logger.recordOutput("Shooter/RadiusToSpeaker", radius);
             } else {
                 // We aren't holding a note, so stay in unknown for now
                 _shooterSubsystem.runShooterForZone(ShooterZone.Unknown);

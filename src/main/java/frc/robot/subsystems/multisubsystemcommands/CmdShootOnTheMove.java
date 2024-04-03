@@ -12,6 +12,8 @@ package frc.robot.subsystems.multisubsystemcommands;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -39,6 +41,7 @@ public class CmdShootOnTheMove extends Command {
   private Command _autoAdjustCommand;
 
   private boolean _isFinished;
+  private boolean _cmdIsRunning;
 
   private Translation2d _currentRobotTranslation;
   private double _currentAngleRadians;
@@ -86,6 +89,8 @@ public class CmdShootOnTheMove extends Command {
     _trigger = triggerAxis;
     _translationXSupplier = translationXSupplier;
     _translationYSupplier = translationYSupplier;
+    //_autoAdjustCommand = autoAdjustCommand;
+    _cmdIsRunning = true;
 
     _rotationPID = new PIDController(
         DriveConstants.SHOOT_ON_THE_MOVE_P,
@@ -106,6 +111,7 @@ public class CmdShootOnTheMove extends Command {
   @Override
   public void initialize() {
     _isFinished = false;
+    _cmdIsRunning = true;
     // Cancel CmdAdjustShooterAutomatically while this command runs; reenable when it finishes.
     _shooter.setAutoShootEnabled(false);
   }
@@ -119,6 +125,7 @@ public class CmdShootOnTheMove extends Command {
         _hasRunOnce = true;
       }
     }
+
 
     // Get *translation only* of the robot
     _currentRobotTranslation = _drive.getPose().getTranslation();
@@ -146,9 +153,13 @@ public class CmdShootOnTheMove extends Command {
     // Angle to the speaker from the future position as a Rotation2d.
     _futureAngleToSpeaker = _drive.getRotation2dToSpeaker(_futureRobotTranslation);
 
+    // 
+    _drive.setShootOnMoveGyro(_futureRobotTranslation.getAngle());
+
     // All PID calculations are done in radians, so convert our setpoint from a
     // Rotation2d to radians.
     _rotationPID.setSetpoint(_futureAngleToSpeaker.getRadians());
+
 
     // Angle in radians (omegaRadiansPerSecond) to pass to the drivetrain later in a
     // ChassisSpeeds object
@@ -181,6 +192,9 @@ public class CmdShootOnTheMove extends Command {
         }
       }
     }
+
+    // Adds a boolean that tells if this command is running to NetworkTables.
+    Logger.recordOutput("Drive/shootOnTheMove/isRunning", _cmdIsRunning);
   }
 
   // Called once the command ends or is interrupted.
@@ -195,6 +209,7 @@ public class CmdShootOnTheMove extends Command {
     _shotTimer.stop();
     _shotTimer.reset();
     _hasRunOnce = false;
+    _cmdIsRunning = false;
 
     // Reenable CmdAdjustShooterAutomatically because this command is finished.
     _shooter.setAutoShootEnabled(true);

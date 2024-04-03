@@ -248,11 +248,11 @@ public class Shooter extends SubsystemBase {
         return ShooterZone.Unknown;
     }
 
-    public boolean isAutoShootEnabled() {
+    public static boolean isAutoShootEnabled() {
         return _autoShootEnabled;
     }
 
-    public void setAutoShootEnabled(boolean enabled) {
+    public static void setAutoShootEnabled(boolean enabled) {
         _autoShootEnabled = enabled;
     }
 

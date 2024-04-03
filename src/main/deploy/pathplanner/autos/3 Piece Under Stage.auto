@@ -1,0 +1,67 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.51,
+      "y": 5.56
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting_From_Subwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(M3A) Shoot first note, move to second note pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PickUpNoteWithLimelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootWithAutoAlign"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(M) Going under stage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PickUpNoteWithLimelight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(M2) Under stage reverse"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootWithAutoAlign"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

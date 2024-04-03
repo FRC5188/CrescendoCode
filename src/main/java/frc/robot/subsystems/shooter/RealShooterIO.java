@@ -87,14 +87,14 @@ public class RealShooterIO implements ShooterIO {
         // _angleMotor.getPIDController().setReference(degrees, ControlType.kPosition);
     }
 
-    public void setAngleMotorSpeed(double speed) {
-         _angleMotor.set(speed);
+    public void setAngleMotorVoltage(double voltage) {
+         _angleMotor.setVoltage(voltage);
     }
 
     private void configAngleMotor() {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
 
-        _angleMotor.enableVoltageCompensation(12.0);
+        _angleMotor.enableVoltageCompensation(8.0);
         _angleMotor.setInverted(false);
         _angleMotor.setCANTimeout(100);
         _angleMotor.setIdleMode(IdleMode.kBrake);

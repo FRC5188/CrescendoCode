@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -92,6 +93,7 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
+        GenericHID _driveRumble = _driveController.getHID();
 
         // Button box
         // Top half of buttons
@@ -393,6 +395,21 @@ public class RobotContainer {
                 // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         }
+
+        // RUMBLE
+        // rumbles the controller when intake has a note
+
+        public static Command rumbleDriverCommand() {
+                return new RunCommand(() -> rumbleDriverController()).withTimeout(2).finallyDo(() -> stopRumbleDriverController());
+            }
+        
+            public void rumbleDriverController() {
+                _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+            }
+        
+            public void stopRumbleDriverController() {
+                _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+            }
 
         /**
          * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -3,7 +3,9 @@ package frc.robot.subsystems.intake;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 // import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged; checkstyle says this is redunant
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.util.LoggedTunableNumber;
@@ -162,6 +164,7 @@ public class Intake extends SubsystemBase {
      */
     public void setHasNote() {
         _hasNote = true;
+        RobotContainer.rumbleDriverCommand();
     }
 
 

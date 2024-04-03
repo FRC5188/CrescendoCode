@@ -11,6 +11,9 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 
@@ -91,8 +94,8 @@ public class Shooter extends SubsystemBase {
     private ShooterZone _currentShooterZone;
     private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
     private final ShooterCommandFactory _shooterCommandFactory = new ShooterCommandFactory(this);
-    //private ProfiledPIDController _anglePID;
     private PIDController _anglePID;
+    private DoubleSubscriber _radiusToSpeaker;
 
     public Shooter(ShooterIO shooterIO) {
         _shooterIO = shooterIO;
@@ -111,6 +114,10 @@ public class Shooter extends SubsystemBase {
         _zoneDataMappings.put(ShooterZone.Unknown, UnknownData);
         _zoneDataMappings.put(ShooterZone.Amp, AmpData);
         _zoneDataMappings.put(ShooterZone.Feeder, FeederData);
+
+        NetworkTable adkitNetworkTable = NetworkTableInstance.getDefault().getTable("AdvantageKit");
+        _radiusToSpeaker = adkitNetworkTable.getDoubleTopic("RealOutputs/Drive/radiustospeaker")
+                            .subscribe(4.5);
     }
 
     public ShooterCommandFactory buildCommand() {
@@ -291,8 +298,14 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean shooterInPosition() {
+        // Making a sliding scale kind of function here (it'll probably be linear)
+        // We don't need to be as specific with our position when we are right against the subwoofer,
+        // but when we are really far away we have to be pretty exact
+        // So this function will let us be faster up close, but more accurate further away
+        double deadband = (ShooterConstants.ANGLE_DEADBAND_SLOPE * _radiusToSpeaker.get()) + ShooterConstants.ANGLE_DEADBAND_INTERCEPT;
+
         return Math.abs(_targetShooterAngle
-                - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+                - getCurrentPositionInDegrees()) <= deadband;
     }
 
     /**

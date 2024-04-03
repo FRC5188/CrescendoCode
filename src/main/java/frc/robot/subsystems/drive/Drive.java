@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
+import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.autonomous.AutonomousPathGenerator;
 
@@ -46,6 +47,8 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged _gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] _modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine _sysId;
+
+  private boolean hasSeenTag = false;
 
   private final VisionIO _visionIO;
   private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
@@ -326,13 +329,31 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Adds a vision measurement to the pose estimator.
+   * Adds a vision measurement to the pose.
    *
    * @param visionPose The pose of the robot as measured by the vision camera.
    * @param timestamp  The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
-    if (VisionIO.shouldUsePoseEstimation(visionPose, this.getPose())){
+    // If we haven't seen a tag then we won't add the Cut-Off Filter so that we can get an initial estimation of pose.
+    
+    // We'll first check to see if any of our cameras have seen a tag using a for-loop and if they have then we'll set hasSeenTag to true.
+    for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
+      if (_visionInputs._hasPose[i]) {
+        hasSeenTag = true;
+      }
+    }
+
+    // Then if we've seen a tag before we'll add the Cut-Off Filter to the vision measurements.
+    if (hasSeenTag) {
+      if (VisionIO.shouldUsePoseEstimation(this.getPose(), visionPose)){
+        _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+      }
+      else {
+        System.out.println("[WARNING]: Rejected Vision Estimation. Signifigant Outlier Determined.");
+      }
+    } else {
+      System.out.println("[INFO]: No Tag Seen. Added Initial Vision Esitmation.");
       _poseEstimator.addVisionMeasurement(visionPose, timestamp);
     }
   }

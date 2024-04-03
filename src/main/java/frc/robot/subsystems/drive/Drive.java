@@ -119,6 +119,8 @@ public class Drive extends SubsystemBase {
       module.periodic();
     }
 
+    Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
+
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
       for (var module : _modules) {
@@ -128,7 +130,6 @@ public class Drive extends SubsystemBase {
       // Log empty setpoint states when disabled
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
-      Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
       Logger.recordOutput("Drive/Alliance", getAlliance());
     }
 

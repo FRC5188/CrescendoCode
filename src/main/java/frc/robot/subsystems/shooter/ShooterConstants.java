@@ -47,7 +47,7 @@ public abstract class ShooterConstants {
     public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/SUBWOOFER_SHOOTER_ANGLE", 42.0);
     
     // unknown
-    public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/UNKNOWN_FLYWHEEL_SPEED", 1200);
+    public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/UNKNOWN_FLYWHEEL_SPEED", 0); //1200
     public static final LoggedTunableNumber ZONE_UNKNOWN_LOW_BOUND = new LoggedTunableNumber("Shooter/UNKNOWN_LOW_BOUND", -1);
     public static final LoggedTunableNumber ZONE_UNKNOWN_UPPER_BOUND = new LoggedTunableNumber("Shooter/UNKNOWN_UPPER_BOUND", -1);
     public static final LoggedTunableNumber ZONE_UNKNOWN_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/UNKNOWN_SHOOTER_ANGLE", 35);
@@ -105,8 +105,8 @@ public abstract class ShooterConstants {
     public static final double NEO_VORTEX_INTERNAL_RESISTANCE = MAX_VOLTAGE / NEO_VORTEX_STALL_CURRENT;
     public static final double NEO_VORTEX_TORQUE_CONSTANT = NEO_VORTEX_STALL_TORQUE / NEO_VORTEX_STALL_CURRENT;
     public static final double SHOOTER_FEEDFORWARD_CONSTANT = 
-        (SHOOTER_WEIGHT_KG * SHOOTER_MOMENT_ARM_LENGTH_METERS * NEO_VORTEX_INTERNAL_RESISTANCE) 
-        / (NEO_VORTEX_TORQUE_CONSTANT * ANGLE_GEAR_RATIO * MAX_VOLTAGE);
+        ((SHOOTER_WEIGHT_KG * SHOOTER_MOMENT_ARM_LENGTH_METERS * NEO_VORTEX_INTERNAL_RESISTANCE) 
+        / (NEO_VORTEX_TORQUE_CONSTANT * ANGLE_GEAR_RATIO)) + 0.07;
     
 
     /******************

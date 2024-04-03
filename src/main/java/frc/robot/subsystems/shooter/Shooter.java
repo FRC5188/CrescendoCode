@@ -97,10 +97,10 @@ public class Shooter extends SubsystemBase {
     public Shooter(ShooterIO shooterIO) {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
-        // 0.017, 0.00008, 0.25
+        // 0.0065, 0.0015, 0.0015
         
-        //_anglePID = new ProfiledPIDController(0.0055, 0.001, 0.0015, new Constraints(40, 70));
-        _anglePID = new PIDController(0.0065, 0.0015, 0.0015);
+        // _anglePID = new ProfiledPIDController(0.0055, 0.001, 0.0015, new Constraints(40, 70));
+        _anglePID = new PIDController(0.0065,0.0015,0.0015);
         _anglePID.setIZone(5);
 
         // Set up the zone mappings
@@ -262,20 +262,21 @@ public class Shooter extends SubsystemBase {
     public void setShooterPositionWithRadius(double radius) {
         double angle;
         // only shoot inside this radius
-        if (radius <= 4.5) {
-            if(radius < 1){
+        if (radius <= 5) {
+            if(radius < 1.3){
                 // the subwoofer is about a meter away from the alliance wall
                 // if we think we are less than a meter from the speaker then we
                 // are "inside" the subwoofer which is not possible. so harcode ourselves to one
                 // meter
-                radius = 1;
+                radius = 1.3;
             }
-            angle = -21.02 * Math.log(0.1106 * radius);
-            angle -= 2;
+            //angle = -21.02 * Math.log(0.1106 * radius);
+            angle = (101 * (Math.exp(-0.89 * radius))) + 12.37;
+            //angle -= 2;
             if (radius > 2.0 && radius < 2.75) {
-                angle -= 2.25;
+                //angle -= 2.25;
             } else if (radius >= 2.75 && radius < 3.75) {
-                angle -= 1.25;
+                //angle -= 1.25;
             } 
             // else if (radius >= 3.75) {
             //     angle -= 0.;

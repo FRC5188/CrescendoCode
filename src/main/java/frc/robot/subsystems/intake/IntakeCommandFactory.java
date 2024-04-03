@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeWaitForNote;
 import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
+import frc.robot.subsystems.intake.commands.CmdIntakeWaitForIntake;
 
 public class IntakeCommandFactory {
     private Intake _intake;
@@ -78,13 +79,16 @@ public class IntakeCommandFactory {
      * @param position {@link Intake.IntakePosition}
      * @return
      */
-    public Command pickUpNoteFrom(IntakePosition position) {
+    public Command pickUpNoteFrom(IntakePosition position, int timeoutMs) {
         return 
             this.setPosition(position)
             .andThen(this.acquire())
-            .andThen(new CmdIntakeWaitForNote(0, this._intake))
-            .andThen(new CmdAcquireNoteFor(1000, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED))
-            .andThen(this.setPosition(IntakePosition.Stowed));
+            .andThen(new CmdIntakeWaitForNote(timeoutMs, this._intake))
+            .andThen(new CmdAcquireNoteFor(250, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED.get()))
+            .andThen(this.setPosition(IntakePosition.Stowed))
+            .andThen(new CmdAcquireNoteFor(350, _intake, IntakeConstants.INTAKE_ACQUIRE_SPEED.get()))
+            .andThen(new CmdIntakeWaitForIntake(_intake));
+
     }
 
     /**
@@ -94,8 +98,8 @@ public class IntakeCommandFactory {
      * This command calles the {@link IntakeCommandFactory.pickUpNoteFrom}
      * @return
      */
-    public Command pickUpFromGround() {
-        return this.pickUpNoteFrom(IntakePosition.GroundPickup);
+    public Command pickUpFromGround(int timeoutMs) {
+        return this.pickUpNoteFrom(IntakePosition.GroundPickup, timeoutMs);
     }
 
     /**
@@ -105,6 +109,6 @@ public class IntakeCommandFactory {
      * @return
      */
     public Command acquire(int timeMS) {
-        return new CmdAcquireNoteFor(timeMS, this._intake, IntakeConstants.INTAKE_ACQUIRE_SPEED);
+        return new CmdAcquireNoteFor(timeMS, this._intake, IntakeConstants.INTAKE_ACQUIRE_SPEED.get());
     }
 }

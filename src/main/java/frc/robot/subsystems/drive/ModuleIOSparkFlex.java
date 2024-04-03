@@ -23,7 +23,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.HardwareConstants;
+import frc.robot.RobotContainer;
 import frc.robot.util.MotorFrameConfigurator;
 
 /**
@@ -102,6 +104,9 @@ public class ModuleIOSparkFlex implements ModuleIO {
     _turnSparkFlex.setSmartCurrentLimit(30);
     _driveSparkFlex.enableVoltageCompensation(12.0);
     _turnSparkFlex.enableVoltageCompensation(12.0);
+
+    _driveSparkFlex.setClosedLoopRampRate(0.05);
+    _turnSparkFlex.setClosedLoopRampRate(0.05);
 
     _driveEncoder.setPosition(0.0);
     _driveEncoder.setMeasurementPeriod(10);

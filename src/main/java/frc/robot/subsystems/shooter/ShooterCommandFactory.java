@@ -21,7 +21,7 @@ public class ShooterCommandFactory {
     /**
      * Sets the angle of the shooter in degrees
      * 
-     * @param angle andle in degrees
+     * @param angle angle in degrees
      * @return Command to set shooter angle
      */
     public Command setAngle(double angle) {

@@ -29,10 +29,12 @@ public class CmdAdjustShooterAutomatically extends Command {
     public void execute() {
         // Only run things if autoshoot is enabled and we have a note
         if (_shooterSubsystem.isAutoShootEnabled()) {
-            // update this flag so we can properly disable the flywheels if we turn autoshoot off
+            // update this flag so we can properly disable the flywheels if we turn
+            // autoshoot off
             _prevAutoshootState = true;
 
-            // If we have a note, then start running the shooter according to the radius to speaker
+            // If we have a note, then start running the shooter according to the radius to
+            // speaker
             if (_intakeSubsystem.hasNote()) {
                 double radius = _drive.getRadiusToSpeakerInMeters();
                 _shooterSubsystem.runShooterForRadius(radius);
@@ -52,6 +54,7 @@ public class CmdAdjustShooterAutomatically extends Command {
                 _prevAutoshootState = false;
             }
         }
+        _shooterSubsystem.runAnglePID();
     }
 
     @Override

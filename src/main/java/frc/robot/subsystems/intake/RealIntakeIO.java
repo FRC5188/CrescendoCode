@@ -23,14 +23,16 @@ public class RealIntakeIO implements IntakeIO {
         configRollerMotor();
         configFeederMotor();
         configEncoder();
-        configPivotPID(IntakeConstants.PIVOT_PID_KP,
-                        IntakeConstants.PIVOT_PID_KI,
-                        IntakeConstants.PIVOT_PID_KD);
+        configPivotPID(IntakeConstants.PIVOT_PID_KP.get(),
+                        IntakeConstants.PIVOT_PID_KI.get(),
+                        IntakeConstants.PIVOT_PID_KD.get());
         _leftLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.LEFT_LIMIT_SWITCH_PORT);
         _rightLimitSwitch = new DigitalInput(HardwareConstants.DIOPorts.RIGHT_LIMIT_SWITCH_PORT);
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
+        updatedLoggableConstants();
+
         inputs._pivotMotorTemperature = _pivotMotor.getMotorTemperature();
         inputs._pivotMotorVelocityRotationsPerMin = _pivotMotor.getEncoder().getVelocity();
         inputs._pivotMotorVoltage = _pivotMotor.getAppliedOutput() * _pivotMotor.getBusVoltage();
@@ -59,6 +61,18 @@ public class RealIntakeIO implements IntakeIO {
 
     public void setPivotMotorSpeed(double speed) {
         _pivotMotor.set(speed);
+    }
+
+    public void updatedLoggableConstants() {
+        if (IntakeConstants.PIVOT_PID_KP.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setP(IntakeConstants.PIVOT_PID_KP.get());
+        }
+        if (IntakeConstants.PIVOT_PID_KI.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setI(IntakeConstants.PIVOT_PID_KI.get());
+        }
+        if (IntakeConstants.PIVOT_PID_KD.hasChanged(hashCode())) {
+            _pivotMotor.getPIDController().setD(IntakeConstants.PIVOT_PID_KD.get());
+        }
     }
 
     public void setFeederMotorSpeed(double speed) {

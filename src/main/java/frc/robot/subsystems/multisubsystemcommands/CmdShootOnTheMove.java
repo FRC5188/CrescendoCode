@@ -15,7 +15,6 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -58,7 +57,6 @@ public class CmdShootOnTheMove extends Command {
   private Timer _shotTimer;
   private Boolean _hasRunOnce;
   private double _correctedRadius;
-  private ShooterZone _correctedZone;
   private Pose2d _futureRobotPose2d;
   private double _triggerThreshold;
 
@@ -76,15 +74,14 @@ public class CmdShootOnTheMove extends Command {
    *                             joystick
    * @param translationYSupplier translation y supplied by driver translation
    *                             joystick
-   * @param autoAdjustCommand    CmdAdjustShooterAutomatically
+[]\
    **/
   public CmdShootOnTheMove(Drive drivetrainSubsystem,
       Shooter shooterSubsystem,
       Intake intakeSubsystem,
       DoubleSupplier triggerAxis,
       DoubleSupplier translationXSupplier,
-      DoubleSupplier translationYSupplier,
-      Command autoAdjustCommand) {
+      DoubleSupplier translationYSupplier) {
 
     _drive = drivetrainSubsystem;
     _shooter = shooterSubsystem;
@@ -116,9 +113,7 @@ public class CmdShootOnTheMove extends Command {
     _isFinished = false;
     _cmdIsRunning = true;
     // Cancel CmdAdjustShooterAutomatically while this command runs; reenable when it finishes.
-    if (CommandScheduler.getInstance().isScheduled(_autoAdjustCommand)) {
-      _autoAdjustCommand.cancel();
-    }
+    _shooter.setAutoShootEnabled(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -173,16 +168,15 @@ public class CmdShootOnTheMove extends Command {
 
     // Get a Pose2d based on the newly-calculated future translation and angle.
     _futureRobotPose2d = new Pose2d(_futureRobotTranslation, _futureAngleToSpeaker);
-
-    // _correctedZone = _shooter.getZoneFromRadius(_drive.getRadiusToSpeakerInMeters(_futureRobotPose2d));
     _correctedRadius = _drive.getRadiusToSpeakerInMeters(_futureRobotPose2d);
 
+    // drive the robot based on the calculations from above
     _drive.runVelocity(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            _translationXSupplier.getAsDouble(),
-            _translationYSupplier.getAsDouble(),
-            _correctedRotation,
-            _drive.getRotation()));
+        _drive.transformJoystickInputsToChassisSpeeds(
+          _translationXSupplier.getAsDouble(), 
+          _translationYSupplier.getAsDouble(),
+           _correctedRotation, false));
+        
 
     if (_shooter.isAutoShootEnabled()) {
       if (_intake.hasNote()) {
@@ -218,7 +212,7 @@ public class CmdShootOnTheMove extends Command {
     _cmdIsRunning = false;
 
     // Reenable CmdAdjustShooterAutomatically because this command is finished.
-    CommandScheduler.getInstance().schedule(_autoAdjustCommand);
+    _shooter.setAutoShootEnabled(true);
   }
 
   // Returns true when the command should end.

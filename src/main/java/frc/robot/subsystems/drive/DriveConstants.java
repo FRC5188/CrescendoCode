@@ -2,6 +2,9 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -22,6 +25,8 @@ public class DriveConstants {
     // See https://firstfrc.blob.core.windows.net/frc2024/FieldAssets/2024LayoutMarkingDiagram.pdf for diagram
     public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), new Rotation2d(0));
     public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
+    public static final Pose2d BLUE_AMP = new Pose2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323), new Rotation2d(0));
+    public static final Pose2d RED_AMP = new Pose2d(Units.inchesToMeters(578.77), Units.inchesToMeters(323), new Rotation2d(Math.PI));
     
     /**
      * 
@@ -78,11 +83,10 @@ public class DriveConstants {
     public static final double MODULE_TURNPID_KD = 0.0;
 
     // PID constants for auto aim command
-    public static final double AUTO_ROTATE_P = 0.13;
-    public static final double AUTO_ROTATE_I = 0.003;
-    public static final double AUTO_ROTATE_D = 0.00075;
+    public static final double AUTO_ROTATE_P = 0.007;
+    public static final double AUTO_ROTATE_I = 0.0001;
+    public static final double AUTO_ROTATE_D = 0.0006;
     public static final double AUTO_ROTATE_TOLERANCE = 3.0;
-
     // PID constants for CmdShootOnTheMove
     public static final double SHOOT_ON_THE_MOVE_P = 0.13;
     public static final double SHOOT_ON_THE_MOVE_I = 0.003;
@@ -90,4 +94,49 @@ public class DriveConstants {
     public static final double SHOOT_ON_THE_MOVE_TOLERANCE = 3.0;
 
     public static final double JOYSTICK_DEADBAND = 0.1;
+
+    // Logs all of the IntakeConstants into Advantage Kit.
+    static {
+        Logger.recordOutput("Constants/Drive/MAX_LINEAR_SPEED", MAX_LINEAR_SPEED);
+        Logger.recordOutput("Constants/Drive/TRACK_WIDTH_X", TRACK_WIDTH_X);
+        Logger.recordOutput("Constants/Drive/TRACK_WIDTH_Y", TRACK_WIDTH_Y);
+        Logger.recordOutput("Constants/Drive/DRIVE_BASE_RADIUS", DRIVE_BASE_RADIUS);
+        Logger.recordOutput("Constants/Drive/MAX_ANGULAR_SPEED", MAX_ANGULAR_SPEED);
+        
+        Logger.recordOutput("Constants/Drive/RED_SPEAKER", RED_SPEAKER);
+        Logger.recordOutput("Constants/Drive/BLUE_SPEAKER", BLUE_SPEAKER);
+        
+        Logger.recordOutput("Constants/Drive/DISCRETE_TIMESTEP", DISCRETE_TIMESTEP);
+        
+        Logger.recordOutput("Constants/Drive/FL_OFFSET", FL_OFFSET);
+        Logger.recordOutput("Constants/Drive/FR_OFFSET", FR_OFFSET);
+        Logger.recordOutput("Constants/Drive/BL_OFFSET", BL_OFFSET);
+        Logger.recordOutput("Constants/Drive/BR_OFFSET", BR_OFFSET);
+        
+        Logger.recordOutput("Constants/Drive/SYSID_RAMP_RRATE", SYSID_RAMP_RRATE);
+        Logger.recordOutput("Constants/Drive/SYSID_STEP_VOLTAGE", SYSID_STEP_VOLTAGE);
+        Logger.recordOutput("Constants/Drive/SYSID_TIMEOUT", SYSID_TIMEOUT);
+
+        Logger.recordOutput("Constants/Drive/MODULE_FEEDFORWARD_KS", MODULE_FEEDFORWARD_KS);
+        Logger.recordOutput("Constants/Drive/MODULE_FEEDFORWARD_KV", MODULE_FEEDFORWARD_KV);
+        Logger.recordOutput("Constants/Drive/MODULE_FEEDFORWARD_KA", MODULE_FEEDFORWARD_KA);
+        Logger.recordOutput("Constants/Drive/MODULE_DRIVEPID_KP", MODULE_DRIVEPID_KP);
+        Logger.recordOutput("Constants/Drive/MODULE_DRIVEPID_KI", MODULE_DRIVEPID_KI);
+        Logger.recordOutput("Constants/Drive/MODULE_DRIVEPID_KD", MODULE_DRIVEPID_KD);
+        Logger.recordOutput("Constants/Drive/MODULE_TURNPID_KP", MODULE_TURNPID_KP);
+        Logger.recordOutput("Constants/Drive/MODULE_TURNPID_KI", MODULE_TURNPID_KI);
+        Logger.recordOutput("Constants/Drive/MODULE_TURNPID_KD", MODULE_TURNPID_KD);
+
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_P", AUTO_ROTATE_P);
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_I", AUTO_ROTATE_I);
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_D", AUTO_ROTATE_D);
+        Logger.recordOutput("Constants/Drive/AUTO_ROTATE_TOLERANCE", AUTO_ROTATE_TOLERANCE);
+
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_P", SHOOT_ON_THE_MOVE_P);
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_I", SHOOT_ON_THE_MOVE_I);
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_D", SHOOT_ON_THE_MOVE_D);
+        Logger.recordOutput("Constants/Drive/SHOOT_ON_THE_MOVE_TOLERANCE", SHOOT_ON_THE_MOVE_TOLERANCE);
+
+        Logger.recordOutput("Constants/Drive/JOYSTICK_DEADBAND", JOYSTICK_DEADBAND);
+    }
 }

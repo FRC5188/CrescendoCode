@@ -13,14 +13,6 @@
 
 package frc.robot.subsystems.drive.commands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
@@ -41,7 +33,7 @@ public final class DriveCommands {
     return Commands.run(
         () -> {
           drive.runVelocity(drive.transformJoystickInputsToChassisSpeeds(
-            xSupplier.getAsDouble(), ySupplier.getAsDouble(), omegaSupplier.getAsDouble()));
+            xSupplier.getAsDouble(), ySupplier.getAsDouble(), omegaSupplier.getAsDouble(), false));
         },
         drive);
   }

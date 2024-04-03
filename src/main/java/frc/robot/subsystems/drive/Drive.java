@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -34,6 +35,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,6 +45,7 @@ import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
 import frc.robot.subsystems.multisubsystemcommands.CmdShootOnTheMove;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.autonomous.AutonomousPathGenerator;
 
@@ -58,9 +61,9 @@ public class Drive extends SubsystemBase {
   private final Module[] _modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine _sysId;
 
-  private final VisionIO _visionIO;
-  public final VisionDriveIO _visionDriveIO;
+  private boolean hasSeenTag = false;
 
+  private final VisionIO _visionIO;
   private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
 
   private SwerveDriveKinematics _kinematics = new SwerveDriveKinematics(getModuleTranslations());
@@ -87,7 +90,6 @@ public class Drive extends SubsystemBase {
   public Drive(
       GyroIO gyroIO,
       VisionIO visionIO,
-      VisionDriveIO visionDriveIO,
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
@@ -111,23 +113,23 @@ public class Drive extends SubsystemBase {
     PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 
     // =============== START CONFIGURATION FOR SYSID ===============
-    _sysId =
-        new SysIdRoutine(
-            new SysIdRoutine.Config(
-              DriveConstants.SYSID_RAMP_RRATE,
-              DriveConstants.SYSID_STEP_VOLTAGE,
-              DriveConstants.SYSID_TIMEOUT,
-                (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
-            new SysIdRoutine.Mechanism(
-                (voltage) -> {
-                  for (int i = 0; i < 4; i++) {
-                    _modules[i].runCharacterization(voltage.in(Volts));
-                  }
-                },
-                null,
-                this));
+    _sysId = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            DriveConstants.SYSID_RAMP_RRATE,
+            DriveConstants.SYSID_STEP_VOLTAGE,
+            DriveConstants.SYSID_TIMEOUT,
+            (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+        new SysIdRoutine.Mechanism(
+            (voltage) -> {
+              for (int i = 0; i < 4; i++) {
+                _modules[i].runCharacterization(voltage.in(Volts));
+              }
+            },
+            null,
+            this));
     _centerOfRotation = new Translation2d();
     _field = new Field2d();
+    _alliance = Alliance.Blue;
   }
   // =============== END CONFIGURATION FOR SYSID ===============
 
@@ -142,6 +144,8 @@ public class Drive extends SubsystemBase {
       module.periodic();
     }
 
+    Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
+
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
       for (var module : _modules) {
@@ -151,6 +155,7 @@ public class Drive extends SubsystemBase {
       // Log empty setpoint states when disabled
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
+      Logger.recordOutput("Drive/Alliance", getAlliance());
     }
 
     // Read wheel positions and deltas from each module
@@ -179,60 +184,67 @@ public class Drive extends SubsystemBase {
         _poseEstimator.addVisionMeasurement(_visionInputs._poses[i], _visionInputs._timestamps[i]);
       }
     }
-    _poseEstimator.update(_rawGyroRotation, modulePositions);
 
-    // MITCHELL READ THIS COMMENT. I'm still getting the loop overrun issue from the
-    // driver station
-    // so this did not solve the issue. but i wanted to bring it to your attention.
-    // as of the commit which added this block of comments, the only errors I'm
-    // getting from the driver
-    // station is about photon vision cameras and the loop over run from drive
-    // periodic. i am a little
-    // worried that this drive periodic overrun issue might come back to bite us so
-    // I don't want to
-    // leave it not addressed for too long. But, first, lets get the rest of the
-    // robot back up and going
+    _poseEstimator.update(_rawGyroRotation, modulePositions);
 
     // commenting this out to see if it helps with loop overrun time gh - 2/25/24
     // driver.periodic is sometimes running at 20-40ms on its own
-    // _field.setRobotPose(_poseEstimator.getEstimatedPosition());
-    // SmartDashboard.putData("Field", _field);
+    _field.setRobotPose(_poseEstimator.getEstimatedPosition());
+    SmartDashboard.putData("Field", _field);
     // double[] cor = {_centerOfRotation.getX(), _centerOfRotation.getY()};
     // SmartDashboard.putNumberArray("CoR", cor);
   }
 
+  public Alliance getAlliance() {
+    if (DriverStation.getAlliance().isPresent()){
+      _alliance = DriverStation.getAlliance().get();
+    }
+    return _alliance;
+  }
 
-  public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate) {
-          // Apply deadband
-          double linearMagnitude =
-              MathUtil.applyDeadband(
-                  Math.hypot(x, y), DriveConstants.JOYSTICK_DEADBAND);
-          Rotation2d linearDirection =
-              new Rotation2d(x, y);
-          double omega = MathUtil.applyDeadband(rotate, DriveConstants.JOYSTICK_DEADBAND);
+  /**
+   * Take the values from the joystick, apply math, and then provide them to the
+   * robot to drive. If
+   * you set the bypassomegamath flag then the value supplied in rotate will be
+   * directly supplied to
+   * the drivetrain.
+   * 
+   * @param x               value from joystick
+   * @param y               value from joystick
+   * @param rotate          value from joystick or PID controller
+   * @param bypassomegamath
+   * @return
+   */
+  public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate,
+      boolean bypassomegamath) {
+    // Apply deadband
+    double linearMagnitude = MathUtil.applyDeadband(
+        Math.hypot(x, y), DriveConstants.JOYSTICK_DEADBAND);
+    Rotation2d linearDirection = new Rotation2d(x, y);
+    double omega = MathUtil.applyDeadband(rotate, DriveConstants.JOYSTICK_DEADBAND);
 
-          // Square values
-          linearMagnitude = linearMagnitude * linearMagnitude;
-          omega = Math.copySign(omega * omega, omega);
+    // Square values
+    linearMagnitude = linearMagnitude * linearMagnitude;
+    omega = Math.copySign(omega * omega, omega);
 
-          // Calcaulate new linear velocity
-          Translation2d linearVelocity =
-              new Pose2d(new Translation2d(), linearDirection)
-                  .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
-                  .getTranslation();
+    // Calcaulate new linear velocity
+    Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection)
+        .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+        .getTranslation();
 
-          // Convert to field relative speeds & send command
-          boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
-          return
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  linearVelocity.getX() * getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * getMaxLinearSpeedMetersPerSec(),
-                  omega * getMaxAngularSpeedRadPerSec(),
-                  isFlipped
-                      ? getRotation().plus(new Rotation2d(Math.PI))
-                      : getRotation());
+    // Convert to field relative speeds & send command
+    boolean isFlipped = getAlliance() == Alliance.Red;
+
+    // if bypassomegamath is true, use the raw rotate value, else use the omega with
+    // its math
+    omega = bypassomegamath ? rotate : omega;
+    return ChassisSpeeds.fromFieldRelativeSpeeds(
+        linearVelocity.getX() * getMaxLinearSpeedMetersPerSec(),
+        linearVelocity.getY() * getMaxLinearSpeedMetersPerSec(),
+        omega * getMaxAngularSpeedRadPerSec(),
+        isFlipped
+            ? getRotation().plus(new Rotation2d(Math.PI))
+            : getRotation());
   }
 
   /**
@@ -364,34 +376,69 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Adds a vision measurement to the pose estimator.
+   * Adds a vision measurement to the pose.
    *
    * @param visionPose The pose of the robot as measured by the vision camera.
    * @param timestamp  The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
-    _poseEstimator.addVisionMeasurement(visionPose, timestamp);
-  }
-
-  private Alliance getAlliance() {
-    if (_alliance == null) {
-      if (DriverStation.getAlliance().isPresent()) {
-        _alliance = DriverStation.getAlliance().get();
+    // If we haven't seen a tag then we won't add the Cut-Off Filter so that we can get an initial estimation of pose.
+    
+    // We'll first check to see if any of our cameras have seen a tag using a for-loop and if they have then we'll set hasSeenTag to true.
+    for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
+      if (_visionInputs._hasPose[i]) {
+        hasSeenTag = true;
       }
     }
 
-    return _alliance;
+    // Then if we've seen a tag before we'll add the Cut-Off Filter to the vision measurements.
+    if (hasSeenTag) {
+      if (VisionIO.shouldUsePoseEstimation(this.getPose(), visionPose)){
+        _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+      }
+      else {
+        System.out.println("[WARNING]: Rejected Vision Estimation. Signifigant Outlier Determined.");
+      }
+    } else {
+      System.out.println("[INFO]: No Tag Seen. Added Initial Vision Esitmation.");
+      _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+    }
   }
 
   private Pose2d getSpeakerPos() {
-    if (_speakerPosition == null) {
-      if (getAlliance() != null) {
-        _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER
-            : DriveConstants.RED_SPEAKER;
-      }
-    }
+    _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_SPEAKER
+        : DriveConstants.RED_SPEAKER;
 
     return _speakerPosition;
+  }
+
+  private Pose2d getAmpPos() {
+    return (getAlliance() == DriverStation.Alliance.Blue) ? DriveConstants.BLUE_AMP
+        : DriveConstants.RED_AMP;
+  }
+
+  public double calcAngleToAmp() {
+    if (getAlliance() == Alliance.Blue) {
+      return calcAngleToAmpForBlue();
+    } else {
+      return calcAngleToAmpForRed();
+    }
+  }
+
+  private double calcAngleToAmpForBlue() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d ampPos = getAmpPos();
+    double xDiff = robotPose.getX() - ampPos.getX();
+    double yDiff = ampPos.getY() - robotPose.getY();
+    return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
+  private double calcAngleToAmpForRed() {
+    Pose2d robotPose = _poseEstimator.getEstimatedPosition();
+    Pose2d ampPos = getAmpPos();
+    double xDiff = ampPos.getX() - robotPose.getX();
+    double yDiff = ampPos.getY() - robotPose.getY();
+    return Math.toDegrees(Math.atan(yDiff / xDiff));
   }
 
   /**
@@ -401,7 +448,7 @@ public class Drive extends SubsystemBase {
 
     return getRadiusToSpeakerInMeters(_poseEstimator.getEstimatedPosition(), getSpeakerPos());
   }
-  
+
   /**
    * Returns the distance from the center of the robot to the alliance's speaker.
    * NOTE: Use THIS constructor for GrpShootOnTheMove only.

@@ -94,6 +94,7 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
+        GenericHID _driveRumble = _driveController.getHID();
 
         // Button box
         // Top half of buttons
@@ -413,6 +414,18 @@ public class RobotContainer {
                 // _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
                 // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        }
+
+               // RUMBLE
+        // rumbles the controller when intake has a note
+
+        public void rumbleDriverController() {
+                if (_intake.hasNote()) {
+                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+                } else {
+                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+                }
+               
         }
 
         /**

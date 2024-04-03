@@ -19,16 +19,16 @@ public class VisionDrive extends SubsystemBase {
   private final VisionDriveIOInputsAutoLogged _visionDriveInputs = new VisionDriveIOInputsAutoLogged();
 
   private ChassisSpeeds _chassisSpeeds;
-  private PIDController _translatePID;
+  private PIDController _translateForwardPID;
+  private PIDController _translateSidewaysPID;
   private PIDController _rotatePID;
 
-  // TODO: Do I need to pass in VisionDriveIO? It's all just inputs.
   public VisionDrive(VisionDriveIO visionDriveIO) {
     _visionDriveIO = visionDriveIO;
     _chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
-  // TODO: What do I do with these??? :(
-    _translatePID = new PIDController(0.2, 0, 0);
+    _translateForwardPID = new PIDController(0.2, 0, 0);
+    _translateSidewaysPID = new PIDController(0.2, 0, 0); // Not tuned yet
     _rotatePID = new PIDController(0.075, 0, 0);
   }
 
@@ -47,7 +47,7 @@ public class VisionDrive extends SubsystemBase {
             
             // Note: x and y on the Limelight screen resemble the coordinate plane, with x increasing to the right and y increasing up.
             // x and y in ChassisSpeeds are different, with negative x representing forward translation and positive y representing right rotation.
-            _chassisSpeeds.vxMetersPerSecond = -1.0*_translatePID.calculate(_visionDriveInputs._ty, 0);
+            _chassisSpeeds.vxMetersPerSecond = -1.0*_translateForwardPID.calculate(_visionDriveInputs._ty, 0);
             _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_visionDriveInputs._tx, 0);
 
         } else {
@@ -73,4 +73,23 @@ public class VisionDrive extends SubsystemBase {
 
       return _chassisSpeeds;
   }
+
+  public ChassisSpeeds getChassisSpeedsForDriveToNoteWithSideTranslation() {
+        if (hasTarget()) {
+            
+            // Note: x and y on the Limelight screen resemble the coordinate plane, with x increasing to the right and y increasing up.
+            // x and y in ChassisSpeeds are different, with negative x representing forward translation and positive y representing right rotation.
+            _chassisSpeeds.vxMetersPerSecond = -1.0*_translateForwardPID.calculate(_visionDriveInputs._ty, 0);
+            _chassisSpeeds.vyMetersPerSecond = _translateSidewaysPID.calculate(_visionDriveInputs._tx, 0);
+            _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_visionDriveInputs._tx, 0);
+
+        } else {
+            // Else: stop.
+            _chassisSpeeds.vxMetersPerSecond = 0.0;
+            _chassisSpeeds.vyMetersPerSecond = 0.0;
+            _chassisSpeeds.omegaRadiansPerSecond = 0.0;
+        }
+
+        return _chassisSpeeds;
+    }
 }

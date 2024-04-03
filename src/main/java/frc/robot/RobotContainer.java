@@ -94,7 +94,6 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
-        GenericHID _driveRumble = _driveController.getHID();
 
         // Button box
         // Top half of buttons
@@ -307,38 +306,13 @@ public class RobotContainer {
                                                                                 new Rotation2d(Math.PI))),
                                                 _drive).ignoringDisable(true));
 
-                double inchesFromSubwoofer = 39.0;
-                double robotWidth = 13.0 + 1.5;
-
-                if (DriverStation.getAlliance().get() == Alliance.Red) {
-                        Pose2d robotOnSubwooferRed = new Pose2d(
-                                        DriveConstants.RED_SPEAKER.getX()
-                                                        - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
-                                        DriveConstants.RED_SPEAKER.getY(),
-                                        new Rotation2d(Math.PI));
-
-                        // Change the robot pose to think it is in front of the red speaker
-                        _driveController.b().onTrue(
-                                        Commands.runOnce(
-                                                        () -> _drive.setPose(robotOnSubwooferRed), _drive)
-                                                        .ignoringDisable(true));
-                }
-
-                else {
-                        Pose2d robotOnSubwooferBlue = new Pose2d(
-                                        DriveConstants.BLUE_SPEAKER.getX()
-                                                        + Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
-                                        DriveConstants.BLUE_SPEAKER.getY(),
-                                        new Rotation2d(Math.PI));
-
-                        // Change the robot pose to think it is in front of the blue speaker
-                        _driveController.b().onTrue(
-                                        Commands.runOnce(
-                                                        () -> _drive.setPose(robotOnSubwooferBlue), _drive)
-                                                        .ignoringDisable(true));
-                }
-
-
+  
+                // Change the robot pose to think it is centered in front of the speaker of its alliance
+                _driveController.b().onTrue(
+                                Commands.runOnce(
+                                                () -> _drive.alignToSubwoofer(), _drive)
+                                                .ignoringDisable(true));
+                
                 /*
                  * ================================
                  * Button Box
@@ -351,8 +325,8 @@ public class RobotContainer {
                                 .onTrue(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
 
                 // Adjust shooter angle from current position
-                _opButtonOne.onTrue(this._shooter.buildCommand().adjustAngle(0.5));
-                _opButtonFour.onTrue(this._shooter.buildCommand().adjustAngle(-0.5));
+                _opButtonOne.onTrue(this._shooter.buildCommand().adjustAngle(1));
+                _opButtonFour.onTrue(this._shooter.buildCommand().adjustAngle(-1));
 
                 // Move intake to different positions
                 _opButtonNine.onTrue(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()));
@@ -372,16 +346,13 @@ public class RobotContainer {
                                 .andThen(new CmdIntakeWaitForIntake(_intake))
                                 .andThen(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()))
                                 .andThen(_intake.buildCommand().setPosition(IntakePosition.Stowed)));
-                // _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
-                //                 ShooterZone.Subwoofer));
-                _op2ButtonFive.onTrue(_shooter.buildCommand().runForZone(
-                        ShooterZone.Subwoofer
-                ));
+                _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
+                                ShooterZone.Subwoofer));
                 _op2ButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Feeder));
-                // _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
-                //                 ShooterZone.Podium));
-                _op2ButtonEight.onTrue(_shooter.buildCommand().runForZone(
-                ShooterZone.Podium));
+                _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
+                                ShooterZone.Podium));
+                // _op2ButtonEight.onTrue(_shooter.buildCommand().runForZone(
+                // ShooterZone.Podium));
 
                 // sad face button
                 _op2ButtonThree.onTrue(new InstantCommand(
@@ -417,18 +388,6 @@ public class RobotContainer {
                 // _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
                 // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        }
-
-               // RUMBLE
-        // rumbles the controller when intake has a note
-
-        public void rumbleDriverController() {
-                if (_intake.hasNote()) {
-                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-                } else {
-                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-                }
-               
         }
 
         /**

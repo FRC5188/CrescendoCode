@@ -29,21 +29,27 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.visiondrive.VisionDriveIO;
+import frc.robot.subsystems.multisubsystemcommands.CmdShootOnTheMove;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.autonomous.AutonomousPathGenerator;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public class Drive extends SubsystemBase {
 
@@ -59,6 +65,7 @@ public class Drive extends SubsystemBase {
 
   private SwerveDriveKinematics _kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d _rawGyroRotation = new Rotation2d();
+  private Rotation2d _shootOnMoveGyro = new Rotation2d();
   private SwerveModulePosition[] _lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
           new SwerveModulePosition(),
@@ -74,6 +81,9 @@ public class Drive extends SubsystemBase {
   private Translation2d _centerOfRotation;
   public Field2d _field;
 
+  private BooleanSubscriber _isCmdShootOnMoveRunning;
+  private NetworkTable _adkitNetworkTable;
+
   public Drive(
       GyroIO gyroIO,
       VisionIO visionIO,
@@ -86,12 +96,19 @@ public class Drive extends SubsystemBase {
     this._visionIO = visionIO;
     this._visionDriveIO = visionDriveIO;
 
+    _isCmdShootOnMoveRunning = _adkitNetworkTable.getBooleanTopic("RealOutputs/Drive/shootOnTheMove/isRunning")
+    .subscribe(false);
+
+    
+
     _modules[0] = new Module(flModuleIO, 0);
     _modules[1] = new Module(frModuleIO, 1);
     _modules[2] = new Module(blModuleIO, 2);
     _modules[3] = new Module(brModuleIO, 3);
 
     AutonomousPathGenerator.configure(this, _kinematics, getModuleStates());
+
+    PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 
     // =============== START CONFIGURATION FOR SYSID ===============
     _sysId =
@@ -184,6 +201,7 @@ public class Drive extends SubsystemBase {
     // SmartDashboard.putNumberArray("CoR", cor);
   }
 
+
   public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate) {
           // Apply deadband
           double linearMagnitude =
@@ -260,9 +278,19 @@ public class Drive extends SubsystemBase {
     stop();
   }
 
+  public void setShootOnMoveGyro(Rotation2d futureGyro){
+    _shootOnMoveGyro = futureGyro;
+  }
+
+  public Rotation2d getShootOnMoveGyro(){
+    return _shootOnMoveGyro;
+  }
+
   public Optional<Rotation2d> getRotationTargetOverride(){
     // Some condition that should decide if we want to override rotation
-    if(Shooter.isAutoShootEnabled()) {
+    if(_isCmdShootOnMoveRunning.get()){
+        return Optional.of(_shootOnMoveGyro);
+    } else if(Shooter.isAutoShootEnabled()) {
         // Return an optional containing the rotation override (this should be a field relative rotation)
         return Optional.of(this.getRotation2dToSpeaker(this.getPose().getTranslation()));
     } else {

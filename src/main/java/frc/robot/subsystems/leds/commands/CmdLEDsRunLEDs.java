@@ -47,7 +47,7 @@ public class CmdLEDsRunLEDs extends Command {
             _leds.runAnimation(LEDAnimation.SolidGreen);
           } else{
             // if we have a note but are not in position then we are not ready.
-            _leds.runAnimation(LEDAnimation.PickedUpNote);
+            _leds.runAnimation(LEDAnimation.SolidRed);
           }
     // } else if (_leds.shouldRunHasNoteAnimation(_intake.hasNote())) {
     //   // Only run this animation one time, right when the intake first picks up a note

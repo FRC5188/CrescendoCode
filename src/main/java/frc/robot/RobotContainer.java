@@ -310,7 +310,7 @@ public class RobotContainer {
                 double inchesFromSubwoofer = 39.0;
                 double robotWidth = 13.0 + 1.5;
 
-                if (DriverStation.getAlliance().get() == Alliance.Red) {
+                if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
                         Pose2d robotOnSubwooferRed = new Pose2d(
                                         DriveConstants.RED_SPEAKER.getX()
                                                         - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),

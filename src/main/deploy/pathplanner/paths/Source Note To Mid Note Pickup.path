@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.41058639382236,
-        "y": 2.4323841240275086
+        "x": 2.683645082254536,
+        "y": 4.065649176428995
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.586298300801729,
-        "y": 1.0407797453771557
+        "x": 1.201681833292409,
+        "y": 6.015600819800215
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.09,
-        "y": 3.56
+        "x": 7.373278784562321,
+        "y": 4.124147725730131
       },
       "prevControl": {
-        "x": 5.259401644273375,
-        "y": 1.9017693053049924
+        "x": 6.661546434731825,
+        "y": 4.494638537970663
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,20 +32,20 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side WIP",
+  "folder": "5 Piece Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -35.21759296819269,
     "velocity": 0
   },
   "useDefaultConstraints": false

@@ -43,21 +43,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Stow_Pickup"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "N&I Lower S Side Note to Shooting"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "N&I Lower S Side Note to Shooting"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "name": "Shooting_From_Podium"
           }
         },
         {
@@ -86,26 +93,33 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Stow_Pickup"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "N&I S - 2nd S Note to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "N&I S - 2nd S Note to Shoot"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "name": "Shooting_From_Podium"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "The Cool Useful Ones",
   "choreoAuto": false
 }

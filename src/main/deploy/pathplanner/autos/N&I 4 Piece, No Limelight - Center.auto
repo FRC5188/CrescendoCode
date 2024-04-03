@@ -101,6 +101,6 @@
       ]
     }
   },
-  "folder": "ignore for now",
+  "folder": null,
   "choreoAuto": false
 }

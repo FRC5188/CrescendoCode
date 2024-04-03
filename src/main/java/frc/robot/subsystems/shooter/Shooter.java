@@ -98,11 +98,9 @@ public class Shooter extends SubsystemBase {
     public Shooter(ShooterIO shooterIO) {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
-        // 0.017, 0.00008, 0.25
-        
-        //_anglePID = new ProfiledPIDController(0.0055, 0.001, 0.0015, new Constraints(40, 70));
-        _anglePID = new PIDController(0.0065, 0.0015, 0.0015);
-        _anglePID.setIZone(5);
+
+        _anglePID = new PIDController(0.0525, 0.015, 0.02); //0.0065, 0.0015, 0.0015
+        _anglePID.setIZone(8);
 
         // Set up the zone mappings
         // This is a funky hack that lets us modify zone data during a match, like angle, 
@@ -331,7 +329,8 @@ public class Shooter extends SubsystemBase {
     public void runAnglePID() {
         double output = calcAnglePID();
 
-        _shooterIO.setAngleMotorSpeed(output);
+        // _shooterIO.setAngleMotorSpeed(output);
+        _shooterIO.setAngleMotorVoltage(output);
     }
 
     private double calcAnglePID() {

@@ -23,8 +23,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -92,6 +94,7 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
+        GenericHID _driveRumble = _driveController.getHID();
 
         // Button box
         // Top half of buttons
@@ -306,16 +309,35 @@ public class RobotContainer {
 
                 double inchesFromSubwoofer = 39.0;
                 double robotWidth = 13.0 + 1.5;
-                Pose2d robotOnSubwooferRed = new Pose2d(
-                                DriveConstants.RED_SPEAKER.getX()
-                                                - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
-                                DriveConstants.RED_SPEAKER.getY(),
-                                new Rotation2d(Math.PI));
-                // Change the robot pose to think it is in front of the red speaker
-                _driveController.b().onTrue(
-                                Commands.runOnce(
-                                                () -> _drive.setPose(robotOnSubwooferRed), _drive)
-                                                .ignoringDisable(true));
+
+                if (DriverStation.getAlliance().get() == Alliance.Red) {
+                        Pose2d robotOnSubwooferRed = new Pose2d(
+                                        DriveConstants.RED_SPEAKER.getX()
+                                                        - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
+                                        DriveConstants.RED_SPEAKER.getY(),
+                                        new Rotation2d(Math.PI));
+
+                        // Change the robot pose to think it is in front of the red speaker
+                        _driveController.b().onTrue(
+                                        Commands.runOnce(
+                                                        () -> _drive.setPose(robotOnSubwooferRed), _drive)
+                                                        .ignoringDisable(true));
+                }
+
+                else {
+                        Pose2d robotOnSubwooferBlue = new Pose2d(
+                                        DriveConstants.BLUE_SPEAKER.getX()
+                                                        + Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
+                                        DriveConstants.BLUE_SPEAKER.getY(),
+                                        new Rotation2d(Math.PI));
+
+                        // Change the robot pose to think it is in front of the blue speaker
+                        _driveController.b().onTrue(
+                                        Commands.runOnce(
+                                                        () -> _drive.setPose(robotOnSubwooferBlue), _drive)
+                                                        .ignoringDisable(true));
+                }
+
 
                 /*
                  * ================================
@@ -392,6 +414,18 @@ public class RobotContainer {
                 // _controller.povLeft().whileTrue(_drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
                 // _controller.povUp().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 // _controller.povDown().whileTrue(_drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        }
+
+               // RUMBLE
+        // rumbles the controller when intake has a note
+
+        public void rumbleDriverController() {
+                if (_intake.hasNote()) {
+                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+                } else {
+                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+                }
+               
         }
 
         /**

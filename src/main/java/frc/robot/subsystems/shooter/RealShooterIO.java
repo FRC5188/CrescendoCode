@@ -91,6 +91,10 @@ public class RealShooterIO implements ShooterIO {
          _angleMotor.setVoltage(voltage);
     }
 
+    public void setAngleMotorVoltage(double voltage) {
+        _angleMotor.setVoltage(voltage);
+    }
+
     private void configAngleMotor() {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
 

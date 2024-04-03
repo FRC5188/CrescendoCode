@@ -326,7 +326,7 @@ public class Shooter extends SubsystemBase {
     public void runAnglePID() {
         double output = calcAnglePID();
 
-        _shooterIO.setAngleMotorVoltage(output);
+        _shooterIO.setAngleMotorSpeed(output);
     }
 
     private double calcAnglePID() {

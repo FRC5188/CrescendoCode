@@ -399,14 +399,17 @@ public class RobotContainer {
         // RUMBLE
         // rumbles the controller when intake has a note
 
-        public void rumbleDriverController() {
-                if (_intake.hasNote()) {
-                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-                } else {
-                        _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-                }
-               
-        }
+        public static Command rumbleDriverCommand() {
+                return new RunCommand(() -> rumbleDriverController()).withTimeout(2).finallyDo(() -> stopRumbleDriverController());
+            }
+        
+            public void rumbleDriverController() {
+                _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+            }
+        
+            public void stopRumbleDriverController() {
+                _driveRumble.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+            }
 
         /**
          * Use this to pass the autonomous command to the main {@link Robot} class.

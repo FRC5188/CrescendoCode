@@ -94,7 +94,7 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
-
+        GenericHID _driveRumble = _driveController.getHID();
         // Button box
         // Top half of buttons
         private final GenericHID _operatorController1 = new GenericHID(1);
@@ -150,7 +150,7 @@ public class RobotContainer {
                                                 new ModuleIOSparkFlex(1),
                                                 new ModuleIOSparkFlex(2),
                                                 new ModuleIOSparkFlex(3));
-                                _intake = new Intake(new RealIntakeIO());
+                                _intake = new Intake(new RealIntakeIO(), _driveRumble);
                                 _shooter = new Shooter(new RealShooterIO());
                                 _leds = new LEDs();
                                 // _climber = new Climber(new RealClimberIO());
@@ -169,7 +169,7 @@ public class RobotContainer {
                                                 new ModuleIOSim(),
                                                 new ModuleIOSim());
                                 _intake = new Intake(new IntakeIO() {
-                                });
+                                }, _driveRumble);
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
                                 // _climber = new Climber(new RealClimberIO() {
@@ -194,7 +194,7 @@ public class RobotContainer {
                                                 new ModuleIO() {
                                                 });
                                 _intake = new Intake(new IntakeIO() {
-                                });
+                                }, _driveRumble);
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
                                 // _climber = new Climber(new RealClimberIO() {

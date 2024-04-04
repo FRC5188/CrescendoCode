@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged; checkstyle says this is redunant
@@ -38,7 +39,7 @@ public class Intake extends SubsystemBase {
     }
 
     protected IntakePosition _intakePosition;
-    private final IntakeCommandFactory _intakeCommandFactory = new IntakeCommandFactory(this);
+    private final IntakeCommandFactory _intakeCommandFactory;
 
     private final IntakeIO _intakeIO;
     private final IntakeIOInputsAutoLogged _intakeInputs = new IntakeIOInputsAutoLogged();
@@ -46,10 +47,11 @@ public class Intake extends SubsystemBase {
     private boolean _hasNote;
     private IntakeVisualizer _intakeVisualizer = new IntakeVisualizer();
 
-    public Intake(IntakeIO intakeIO) {
+    public Intake(IntakeIO intakeIO, GenericHID driveRumble) {
+        _intakeCommandFactory = new IntakeCommandFactory(this, driveRumble);
         this._intakeIO = intakeIO;
         _hasNote = false;
-        _intakePosition = IntakePosition.Stowed;                                    
+        _intakePosition = IntakePosition.Stowed;                                  
         this.setIntakePosition(IntakePosition.Stowed);
     }
 

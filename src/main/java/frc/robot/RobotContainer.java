@@ -372,16 +372,16 @@ public class RobotContainer {
                                 .andThen(new CmdIntakeWaitForIntake(_intake))
                                 .andThen(_intake.buildCommand().spit(IntakeConstants.INTAKE_SPIT_TIME.get()))
                                 .andThen(_intake.buildCommand().setPosition(IntakePosition.Stowed)));
-                // _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
-                //                 ShooterZone.Subwoofer));
-                _op2ButtonFive.onTrue(_shooter.buildCommand().runForZone(
-                        ShooterZone.Subwoofer
-                ));
+                _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
+                                ShooterZone.Subwoofer));
+                // _op2ButtonFive.onTrue(_shooter.buildCommand().runForZone(
+                //         ShooterZone.Subwoofer
+                // ));
                 _op2ButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Feeder));
-                // _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
-                //                 ShooterZone.Podium));
-                _op2ButtonEight.onTrue(_shooter.buildCommand().runForZone(
-                ShooterZone.Podium));
+                _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
+                                ShooterZone.Podium));
+                // _op2ButtonEight.onTrue(_shooter.buildCommand().runForZone(
+                // ShooterZone.Podium));
 
                 // sad face button
                 _op2ButtonThree.onTrue(new InstantCommand(

@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Podium"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {
@@ -114,7 +114,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooting_From_Podium"
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         },
         {

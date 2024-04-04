@@ -348,6 +348,9 @@ public class RobotContainer {
                                 .andThen(_intake.buildCommand().setPosition(IntakePosition.Stowed)));
                 _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
                                 ShooterZone.Subwoofer));
+                // _op2ButtonFive.onTrue(_shooter.buildCommand().runForZone(
+                //         ShooterZone.Subwoofer
+                // ));
                 _op2ButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Feeder));
                 _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
                                 ShooterZone.Podium));

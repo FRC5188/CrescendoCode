@@ -100,9 +100,9 @@ public class Shooter extends SubsystemBase {
     public Shooter(ShooterIO shooterIO) {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
-        // 0.0065, 0.0015, 0.0015
+        // 0.01, 0.001, 0.008
         
-        _anglePID = new PIDController(0.0065,0.0015,0.0015);
+        _anglePID = new PIDController(0.0525, 0.015, 0.02);
         _anglePID.setIZone(5);
 
         // Set up the zone mappings
@@ -320,10 +320,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFlywheelSpeedWithRadius(double radiusInMeters) {
-        double speed = 2000;
-        if (radiusInMeters <= 4 && radiusInMeters > 2) {
-            speed = 1600;
-        } else if (radiusInMeters <= 2) {
+        double speed = 1500; 
+        if (radiusInMeters <= 2) {
             speed = 1200;
         }
         setFlywheelSpeed(speed);
@@ -342,7 +340,7 @@ public class Shooter extends SubsystemBase {
     public void runAnglePID() {
         double output = calcAnglePID();
 
-        _shooterIO.setAngleMotorSpeed(output);
+        _shooterIO.setAngleMotorVoltage(output);
     }
 
     private double calcAnglePID() {

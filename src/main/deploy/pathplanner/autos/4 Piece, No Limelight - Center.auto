@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(C) Sub to Center Note And Back - No Limelight"
+                  "pathName": "Sub to center note, No LL"
                 }
               },
               {
@@ -34,6 +34,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(C, No LL) Center Note to Sub"
           }
         },
         {

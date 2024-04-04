@@ -92,7 +92,7 @@ public class RealShooterIO implements ShooterIO {
     }
 
     public void setAngleMotorSpeed(double speed){
-        _angleMotor.setVoltage(speed);
+        _angleMotor.set(speed);
     }
 
     private void configAngleMotor() {

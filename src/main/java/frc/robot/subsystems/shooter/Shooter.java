@@ -320,10 +320,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFlywheelSpeedWithRadius(double radiusInMeters) {
-        double speed = 2000;
-        if (radiusInMeters <= 4 && radiusInMeters > 2) {
-            speed = 1600;
-        } else if (radiusInMeters <= 2) {
+        double speed = 1500; 
+        if (radiusInMeters <= 2) {
             speed = 1200;
         }
         setFlywheelSpeed(speed);
@@ -342,7 +340,7 @@ public class Shooter extends SubsystemBase {
     public void runAnglePID() {
         double output = calcAnglePID();
 
-        _shooterIO.setAngleMotorSpeed(output);
+        _shooterIO.setAngleMotorVoltage(output);
     }
 
     private double calcAnglePID() {

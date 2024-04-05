@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class HardwareConstants {
-    public static final int NUMBER_OF_CAMERAS = 2;
+    public static final int NUMBER_OF_CAMERAS = 4;
     public class CanIds {
         // |====================== SWERVE MODULE CAN IDs ======================|
         public static int FL_DRIVE = 1;
@@ -84,17 +84,31 @@ public class HardwareConstants {
         private static final double CAMERA_TWO_YAW = Math.toRadians(180.0);
 
         // METERS
-        private static final double CAMERA_THREE_X_FROM_ROBOT = -0.2508;
-        private static final double CAMERA_THREE_Y_FROM_ROBOT = 0.2508;
+        private static final double CAMERA_THREE_X_FROM_ROBOT = 0.2508 - 0.46355;
+        private static final double CAMERA_THREE_Y_FROM_ROBOT = -0.2508 + 0.74295 + 0.34925 - 0.0365;
         private static final double CAMERA_THREE_Z_FROM_ROBOT = 0.27;
 
         private static final double CAMERA_THREE_ROLL = 0.0;
         private static final double CAMERA_THREE_PITCH = Math.toRadians(28.125);
-        private static final double CAMERA_THREE_YAW = Math.toRadians(135.0);
+        private static final double CAMERA_THREE_YAW = Math.toRadians(90.0);
+
+        // CAMERA FOUR
+        private static final double CAMERA_FOUR_X_FROM_ROBOT = 0.2508; //- 0.40645;
+        private static final double CAMERA_FOUR_Y_FROM_ROBOT = -0.2508 - 0.41275 - 0.1905; // -16 1/4 in
+        private static final double CAMERA_FOUR_Z_FROM_ROBOT = 0.27;
+
+        private static final double CAMERA_FOUR_ROLL = 0.0;
+        private static final double CAMERA_FOUR_PITCH = Math.toRadians(28.125);
+        private static final double CAMERA_FOUR_YAW = Math.toRadians(270.0);       
 
         private static final Transform3d _cameraThreePosition = new Transform3d(
             new Translation3d(CAMERA_THREE_X_FROM_ROBOT, CAMERA_THREE_Y_FROM_ROBOT, CAMERA_THREE_Z_FROM_ROBOT),
             new Rotation3d(CAMERA_THREE_ROLL, CAMERA_THREE_PITCH, CAMERA_THREE_YAW)
+        );
+
+        private static final Transform3d _cameraFourPosition = new Transform3d(
+            new Translation3d(CAMERA_FOUR_X_FROM_ROBOT, CAMERA_FOUR_Y_FROM_ROBOT, CAMERA_FOUR_Z_FROM_ROBOT),
+            new Rotation3d(CAMERA_FOUR_ROLL, CAMERA_FOUR_PITCH, CAMERA_FOUR_YAW)
         );
 
         // Shooter Camera
@@ -103,7 +117,7 @@ public class HardwareConstants {
         new Rotation3d(CAMERA_TWO_ROLL, CAMERA_TWO_PITCH, CAMERA_TWO_YAW));
 
         // TODO: Swapped camera position. Rename after competition.
-        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraOnePosition, _cameraTwoPosition, _cameraThreePosition};
+        public static Transform3d[] _cameraPosition = new Transform3d[] {_cameraOnePosition, _cameraTwoPosition, _cameraThreePosition, _cameraFourPosition};
     
     // |====================== END VISION SUBSYSTEM TRANSFORMATIONS ======================|
     

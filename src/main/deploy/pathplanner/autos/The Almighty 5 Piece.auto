@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72,
-      "y": 4.38
+      "x": 1.43,
+      "y": 5.56
     },
-    "rotation": -60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "N&I S - Sub to Lower S Side Note"
+                  "pathName": "Sub to Amp Note W LL"
                 }
               },
               {
@@ -46,12 +46,6 @@
           "type": "named",
           "data": {
             "name": "Stow_Pickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "N&I Lower S Side Note to Shooting"
           }
         },
         {
@@ -67,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "N&I S - Sub to Middle Note"
+                  "pathName": "Amp Note to Center Note LL"
                 }
               },
               {
@@ -92,9 +86,40 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "N&I S - Middle Note to Shoot"
+            "name": "Auto_Shoot_With_Auto_Align"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Note to Source Side Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Deploy_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
           }
         },
         {
@@ -106,12 +131,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "N&I S - Sub to 2nd S Side Note"
+            "pathName": "Source Note To Mid Note Pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deploy_Pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mid Note to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Shoot_With_Auto_Align"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "The Cool Useful Ones",
   "choreoAuto": false
 }

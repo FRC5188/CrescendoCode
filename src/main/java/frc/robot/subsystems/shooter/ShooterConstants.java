@@ -74,9 +74,17 @@ public abstract class ShooterConstants {
      * SHOOTER ENCODER CONSTANTS
      *
      **************/
-    public static final double MAXIMUM_ANGLE_ENCODER_ANGLE = 90; // These might need changed later depending on how everything is implemented. 
-    public static final double MINIMUM_ANGLE_ENCODER_ANGLE = 10; // These might need changed later depending on how everything is implemented. 
-    public static final double ANGLE_ENCODER_DEADBAND_DEGREES = 0.8; // This will be used when we've determining whether we can shoot or not. 
+    public static final double MAXIMUM_ANGLE_ENCODER_ANGLE = 45; // These might need changed later depending on how everything is implemented. 
+    public static final double MINIMUM_ANGLE_ENCODER_ANGLE = 10; // These might need changed later depending on how everything is implemented.
+
+    public static final double SUBWOOFER_ANGLE_ENCODER_DEADBAND_DEGREES = 1; // This will be used when we've determining whether we can shoot or not. 
+    public static final double SUBWOOFER_SHOT_RADIUS = 1.3;
+    public static final double CHAINS_ANGLE_ENCODER_DEADBAND_DEGREES = 0.3;
+    public static final double CHAINS_SHOT_RADIUS = 4.5;
+
+    public static final double ANGLE_DEADBAND_SLOPE = (CHAINS_ANGLE_ENCODER_DEADBAND_DEGREES - SUBWOOFER_ANGLE_ENCODER_DEADBAND_DEGREES)
+                                                      / (CHAINS_SHOT_RADIUS - SUBWOOFER_SHOT_RADIUS);
+    public static final double ANGLE_DEADBAND_INTERCEPT = (ANGLE_DEADBAND_SLOPE * -SUBWOOFER_SHOT_RADIUS) + SUBWOOFER_ANGLE_ENCODER_DEADBAND_DEGREES;
     
     /***************
      * 
@@ -106,7 +114,7 @@ public abstract class ShooterConstants {
     public static final double NEO_VORTEX_TORQUE_CONSTANT = NEO_VORTEX_STALL_TORQUE / NEO_VORTEX_STALL_CURRENT;
     public static final double SHOOTER_FEEDFORWARD_CONSTANT = 
         ((SHOOTER_WEIGHT_KG * SHOOTER_MOMENT_ARM_LENGTH_METERS * NEO_VORTEX_INTERNAL_RESISTANCE) 
-        / (NEO_VORTEX_TORQUE_CONSTANT * ANGLE_GEAR_RATIO)) + 0.07;
+        / (NEO_VORTEX_TORQUE_CONSTANT * ANGLE_GEAR_RATIO)) - 0.08;
     
 
     /******************
@@ -122,7 +130,6 @@ public abstract class ShooterConstants {
 
         Logger.recordOutput("Constants/Shooter/MAXIMUM_ANGLE_ENCODER_ANGLE", MAXIMUM_ANGLE_ENCODER_ANGLE);
         Logger.recordOutput("Constants/Shooter/MINIMUM_ANGLE_ENCODER_ANGLE", MINIMUM_ANGLE_ENCODER_ANGLE);
-        Logger.recordOutput("Constants/Shooter/ANGLE_ENCODER_ANGLE_DEADBAND_DEGREES", ANGLE_ENCODER_DEADBAND_DEGREES);
 
         Logger.recordOutput("Constants/Shooter/FLYWHEEL_GEAR_RATIO", FLYWHEEL_GEAR_RATIO);
         Logger.recordOutput("Constants/Shooter/SHOOTER_CANVAS_WIDTH", SHOOTER_CANVAS_WIDTH);

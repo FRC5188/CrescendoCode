@@ -43,15 +43,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Stow_Pickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "N&I Lower S Side Note to Shooting"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "N&I Lower S Side Note to Shooting"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
           }
         },
         {
@@ -86,15 +93,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Stow_Pickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "N&I S - 2nd S Note to Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "N&I S - 2nd S Note to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
           }
         },
         {
@@ -106,6 +120,6 @@
       ]
     }
   },
-  "folder": "Source Autos",
+  "folder": "The Cool Useful Ones",
   "choreoAuto": false
 }

@@ -11,6 +11,9 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 
@@ -91,16 +94,15 @@ public class Shooter extends SubsystemBase {
     private ShooterZone _currentShooterZone;
     private ShooterVisualizer _shooterVisualizer = new ShooterVisualizer();
     private final ShooterCommandFactory _shooterCommandFactory = new ShooterCommandFactory(this);
-    //private ProfiledPIDController _anglePID;
     private PIDController _anglePID;
+    private DoubleSubscriber _radiusToSpeaker;
 
     public Shooter(ShooterIO shooterIO) {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
-        // 0.0065, 0.0015, 0.0015
+        // 0.05,0,0.02
         
-        // _anglePID = new ProfiledPIDController(0.0055, 0.001, 0.0015, new Constraints(40, 70));
-        _anglePID = new PIDController(0.0065,0.0015,0.0015);
+        _anglePID = new PIDController( 0.08,0.008,0.025);
         _anglePID.setIZone(5);
 
         // Set up the zone mappings
@@ -112,6 +114,10 @@ public class Shooter extends SubsystemBase {
         _zoneDataMappings.put(ShooterZone.Unknown, UnknownData);
         _zoneDataMappings.put(ShooterZone.Amp, AmpData);
         _zoneDataMappings.put(ShooterZone.Feeder, FeederData);
+
+        NetworkTable adkitNetworkTable = NetworkTableInstance.getDefault().getTable("AdvantageKit");
+        _radiusToSpeaker = adkitNetworkTable.getDoubleTopic("RealOutputs/Drive/radiustospeaker")
+                            .subscribe(4.5);
     }
 
     public ShooterCommandFactory buildCommand() {
@@ -270,14 +276,18 @@ public class Shooter extends SubsystemBase {
                 // meter
                 radius = 1.3;
             }
-            //angle = -21.02 * Math.log(0.1106 * radius);
+
             angle = (101 * (Math.exp(-0.89 * radius))) + 12.37;
-            //angle -= 2;
-            if (radius > 2.0 && radius < 2.75) {
-                //angle -= 2.25;
-            } else if (radius >= 2.75 && radius < 3.75) {
-                //angle -= 1.25;
-            } 
+
+            // Previous regression eq
+            // angle = -21.02 * Math.log(0.1106 * radius);
+            
+            // angle -= 2;
+            // if (radius > 2.0 && radius < 2.75) {
+            //     angle -= 2.25;
+            // } else if (radius >= 2.75 && radius < 3.75) {
+            //     angle -= 1.25;
+            // } 
             // else if (radius >= 3.75) {
             //     angle -= 0.;
             // }
@@ -288,8 +298,14 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean shooterInPosition() {
+        // Making a sliding scale kind of function here (it'll probably be linear)
+        // We don't need to be as specific with our position when we are right against the subwoofer,
+        // but when we are really far away we have to be pretty exact
+        // So this function will let us be faster up close, but more accurate further away
+        double deadband = (ShooterConstants.ANGLE_DEADBAND_SLOPE * _radiusToSpeaker.get()) + ShooterConstants.ANGLE_DEADBAND_INTERCEPT;
+
         return Math.abs(_targetShooterAngle
-                - getCurrentPositionInDegrees()) <= ShooterConstants.ANGLE_ENCODER_DEADBAND_DEGREES;
+                - getCurrentPositionInDegrees()) <= deadband;
     }
 
     /**
@@ -304,10 +320,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFlywheelSpeedWithRadius(double radiusInMeters) {
-        double speed = 2000;
-        if (radiusInMeters <= 4 && radiusInMeters > 2) {
-            speed = 1600;
-        } else if (radiusInMeters <= 2) {
+        double speed = 1500; 
+        if (radiusInMeters <= 2) {
             speed = 1200;
         }
         setFlywheelSpeed(speed);
@@ -326,7 +340,7 @@ public class Shooter extends SubsystemBase {
     public void runAnglePID() {
         double output = calcAnglePID();
 
-        _shooterIO.setAngleMotorSpeed(output);
+        _shooterIO.setAngleMotorVoltage(output);
     }
 
     private double calcAnglePID() {

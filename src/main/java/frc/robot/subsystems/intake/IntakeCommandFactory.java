@@ -1,8 +1,11 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.intake.Intake.IntakePosition;
 import frc.robot.subsystems.intake.commands.CmdIntakeWaitForNote;
 import frc.robot.subsystems.intake.commands.CmdAcquireNoteFor;
@@ -10,13 +13,16 @@ import frc.robot.subsystems.intake.commands.CmdIntakeWaitForIntake;
 
 public class IntakeCommandFactory {
     private Intake _intake;
+    private GenericHID _driveRumble;
 
     /**
      * Use this to access commands to run the intake
      * @param intake {@link Intake}
+     * @param driveRumble 
      */
-    public IntakeCommandFactory(Intake intake) {
+    public IntakeCommandFactory(Intake intake, GenericHID driveRumble) {
         this._intake = intake;
+        _driveRumble = driveRumble;
     }
 
 
@@ -110,5 +116,17 @@ public class IntakeCommandFactory {
      */
     public Command acquire(int timeMS) {
         return new CmdAcquireNoteFor(timeMS, this._intake, IntakeConstants.INTAKE_ACQUIRE_SPEED.get());
+    }
+
+    public Command rumbleDriverCommand() {
+        return new RunCommand(() -> rumbleDriverCtrl()).withTimeout(0.25).finallyDo(() -> stopRumbleDriverCtrl());
+    }
+
+    public void rumbleDriverCtrl() {
+        _driveRumble.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+    }
+
+    public void stopRumbleDriverCtrl() {
+        _driveRumble.setRumble(GenericHID.RumbleType.kBothRumble, 0);
     }
 }

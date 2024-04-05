@@ -98,10 +98,10 @@ public class RealShooterIO implements ShooterIO {
     private void configAngleMotor() {
         _angleMotor = new CANSparkFlex(HardwareConstants.CanIds.ANGLE_MOTOR_ID, MotorType.kBrushless);
 
-        _angleMotor.enableVoltageCompensation(6.0);
+        _angleMotor.enableVoltageCompensation(12.0);
         _angleMotor.setInverted(false);
         _angleMotor.setCANTimeout(100);
-        _angleMotor.setIdleMode(IdleMode.kBrake);
+        _angleMotor.setIdleMode(IdleMode.kCoast);
 
         MotorFrameConfigurator.configDutyCycleSensor(_angleMotor);
 

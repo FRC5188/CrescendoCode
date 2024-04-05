@@ -81,7 +81,7 @@ public class RobotContainer {
         private final Intake _intake;
         private final Shooter _shooter;
         private final LEDs _leds;
-        // private final Climber _climber;
+        private final Climber _climber;
         private final VisionDrive _visionDrive;
 
         private double _driveMultiplier = 1.0;
@@ -94,6 +94,7 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
+        private final CommandXboxController _climbController = new CommandXboxController(3);
 
         // Button box
         // Top half of buttons
@@ -153,7 +154,7 @@ public class RobotContainer {
                                 _intake = new Intake(new RealIntakeIO());
                                 _shooter = new Shooter(new RealShooterIO());
                                 _leds = new LEDs();
-                                // _climber = new Climber(new RealClimberIO());
+                                _climber = new Climber(new RealClimberIO());
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO());
                                 break;
 
@@ -172,8 +173,9 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                // _climber = new Climber(new RealClimberIO() {
-                                // });
+                                _climber = new Climber(new RealClimberIO() {
+
+                                });
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
                                 _leds = new LEDs();
@@ -197,8 +199,8 @@ public class RobotContainer {
                                 });
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
-                                // _climber = new Climber(new RealClimberIO() {
-                                // });
+                                _climber = new Climber(new RealClimberIO() {
+                                });
                                 _visionDrive = new VisionDrive(new RealVisionDriveIO() {
                                 });
                                 _leds = new LEDs();
@@ -312,6 +314,19 @@ public class RobotContainer {
                                 Commands.runOnce(
                                                 () -> _drive.alignToSubwoofer(), _drive)
                                                 .ignoringDisable(true));
+                /*
+                 * ================================
+                 * Climb Controller
+                 * ================================
+                 */
+                
+                 _climbController.leftBumper().whileTrue(
+                        new InstantCommand(
+                                () -> this.canMove = true));
+                 //holding left joystick for left climber, right joystick for right climber
+                 //when joystick goes up climber goes down 
+                 //can climb is updated by holding of left trigger/left 
+                 //left bumper on true canmove
                 
                 /*
                  * ================================
@@ -418,4 +433,5 @@ public class RobotContainer {
         public Command getRunLEDs() {
                 return this._runLEDsCommand;
         }
+}
 }

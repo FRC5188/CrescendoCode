@@ -17,6 +17,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
 import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
+import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.autonomous.AutonomousPathGenerator;
 
@@ -117,6 +119,19 @@ public class Drive extends SubsystemBase {
 
     for (var module : _modules) {
       module.periodic();
+    }
+
+    // We'll Record the Tags that Are Used.
+    Logger.recordOutput("Drive/Are Vision Tags Used?", this._visionInputs._tagsUsed);
+
+    Pose3d[] aprilTagPoses = new Pose3d[16];
+    for (int index = 0; index < 16; index++){
+      if (this._visionInputs._tagsUsed[index]){
+        aprilTagPoses[index] = RealVisionIO.getPoseOfTagFromID(index + 1);
+      }
+      else {
+        aprilTagPoses[index] = null; // This should be NULL but I'm not sure if it'll break AdvantageKit.
+      }
     }
 
     Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());

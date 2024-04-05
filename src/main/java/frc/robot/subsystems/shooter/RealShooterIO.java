@@ -101,7 +101,7 @@ public class RealShooterIO implements ShooterIO {
         _angleMotor.enableVoltageCompensation(12.0);
         _angleMotor.setInverted(false);
         _angleMotor.setCANTimeout(100);
-        _angleMotor.setIdleMode(IdleMode.kBrake);
+        _angleMotor.setIdleMode(IdleMode.kCoast);
 
         MotorFrameConfigurator.configDutyCycleSensor(_angleMotor);
 

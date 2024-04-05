@@ -25,15 +25,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.HardwareConstants;
 import frc.robot.subsystems.vision.VisionIOInputsAutoLogged;
+import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.util.autonomous.AutonomousPathGenerator;
 
@@ -46,6 +49,8 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged _gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] _modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine _sysId;
+
+  private boolean hasSeenTag = false;
 
   private final VisionIO _visionIO;
   private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
@@ -66,6 +71,21 @@ public class Drive extends SubsystemBase {
   private Pose2d _speakerPosition;
   private Translation2d _centerOfRotation;
   public Field2d _field;
+
+  private double _inchesFromSubwoofer = 39.0;
+  private double _robotWidth = 13.0 + 1.5;
+
+  private Pose2d _robotOnSubwooferRed = new Pose2d(
+                  DriveConstants.RED_SPEAKER.getX()
+                          - Units.inchesToMeters(_inchesFromSubwoofer + _robotWidth),
+                  DriveConstants.RED_SPEAKER.getY(),
+                  new Rotation2d(Math.PI));
+
+  private Pose2d _robotOnSubwooferBlue = new Pose2d(
+                  DriveConstants.BLUE_SPEAKER.getX()
+                                  + Units.inchesToMeters(_inchesFromSubwoofer + _robotWidth),
+                  DriveConstants.BLUE_SPEAKER.getY(),
+                  new Rotation2d(Math.PI));
 
   public Drive(
       GyroIO gyroIO,
@@ -116,6 +136,8 @@ public class Drive extends SubsystemBase {
       module.periodic();
     }
 
+    Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
+
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
       for (var module : _modules) {
@@ -125,7 +147,6 @@ public class Drive extends SubsystemBase {
       // Log empty setpoint states when disabled
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
-      Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
       Logger.recordOutput("Drive/Alliance", getAlliance());
     }
 
@@ -326,13 +347,33 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Adds a vision measurement to the pose estimator.
+   * Adds a vision measurement to the pose.
    *
    * @param visionPose The pose of the robot as measured by the vision camera.
    * @param timestamp  The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
-    _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+    // If we haven't seen a tag then we won't add the Cut-Off Filter so that we can get an initial estimation of pose.
+    
+    // We'll first check to see if any of our cameras have seen a tag using a for-loop and if they have then we'll set hasSeenTag to true.
+    for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
+      if (_visionInputs._hasPose[i]) {
+        hasSeenTag = true;
+      }
+    }
+
+    // Then if we've seen a tag before we'll add the Cut-Off Filter to the vision measurements.
+    if (hasSeenTag) {
+      if (VisionIO.shouldUsePoseEstimation(this.getPose(), visionPose)){
+        _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+      }
+      else {
+        System.out.println("[WARNING]: Rejected Vision Estimation. Signifigant Outlier Determined.");
+      }
+    } else {
+      System.out.println("[INFO]: No Tag Seen. Added Initial Vision Esitmation.");
+      _poseEstimator.addVisionMeasurement(visionPose, timestamp);
+    }
   }
 
   private Pose2d getSpeakerPos() {
@@ -497,5 +538,16 @@ public class Drive extends SubsystemBase {
         new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, DriveConstants.TRACK_WIDTH_Y / 2.0),
         new Translation2d(-DriveConstants.TRACK_WIDTH_X / 2.0, -DriveConstants.TRACK_WIDTH_Y / 2.0)
     };
+  }
+
+  public void alignToSubwoofer() {
+    if (getAlliance() == Alliance.Red) {
+      setPose(_robotOnSubwooferRed);
+    }
+
+    else {
+      // Alliance is blue.
+      setPose(_robotOnSubwooferBlue);
+    }
   }
 }

@@ -23,8 +23,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -92,7 +94,7 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
-
+        GenericHID _driveRumble = _driveController.getHID();
         // Button box
         // Top half of buttons
         private final GenericHID _operatorController1 = new GenericHID(1);
@@ -148,7 +150,7 @@ public class RobotContainer {
                                                 new ModuleIOSparkFlex(1),
                                                 new ModuleIOSparkFlex(2),
                                                 new ModuleIOSparkFlex(3));
-                                _intake = new Intake(new RealIntakeIO());
+                                _intake = new Intake(new RealIntakeIO(), _driveRumble);
                                 _shooter = new Shooter(new RealShooterIO());
                                 _leds = new LEDs();
                                 // _climber = new Climber(new RealClimberIO());
@@ -167,7 +169,7 @@ public class RobotContainer {
                                                 new ModuleIOSim(),
                                                 new ModuleIOSim());
                                 _intake = new Intake(new IntakeIO() {
-                                });
+                                }, _driveRumble);
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
                                 // _climber = new Climber(new RealClimberIO() {
@@ -192,7 +194,7 @@ public class RobotContainer {
                                                 new ModuleIO() {
                                                 });
                                 _intake = new Intake(new IntakeIO() {
-                                });
+                                }, _driveRumble);
                                 _shooter = new Shooter(new ShooterIO() {
                                 });
                                 // _climber = new Climber(new RealClimberIO() {
@@ -304,19 +306,13 @@ public class RobotContainer {
                                                                                 new Rotation2d(Math.PI))),
                                                 _drive).ignoringDisable(true));
 
-                double inchesFromSubwoofer = 39.0;
-                double robotWidth = 13.0 + 1.5;
-                Pose2d robotOnSubwooferRed = new Pose2d(
-                                DriveConstants.RED_SPEAKER.getX()
-                                                - Units.inchesToMeters(inchesFromSubwoofer + robotWidth),
-                                DriveConstants.RED_SPEAKER.getY(),
-                                new Rotation2d(Math.PI));
-                // Change the robot pose to think it is in front of the red speaker
+  
+                // Change the robot pose to think it is centered in front of the speaker of its alliance
                 _driveController.b().onTrue(
                                 Commands.runOnce(
-                                                () -> _drive.setPose(robotOnSubwooferRed), _drive)
+                                                () -> _drive.alignToSubwoofer(), _drive)
                                                 .ignoringDisable(true));
-
+                
                 /*
                  * ================================
                  * Button Box
@@ -352,6 +348,9 @@ public class RobotContainer {
                                 .andThen(_intake.buildCommand().setPosition(IntakePosition.Stowed)));
                 _op2ButtonFive.onTrue(new GrpShootNoteInZone(_intake, _shooter,
                                 ShooterZone.Subwoofer));
+                // _op2ButtonFive.onTrue(_shooter.buildCommand().runForZone(
+                //         ShooterZone.Subwoofer
+                // ));
                 _op2ButtonSeven.onTrue(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Feeder));
                 _op2ButtonEight.onTrue(new GrpShootNoteInZone(_intake, _shooter,
                                 ShooterZone.Podium));

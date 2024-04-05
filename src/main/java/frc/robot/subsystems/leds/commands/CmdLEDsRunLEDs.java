@@ -36,27 +36,25 @@ public class CmdLEDsRunLEDs extends Command {
     if (DriverStation.isDisabled()) {
       // rainbow when DS is disabled
       _leds.runAnimation(LEDAnimation.RobotDisabled);
-    } else if (_leds._isAutoAimEnabled()) {
-          // the drive wants to use autoaim
-          if(!_intake.hasNote()){
+    } else if(_leds.shouldRunHasNoteAnimation(_intake.hasNote())){
             // if we do not have a note, then blink red
-            _leds.runAnimation(LEDAnimation.BlinkingRed);
-          }else if(_shooter.shooterInPosition() && _leds._isAutoAimReady()){
+            _leds.runAnimation(LEDAnimation.PickedUpNote);
+    } else if (_leds._isAutoAimEnabled()) {
+          // the drive wants to use autoaim  
+          if(_shooter.shooterInPosition() && _leds._isAutoAimReady()){
             // if the shooter is in position and the autoaim code says its ready
             // then signal to the drive we are ready
-            _leds.runAnimation(LEDAnimation.SolidGreen);
+            _leds.runAnimation(LEDAnimation.ReadyToShoot);
           } else{
             // if we have a note but are not in position then we are not ready.
             _leds.runAnimation(LEDAnimation.SolidRed);
           }
+     }
     // } else if (_leds.shouldRunHasNoteAnimation(_intake.hasNote())) {
     //   // Only run this animation one time, right when the intake first picks up a note
     //   // blinks orange when we pick up a note
     //   _leds.runAnimation(LEDAnimation.PickedUpNote);
     // }
-    } else if(_intake.hasNote()){
-      _leds.runAnimation(LEDAnimation.SolidYellow);
-    }
     else{
       // solid orange when we are doing nothing
       _leds.runAnimation(LEDAnimation.RobotIdle);

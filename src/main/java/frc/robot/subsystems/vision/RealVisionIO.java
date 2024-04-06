@@ -15,7 +15,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import frc.robot.HardwareConstants;
 
 public class RealVisionIO implements VisionIO {
-        private static final double AMBIGUITY_CUTOFF = 0.2;
+        private static final double AMBIGUITY_CUTOFF = 0.1;
 
         private static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         private static final PhotonPoseEstimator[] ESTIMATORS = createPoseEstimators();

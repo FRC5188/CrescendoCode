@@ -47,7 +47,7 @@ public class VisionDrive extends SubsystemBase {
             
             // Note: x and y on the Limelight screen resemble the coordinate plane, with x increasing to the right and y increasing up.
             // x and y in ChassisSpeeds are different, with negative x representing forward translation and positive y representing right rotation.
-            _chassisSpeeds.vxMetersPerSecond = -1.0*_translatePID.calculate(_visionDriveInputs._ty, 0);
+            _chassisSpeeds.vxMetersPerSecond = -0.5*_translatePID.calculate(_visionDriveInputs._ty, 0);
             _chassisSpeeds.omegaRadiansPerSecond = _rotatePID.calculate(_visionDriveInputs._tx, 0);
 
         } else {

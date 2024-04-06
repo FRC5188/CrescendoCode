@@ -34,6 +34,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.RealClimberIO;
+import frc.robot.subsystems.climber.commands.CmdClimberMove;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -94,6 +97,7 @@ public class RobotContainer {
 
         // Controller
         private final CommandXboxController _driveController = new CommandXboxController(0);
+        // private final CommandXboxController _climberController = new CommandXboxController(3);
         GenericHID _driveRumble = _driveController.getHID();
         // Button box
         // Top half of buttons
@@ -312,7 +316,20 @@ public class RobotContainer {
                                 Commands.runOnce(
                                                 () -> _drive.alignToSubwoofer(), _drive)
                                                 .ignoringDisable(true));
+
+                /*
+                 * ================================
+                 * Climber Controller
+                 * ================================
+                 */
+
+                // _climber.setDefaultCommand(new CmdClimberMove(_climber, 
+                //         () -> _climberController.getLeftY(), 
+                //         () -> _climberController.getRightY()));
+                // _climberController.a().whileTrue(Commands.runOnce(() -> _climber.setCanMove(true)))
+                //         .whileFalse(Commands.runOnce(() -> _climber.setCanMove(false)));
                 
+
                 /*
                  * ================================
                  * Button Box

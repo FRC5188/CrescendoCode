@@ -27,7 +27,7 @@ public class IntakeConstants {
      * 
      **********************/
     public static final LoggedTunableNumber POSITION_SOURCE_PICKUP = new LoggedTunableNumber("Intake/Position/Source Pickup", 50);
-    public static final LoggedTunableNumber POSITION_GROUND_PICKUP = new LoggedTunableNumber("Intake/Position/Ground Pickup", 188);
+    public static final LoggedTunableNumber POSITION_GROUND_PICKUP = new LoggedTunableNumber("Intake/Position/Ground Pickup", 192);
     public static final LoggedTunableNumber POSITION_STOWED = new LoggedTunableNumber("Intake/Position/Stowed", 12);
     public static final LoggedTunableNumber POSITION_AMP_SCORE = new LoggedTunableNumber("Intake/Position/Amp Score", 60);
     public static final LoggedTunableNumber POSITION_FEEDER_SCORE = new LoggedTunableNumber("Intake/Position/Speaker Score", 140);
@@ -42,7 +42,7 @@ public class IntakeConstants {
     public static final double INTAKE_LENGTH = 0.3;
     public static final double INTAKE_OFFSET_DEGREES = 136;// 57.2 degrees
     public static final double MIN_INTAKE_ANGLE = -2.0;
-    public static final double MAX_INTAKE_ANGLE = 189.0;
+    public static final double MAX_INTAKE_ANGLE = 200.0;
 
     /***************************
      * 

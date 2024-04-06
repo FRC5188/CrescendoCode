@@ -102,7 +102,7 @@ public class Shooter extends SubsystemBase {
         _currentShooterZone = ShooterZone.Unknown;
         // 0.05,0,0.02
         
-        _anglePID = new PIDController( 0.08,0.008,0.025);
+        _anglePID = new PIDController( 0.085,0.01,0.025);
         _anglePID.setIZone(5);
 
         // Set up the zone mappings

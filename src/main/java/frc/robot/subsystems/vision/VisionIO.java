@@ -2,7 +2,9 @@ package frc.robot.subsystems.vision;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.HardwareConstants;

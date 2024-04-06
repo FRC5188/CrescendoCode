@@ -25,6 +25,9 @@ public class RealVisionIO implements VisionIO {
                 for (int n = 0; n < HardwareConstants.NUMBER_OF_CAMERAS; n++) {
                         Optional<EstimatedRobotPose> estimatedPose = ESTIMATORS[n].update();
 
+
+
+
                         if (estimatedPose.isPresent()){
 
                                 // We'll check to make sure that the poses that are referenced are not too ambiguous.

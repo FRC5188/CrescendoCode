@@ -282,10 +282,14 @@ public class RobotContainer {
                 // () -> _driveController.getRightTriggerAxis(),
                 // () -> _driveController.getLeftX(),
                 // () -> _driveController.getRightX()));
-                _driveController.leftBumper().whileTrue(new CmdDriveAutoAim(_drive,
+                _driveController.leftBumper().whileTrue(Commands.runOnce(() -> _shooter.setAutoShootEnabled(true))
+                        .andThen(new CmdDriveAutoAim(_drive,
                                 () -> -_driveController.getLeftY() * _driveMultiplier,
                                 () -> -_driveController.getLeftX() * _driveMultiplier,
-                                true));
+                                true))
+                        );
+
+                _driveController.leftBumper().onFalse(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
 
                 _driveController.leftTrigger(0.5).whileTrue(new CmdDriveAutoAim(_drive,
                                 () -> -_driveController.getLeftY() * _driveMultiplier,
@@ -338,8 +342,8 @@ public class RobotContainer {
 
                 // The toggle sends out true when we want to disable autoshoot, so this looks a
                 // little flipped around
-                _autoShootToggle.onFalse(Commands.runOnce(() -> _shooter.setAutoShootEnabled(true)))
-                                .onTrue(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
+                // _autoShootToggle.onFalse(Commands.runOnce(() -> _shooter.setAutoShootEnabled(true)))
+                //                 .onTrue(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
 
                 // Adjust shooter angle from current position
                 _opButtonOne.onTrue(this._shooter.buildCommand().adjustAngle(1));

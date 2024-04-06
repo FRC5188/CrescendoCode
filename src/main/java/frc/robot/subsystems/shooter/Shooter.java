@@ -32,7 +32,8 @@ public class Shooter extends SubsystemBase {
         private LoggedTunableNumber _shooterAngle;
         private LoggedTunableNumber _flywheelSpeed;
 
-        ShooterZoneData(LoggedTunableNumber lowBound, LoggedTunableNumber highBound, LoggedTunableNumber shooterAngle, LoggedTunableNumber flywheelSpeed) {
+        ShooterZoneData(LoggedTunableNumber lowBound, LoggedTunableNumber highBound, LoggedTunableNumber shooterAngle,
+                LoggedTunableNumber flywheelSpeed) {
             this._lowBound = lowBound;
             this._highBound = highBound;
             this._shooterAngle = shooterAngle;
@@ -101,12 +102,13 @@ public class Shooter extends SubsystemBase {
         _shooterIO = shooterIO;
         _currentShooterZone = ShooterZone.Unknown;
         // 0.05,0,0.02
-        
-        _anglePID = new PIDController( 0.085,0.01,0.025);
+
+        _anglePID = new PIDController(0.085, 0.01, 0.025);
         _anglePID.setIZone(5);
 
         // Set up the zone mappings
-        // This is a funky hack that lets us modify zone data during a match, like angle, 
+        // This is a funky hack that lets us modify zone data during a match, like
+        // angle,
         // that will stick around until the robot is restarted
         _zoneDataMappings = new HashMap<>();
         _zoneDataMappings.put(ShooterZone.Subwoofer, SubwooferData);
@@ -117,7 +119,7 @@ public class Shooter extends SubsystemBase {
 
         NetworkTable adkitNetworkTable = NetworkTableInstance.getDefault().getTable("AdvantageKit");
         _radiusToSpeaker = adkitNetworkTable.getDoubleTopic("RealOutputs/Drive/radiustospeaker")
-                            .subscribe(4.5);
+                .subscribe(4.5);
     }
 
     public ShooterCommandFactory buildCommand() {
@@ -130,13 +132,18 @@ public class Shooter extends SubsystemBase {
 
     /**
      * Adjusts the current shooter position by the given amount
-     * Amount can be positive or negative; positive will increase the angle, negative will decrease
-     * This adjustment will become the new position for whatever zone we are currently in,
+     * Amount can be positive or negative; positive will increase the angle,
+     * negative will decrease
+     * This adjustment will become the new position for whatever zone we are
+     * currently in,
      * this change will stay until the code is restarted
+     * 
      * @param amountInDegrees the amount to change the current angle by
      */
     public void adjustShooterAngle(double amountInDegrees) {
-        // _zoneDataMappings.get(_currentShooterZone)._shooterAngle = _zoneDataMappings.get(_currentShooterZone).getShooterAngle() + amountInDegrees;
+        // _zoneDataMappings.get(_currentShooterZone)._shooterAngle =
+        // _zoneDataMappings.get(_currentShooterZone).getShooterAngle() +
+        // amountInDegrees;
         // setTargetPositionAsAngle(_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
         // String key = "shooter/zone/" + _currentShooterZone + "/angle";
         // Logger.recordOutput(key,_zoneDataMappings.get(_currentShooterZone).getShooterAngle());
@@ -155,7 +162,7 @@ public class Shooter extends SubsystemBase {
             // if we make a big change in the requested angle, reset the PID controller
             // before moving
             // if(Math.abs(_targetShooterAngle - angle) > 5)
-            //     _anglePID.reset(_shooterInputs._angleEncoderPositionDegrees);
+            // _anglePID.reset(_shooterInputs._angleEncoderPositionDegrees);
             // _anglePID.setGoal(angle);
             _anglePID.setSetpoint(angle);
             // _shooterIO.setTargetPositionAsDegrees(angle);
@@ -208,10 +215,11 @@ public class Shooter extends SubsystemBase {
     // TODO: THIS SHOULD BE SET AS MATH.ABS() ONCE SHOOTER FLYWHEEL PIDS ARE FIXED
     private boolean areFlywheelsAtTargetSpeed() {
         return _targetFlywheelSpeed
-                - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= 
-                 _targetFlywheelSpeed - _targetFlywheelSpeed * ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
-                 // the deadband is a percent. so subtract the deadband perctange times the target from the
-                 // target to get the lower bound.
+                - _shooterInputs._leftFlywheelMotorVelocityRotationsPerMin <= _targetFlywheelSpeed
+                        - _targetFlywheelSpeed * ShooterConstants.FLYWHEEL_SPEED_DEADBAND;
+        // the deadband is a percent. so subtract the deadband perctange times the
+        // target from the
+        // target to get the lower bound.
     }
 
     /**
@@ -226,7 +234,7 @@ public class Shooter extends SubsystemBase {
         setFlywheelSpeed(_zoneDataMappings.get(zone).getFlywheelSpeed());
     }
 
-    public void runShooterForRadius(double radius){
+    public void runShooterForRadius(double radius) {
         setFlywheelSpeedWithRadius(radius);
         setShooterPositionWithRadius(radius);
     }
@@ -269,7 +277,7 @@ public class Shooter extends SubsystemBase {
         double angle;
         // only shoot inside this radius
         if (radius <= 5) {
-            if(radius < 1.3){
+            if (radius < 1.3) {
                 // the subwoofer is about a meter away from the alliance wall
                 // if we think we are less than a meter from the speaker then we
                 // are "inside" the subwoofer which is not possible. so harcode ourselves to one
@@ -281,15 +289,15 @@ public class Shooter extends SubsystemBase {
 
             // Previous regression eq
             // angle = -21.02 * Math.log(0.1106 * radius);
-            
+
             // angle -= 2;
             // if (radius > 2.0 && radius < 2.75) {
-            //     angle -= 2.25;
+            // angle -= 2.25;
             // } else if (radius >= 2.75 && radius < 3.75) {
-            //     angle -= 1.25;
-            // } 
+            // angle -= 1.25;
+            // }
             // else if (radius >= 3.75) {
-            //     angle -= 0.;
+            // angle -= 0.;
             // }
             Logger.recordOutput("Shooter/RegressionEstimatedAngle", angle);
             setTargetPositionAsAngle(angle);
@@ -299,10 +307,18 @@ public class Shooter extends SubsystemBase {
 
     public boolean shooterInPosition() {
         // Making a sliding scale kind of function here (it'll probably be linear)
-        // We don't need to be as specific with our position when we are right against the subwoofer,
+        // We don't need to be as specific with our position when we are right against
+        // the subwoofer,
         // but when we are really far away we have to be pretty exact
-        // So this function will let us be faster up close, but more accurate further away
-        double deadband = (ShooterConstants.ANGLE_DEADBAND_SLOPE * _radiusToSpeaker.get()) + ShooterConstants.ANGLE_DEADBAND_INTERCEPT;
+        // So this function will let us be faster up close, but more accurate further
+        // away
+        double deadband = 0.8;
+        if (_autoShootEnabled) {
+            deadband = (ShooterConstants.ANGLE_DEADBAND_SLOPE * _radiusToSpeaker.get())
+                    + ShooterConstants.ANGLE_DEADBAND_INTERCEPT;
+        }
+
+        Logger.recordOutput("Shooter/positionDeadband", deadband);
 
         return Math.abs(_targetShooterAngle
                 - getCurrentPositionInDegrees()) <= deadband;
@@ -320,7 +336,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFlywheelSpeedWithRadius(double radiusInMeters) {
-        double speed = 1500; 
+        double speed = 1500;
         if (radiusInMeters <= 2) {
             speed = 1200;
         }
@@ -335,7 +351,6 @@ public class Shooter extends SubsystemBase {
     public boolean isReady() {
         return shooterInPosition() && areFlywheelsAtTargetSpeed();
     }
-    
 
     public void runAnglePID() {
         double output = calcAnglePID();
@@ -344,14 +359,14 @@ public class Shooter extends SubsystemBase {
     }
 
     private double calcAnglePID() {
-        return _anglePID.calculate(_shooterInputs._angleEncoderPositionDegrees) 
-            + calcFeedforward();
+        return _anglePID.calculate(_shooterInputs._angleEncoderPositionDegrees)
+                + calcFeedforward();
     }
 
     private double calcFeedforward() {
-       return (ShooterConstants.SHOOTER_FEEDFORWARD_CONSTANT * Math.cos(
-                Units.degreesToRadians(_shooterInputs._angleEncoderPositionDegrees 
-                + ShooterConstants.ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES)));
+        return (ShooterConstants.SHOOTER_FEEDFORWARD_CONSTANT * Math.cos(
+                Units.degreesToRadians(_shooterInputs._angleEncoderPositionDegrees
+                        + ShooterConstants.ANGLE_FROM_ROBOT_ZERO_TO_GROUND_DEGREES)));
     }
 
     @Override
@@ -372,6 +387,6 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/PIDSetpoint", _anglePID.getSetpoint());
         Logger.recordOutput("Shooter/TargetShooterAngle", _targetShooterAngle);
         Logger.recordOutput("Shooter/AnglePIDCalculatedOutput", calcAnglePID());
-        Logger.recordOutput("Shooter/isAutoShootEnabled",this.isAutoShootEnabled());
+        Logger.recordOutput("Shooter/isAutoShootEnabled", this.isAutoShootEnabled());
     }
 }

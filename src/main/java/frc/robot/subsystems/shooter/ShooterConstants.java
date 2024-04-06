@@ -47,7 +47,7 @@ public abstract class ShooterConstants {
     public static final LoggedTunableNumber ZONE_SUBWOOFER_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/SUBWOOFER_SHOOTER_ANGLE", 42.0);
     
     // unknown
-    public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/UNKNOWN_FLYWHEEL_SPEED", 0); //1200
+    public static final LoggedTunableNumber ZONE_UNKNOWN_FLYWHEEL_SPEED = new LoggedTunableNumber("Shooter/UNKNOWN_FLYWHEEL_SPEED", 1200); //1200
     public static final LoggedTunableNumber ZONE_UNKNOWN_LOW_BOUND = new LoggedTunableNumber("Shooter/UNKNOWN_LOW_BOUND", -1);
     public static final LoggedTunableNumber ZONE_UNKNOWN_UPPER_BOUND = new LoggedTunableNumber("Shooter/UNKNOWN_UPPER_BOUND", -1);
     public static final LoggedTunableNumber ZONE_UNKNOWN_SHOOTER_ANGLE = new LoggedTunableNumber("Shooter/UNKNOWN_SHOOTER_ANGLE", 35);
@@ -122,7 +122,7 @@ public abstract class ShooterConstants {
      * 
      *****************/
     // flywheel deadband is a percentange now
-    public static final double FLYWHEEL_SPEED_DEADBAND = 0.05;
+    public static final double FLYWHEEL_SPEED_DEADBAND = 0.1;
     public static final double TIME_TO_SHOOT = 0.2; // In seconds 
 
     // Logs all of the ShooterConstants into Advantage Kit.

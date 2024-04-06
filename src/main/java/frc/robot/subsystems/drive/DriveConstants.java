@@ -27,7 +27,9 @@ public class DriveConstants {
     public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
     public static final Pose2d BLUE_AMP = new Pose2d(Units.inchesToMeters(72.5), Units.inchesToMeters(270), new Rotation2d(0));
     public static final Pose2d RED_AMP = new Pose2d(Units.inchesToMeters(578.77), Units.inchesToMeters(270), new Rotation2d(Math.PI));
-    
+    public static final double BLUE_AUTO_PENALTY_LINE = 8.7;
+    public static final double RED_AUTO_PENALTY_LINE = 7.8;
+
     /**
      * 
      * timestep used in {@link #ChassisSpeeds.discretize(CassisSpeeds, double)}

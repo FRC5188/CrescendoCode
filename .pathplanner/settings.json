@@ -3,10 +3,10 @@
   "robotLength": 0.66,
   "holonomicMode": true,
   "pathFolders": [
-    "Lit Left Ring Auto Paths",
+    "5 Piece Paths",
+    "New Amp 3 Piece Paths",
     "Macho Middle Ring Auto Paths",
     "Middle 4 No LL Piece Auto Paths",
-    "5 Piece Paths",
     "Rad Right Ring Auto Paths",
     "Source Side WIP"
   ],

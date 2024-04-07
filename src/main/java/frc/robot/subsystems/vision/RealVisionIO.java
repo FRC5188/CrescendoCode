@@ -5,92 +5,86 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
+import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import frc.robot.HardwareConstants;
 
 public class RealVisionIO implements VisionIO {
-        private static final double AMBIGUITY_CUTOFF = 0.2;
-
         private static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+        private static final PhotonCamera[] CAMERAS = createCameras();
         private static final PhotonPoseEstimator[] ESTIMATORS = createPoseEstimators();
 
+        // Updated Every Cycle.
         public void updateInputs(VisionIOInputs inputs) {
         
-                for (int n = 0; n < HardwareConstants.NUMBER_OF_CAMERAS; n++) {
-                        Optional<EstimatedRobotPose> estimatedPose = ESTIMATORS[n].update();
+                for (int n = 0; n <VisionConstants.Software.NUMBER_OF_CAMERAS; n++) {
+                        final PhotonPipelineResult results = CAMERAS[n].getLatestResult();
+                        Optional<EstimatedRobotPose> estimatedPose = Optional.empty();
 
+                        // Here we're filtering out the tags that have ambiguous poses that we don't really want to use.
+                        if (results.hasTargets() && (results.targets.size() > 1 || results.targets.get(0).getPoseAmbiguity() < VisionConstants.Software.AMBIGUITY_CUTOFF)){
+                                estimatedPose = ESTIMATORS[n].update(results);
+                        }
+
+                        // (2024-2025 TODO): Filter out poses that are outside the field or that are more than 2.0m away from the current position of the robot.
+                        // While we shouldn't to have to worry much about this with the cut-off filter it's just another way we can keep improving this part of 
+                        // our robot. :)
+
+                        // If we have an estimated pose then we'll use it...
                         if (estimatedPose.isPresent()){
-
-                                // We'll check to make sure that the poses that are referenced are not too ambiguous.
-                                estimatedPose = Optional.of(getPoseWithAmbiguityCutoff(estimatedPose.get()));
-
-                                // Now that we've removed some of the ambiguous poses, we can check to see if we have any poses left.
-                                // If not then we'll just pretend that we don't have a pose.
-                                if (estimatedPose.get().targetsUsed.size() == 0){
-                                        inputs._hasPose[n] = false;
-                                        inputs._poses[n] = new Pose2d();
-                                        continue; // Move On.
-                                }
-
-                                // We'll then iterate through the targets and if we have the tag then we'll set it to true. 
-                                // We'll use the index of the array as a representation of the ID. 
-                                for (PhotonTrackedTarget target : estimatedPose.get().targetsUsed){
-                                        inputs._tagsUsed[target.getFiducialId() - 1] = true;
-                                }
-
-                                // This is what happens whenever we have a pose that is not too ambiguous.
+                                inputs._hasPose[n] = true;
                                 inputs._poses[n] = estimatedPose.get().estimatedPose.toPose2d();
                                 inputs._timestamps[n] = estimatedPose.get().timestampSeconds;
-                                inputs._hasPose[n] = true;
-                        } else {
-                                inputs._hasPose[n] = false;
-                                inputs._poses[n] = new Pose2d();
-
-                                // If we don't see anything then we'll make sure that we update that we don't see any tags. 
-                                for (int index = 0; index < 16; index++){
-                                        inputs._tagsUsed[index] = false;
-                                }
+                                continue;
                         }
+
+                        // If not then we don't see any tags or we shouldn't use the tags that we do see so we'll not do anything.
+                        inputs._hasPose[n] = false;
+                        inputs._poses[n] = new Pose2d();
+                        inputs._timestamps[n] = results.getTimestampSeconds();     
+                        continue;    
                 }
         }
 
+        /**
+         * @return Array of {@link PhotonPoseEstimator PhotonPoseEstimators} for each {@link PhotonCamera PhotonCamera}.
+         */
         private static PhotonPoseEstimator[] createPoseEstimators() {
-                final PhotonPoseEstimator[] estimators = new PhotonPoseEstimator[HardwareConstants.NUMBER_OF_CAMERAS];
-                for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
+                // Whenever using Multi-Tag PNP make sure you select the option on the Photon Camera itself. You can do this in the 
+                // PhotonVision GUI.
+                final PhotonPoseEstimator[] estimators = new PhotonPoseEstimator[VisionConstants.Software.NUMBER_OF_CAMERAS];
+                for (int i = 0; i <VisionConstants.Software.NUMBER_OF_CAMERAS; i++) {
                         estimators[i] = new PhotonPoseEstimator(
                                 FIELD_LAYOUT,
                                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                                new PhotonCamera("photoncamera_" + (i + 1)),
-                                HardwareConstants.ComponentTransformations._cameraPosition[i]);
+                                CAMERAS[i],
+                                VisionConstants.Physical._cameraPosition[i]);
 
                         estimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
                 }
                 return estimators;
         }
 
-        public static Pose3d getPoseOfTagFromID(int i){
-                return FIELD_LAYOUT.getTagPose(i).get();
+        /**
+         * @param tagNumber AprilTag ID
+         * @return Pose of AprilTag on the Field.
+         */
+        public static Pose3d getPoseOfTagFromID(int tagNumber){
+                return FIELD_LAYOUT.getTagPose(tagNumber).get();
         }
 
         /**
-         * Will use the constant ambiguity cutoff in removing any poses that are too ambiguous.
-         * @param pose Estimated Robot Pose from Vision
-         * @return Estimated Robot Pose with Ambigious Poses Removed
+         * @return Array of the {@link PhotonCamera PhotonCameras} connected to the Co-Processor.
          */
-        private static EstimatedRobotPose getPoseWithAmbiguityCutoff(EstimatedRobotPose pose){
-                for (int i = 0; i < pose.targetsUsed.size(); i++) {
-                        PhotonTrackedTarget target = pose.targetsUsed.get(i);
+        private static PhotonCamera[] createCameras(){
+                PhotonCamera[] cameras = new PhotonCamera[VisionConstants.Software.NUMBER_OF_CAMERAS];
 
-                        if (target.getPoseAmbiguity() > AMBIGUITY_CUTOFF){
-                                pose.targetsUsed.remove(target);
-                        }
+                for (int i = 0; i < VisionConstants.Software.NUMBER_OF_CAMERAS; i++){
+                        cameras[i] = new PhotonCamera("photoncamera_" + (i + 1));
                 }
 
-                return pose;
+                return cameras;
         }
 }

@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 
@@ -190,6 +191,11 @@ public class Shooter extends SubsystemBase {
         // }
     }
 
+    // checks if shooter encoder is at 0
+    public boolean isShooterEncoderAtZero() {
+        return _shooterInputs._angleEncoderPositionDegrees == 0;
+        }
+
     /**
      * The current zone the shooter thinks it is in.
      * 
@@ -358,5 +364,10 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/TargetShooterAngle", _targetShooterAngle);
         Logger.recordOutput("Shooter/AnglePIDCalculatedOutput", calcAnglePID());
         Logger.recordOutput("Shooter/isAutoShootEnabled",this.isAutoShootEnabled());
+      
+        // SHUFFLEBOARD VALUES
+        SmartDashboard.putBoolean("Is Shooter Encoder at 0?", isShooterEncoderAtZero());
+
+       
     }
 }

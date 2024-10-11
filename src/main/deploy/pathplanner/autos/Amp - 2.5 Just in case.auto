@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.43,
-      "y": 5.56
+      "x": 0.7284778050297884,
+      "y": 6.67517683109546
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,13 +24,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(C) Sub to Center Note And Back - No Limelight"
+                  "pathName": "A - Amp To 2nd Note Pickup"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Deploy_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(2.5) 2nd Note to 2nd Shot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
                 }
               }
             ]
@@ -49,44 +74,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(C) Sub to Amp Side Note - No LL"
+                  "pathName": "(2.5) Exit Wing After shooting"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(C) Amp Side Note to Sub, No LL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(C) Sub to source side note - No LL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Deploy_Pickup"
                 }
               }
             ]
@@ -95,7 +89,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
           }
         }
       ]

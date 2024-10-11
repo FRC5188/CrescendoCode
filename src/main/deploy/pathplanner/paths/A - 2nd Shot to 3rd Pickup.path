@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.330836567521922,
-        "y": 6.2887192250846695
+        "x": 5.300306754459664,
+        "y": 6.610851683241828
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 5.788606449007769
       },
       "prevControl": {
-        "x": 5.8261782620431335,
-        "y": 6.1511252367234075
+        "x": 5.902190265918994,
+        "y": 6.512182255133741
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "New Amp 3 Piece Paths",
+  "folder": "New Amp Paths",
   "previewStartingState": {
     "rotation": 27.0,
     "velocity": 0

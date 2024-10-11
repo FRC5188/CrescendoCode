@@ -25,7 +25,7 @@ public class LEDs {
     NetworkTable _adkitNetworkTable;
     BooleanSubscriber _isAutoAimEnabled;
     BooleanSubscriber _isAutoAimReady;
-
+    BooleanSubscriber _usingAmpAim;
 
     public enum LEDAnimation {
         None(null, null, 0),
@@ -37,10 +37,12 @@ public class LEDs {
         BlinkingRed(null, new StrobeAnimation(255, 0, 0, 0, 0.5, _numLEDs), 3),
         SolidYellow(new LEDColor(255, 128, 0), null, 0),
         PickedUpNote(null, new StrobeAnimation(255, 128, 0, 0, 0.5, _numLEDs), 3),
-        ClimberAscending(new LEDColor(255, 215, 0), new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3),
+        ClimberAscending(new LEDColor(255, 215, 0),
+                new LarsonAnimation(0, 234, 255, 0, 0.5, _numLEDs, BounceMode.Back, 5, 0), 3),
         AmpReady(null, new StrobeAnimation(204, 0, 255, 0, 0.5, _numLEDs), 3),
-        //Change time on RobotDisabled
+        // Change time on RobotDisabled
         RobotDisabled(null, new RainbowAnimation(100, 0.5, _numLEDs), 0);
+
         LEDColor _color;
         Animation _animation;
         int _secondsToRun;
@@ -68,25 +70,32 @@ public class LEDs {
         _candle = new CANdle(HardwareConstants.CanIds.CANDLE_ID);
         _adkitNetworkTable = NetworkTableInstance.getDefault().getTable("AdvantageKit");
         _isAutoAimEnabled = _adkitNetworkTable.getBooleanTopic("RealOutputs/Drive/autoaim/isEnabled")
-                            .subscribe(false);
+                .subscribe(false);
         _isAutoAimReady = _adkitNetworkTable.getBooleanTopic("RealOutputs/Drive/autoaim/isReady")
-                            .subscribe(false);
+                .subscribe(false);
+        _usingAmpAim = _adkitNetworkTable.getBooleanTopic("RealOutputs/Drive/usingAmpAim")
+                .subscribe(false);
     }
 
     public LEDAnimation getCurrentAnimation() {
         return _currentAnimation;
     }
 
-    public boolean _isAutoAimEnabled(){
+    public boolean _isAutoAimEnabled() {
         boolean enabled = _isAutoAimEnabled.get();
         Logger.recordOutput("LEDS/isAutoAimEnabled", enabled);
         return enabled;
     }
 
-    public boolean _isAutoAimReady(){
+    public boolean _isAutoAimReady() {
         boolean enabled = _isAutoAimReady.get();
         Logger.recordOutput("LEDS/isAutoAimReady", enabled);
-        return enabled;    }
+        return enabled;
+    }
+
+    public boolean usingAmpAim() {
+        return _usingAmpAim.get();
+    }
 
     public void runAnimation(LEDAnimation animation) {
         Logger.recordOutput("LEDS/currentAnimation", _currentAnimation);
@@ -96,12 +105,12 @@ public class LEDs {
 
             if (animation.getColor() == null) {
                 _candle.clearAnimation(0);
-                _candle.setLEDs(0,0,0);
+                _candle.setLEDs(0, 0, 0);
                 _candle.animate(animation.getAnimation());
-            } else if (animation.getAnimation() == null){
+            } else if (animation.getAnimation() == null) {
                 LEDColor color = animation.getColor();
                 _candle.clearAnimation(0);
-                _candle.setLEDs(0,0,0);     
+                _candle.setLEDs(0, 0, 0);
                 _candle.setLEDs(color.getR(), color.getG(), color.getB());
             } else {
                 _candle.clearAnimation(0);
@@ -109,12 +118,13 @@ public class LEDs {
                 LEDColor color = animation.getColor();
                 _candle.setLEDs(color.getR(), color.getG(), color.getB());
             }
-            
+
         }
     }
 
     /**
      * returns true if the animation was stopped so we can reset the timer
+     * 
      * @param currentRunTimeIn20Ms
      * @return
      */
@@ -125,24 +135,22 @@ public class LEDs {
         if (animationTime > 0) {
             // We actually have a timeout
             if (currentRunTimeIn20Ms >= animationTime * 50) {
-                Logger.recordOutput("LEDS/animationTimeout",true);
+                Logger.recordOutput("LEDS/animationTimeout", true);
                 wasAnimationStopped = true;
                 if (_currentAnimation.getColor() == null) {
-                _candle.clearAnimation(0);
-                } else if (_currentAnimation.getAnimation() == null){
+                    _candle.clearAnimation(0);
+                } else if (_currentAnimation.getAnimation() == null) {
                     _candle.setLEDs(0, 0, 0);
                 } else {
                     _candle.clearAnimation(0);
                     _candle.setLEDs(0, 0, 0);
                 }
-            _currentAnimation = LEDAnimation.None;
+                _currentAnimation = LEDAnimation.None;
+            } else {
+                Logger.recordOutput("LEDS/animationTimeout", false);
             }
-            else{
-                Logger.recordOutput("LEDS/animationTimeout",false);
-            }
-        }
-        else{
-            Logger.recordOutput("LEDS/animationTimeout",false);
+        } else {
+            Logger.recordOutput("LEDS/animationTimeout", false);
         }
         return wasAnimationStopped;
     }
@@ -152,7 +160,7 @@ public class LEDs {
         _prevHasNote = hasNote;
         return ret;
     }
-    
+
     public boolean getAmpReady() {
         return _ampReady;
     }

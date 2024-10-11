@@ -4,8 +4,9 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.proto.Photon;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -15,55 +16,55 @@ import edu.wpi.first.math.geometry.Pose3d;
 import frc.robot.HardwareConstants;
 
 public class RealVisionIO implements VisionIO {
-        private static final double AMBIGUITY_CUTOFF = 0.1;
+        private static final double AMBIGUITY_CUTOFF = 0.2;
 
         private static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+        private static final PhotonCamera[] CAMERAS = createCameras();
         private static final PhotonPoseEstimator[] ESTIMATORS = createPoseEstimators();
 
         public void updateInputs(VisionIOInputs inputs) {
         
                 for (int n = 0; n < HardwareConstants.NUMBER_OF_CAMERAS; n++) {
-                        Optional<EstimatedRobotPose> estimatedPose = ESTIMATORS[n].update();
+                        final PhotonPipelineResult results = CAMERAS[n].getLatestResult();
+                        Optional<EstimatedRobotPose> estimatedPose = Optional.empty();
 
-
-
+                        // The first thing we'll do is filter out the bad tags from our cameras.
+                        if (results.hasTargets() && (results.targets.size() > 1 || results.targets.get(0).getPoseAmbiguity() < AMBIGUITY_CUTOFF)){
+                                //double imageCaptureTime = results.getTimestampSeconds();
+                                // DON'T IF YOU ACTUALLY NEED THIS, BUT WE'LL SEE - MITCHELL :)
+                                estimatedPose = ESTIMATORS[n].update(results);
+                        }
 
                         if (estimatedPose.isPresent()){
-
-                                // We'll check to make sure that the poses that are referenced are not too ambiguous.
-                                estimatedPose = Optional.of(getPoseWithAmbiguityCutoff(estimatedPose.get()));
-
-                                // Now that we've removed some of the ambiguous poses, we can check to see if we have any poses left.
-                                // If not then we'll just pretend that we don't have a pose.
-                                if (estimatedPose.get().targetsUsed.size() == 0){
-                                        inputs._hasPose[n] = false;
-                                        inputs._poses[n] = new Pose2d();
-                                        continue; // Move On.
-                                }
-
-                                // This is what happens whenever we have a pose that is not too ambiguous.
+                                inputs._hasPose[n] = true;
                                 inputs._poses[n] = estimatedPose.get().estimatedPose.toPose2d();
                                 inputs._timestamps[n] = estimatedPose.get().timestampSeconds;
-                                inputs._hasPose[n] = true;
-                        } else {
-                                inputs._hasPose[n] = false;
-                                inputs._poses[n] = new Pose2d();
+                                continue;
                         }
+
+                        // If we can't do anything then just set it to null so at least we're not breaking everything.
+                        inputs._hasPose[n] = false;
+                        inputs._poses[n] = new Pose2d();
+                        inputs._timestamps[n] = results.getTimestampSeconds();     
+                        continue;    
                 }
         }
-
         private static PhotonPoseEstimator[] createPoseEstimators() {
                 final PhotonPoseEstimator[] estimators = new PhotonPoseEstimator[HardwareConstants.NUMBER_OF_CAMERAS];
                 for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++) {
                         estimators[i] = new PhotonPoseEstimator(
                                 FIELD_LAYOUT,
                                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                                new PhotonCamera("photoncamera_" + (i + 1)),
+                                CAMERAS[i],
                                 HardwareConstants.ComponentTransformations._cameraPosition[i]);
 
                         estimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
                 }
                 return estimators;
+        }
+
+        public static Pose3d getPoseOfTagFromID(int i){
+                return FIELD_LAYOUT.getTagPose(i).get();
         }
 
         /**
@@ -81,5 +82,15 @@ public class RealVisionIO implements VisionIO {
                 }
 
                 return pose;
+        }
+
+        private static PhotonCamera[] createCameras(){
+                PhotonCamera[] cameras = new PhotonCamera[HardwareConstants.NUMBER_OF_CAMERAS];
+
+                for (int i = 0; i < HardwareConstants.NUMBER_OF_CAMERAS; i++){
+                        cameras[i] = new PhotonCamera("photoncamera_" + (i + 1));
+                }
+
+                return cameras;
         }
 }

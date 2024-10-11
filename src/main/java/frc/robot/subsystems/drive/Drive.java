@@ -51,6 +51,7 @@ public class Drive extends SubsystemBase {
   private final SysIdRoutine _sysId;
 
   private boolean hasSeenTag = false;
+  private boolean usingAmpAim = false;
 
   private final VisionIO _visionIO;
   private final VisionIOInputsAutoLogged _visionInputs = new VisionIOInputsAutoLogged();
@@ -137,6 +138,7 @@ public class Drive extends SubsystemBase {
     }
 
     Logger.recordOutput("Drive/radiustospeaker", getRadiusToSpeakerInMeters());
+    Logger.recordOutput("Drive/usingAmpAim", getAmpAim());
 
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
@@ -210,10 +212,10 @@ public class Drive extends SubsystemBase {
   public ChassisSpeeds transformJoystickInputsToChassisSpeeds(double x, double y, double rotate,
       boolean bypassomegamath) {
     // Apply deadband
-    double linearMagnitude = MathUtil.applyDeadband(
+    double linearMagnitude = 0.8 * MathUtil.applyDeadband(
         Math.hypot(x, y), DriveConstants.JOYSTICK_DEADBAND);
     Rotation2d linearDirection = new Rotation2d(x, y);
-    double omega = MathUtil.applyDeadband(rotate, DriveConstants.JOYSTICK_DEADBAND);
+    double omega = 0.8 * MathUtil.applyDeadband(rotate, DriveConstants.JOYSTICK_DEADBAND);
 
     // Square values
     linearMagnitude = linearMagnitude * linearMagnitude;
@@ -410,6 +412,14 @@ public class Drive extends SubsystemBase {
     double xDiff = ampPos.getX() - robotPose.getX();
     double yDiff = ampPos.getY() - robotPose.getY();
     return Math.toDegrees(Math.atan(yDiff / xDiff));
+  }
+
+  public void setAmpAim(boolean value) {
+    usingAmpAim = value;
+  }
+
+  public boolean getAmpAim() {
+    return usingAmpAim;
   }
 
   /**

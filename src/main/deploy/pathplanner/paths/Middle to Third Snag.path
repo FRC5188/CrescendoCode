@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.37,
-        "y": 5.557362183607978
+        "x": 8.29,
+        "y": 3.97
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7014917793731075,
-        "y": 5.557362183607978
+        "x": 8.289990426134699,
+        "y": 3.71983743967488
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.09865958924317,
-        "y": 5.557362183607978
+        "x": 8.309724311756318,
+        "y": 3.1870225278912105
       },
       "prevControl": {
-        "x": 1.6501707112677897,
-        "y": 5.547612425391122
+        "x": 8.28012348332389,
+        "y": 3.6014341259451754
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,20 +32,20 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "rotation": -90.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Snagging Bamboozler Paths",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -20.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

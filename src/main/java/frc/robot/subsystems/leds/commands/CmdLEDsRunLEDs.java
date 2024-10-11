@@ -41,7 +41,7 @@ public class CmdLEDsRunLEDs extends Command {
           if(!_intake.hasNote()){
             // if we do not have a note, then blink red
             _leds.runAnimation(LEDAnimation.BlinkingRed);
-          }else if(_shooter.shooterInPosition() && _leds._isAutoAimReady()){
+          }else if((_shooter.shooterInPosition() || _leds.usingAmpAim()) && _leds._isAutoAimReady()){
             // if the shooter is in position and the autoaim code says its ready
             // then signal to the drive we are ready
             _leds.runAnimation(LEDAnimation.SolidGreen);

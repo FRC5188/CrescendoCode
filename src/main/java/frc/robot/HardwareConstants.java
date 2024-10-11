@@ -75,7 +75,7 @@ public class HardwareConstants {
         new Translation3d(CAMERA_ONE_X_FROM_ROBOT_CENTER, CAMERA_ONE_Y_FROM_ROBOT_CENTER, CAMERA_ONE_Z_FROM_ROBOT_CENTER),
         new Rotation3d(CAMERA_ONE_ROLL, CAMERA_ONE_PITCH, CAMERA_ONE_YAW));
 
-        private static final double CAMERA_TWO_X_FROM_ROBOT_CENTER = -0.16 - 0.254; // Mechanical offset - 1/8" offset
+        private static final double CAMERA_TWO_X_FROM_ROBOT_CENTER = -0.16 - 0.254 - 0.0762; // Mechanical offset - 1/8" offset
         private static final double CAMERA_TWO_Y_FROM_ROBOT_CENTER = -0.273;
         private static final double CAMERA_TWO_Z_FROM_ROBOT_CENTER = 0.2583;
 
@@ -85,7 +85,7 @@ public class HardwareConstants {
 
         // METERS
         private static final double CAMERA_THREE_X_FROM_ROBOT = 0.2508 - 0.46355;
-        private static final double CAMERA_THREE_Y_FROM_ROBOT = -0.2508 + 0.74295 + 0.34925 - 0.0365;
+        private static final double CAMERA_THREE_Y_FROM_ROBOT = -0.2508 + 0.74295 + 0.34925 - 0.0365 + 0.2286 + 0.1143;
         private static final double CAMERA_THREE_Z_FROM_ROBOT = 0.27;
 
         private static final double CAMERA_THREE_ROLL = 0.0;
@@ -94,7 +94,7 @@ public class HardwareConstants {
 
         // CAMERA FOUR
         private static final double CAMERA_FOUR_X_FROM_ROBOT = 0.2508; //- 0.40645;
-        private static final double CAMERA_FOUR_Y_FROM_ROBOT = -0.2508 - 0.41275 - 0.1905; // -16 1/4 in
+        private static final double CAMERA_FOUR_Y_FROM_ROBOT = -0.2508 - 0.41275 - 0.1905 - 0.1143; // -16 1/4 in
         private static final double CAMERA_FOUR_Z_FROM_ROBOT = 0.27;
 
         private static final double CAMERA_FOUR_ROLL = 0.0;

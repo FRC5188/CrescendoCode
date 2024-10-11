@@ -20,8 +20,8 @@
         "y": 5.69
       },
       "prevControl": {
-        "x": 4.136331239852207,
-        "y": 5.925683292165444
+        "x": 5.566714210351499,
+        "y": 6.531916140755359
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "New Amp 3 Piece Paths",
+  "folder": "New Amp Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

@@ -244,6 +244,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Shooting_From_Podium",
                                 new CmdDriveAutoAim(_drive, zeroSupplier, zeroSupplier, true)
                                 .andThen(new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Podium)));
+                NamedCommands.registerCommand("Feeder_Shot", 
+                new GrpShootNoteInZone(_intake, _shooter, ShooterZone.Feeder));
                 _autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
                 // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
@@ -289,12 +291,13 @@ public class RobotContainer {
                                 true))
                         );
 
-                _driveController.leftBumper().onFalse(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
+                _driveController.leftBumper().whileFalse(Commands.runOnce(() -> _shooter.setAutoShootEnabled(false)));
 
                 _driveController.leftTrigger(0.5).whileTrue(new CmdDriveAutoAim(_drive,
                                 () -> -_driveController.getLeftY() * _driveMultiplier,
                                 () -> -_driveController.getLeftX() * _driveMultiplier,
-                                false));
+                                false).alongWith(Commands.runOnce(() -> _drive.setAmpAim(true))))
+                                .onFalse(Commands.runOnce(() -> _drive.setAmpAim(false)));
 
                 _driveController.a().whileTrue(
                                 new InstantCommand(

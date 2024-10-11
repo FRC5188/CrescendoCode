@@ -24,22 +24,28 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Sub to center note, No LL"
+                  "pathName": "Sub to Amp Note W LL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Deploy_Pickup"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(C, No LL) Center Note to Sub"
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
           }
         },
         {
@@ -55,22 +61,28 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(C) Sub to Amp Side Note - No LL"
+                  "pathName": "Amp Note to Center Note LL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Deploy_Pickup"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(C) Amp Side Note to Sub, No LL"
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
           }
         },
         {
@@ -86,22 +98,71 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(C) Sub to source side note - No LL"
+                  "pathName": "Center Note to Source Side Note"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pickup_Note_Without_Limelight"
+                  "name": "Deploy_Pickup"
                 }
               }
             ]
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow_Pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Shoot_With_Auto_Align"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "(C) Source Side Note to Sub, No LL"
+            "pathName": "Source Note To Mid Note Pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deploy_Pickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mid Note to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
           }
         },
         {

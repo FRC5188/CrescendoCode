@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.43,
-      "y": 5.56
+      "x": 0.7417791758660457,
+      "y": 6.699654168539107
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Sub to Amp Note W LL"
+                  "pathName": "(2.5) Exit Wing After shooting"
                 }
               },
               {
@@ -43,117 +43,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Stow_Pickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp Note to Center Note LL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Deploy_Pickup"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pickup_Note_With_Limelight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stow_Pickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center Note to Source Side Note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Deploy_Pickup"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pickup_Note_With_Limelight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stow_Pickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source Note To Mid Note Pickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Deploy_Pickup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pickup_Note_With_Limelight"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid Note to Shoot"
+                  "pathName": "Rotate after first snag"
                 }
               },
               {
@@ -168,7 +64,107 @@
         {
           "type": "named",
           "data": {
-            "name": "Auto_Shoot_With_Auto_Align"
+            "name": "Feeder_Shot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Ampy Side Note To Middle Pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Deploy_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Rotate After Snagging Middle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feeder_Shot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle to Third Snag"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Deploy_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup_Note_With_Limelight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Third Snag Rotate"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stow_Pickup"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feeder_Shot"
           }
         }
       ]
